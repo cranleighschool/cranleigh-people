@@ -386,11 +386,12 @@ class cran_peeps {
 	}
 	
 	function add_photo_column_to_listing($defaults) {
-		$defaults['featured_image'] = "Photo";
+		if (get_post_type()==$this->post_type_key)
+		$defaults['staff_photo'] = "Photo";
 		return $defaults;
 	}
 	function add_photo_to_listing($column_name, $post_ID) {
-		if ($column_name == 'featured_image') {
+		if ($column_name == 'staff_photo') {
 			$post_featured_image = $this->get_staff_photo($post_ID);
 			if ($post_featured_image) {
 				echo '<img src="'.$post_featured_image.'" />';
