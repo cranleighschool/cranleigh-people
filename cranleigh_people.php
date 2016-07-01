@@ -4,7 +4,7 @@
 	Plugin URI: http://www.cranleigh.org
 	Description: One plugin that controls the people who work at Cranleigh. 
 	Author: Fred Bradley
-	Version: 1
+	Version: 1.1.0
 	Author URI: http://fred.im
 */
 
@@ -304,6 +304,7 @@ class cran_peeps {
 		} else {
 			return "Incorrect Data Given";
 		}
+		$output = "";
 		$query = new WP_Query($query_args);
 		if ($query->have_posts()):
 			while($query->have_posts()): $query->the_post();
@@ -386,11 +387,12 @@ class cran_peeps {
 	}
 	
 	function add_photo_column_to_listing($defaults) {
-		$defaults['featured_image'] = "Photo";
+		if (get_post_type()==$this->post_type_key)
+		$defaults['staff_photo'] = "Photo";
 		return $defaults;
 	}
 	function add_photo_to_listing($column_name, $post_ID) {
-		if ($column_name == 'featured_image') {
+		if ($column_name == 'staff_photo') {
 			$post_featured_image = $this->get_staff_photo($post_ID);
 			if ($post_featured_image) {
 				echo '<img src="'.$post_featured_image.'" />';
