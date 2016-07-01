@@ -1,12 +1,6 @@
 <?php
-
-/**
- * WordPress settings API demo class
- *
- * @author Tareq Hasan
- */
-if ( !class_exists('WeDevs_Settings_API_Test' ) ):
-class WeDevs_Settings_API_Test {
+if ( !class_exists('Cranleigh_CranleighPeople_Settings' ) ):
+class Cranleigh_CranleighPeople_Settings {
 
     private $settings_api;
 
@@ -295,5 +289,5 @@ class WeDevs_Settings_API_Test {
     }
 
 }
-$settings_api = new WeDevs_Settings_API_Test();
+$settings_api = new Cranleigh_CranleighPeople_Settings();
 endif;
