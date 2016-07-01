@@ -4,7 +4,7 @@
 	Plugin URI: http://www.cranleigh.org
 	Description: One plugin that controls the people who work at Cranleigh. 
 	Author: Fred Bradley
-	Version: 1
+	Version: 1.1.0
 	Author URI: http://fred.im
 */
 
