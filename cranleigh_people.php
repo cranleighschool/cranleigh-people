@@ -28,6 +28,7 @@ class cran_peeps {
 		add_action( 'init', array($this, 'TAX_staff_cats'));
 		
 		add_action("after_setup_theme", array($this, 'profile_pictures'));
+		add_action("plugins_loaded", array($this, 'is_meta_box_alive'));
 
 		add_filter( 'rwmb_meta_boxes', array($this, 'meta_boxes'));
 
@@ -39,6 +40,14 @@ class cran_peeps {
 		
 		add_filter('manage_posts_columns', array($this,'add_photo_column_to_listing'));
 		add_action('manage_posts_custom_column', array($this,'add_photo_to_listing'), 10, 2);
+	}
+	
+	function is_meta_box_alive() {
+		if (defined('RWMB_VER')):
+			return true;
+		else:
+			return false;
+		endif;
 
 	}
 	
