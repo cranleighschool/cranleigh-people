@@ -28,17 +28,9 @@ class Cranleigh_CranleighPeople_Settings {
     function get_settings_sections() {
         $sections = array(
             array(
-                'id' => 'wedevs_basics',
+                'id' => 'cran_people_basic',
                 'title' => __( 'Basic Settings', 'wedevs' )
             ),
-            array(
-                'id' => 'wedevs_advanced',
-                'title' => __( 'Advanced Settings', 'wedevs' )
-            ),
-            array(
-                'id' => 'wedevs_others',
-                'title' => __( 'Other Settings', 'wpuf' )
-            )
         );
         return $sections;
     }
