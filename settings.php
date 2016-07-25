@@ -22,14 +22,14 @@ class Cranleigh_CranleighPeople_Settings {
     }
 
     function admin_menu() {
-        add_options_page( 'Settings API', 'Settings API', 'delete_posts', 'settings_api_test', array($this, 'plugin_page') );
+        add_options_page( 'Cranleigh People', 'Cranleigh People', 'delete_posts', 'cranleigh_people_settings', array($this, 'plugin_page') );
     }
 
     function get_settings_sections() {
         $sections = array(
             array(
                 'id' => 'cran_people_basic',
-                'title' => __( 'Basic Settings', 'wedevs' )
+                'title' => __( 'Cranleigh People', 'wedevs' )
             ),
         );
         return $sections;
