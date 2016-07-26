@@ -41,7 +41,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 	}
 
 	function form($instance) {
-		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'Address', 'cranleigh-2016' );
+		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'Staff Member', 'cranleigh-2016' );
 		$username = ! empty($instance['username']) ? $instance['username'] : "";
 		?>
 		<p>Custom Email, Phone and address first line can be defined in the <a href="customize.php">Theme Customiser</a></p>
@@ -54,6 +54,8 @@ class Cranleigh_People_Widget extends WP_Widget {
 			<select class="widefat" id="<?php echo esc_attr($this->get_field_id('username')); ?>" name="<?php echo esc_attr($this->get_field_name('username')); ?>">
 				<option value="">Select User</option>
 				<?php
+
+					switch_to_blog(1);
 					$query = new WP_Query($this->query_args);
 
 					if ($query->have_posts()):
@@ -71,6 +73,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 						//echo "<input class=\"widefat\" id=\"".esc_attr($this->get_field_id('username'))."\" name=\"".esc_attr($this->get_field_name('username'))."\" type=\"autocomplete\" value=\"".esc_attr($username)."\" />";
 						echo 'You have no staff to choose from...';
 					endif;
+					restore_current_blog();
 
 				?>
 			</select>
@@ -86,7 +89,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 				)
 			)
 		);
-
+		switch_to_blog(1);
 		$query = new WP_Query(wp_parse_args($args, $this->query_args));
 
 		if ($query->have_posts()):
@@ -119,7 +122,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 
 			endwhile;
 			wp_reset_postdata();
-
+			restore_current_blog();
 		else:
 			echo "<p class=\"alert-warning\">Staff Member not selected</p>";
 		endif;
