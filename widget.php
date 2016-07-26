@@ -55,7 +55,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 				<option value="">Select User</option>
 				<?php
 
-					switch_to_blog(1);
+					switch_to_blog(BLOG_ID_CURRENT_SITE);
 					$query = new WP_Query($this->query_args);
 
 					if ($query->have_posts()):
@@ -89,7 +89,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 				)
 			)
 		);
-		switch_to_blog(1);
+		switch_to_blog(BLOG_ID_CURRENT_SITE);
 		$query = new WP_Query(wp_parse_args($args, $this->query_args));
 
 		if ($query->have_posts()):
