@@ -42,6 +42,18 @@ class Cranleigh_CranleighPeople_Settings {
      */
     function get_settings_fields() {
         $settings_fields = array(
+	        "cran_people_basic" => array(
+		        array(
+                    'name'    => 'load_cpt',
+                    'label'   => __( 'Load Custom Post Type', 'wedevs' ),
+                    'desc'    => __( 'Do you want to load the custom post type, or just the widgets and shortcodes?', 'wedevs' ),
+                    'type'    => 'radio',
+                    'options' => array(
+                        'yes' => 'Yes, load everything.',
+                        'no'  => 'No, I only need the widgets and shortcodes.'
+                    )
+                ),
+	        ),
             'wedevs_basics' => array(
                 array(
                     'name'              => 'text_val',
@@ -71,16 +83,7 @@ class Cranleigh_CranleighPeople_Settings {
                     'desc'  => __( 'Checkbox Label', 'wedevs' ),
                     'type'  => 'checkbox'
                 ),
-                array(
-                    'name'    => 'radio',
-                    'label'   => __( 'Radio Button', 'wedevs' ),
-                    'desc'    => __( 'A radio button', 'wedevs' ),
-                    'type'    => 'radio',
-                    'options' => array(
-                        'yes' => 'Yes',
-                        'no'  => 'No'
-                    )
-                ),
+
                 array(
                     'name'    => 'multicheck',
                     'label'   => __( 'Multile checkbox', 'wedevs' ),
@@ -283,3 +286,4 @@ class Cranleigh_CranleighPeople_Settings {
 }
 $settings_api = new Cranleigh_CranleighPeople_Settings();
 endif;
+

@@ -23,24 +23,27 @@ class cran_peeps {
 	 * @return void
 	 */
 	function __construct() {
-		register_activation_hook(__FILE__, array($this, 'activate'));
+		$settings = get_option('cran_people_basic');
+		if (isset($settings['load_cpt']) && $settings['load_cpt']=="yes"):
+			register_activation_hook(__FILE__, array($this, 'activate'));
 
-		add_action( 'init', array($this, 'CPT_Cranleigh_People'));
-		add_action( 'init', array($this, 'TAX_staff_cats'));
+			add_action( 'init', array($this, 'CPT_Cranleigh_People'));
+			add_action( 'init', array($this, 'TAX_staff_cats'));
 
-		add_action("after_setup_theme", array($this, 'profile_pictures'));
-		add_action("plugins_loaded", array($this, 'is_meta_box_alive'));
+			add_action("after_setup_theme", array($this, 'profile_pictures'));
+			add_action("plugins_loaded", array($this, 'is_meta_box_alive'));
 
-		add_filter( 'rwmb_meta_boxes', array($this, 'meta_boxes'));
+			add_filter( 'rwmb_meta_boxes', array($this, 'meta_boxes'));
 
-		add_action( 'admin_menu' , array($this, 'remove_staff_cats_tax_box'));
-		add_action( 'tgmpa_register', array($this, 'cs__register_required_plugins') );
+			add_action( 'admin_menu' , array($this, 'remove_staff_cats_tax_box'));
+			add_action( 'tgmpa_register', array($this, 'cs__register_required_plugins') );
 
-		add_shortcode("cranleigh-person", array($this, 'person_shortcode'));
-		add_filter("enter_title_here", array($this, 'title_text_input'));
+			add_shortcode("cranleigh-person", array($this, 'person_shortcode'));
+			add_filter("enter_title_here", array($this, 'title_text_input'));
 
-		add_filter('manage_posts_columns', array($this,'add_photo_column_to_listing'));
-		add_action('manage_posts_custom_column', array($this,'add_photo_to_listing'), 10, 2);
+			add_filter('manage_posts_columns', array($this,'add_photo_column_to_listing'));
+			add_action('manage_posts_custom_column', array($this,'add_photo_to_listing'), 10, 2);
+		endif;
 	}
 
 	function is_meta_box_alive() {
