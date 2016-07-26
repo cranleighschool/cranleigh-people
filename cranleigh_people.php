@@ -2,7 +2,7 @@
 /*
 	Plugin Name: Cranleigh People
 	Plugin URI: http://www.cranleigh.org
-	Description: One plugin that controls the people who work at Cranleigh. 
+	Description: One plugin that controls the people who work at Cranleigh.
 	Author: Fred Bradley
 	Version: 1.1.0
 	Author URI: http://fred.im
@@ -11,22 +11,23 @@
 require_once dirname( __FILE__ ) . '/class-tgm-plugin-activation.php';
 require_once(dirname(__FILE__).'/settingsapiwrapper.php');
 require_once(dirname(__FILE__).'/settings.php');
+require_once(dirname(__FILE__).'/widget.php');
 
 class cran_peeps {
 	public $post_type_key = "staff";
-	
+
 	/**
 	 * __construct function. Contains all the actions and filters for the class.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
 	function __construct() {
 		register_activation_hook(__FILE__, array($this, 'activate'));
-		
+
 		add_action( 'init', array($this, 'CPT_Cranleigh_People'));
 		add_action( 'init', array($this, 'TAX_staff_cats'));
-		
+
 		add_action("after_setup_theme", array($this, 'profile_pictures'));
 		add_action("plugins_loaded", array($this, 'is_meta_box_alive'));
 
@@ -37,11 +38,11 @@ class cran_peeps {
 
 		add_shortcode("cranleigh-person", array($this, 'person_shortcode'));
 		add_filter("enter_title_here", array($this, 'title_text_input'));
-		
+
 		add_filter('manage_posts_columns', array($this,'add_photo_column_to_listing'));
 		add_action('manage_posts_custom_column', array($this,'add_photo_to_listing'), 10, 2);
 	}
-	
+
 	function is_meta_box_alive() {
 		if (defined('RWMB_VER')):
 			return true;
@@ -50,43 +51,43 @@ class cran_peeps {
 		endif;
 
 	}
-	
+
 	/**
 	 * activate function. Called only once upon activation of the plugin on any site.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
-	 
+
 	function activate() {
 		$this->insert_staff_roles();
 	}
-	
-	
+
+
 	/**
 	 * remove_staff_cats_tax_box function.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
 	function remove_staff_cats_tax_box() {
 		remove_meta_box( 'staff_categoriesdiv' , 'staff' , 'side' );
 	}
-	
+
 	/**
 	 * profile_pictures function.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
 	function profile_pictures() {
 		add_image_size("staff-photo", 500, 500, true);
 	}
-	
-	
+
+
 	/**
 	 * title_text_input function.
-	 * 
+	 *
 	 * @access public
 	 * @param mixed $title
 	 * @return void
@@ -97,7 +98,7 @@ class cran_peeps {
 		endif;
 		return $title;
 	}
-	
+
 	/**
 	 * meta_boxes function.
 	 * Uses the 'rwmb_meta_boxes' filter to add custom meta boxes to our custom post type.
@@ -118,6 +119,12 @@ class cran_peeps {
 			"autosave" => true,
 			"fields" => array(
 				array(
+					"name" => __("Cranleigh Username", "cranleigh"),
+					"id" => "{$prefix}username",
+					"type" => "text",
+					"desc" => "eg. Dave Futcher is &quot;DJF&quot;"
+				),
+				array(
 					"name" => __("Position(s)", "text_domain"),
 					"id" => "{$prefix}position",
 					"type" => "autocomplete",
@@ -130,8 +137,9 @@ class cran_peeps {
 					"id" => "{$prefix}leadjobtitle",
 					"type" => "text",
 					"desc" => "The job title that will show on on your cards, and contacts"
-				)
-			
+				),
+
+
 			),
 			'validation' => array(
 				'rules'    => array(
@@ -157,7 +165,7 @@ class cran_peeps {
 				),
 			),
 		);
-		
+
 /*		$meta_boxes[] = array(
 			"id" => "staff_meta_normal",
 			"title" => "Staff Meta",
@@ -172,10 +180,10 @@ class cran_peeps {
 		)*/
 		return $meta_boxes;
 	}
-	
+
 	// Register Custom Post Type
 	function CPT_Cranleigh_People() {
-	
+
 		$labels = array(
 			'name'                  => _x( 'Cranleigh People', 'Post Type General Name', 'text_domain' ),
 			'singular_name'         => _x( 'Person', 'Post Type Singular Name', 'text_domain' ),
@@ -218,18 +226,18 @@ class cran_peeps {
 			'show_in_admin_bar'     => true,
 			'show_in_nav_menus'     => true,
 			'can_export'            => true,
-			'has_archive'           => true,		
+			'has_archive'           => true,
 			'exclude_from_search'   => true,
 			'publicly_queryable'    => true,
 			'capability_type'       => 'page',
 		);
 		register_post_type( $this->post_type_key, $args );
-	
+
 	}
-	
+
 	// Register Custom Taxonomy
 	function TAX_staff_cats() {
-	
+
 		$labels = array(
 			'name'                       => _x( 'Staff Groups', 'Taxonomy General Name', 'text_domain' ),
 			'singular_name'              => _x( 'Staff Group', 'Taxonomy Singular Name', 'text_domain' ),
@@ -262,26 +270,26 @@ class cran_peeps {
 			'show_tagcloud'              => false,
 		);
 		register_taxonomy( 'staff_categories', array( 'staff' ), $args );
-	
+
 	}
 	function insert_staff_roles() {
 		$this->TAX_staff_cats();
 		$args = array();
-		
+
 		$roles = array(
 			"Head of Department",
 			"Deputy Head",
 			"Headmaster",
 			"Housemaster / Housemistress",
-			"Teacher", 
+			"Teacher",
 			"Senior Management Team"
 		);
-		
+
 		foreach ($roles as $role):
 			$test[] = wp_insert_term($role, "staff_categories");
 		endforeach;
 	}
-	
+
 	function staff_roles() {
 		$args = array(
 			"hide_empty" => false
@@ -293,19 +301,19 @@ class cran_peeps {
 		}
 		return $output;
 	}
-	
+
 	function person_shortcode($atts, $content=null) {
 		global $post;
 		$a = shortcode_atts(array(
 			"id" => null,
 			"slug" => null
 		), $atts);
-		
+
 		$query_args = array(
 			"post_type" => $this->post_type_key,
-			"posts_per_page" => 1	
+			"posts_per_page" => 1
 		);
-		
+
 		if ($a['id']) {
 			$query_args['p'] = $a['id'];
 		} elseif ($a['slug']) {
@@ -358,9 +366,9 @@ class cran_peeps {
 				'slug'      => 'meta-box',
 				'required'  => true,
 			),
-	
+
 		);
-	
+
 		/*
 		 * Array of configuration settings. Amend each line as needed.
 		 *
@@ -381,12 +389,12 @@ class cran_peeps {
 			'dismiss_msg'  => '',						// If 'dismissable' is false, this message will be output at top of nag.
 			'is_automatic' => false,					// Automatically activate plugins after installation or not.
 			'message'      => '',						// Message to output right before the plugins table.
-	
+
 		);
-	
+
 		tgmpa( $plugins, $config );
 	}
-	
+
 	function get_staff_photo($post_ID) {
 		$post_thumb_id = get_post_thumbnail_id($post_ID);
 		if ($post_thumb_id) {
@@ -394,7 +402,7 @@ class cran_peeps {
 			return $post_thumb_img[0];
 		}
 	}
-	
+
 	function add_photo_column_to_listing($defaults) {
 		if (get_post_type()==$this->post_type_key)
 		$defaults['staff_photo'] = "Photo";
@@ -413,4 +421,5 @@ class cran_peeps {
 }
 
 $cran_peeps_plugin = new cran_peeps();
+
 
