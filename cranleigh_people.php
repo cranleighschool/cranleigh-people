@@ -12,6 +12,7 @@ require_once dirname( __FILE__ ) . '/class-tgm-plugin-activation.php';
 require_once(dirname(__FILE__).'/settingsapiwrapper.php');
 require_once(dirname(__FILE__).'/settings.php');
 require_once(dirname(__FILE__).'/widget.php');
+require_once(dirname(__FILE__).'/shortcode.php');
 
 class cran_peeps {
 	public $post_type_key = "staff";
@@ -130,9 +131,9 @@ class cran_peeps {
 				array(
 					"name" => __("Position(s)", "text_domain"),
 					"id" => "{$prefix}position",
-					"type" => "autocomplete",
+					"type" => "text",
 					"clone" => true,
-					'options'     => $this->staff_roles(),
+//					'options'     => $this->staff_roles(),
 					"desc" => "Start typing a role. If the role you're after doesn't exist then add it <a href='edit-tags.php?taxonomy=staff_categories&post_type=staff' target='_blank'>here</a>. If you have more than one role, add them all here."
 				),
 				array(
@@ -141,8 +142,24 @@ class cran_peeps {
 					"type" => "text",
 					"desc" => "The job title that will show on on your cards, and contacts"
 				),
-
-
+				array(
+					"name" => __("Full Title", "cranleigh"),
+					"id" => "{$prefix}full_title",
+					"type" => "text",
+					"desc" => "eg. Mr Charlie H.D. Boddington BA, PGCE"
+				),
+				array(
+					"name" => __("Email Address", "cranleigh"),
+					"id" => "{$prefix}email_address",
+					"type" => "email",
+					"desc" => "djf@cranleigh.org"
+				),
+				array(
+					"name" => __("Phone Number", "cranleigh"),
+					"id" => "{$prefix}phone",
+					"type" => "text",
+					"desc" => "01483 542019"
+				)
 			),
 			'validation' => array(
 				'rules'    => array(
