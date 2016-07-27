@@ -10,15 +10,15 @@ By default, when you activate this plugin it only loads relevant widgets and sho
 ### [person_card]
 Attributes:
 
-	* `user`: the staff member's Cranleigh Username
-	* `type`: the type of card you want to display (common choices are either `house` or `small`)
-	* `title`: used if the `type` is `house`. 
+	1 `user`: the staff member's Cranleigh Username
+	2 `type`: the type of card you want to display (common choices are either `house` or `small`)
+	3 `title`: used if the `type` is `house`. 
 
 ### [card_list]
 Attributes: 
 
-	* `people`: a comma separated list of Cranleigh Usernames
-	* `type`: same as `type` for the `[person_card]`. Get's defaulted to `small` if you leave it blank.
+	1 `people`: a comma separated list of Cranleigh Usernames
+	2 `type`: same as `type` for the `[person_card]`. Get's defaulted to `small` if you leave it blank.
 	
 ## Changelog
 ### 1.0.0 "Bare Bones"
