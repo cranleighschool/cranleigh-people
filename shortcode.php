@@ -42,6 +42,8 @@
 
 			asort($users);
 
+			ob_start();
+
 			echo "<div class=\"row\">";
 			foreach ($users as $person => $dull) {
 				$username = trim($person);
@@ -50,13 +52,19 @@
 				echo "</div>";
 			}
 			echo "</div>";
+
+			$output = ob_get_contents();
+			ob_end_clean();
+			return $output;
 		}
+
 		function small($post_id, $card_title) {
 			global $post;
 			$full_title = get_post_meta($post->ID, 'staff_full_title', true);
 			$phone = get_post_meta($post->ID, 'staff_phone', true);
 			$phone_href = $this->phone_href($phone);
 			$position = $this->get_position(get_post_meta($post->ID, 'staff_position', true));
+			ob_start();
 			?>
 			<div class="card landscape">
 				<div class="row">
@@ -73,8 +81,13 @@
 					</div>
 				</div>
 			</div>
+
 			<?php
+			$output = ob_get_contents();
+			ob_end_clean();
+			return $output;
 		}
+
 		function shortcode($atts, $content=null) {
 			$a = shortcode_atts(array(
 				'type' => 'small',
@@ -108,23 +121,24 @@
 
 					switch($a['type']):
 						case "house":
-							$this->house_staff($post_id, $a['title']);
+							$output = $this->house_staff($post_id, $a['title']);
 						break;
 						case "small":
-							$this->small($post_id, $a['title']);
+							$output = $this->small($post_id, $a['title']);
 						break;
 						default:
-							$this->small($post_id, $a['title']);
+							$output = $this->small($post_id, $a['title']);
 						break;
 					endswitch;
 				endwhile;
 				wp_reset_postdata();
 			else:
-				return "<div class=\"alert alert-warning\">Staff member &quot;".$a['user']."&quot; not found.</div>";
+				$output = "<div class=\"alert alert-warning\">Staff member &quot;".$a['user']."&quot; not found.</div>";
 			endif;
 
 			restore_current_blog();
 
+			return $output;
 
 		}
 
@@ -146,7 +160,7 @@
 		}
 
 		function default_card() {
-			echo 'Not Written Yet';
+			return 'Not Written Yet';
 		}
 
 		function phone_href($number) {
@@ -179,12 +193,13 @@
 		}
 
 		function house_staff($post_id=null, $card_title="Housemaster") {
-			$p = get_post($post_id);
+			global $post;
 
-			$full_title = get_post_meta($p->ID, 'staff_full_title', true);
-			$phone = get_post_meta($p->ID, 'staff_phone', true);
+			$full_title = get_post_meta($post->ID, 'staff_full_title', true);
+			$phone = get_post_meta($post->ID, 'staff_phone', true);
 			$phone_href = $this->phone_href($phone);
-			$position = $this->get_position(get_post_meta($p->ID, 'staff_position', true), "Housemaster");
+			$position = $this->get_position(get_post_meta($post->ID, 'staff_position', true), "Housemaster");
+			ob_start();
 			?>
 				<section id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
 					<div class="card landscape light">
@@ -230,7 +245,11 @@
 						</div><!-- .row -->
 					</div><!-- .card landscape light -->
 				</section>
+
 			<?php
+			$output = ob_get_contents();
+			ob_end_clean();
+			return $output;
 		}
 	}
 new Cranleigh_People_Shortcode();
