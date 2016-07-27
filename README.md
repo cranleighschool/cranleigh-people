@@ -23,6 +23,9 @@ By default, when you activate this plugin it only loads relevant widgets and sho
 | `type` | same as `type` for the `[person_card]`.| `small`|
 
 ## Changelog
+### 1.2.0 
+* Working with Shorcode and Widget
+
 ### 1.0.0 "Bare Bones"
 * Initial Plugin Developed
 * No further instructions for scope
