@@ -77,7 +77,7 @@
 		}
 		function shortcode($atts, $content=null) {
 			$a = shortcode_atts(array(
-				'type' => 'landscape',
+				'type' => 'small',
 				'user' => null,
 				'title' => null
 			), $atts);
@@ -114,7 +114,7 @@
 							$this->small($post_id, $a['title']);
 						break;
 						default:
-							$this->house_staff($post_id, $a['title']);
+							$this->small($post_id, $a['title']);
 						break;
 					endswitch;
 				endwhile;
