@@ -307,9 +307,11 @@
 
 									<?php echo $this->get_first_paragraph(); ?>
 
+									<?php if (strlen($this->get_second_paragraph()) > 1): ?>
 									<p class="read-more">
 										<a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" aria-expanded="false">Read more…</a>
 									</p>
+									<?php endif; ?>
 
 									<div id="<?php echo $this->sanitize_title_to_id($card_title); ?>-bio" class="collapse" aria-expanded="false">
 										<?php echo $this->get_second_paragraph(); ?>
