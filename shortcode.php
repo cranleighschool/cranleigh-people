@@ -73,7 +73,13 @@
 				<div class="row">
 					<div class="col-xs-4">
 						<div class="card-image">
-							<?php the_post_thumbnail('thumbnail', array("class" => "img-responsive")); ?>
+							<?php if (has_post_thumbnail( )):
+								the_post_thumbnail('thumbnail', array("class" => "img-responsive"));
+								else:
+									$photo = get_option("cran_people_basic")['default_photo'];
+									echo "<img src=\"".$photo."\">";
+								endif;
+								?>
 						</div>
 					</div>
 					<div class="col-xs-8">
@@ -177,13 +183,13 @@
 		}
 		function get_position($positions, $not=null) {
 			if (is_array($positions)):
-				foreach ($positions as $position):
-					if ($position == $not):
-						continue;
-					endif;
-					break;;
-				endforeach;
-				return $position;
+			foreach ($positions as $position):
+				if ($position == $not):
+					continue;
+				endif;
+				break;;
+			endforeach;
+			return $position;
 			endif;
 			return false;
 		}
@@ -209,7 +215,13 @@
 						<div class="row">
 							<div class="col-xs-4">
 								<div class="card-image">
-									<?php the_post_thumbnail(array(600,800), array("class"=>"img-responsive")); ?>
+									<?php if (has_post_thumbnail()):
+										 the_post_thumbnail(array(600,800), array("class"=>"img-responsive"));
+										else:
+											$photo = get_option("cran_people_basic")['default_photo'];
+										echo "<img src=\"".$photo."\">";
+
+										endif; ?>
 								</div>
 							</div>
 							<div class="col-xs-8">
