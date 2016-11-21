@@ -64,6 +64,9 @@
 			$phone = get_post_meta($post->ID, 'staff_phone', true);
 			$phone_href = $this->phone_href($phone);
 			$position = $this->get_position(get_post_meta($post->ID, 'staff_position', true));
+			if (!$position) {
+				$position = get_post_meta($post->ID, 'staff_leadjobtitle', true);
+			}
 			ob_start();
 			?>
 			<div class="card landscape">
@@ -174,13 +177,13 @@
 		}
 		function get_position($positions, $not=null) {
 			if (is_array($positions)):
-			foreach ($positions as $position):
-				if ($position == $not):
-					continue;
-				endif;
-				break;;
-			endforeach;
-			return $position;
+				foreach ($positions as $position):
+					if ($position == $not):
+						continue;
+					endif;
+					break;;
+				endforeach;
+				return $position;
 			endif;
 			return false;
 		}
