@@ -53,6 +53,13 @@ class Cranleigh_CranleighPeople_Settings {
                         'no'  => 'No, I only need the widgets and shortcodes.'
                     )
                 ),
+                array(
+	                'name' => 'default_photo',
+	                'label' => __("Default Photo", 'cranleigh-2016'),
+	                'desc' => __("Where a photo isn't found for a user what placeholder image do you want to use?", "cranleigh-2016"),
+					'type'    => 'file',
+                    'default' => ''
+				)
 	        ),
             'wedevs_basics' => array(
                 array(
