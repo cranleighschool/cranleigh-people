@@ -163,7 +163,11 @@
 			$str = substr($str, 0, strpos($str, '</p>') + 4);
 			$str = strip_tags($str, '<a><strong><em>');
 
-			return '<p class="biography">' . $str . '</p>';
+			if (strlen($this->get_second_paragraph()) <= 1 && strlen($str) > 400):
+				return '<p class="biography">'.substr($str, 0, 400).'...</p>';
+			else:
+				return '<p class="biography">' . $str . '</p>';
+			endif;
 		}
 		function get_second_paragraph() {
 			global $post;
