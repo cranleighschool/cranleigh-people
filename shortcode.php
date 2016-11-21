@@ -16,7 +16,8 @@
 			$a = shortcode_atts(array(
 				"people"=> null,
 				"columns" => 2,
-				"type" => "small"
+				"type" => "small",
+				"sort" => null,
 			), $atts);
 
 			switch($a['columns']):
@@ -40,7 +41,9 @@
 				$users[$person] = $last;
 			endforeach;
 
-			asort($users);
+			if ($a['sort']==true) {
+				asort($users);
+			}
 
 			ob_start();
 
