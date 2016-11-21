@@ -135,6 +135,9 @@
 						case "house":
 							$output = $this->house_staff($post_id, $a['title']);
 						break;
+						case "hod":
+							$output = $this->head_of_dept($post_id, $a['title']);
+						break;
 						case "small":
 							$output = $this->small($post_id, $a['title']);
 						break;
@@ -160,7 +163,7 @@
 			$str = substr($str, 0, strpos($str, '</p>') + 4);
 			$str = strip_tags($str, '<a><strong><em>');
 
-			return '<p>' . $str . '</p>';
+			return '<p class="biography">' . $str . '</p>';
 		}
 		function get_second_paragraph() {
 			global $post;
@@ -203,6 +206,18 @@
 		function sanitize_title_to_id($card_title) {
 			return strtolower(str_replace(" ", "", $card_title));
 		}
+		function get_staff_photo($thumb=false) {
+			if (has_post_thumbnail()):
+				if ($thumb===false) {
+					the_post_thumbnail(array(600,800), array("class"=>"img-responsive"));
+				} else {
+					the_post_thumbnail('thumbnail', array("class"=>"img-responsive"));
+				}
+			else:
+				$photo = get_option("cran_people_basic")['default_photo'];
+				echo "<img src=\"".$photo."\">";
+			endif;
+		}
 
 		function house_staff($post_id=null, $card_title="Housemaster") {
 			global $post;
@@ -218,13 +233,7 @@
 						<div class="row">
 							<div class="col-xs-4">
 								<div class="card-image">
-									<?php if (has_post_thumbnail()):
-										 the_post_thumbnail(array(600,800), array("class"=>"img-responsive"));
-										else:
-											$photo = get_option("cran_people_basic")['default_photo'];
-										echo "<img src=\"".$photo."\">";
-
-										endif; ?>
+									<?php $this->get_staff_photo(); ?>
 								</div>
 							</div>
 							<div class="col-xs-8">
@@ -258,6 +267,53 @@
 										<?php echo $this->get_second_paragraph(); ?>
 									</div>
 
+								</div><!-- .card-text -->
+							</div><!-- .xs-8 -->
+						</div><!-- .row -->
+					</div><!-- .card landscape light -->
+				</section>
+
+			<?php
+			$output = ob_get_contents();
+			ob_end_clean();
+			return $output;
+		}
+
+		function head_of_dept($post_id=null, $card_title="Head of Department") {
+			global $post;
+
+			$full_title = get_post_meta($post->ID, 'staff_full_title', true);
+			$phone = get_post_meta($post->ID, 'staff_phone', true);
+			$phone_href = $this->phone_href($phone);
+			$position = $this->get_position(get_post_meta($post->ID, 'staff_position', true), "Housemaster");
+			ob_start();
+			?>
+				<section id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
+					<div class="card landscape light">
+						<div class="row">
+							<div class="col-xs-4">
+								<div class="card-image">
+									<?php $this->get_staff_photo(); ?>
+								</div>
+							</div>
+							<div class="col-xs-8">
+								<div class="card-text">
+								<?php
+									if ($card_title !== null) {
+										echo $this->card_title('h3', $card_title);
+									}
+								?>
+									<h4><a href="mailto:<?php echo get_post_meta($post->ID, 'staff_email_address', true); ?>"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> <a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a></h4>
+
+									<?php echo $this->get_first_paragraph(); ?>
+
+									<p class="read-more">
+										<a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" aria-expanded="false">Read more…</a>
+									</p>
+
+									<div id="<?php echo $this->sanitize_title_to_id($card_title); ?>-bio" class="collapse" aria-expanded="false">
+										<?php echo $this->get_second_paragraph(); ?>
+									</div>
 								</div><!-- .card-text -->
 							</div><!-- .xs-8 -->
 						</div><!-- .row -->
