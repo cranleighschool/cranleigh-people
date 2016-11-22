@@ -14,6 +14,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 		parent::__construct('cranleigh-person', 'Person Card (Sidebar)', $widget_ops);
 
 		$this->query_args = array(
+			"posts_per_page" => -1,
 			"post_type" => "staff",
 			"orderby" => "meta_value_num",
 			"meta_key" => "staff_username"
