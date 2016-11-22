@@ -109,7 +109,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 					if (has_post_thumbnail()):
 						the_post_thumbnail('full', array("class"=>"img-responsive")); // This needs to not be `full` but we haven't confirmed image sizes yet
 					else:
-						echo "<img src=\"//placehold.it/600x800&text=PHOTO\" class=\"img-responsive\" alt=\"".get_the_title()."\">";
+						echo "<img src=\"//placehold.it/300x300&text=PHOTO\" class=\"img-responsive\" alt=\"".get_the_title()."\">";
 					endif;
 					?>
 			</div>
