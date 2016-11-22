@@ -418,22 +418,38 @@ class cran_peeps {
 	function get_staff_photo($post_ID) {
 		$post_thumb_id = get_post_thumbnail_id($post_ID);
 		if ($post_thumb_id) {
+			return get_the_post_thumbnail( $post_ID, array(100,100) );
 			$post_thumb_img = wp_get_attachment_image_src($post_thumb_id, array(100,100));
 			return $post_thumb_img[0];
 		}
 	}
 
 	function add_photo_column_to_listing($defaults) {
-		if (get_post_type()==$this->post_type_key)
-		$defaults['staff_photo'] = "Photo";
+		if (get_post_type()==$this->post_type_key) {
+			$columns = array();
+			$columns['cb'] = $defaults['cb'];
+			$columns['title'] = $defaults['title'];
+			$columns['staff_username'] = "Username";
+			$columns['staff_leadjobtitle'] = "Lead Job Title";
+			$columns['taxonomy-staff_categories'] = $defaults['taxonomy-staff_categories'];
+			$columns['date'] = $defaults['date'];
+			$columns['staff_photo'] = "Photo";
+			return $columns;
+		}
 		return $defaults;
 	}
 	function add_photo_to_listing($column_name, $post_ID) {
 		if ($column_name == 'staff_photo') {
 			$post_featured_image = $this->get_staff_photo($post_ID);
 			if ($post_featured_image) {
-				echo '<img src="'.$post_featured_image.'" />';
+				echo $post_featured_image;
 			}
+		}
+		if ($column_name == 'staff_username') {
+			echo strtoupper(get_post_meta( $post_ID, 'staff_username', true ));
+		}
+		if ($column_name == 'staff_leadjobtitle') {
+			echo get_post_meta( $post_ID, 'staff_leadjobtitle', true );
 		}
 	}
 
@@ -441,5 +457,6 @@ class cran_peeps {
 }
 
 $cran_peeps_plugin = new cran_peeps();
+
 
 
