@@ -13,7 +13,7 @@
 
 		}
 		function table_row($atts, $content=null) {
-			$a = shortcode_atts( ["user" = null], $atts );
+			$a = shortcode_atts( ["user" => null], $atts );
 			ob_start();
 ?>			<tr>
 				<td>Person</td>
