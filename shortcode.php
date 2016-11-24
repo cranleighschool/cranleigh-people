@@ -48,6 +48,8 @@
 				[
 					"people" => null,
 					"class" => "table-striped",
+					"first_column" => "full_title",
+					"last_column" => "email_address"
 				],
 				$atts);
 			$people = explode(",", $a['people']);
@@ -70,7 +72,7 @@
 			foreach ($users as $person => $dull) {
 				$username = trim($person);
 				echo "<div class=\"col-sm-".$class."\">";
-				echo $this->table_row(array("user" => $username));
+				echo $this->table_row(array_merge(array("user" => $username), $a));
 				echo "</div>";
 			}
 ?>
