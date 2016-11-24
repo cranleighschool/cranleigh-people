@@ -12,18 +12,37 @@
 			);
 
 		}
-		function table_row($atts, $content=null) {
-			$a = shortcode_atts( ["user" => null], $atts );
+		function two_column($post_id) {
+			global $post;
+
+			$first_column = get_post_meta($post->ID, 'staff_'.$this->first_column, true);
+			$last_column = get_post_meta($post->ID, 'staff_'.$this->last_column, true);
+
 			ob_start();
+
 ?>			<tr>
-				<td>Person</td>
-				<td><?php echo $a['user']; ?></td>
+				<td><?php echo $first_column; ?></td>
+				<td><?php echo $last_column; ?></td>
 			</tr>
 <?php
-	$output = ob_get_contents();
+			$output = ob_get_contents();
 			ob_end_clean();
 			return $output;
 		}
+
+		function table_row($atts, $content=null) {
+			$a = shortcode_atts( [
+				"user" => null,
+				"first_column" => "full_title",
+				"last_column" => "email_address"
+			], $atts );
+
+			$this->first_column = $a['first_column'];
+			$this->last_column = $a['last_column'];
+
+			return $this->shortcode(array("type" => "two-column", "user" => $a['user']));
+		}
+
 		function table_list($atts, $content=null) {
 			$a = shortcode_atts(
 				[
@@ -51,7 +70,7 @@
 			foreach ($users as $person => $dull) {
 				$username = trim($person);
 				echo "<div class=\"col-sm-".$class."\">";
-				echo $this->table_row(array("first_column" => "job_title", "last_column" => "name", "user" => $username));
+				echo $this->table_row(array("user" => $username));
 				echo "</div>";
 			}
 ?>
@@ -191,6 +210,9 @@
 						break;
 						case "small":
 							$output = $this->small($post_id, $a['title']);
+						break;
+						case "two-column":
+							$output = $this->two_column($post_id);
 						break;
 						default:
 							$output = $this->small($post_id, $a['title']);
