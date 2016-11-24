@@ -3,6 +3,7 @@
 		function __construct() {
 			add_shortcode("person_card", array($this, 'shortcode'));
 			add_shortcode("card_list", array($this, 'tutors_list'));
+			add_shortcode("table_list", array($this, 'table_list'));
 
 			$this->query_args = array(
 				"post_type" => "staff",
@@ -10,6 +11,52 @@
 				"meta_key" => "staff_username"
 			);
 
+		}
+		function table_row($atts, $content=null) {
+			$a = shortcode_atts( ["user" = null], $atts );
+			ob_start();
+?>			<tr>
+				<td>Person</td>
+				<td><?php echo $a['user']; ?></td>
+			</tr>
+<?php
+	$output = ob_get_contents();
+			ob_end_clean();
+			return $output;
+		}
+		function table_list($atts, $content=null) {
+			$a = shortcode_atts(
+				[
+					"people" => null,
+					"class" => "table-striped",
+				],
+				$atts);
+			$people = explode(",", $a['people']);
+
+			$users = array();
+			foreach ($people as $person):
+				$initial = str_split($person);
+				$last = end($initial);
+				$users[$person] = $last;
+			endforeach;
+
+			if ($a['sort']==true) {
+				asort($users);
+			}
+
+			ob_start();
+?>
+			<table class="table <?php echo $a['class']; ?>">
+<?php
+			foreach ($users as $person => $dull) {
+				$username = trim($person);
+				echo "<div class=\"col-sm-".$class."\">";
+				echo $this->table_row(array("first_column" => "job_title", "last_column" => "name", "user" => $username));
+				echo "</div>";
+			}
+?>
+			</table>
+<?php
 		}
 
 		function tutors_list($atts) {
@@ -331,5 +378,7 @@
 			ob_end_clean();
 			return $output;
 		}
+
+
 	}
 new Cranleigh_People_Shortcode();
