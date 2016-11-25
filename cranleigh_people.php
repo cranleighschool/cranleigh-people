@@ -123,6 +123,13 @@ class cran_peeps {
 			"autosave" => true,
 			"fields" => array(
 				array(
+					"name" => __("Surname", "cranleigh"),
+					"id" => "{$prefix}surname",
+					"type" => "text",
+					"desc" => "for sorting purposes only",
+					'disabled'  => true,
+				),
+				array(
 					"name" => __("Cranleigh Username", "cranleigh"),
 					"id" => "{$prefix}username",
 					"type" => "text",
