@@ -44,6 +44,9 @@ class cran_peeps {
 
 			add_filter('manage_posts_columns', array($this,'add_photo_column_to_listing'));
 			add_action('manage_posts_custom_column', array($this,'add_photo_to_listing'), 10, 2);
+
+			add_action( 'pre_get_posts', array($this,'owd_post_order') );
+
 		endif;
 	}
 
@@ -87,6 +90,8 @@ class cran_peeps {
 	function profile_pictures() {
 		add_image_size("staff-photo", 500, 500, true);
 	}
+
+
 
 
 	/**
@@ -460,6 +465,16 @@ class cran_peeps {
 		}
 	}
 
+	// Order custom post types alphabetically
+	function owd_post_order( $query ) {
+		if ( $query->is_post_type_archive($this->post_type_key) && $query->is_main_query() ) {
+
+			$query->set( 'orderby', 'meta_value' );
+			$query->set('meta_key', 'staff_surname');
+			$query->set( 'order', 'ASC' );
+		}
+		return $query;
+	}
 
 }
 
