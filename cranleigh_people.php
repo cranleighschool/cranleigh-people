@@ -256,6 +256,17 @@ class cran_peeps {
 			'items_list_navigation' => __( 'People list navigation', 'text_domain' ),
 			'filter_items_list'     => __( 'Filter people list', 'text_domain' ),
 		);
+		$capabilities = array(
+			'publish_posts' => 'publish_'.$this->post_type_key,
+			'edit_posts' => 'edit_'.$this->post_type_key,
+			'edit_others_posts' => 'edit_others_'.$this->post_type_key,
+			'delete_posts' => 'delete_'.$this->post_type_key,
+			'delete_others_posts' => 'delete_others_'.$this->post_type_key,
+			'read_private_posts' => 'read_private_'.$this->post_type_key,
+			'edit_post' => 'edit_'.$this->post_type_key,
+			'delete_post' => 'delete_'.$this->post_type_key,
+			'read_post' => 'read_'.$this->post_type_key,
+		);
 		$args = array(
 			'label'                 => __( 'Person', 'text_domain' ),
 			'description'           => __( 'A List of People that are mentioned on the website', 'text_domain' ),
@@ -274,7 +285,7 @@ class cran_peeps {
 			'has_archive'           => true,
 			'exclude_from_search'   => true,
 			'publicly_queryable'    => true,
-			'capability_type'       => 'page',
+			'capabilities' => $capabilities,
 		);
 		register_post_type( $this->post_type_key, $args );
 
@@ -305,6 +316,7 @@ class cran_peeps {
 			'items_list'                 => __( 'Items list', 'text_domain' ),
 			'items_list_navigation'      => __( 'Items list navigation', 'text_domain' ),
 		);
+
 		$args = array(
 			'labels'                     => $labels,
 			'hierarchical'               => false,
@@ -313,6 +325,12 @@ class cran_peeps {
 			'show_admin_column'          => true,
 			'show_in_nav_menus'          => true,
 			'show_tagcloud'              => false,
+			'capabilities' => array(
+				'manage_terms' => 'manage_staff_cats',
+				'edit_terms' => 'edit_staff_cats',
+				'delete_terms' => 'delete_staff_cats',
+				'assign_terms' => 'assign_staff_cats',
+			)
 		);
 		register_taxonomy( 'staff_categories', array( 'staff' ), $args );
 
