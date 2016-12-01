@@ -16,6 +16,8 @@ require_once(dirname(__FILE__).'/shortcode.php');
 
 class cran_peeps {
 	public $post_type_key = "staff";
+	private $card_types = false;
+
 
 	/**
 	 * __construct function. Contains all the actions and filters for the class.
@@ -24,6 +26,12 @@ class cran_peeps {
 	 * @return void
 	 */
 	function __construct() {
+		$this->card_types = (object) [
+		["value" => "hod", "title" => "Head of Department"],
+		["value" => "house", "title" => "House"],
+		["value" => "small", "title" => "Small"],
+		["value" => "two-column", "title" => "Two Column"]
+	];
 		$settings = get_option('cran_people_basic');
 		if (isset($settings['load_cpt']) && $settings['load_cpt']=="yes"):
 			register_activation_hook(__FILE__, array($this, 'activate'));
@@ -46,6 +54,11 @@ class cran_peeps {
 			add_action('manage_posts_custom_column', array($this,'add_photo_to_listing'), 10, 2);
 
 			add_action( 'pre_get_posts', array($this,'owd_post_order') );
+
+
+			add_action('media_buttons', array($this, 'add_media_button'), 900);
+			add_action('wp_enqueue_media', array($this, 'include_media_button_js_file'));
+			add_action( 'admin_print_footer_scripts', array( $this, 'add_mce_popup' ) );
 
 		endif;
 	}
@@ -474,6 +487,94 @@ class cran_peeps {
 			$query->set( 'order', 'ASC' );
 		}
 		return $query;
+	}
+
+
+	function add_media_button() {
+		echo '<style>.wp-media-buttons .person_card_insert span.wp-media-buttons-icon:before {
+			font:400 18px/1 dashicons;
+			content:"\f110";
+			} </style>';
+		echo '<a href="#" class="button person_card_insert" id="add_person_shortcode"><span class="wp-media-buttons-icon"></span>' . esc_html__( 'Person Card', 'cranleigh' ) . '</a>';
+
+	}
+
+	function include_media_button_js_file() {
+		wp_enqueue_script('cranleigh_people_media_button', plugins_url('popme.js', __FILE__), array('jquery'), time(), true);
+	}
+
+	function add_mce_popup() {
+		?>
+		<script>
+			function CranleighPeopleInsertShortcode(){
+
+				var user = jQuery("#user").val();
+				var title = jQuery("#card_title").val();
+				var type = jQuery("#card_type").val();
+
+//				smugmug_url = smugmug_url.trim();
+//				if (smugmug_url.substr(0,4) != "http") {
+//					alert(<?php echo json_encode( __( 'Please enter a valid URL, ensuring it starts with https://', 'cranleigh' ) ); ?>);
+//					return;
+//				}
+				window.send_to_editor("[person_card user=\"" + user + "\" type=\"" + type + "\" title=\"" + title + "\"]");
+				return;
+
+    		}
+		</script>
+
+		<div id="insert_cranleigh_person" style="display:none;">
+			<div id="insert_cranleigh_person_wrapper" class="wrap">
+				<div id="insert-cranleigh-person-container">
+					<label>User</label><br />
+					<?php
+					$args = [
+						"post_type" => $this->post_type_key,
+						"posts_per_page" => -1,
+						"meta_key" => "staff_surname",
+						"orderby" => "meta_value",
+						"order" => "ASC"
+					];
+
+					$newquery = new WP_Query($args);
+
+					?>
+					<select id="user">
+						<option value="">--SELECT A STAFF MEMBER---</option>
+						<?php while($newquery->have_posts()): $newquery->the_post();
+							$username = get_post_meta(get_the_ID(), "staff_username", true);
+						?>
+						<option value="<?php echo $username; ?>"><?php echo get_the_title()." (".$username.")"; ?></option>
+						<?php endwhile;
+							wp_reset_postdata();
+							wp_reset_query();
+						?>
+					</select>
+					<br />
+					<label>Card Type</label><br />
+					<select id="card_type">
+						<option value="">--SELECT A CARD TYPE---</option>
+						<?php foreach($this->card_types as $card_type):
+							 ?>
+						<option value="<?php echo $card_type['value']; ?>"><?php echo $card_type['title']; ?></option>
+						<?php endforeach; ?>
+					</select>
+					<br />
+					<label>Card Title</label><br />
+					<input type="text" id="card_title" style="padding:5px;width:100%;border-radius: 5px;" placeholder="Card Title" />
+
+					<div style="padding-top:15px;">
+						<input type="button" class="button-primary" value="Insert Shortcode" onclick="CranleighPeopleInsertShortcode();"/>
+						<a class="button" href="#" onclick="tb_remove(); return false;">
+							<?php _e("Cancel", "js_shortcode"); ?>
+						</a>
+        			</div>
+
+				</div>
+			</div>
+		</div>
+
+	<?php
 	}
 
 }
