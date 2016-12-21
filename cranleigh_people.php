@@ -60,6 +60,8 @@ class cran_peeps {
 			add_action('wp_enqueue_media', array($this, 'include_media_button_js_file'));
 			add_action( 'admin_print_footer_scripts', array( $this, 'add_mce_popup' ) );
 
+			add_action('admin_notices', array($this, 'admin_notice'));
+			add_action('admin_head', array($this, 'admin_head'));
 		endif;
 	}
 
@@ -154,18 +156,18 @@ class cran_peeps {
 					"desc" => "eg. Dave Futcher is &quot;DJF&quot;"
 				),
 				array(
-					"name" => __("Position(s)", "text_domain"),
+					"name" => __("Lead Job Title", "cranleigh"),
+					"id" => "{$prefix}leadjobtitle",
+					"type" => "text",
+					"desc" => "The job title that will show on on your cards, and contacts"
+				),
+				array(
+					"name" => __("More Position(s)", "text_domain"),
 					"id" => "{$prefix}position",
 					"type" => "text",
 					"clone" => true,
 //					'options'     => $this->staff_roles(),
 					"desc" => "Start typing a role. If the role you're after doesn't exist then add it <a href='edit-tags.php?taxonomy=staff_categories&post_type=staff' target='_blank'>here</a>. If you have more than one role, add them all here."
-				),
-				array(
-					"name" => __("Lead Job Title", "cranleigh"),
-					"id" => "{$prefix}leadjobtitle",
-					"type" => "text",
-					"desc" => "The job title that will show on on your cards, and contacts"
 				),
 				array(
 					"name" => __("Full Title", "cranleigh"),
@@ -593,6 +595,28 @@ class cran_peeps {
 		</div>
 
 	<?php
+	}
+
+	function admin_head() {
+		echo '<style>.blink {
+    animation-duration: 2s;
+    animation-name: blink;
+    animation-iteration-count: infinite;
+    animation-timing-function: steps(4, start);
+}
+@keyframes blink {
+    80% {
+        visibility: hidden;
+    }
+}
+</style>';
+
+	}
+	function admin_notice() {
+		global $pagenow;
+		if ($pagenow=='post.php' && get_post_type()=='staff') {
+			echo '<div class="notice notice-warning"><p class="blink"><strong>Warning:</strong> This data is managed by a daily syncronisation from ISAMS. You can safely modify the main biography content, and the photo. Any other changes you make will be overridden at the next sync.</p></div>';
+		}
 	}
 
 }
