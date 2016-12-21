@@ -145,7 +145,7 @@ class cran_peeps {
 					"id" => "{$prefix}surname",
 					"type" => "text",
 					"desc" => "for sorting purposes only",
-					'disabled'  => true,
+					'readonly'  => true,
 				),
 				array(
 					"name" => __("Cranleigh Username", "cranleigh"),
