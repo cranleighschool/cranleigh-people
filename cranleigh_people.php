@@ -635,7 +635,7 @@ class cran_peeps {
 		$user = $wpdb->get_row("SELECT meta_value from $wpdb->postmeta WHERE post_id=".get_the_ID()." AND meta_key='staff_username'");
 
 		if ($pagenow=='post.php' && get_post_type()=='staff') {
-			echo '<div class="notice notice-warning"><p class="blink"><strong>Warning:</strong> This data is managed by a daily syncronisation from ISAMS. You can safely modify the profile photo. Any other changes you make will be overridden at the next sync.</p><p>To amend the biography <a href="https://marketing.cranleigh.org/staff-biographies/find/'.$user->meta_value.'">please click here.</a></div>';
+			echo '<div class="notice notice-warning"><p class="blink"><strong>Warning:</strong> This data is managed by a daily syncronisation from ISAMS. You can safely modify the profile photo. Any other changes you make will be overridden at the next sync.</p><p>To amend the biography <a target="_blank" href="https://marketing.cranleigh.org/staff-biographies/find/'.$user->meta_value.'">please click here.</a></div>';
 		}
 	}
 
