@@ -62,6 +62,16 @@ class cran_peeps {
 
 			add_action('admin_notices', array($this, 'admin_notice'));
 			add_action('admin_head', array($this, 'admin_head'));
+
+			add_filter('tiny_mce_before_init', function($args) {
+				global $pagenow;
+				if ($pagenow=='post.php' && get_post_type()=='staff') {
+					$args['readonly'] = true;
+					$args['toolbar'] = false;
+				}
+				return $args;
+			});
+			add_filter('wp_default_editor', array($this, 'force_default_editor'));
 		endif;
 	}
 
@@ -598,24 +608,34 @@ class cran_peeps {
 	}
 
 	function admin_head() {
-		echo '<style>.blink {
-    animation-duration: 2s;
-    animation-name: blink;
-    animation-iteration-count: infinite;
-    animation-timing-function: steps(4, start);
-}
-@keyframes blink {
-    80% {
-        visibility: hidden;
-    }
-}
-</style>';
+		echo '<style>
+			.blink {
+				animation-duration: 2s;
+				animation-name: blink;
+				animation-iteration-count: infinite;
+				animation-timing-function: steps(4, start);
+			}
+			@keyframes blink {
+			    80% {
+			        visibility: hidden;
+			    }
+			}
+			.wp-editor-tabs {
+				display:none;
+			}
+			</style>';
 
 	}
+	function force_default_editor() {
+		return 'tinymce';
+	}
 	function admin_notice() {
-		global $pagenow;
+		global $pagenow, $wpdb;
+		// We have to use WPDB to get the staff username as the post data hasn't been called yet (we're in the admin!)
+		$user = $wpdb->get_row("SELECT meta_value from $wpdb->postmeta WHERE post_id=".get_the_ID()." AND meta_key='staff_username'");
+
 		if ($pagenow=='post.php' && get_post_type()=='staff') {
-			echo '<div class="notice notice-warning"><p class="blink"><strong>Warning:</strong> This data is managed by a daily syncronisation from ISAMS. You can safely modify the main biography content, and the photo. Any other changes you make will be overridden at the next sync.</p></div>';
+			echo '<div class="notice notice-warning"><p class="blink"><strong>Warning:</strong> This data is managed by a daily syncronisation from ISAMS. You can safely modify the profile photo. Any other changes you make will be overridden at the next sync.</p><p>To amend the biography <a href="https://marketing.cranleigh.org/staff-biographies/find/'.$user->meta_value.'">please click here.</a></div>';
 		}
 	}
 
