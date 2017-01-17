@@ -71,7 +71,9 @@ class cran_peeps {
 				}
 				return $args;
 			});
-			add_filter('wp_default_editor', array($this, 'force_default_editor'));
+			if (get_post_type()=='staff'):
+				add_filter('wp_default_editor', array($this, 'force_default_editor'));
+			endif;
 		endif;
 	}
 
@@ -608,22 +610,26 @@ class cran_peeps {
 	}
 
 	function admin_head() {
-		echo '<style>
-			.blink {
-				animation-duration: 2s;
-				animation-name: blink;
-				animation-iteration-count: infinite;
-				animation-timing-function: steps(4, start);
+		global $pagenow;
+		if ($pagenow=='post.php' && get_post_type()=='staff') {
+
+			echo '<style>
+				.blink {
+					animation-duration: 2s;
+					animation-name: blink;
+					animation-iteration-count: infinite;
+					animation-timing-function: steps(4, start);
+				}
+				@keyframes blink {
+				    80% {
+				        visibility: hidden;
+				    }
+				}
+				.wp-editor-tabs {
+					display:none;
+				}
+				</style>';
 			}
-			@keyframes blink {
-			    80% {
-			        visibility: hidden;
-			    }
-			}
-			.wp-editor-tabs {
-				display:none;
-			}
-			</style>';
 
 	}
 	function force_default_editor() {
