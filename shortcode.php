@@ -338,7 +338,7 @@
 									<?php
 										if ($card_title !== "Matron"):
 											echo '<p><a href="mailto:'.$email.'"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span>'.strtolower($email).'</a><br>
-									<a href="tel:'.$phone_href.'"><span class="sr-only">Phone:</span><span class="glyphicon glyphicon-earphone"></span> '.$phone.'</a></p>';
+									<a href="tel:'.$phone_href.'"><span class="sr-only">Phone:</span><span class="glyphicon glyphicon-earphone"></span>'.$phone.'</a></p>';
 										endif;
 									echo $this->get_first_paragraph(); ?>
 
