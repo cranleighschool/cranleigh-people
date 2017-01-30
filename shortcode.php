@@ -305,6 +305,7 @@
 			$phone = get_post_meta($post->ID, 'staff_phone', true);
 			$phone_href = $this->phone_href($phone);
 			$position = $this->get_position(get_post_meta($post->ID, 'staff_position', true), "Housemaster");
+			$email = get_post_meta($post->ID, 'staff_email_address', true);
 			ob_start();
 			?>
 				<section id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
@@ -336,7 +337,7 @@
 									<h4><a href="#"><?php echo $full_title; ?></a></h4>
 									<?php
 										if ($card_title !== "Matron"):
-											echo '<p><a href="#"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> '.$position.'<br>
+											echo '<p><a href="#"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> '.$email.'<br>
 									<a href="tel:'.$phone_href.'"><span class="sr-only">Phone:</span><span class="glyphicon glyphicon-earphone"></span> '.$phone.'</a></p>';
 										endif;
 									echo $this->get_first_paragraph(); ?>
