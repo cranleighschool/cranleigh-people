@@ -334,7 +334,7 @@
 												echo $this->card_title('h3', $card_title);
 										endswitch;
 									?>
-									<h4><a href="#"><?php echo $full_title; ?></a></h4>
+									<h4><a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a></h4>
 									<?php
 										if ($card_title !== "Matron"):
 											echo '<p><a href="mailto:'.$email.'"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span>'.strtolower($email).'</a>';
