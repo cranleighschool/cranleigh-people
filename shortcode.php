@@ -335,7 +335,7 @@
 												echo $this->card_title('h3', $card_title);
 										endswitch;
 									?>
-									<h4><a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?><span class="qualifications"><?php echo $qualifications; ?></span></a></h4>
+									<h4><a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a><span class="qualifications"><?php echo $qualifications; ?></span></h4>
 									<?php
 										if ($card_title !== "Matron"):
 											echo '<p><a href="mailto:'.$email.'"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span>'.strtolower($email).'</a>';
@@ -389,7 +389,7 @@
 										echo $this->card_title('h3', $card_title);
 									}
 								?>
-									<h4><a href="mailto:<?php echo $emai; ?>"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> <a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?><span class="qualifications"><?php echo $qualifications; ?></span></a></h4>
+									<h4><a href="mailto:<?php echo $emai; ?>"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> <a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a><span class="qualifications"><?php echo $qualifications; ?></span></h4>
 
 									<?php echo $this->get_first_paragraph(); ?>
 
