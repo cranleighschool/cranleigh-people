@@ -185,7 +185,12 @@ class cran_peeps {
 					"name" => __("Full Title", "cranleigh"),
 					"id" => "{$prefix}full_title",
 					"type" => "text",
-					"desc" => "eg. Mr Charlie H.D. Boddington BA, PGCE"
+					"desc" => "eg. Mr Charlie H.D. Boddington"
+				),
+				array(
+					"name" => __("Qualifications", "cranleigh"),
+					"id" => "{$prefix}qualifications",
+					"type" => "text",
 				),
 				array(
 					"name" => __("Email Address", "cranleigh"),
