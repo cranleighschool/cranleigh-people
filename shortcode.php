@@ -306,9 +306,10 @@
 			$phone_href = $this->phone_href($phone);
 			$position = $this->get_position(get_post_meta($post->ID, 'staff_position', true), "Housemaster");
 			$email = get_post_meta($post->ID, 'staff_email_address', true);
+			$qualifications = get_post_meta($post->ID, 'staff_qualifications', true);
 			ob_start();
 			?>
-				<section id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
+				<section class="person-card" id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
 					<div class="card landscape light">
 						<div class="row">
 							<div class="col-xs-4">
@@ -334,7 +335,7 @@
 												echo $this->card_title('h3', $card_title);
 										endswitch;
 									?>
-									<h4><a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a></h4>
+									<h4><a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?><span class="qualifications"><?php echo $qualifications; ?></span></a></h4>
 									<?php
 										if ($card_title !== "Matron"):
 											echo '<p><a href="mailto:'.$email.'"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span>'.strtolower($email).'</a>';
@@ -369,6 +370,8 @@
 			$phone = get_post_meta($post->ID, 'staff_phone', true);
 			$phone_href = $this->phone_href($phone);
 			$position = $this->get_position(get_post_meta($post->ID, 'staff_position', true), "Housemaster");
+			$email = get_post_meta($post->ID, 'staff_email_address', true);
+			$qualifications = get_post_meta($post->ID, 'staff_qualifications', true);
 			ob_start();
 			?>
 				<section id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
@@ -386,7 +389,7 @@
 										echo $this->card_title('h3', $card_title);
 									}
 								?>
-									<h4><a href="mailto:<?php echo get_post_meta($post->ID, 'staff_email_address', true); ?>"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> <a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a></h4>
+									<h4><a href="mailto:<?php echo $emai; ?>"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> <a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?><span class="qualifications"><?php echo $qualifications; ?></span></a></h4>
 
 									<?php echo $this->get_first_paragraph(); ?>
 
