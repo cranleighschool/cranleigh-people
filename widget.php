@@ -126,6 +126,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 		else:
 			echo "<p class=\"alert-warning\">Staff Member not selected</p>";
 		endif;
+		echo "<div class=\"clearfix clear\">&nbsp;</div>";
 	}
 
 		function get_first_paragraph() {
