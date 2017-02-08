@@ -101,7 +101,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 				<a href="<?php the_permalink(); ?>">
 					<span class="glyphicon glyphicon-envelope"></span>
 
-				<?php the_title(); ?></a>
+				<?php echo get_post_meta(get_the_ID(), 'staff_full_title', true); ?></a>
 
 			</h5>
 			<div class="person-image">
