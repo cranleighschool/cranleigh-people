@@ -114,13 +114,9 @@ class Cranleigh_People_Widget extends WP_Widget {
 					endif;
 					?>
 			</div>
-			<?php the_excerpt(); ?>
+			<?php
 
-			<p class="read-more clearfix">
-				<a href="<?php the_permalink(); ?>">Read more...</a>
-			</p>
-
-		<?php
+			echo $this->get_first_paragraph();
 
 			endwhile;
 			wp_reset_postdata();
@@ -129,6 +125,15 @@ class Cranleigh_People_Widget extends WP_Widget {
 			echo "<p class=\"alert-warning\">Staff Member not selected</p>";
 		endif;
 	}
+
+		function get_first_paragraph() {
+			global $post;
+			$str = wpautop(get_the_content());
+			$str = substr($str, 0, strpos($str, '</p>') + 4);
+			$str = strip_tags($str, '<a><strong><em>');
+
+			return '<p class="biography">' . $str . '</p>';
+		}
 
 }
 
