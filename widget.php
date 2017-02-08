@@ -96,12 +96,12 @@ class Cranleigh_People_Widget extends WP_Widget {
 		if ($query->have_posts()):
 			while($query->have_posts()): $query->the_post();
 
-		?>
+		?><?php edit_post_link("[Edit ".$username."]", "<small class='pull-right'>", "</small>"); ?>
 			<h5>
 				<a href="<?php the_permalink(); ?>">
 					<span class="glyphicon glyphicon-envelope"></span>
 
-				<?php the_title(); ?></a><?php edit_post_link("[Edit ".$username."]"); ?>
+				<?php the_title(); ?></a>
 
 			</h5>
 			<div class="person-image">
@@ -109,7 +109,8 @@ class Cranleigh_People_Widget extends WP_Widget {
 					if (has_post_thumbnail()):
 						the_post_thumbnail('full', array("class"=>"img-responsive")); // This needs to not be `full` but we haven't confirmed image sizes yet
 					else:
-						echo "<img src=\"//placehold.it/300x300&text=PHOTO\" class=\"img-responsive\" alt=\"".get_the_title()."\">";
+						echo "<img class=\"img-responsive\" alt=\"".get_the_title()."\" src=\"".site_url("staff_photos/database.php?user_=".$username)."\" />";
+//						echo "<img src=\"//placehold.it/300x300&text=PHOTO\" class=\"img-responsive\" alt=\"".get_the_title()."\">";
 					endif;
 					?>
 			</div>
