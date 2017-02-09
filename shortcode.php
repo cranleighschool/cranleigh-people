@@ -148,6 +148,7 @@
 				<div class="row">
 					<div class="col-xs-4">
 						<div class="card-image">
+							<a href="<?php the_permalink(); ?>">
 							<?php if (has_post_thumbnail( )):
 								the_post_thumbnail('thumbnail', array("class" => "img-responsive"));
 								else:
@@ -160,6 +161,7 @@
 									endif;
 								endif;
 							?>
+							</a>
 						</div>
 					</div>
 					<div class="col-xs-8">
