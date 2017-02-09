@@ -151,10 +151,15 @@
 							<?php if (has_post_thumbnail( )):
 								the_post_thumbnail('thumbnail', array("class" => "img-responsive"));
 								else:
-									$photo = get_option("cran_people_basic")['default_photo'];
-									echo "<img src=\"".$photo."\">";
+									$check = wp_remote_head(site_url("staff_photos/database.php?user_=".get_post_meta(get_the_ID(), 'staff_username', true)), ['timeout'=>2]);
+									if ($check['response']['code']==200):
+										echo "<img class=\"img-responsive\" alt=\"".get_the_title()."\" src=\"".site_url("staff_photos/database.php?user_=".get_post_meta(get_the_ID(), 'staff_username', true))."\" />";
+									else:
+										$photo = get_option("cran_people_basic")['default_photo'];
+										echo "<img src=\"".$photo."\">";
+									endif;
 								endif;
-								?>
+							?>
 						</div>
 					</div>
 					<div class="col-xs-8">
