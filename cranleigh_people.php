@@ -50,7 +50,8 @@ class cran_peeps {
 			add_shortcode("cranleigh-person", array($this, 'person_shortcode'));
 			add_filter("enter_title_here", array($this, 'title_text_input'));
 
-			add_filter('manage_posts_columns', array($this,'add_photo_column_to_listing'));
+//			add_filter('manage_posts_columns', array($this,'add_photo_column_to_listing'));
+			add_filter('manage_edit-staff_columns', array($this, 'add_photo_column_to_listing'));
 			add_action('manage_posts_custom_column', array($this,'add_photo_to_listing'), 10, 2);
 
 			add_action( 'pre_get_posts', array($this,'owd_post_order') );
@@ -179,7 +180,7 @@ class cran_peeps {
 					"type" => "text",
 					"clone" => true,
 //					'options'     => $this->staff_roles(),
-					"desc" => "Start typing a role. If the role you're after doesn't exist then add it <a href='edit-tags.php?taxonomy=staff_categories&post_type=staff' target='_blank'>here</a>. If you have more than one role, add them all here."
+					"desc" => ""
 				),
 				array(
 					"name" => __("Full Title", "cranleigh"),
@@ -191,6 +192,7 @@ class cran_peeps {
 					"name" => __("Qualifications", "cranleigh"),
 					"id" => "{$prefix}qualifications",
 					"type" => "text",
+					"desc" => "BA, DipEd, BEng, PhD"
 				),
 				array(
 					"name" => __("Email Address", "cranleigh"),
@@ -496,6 +498,11 @@ class cran_peeps {
 			$columns['taxonomy-staff_categories'] = $defaults['taxonomy-staff_categories'];
 			$columns['date'] = $defaults['date'];
 			$columns['staff_photo'] = "Photo";
+	unset( $columns['wpseo-score'] );
+	unset( $columns['wpseo-title'] );
+	unset( $columns['wpseo-metadesc'] );
+	unset( $columns['wpseo-focuskw'] );
+
 			return $columns;
 		}
 		return $defaults;
