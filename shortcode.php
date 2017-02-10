@@ -4,6 +4,7 @@
 			add_shortcode("person_card", array($this, 'shortcode'));
 			add_shortcode("card_list", array($this, 'tutors_list'));
 			add_shortcode("table_list", array($this, 'table_list'));
+			add_shortcode( "people_taxonomy", array($this, 'as_taxonomy') );
 
 			$this->query_args = array(
 				"post_type" => "staff",
@@ -12,6 +13,37 @@
 			);
 
 		}
+
+
+		/**
+		 * as_taxonomy function.
+		 *
+		 * @access public
+		 * @param string|array $taxonomy
+		 * @return void
+		 */
+		function as_taxonomy($atts, $content=null) {
+			$atts = shortcode_atts( [
+				"taxonomy" => $taxonomy
+			], $atts );
+			$args = [
+				"tax_query" => [
+					[
+						"taxonomy" => "staff_categories",
+						"field" => "slug",
+						"terms" => $atts['taxonomy']
+					]
+				]
+			];
+			$query = new WP_Query(wp_parse_args($args, $this->query_args));
+			while ($query->have_posts()): $query->the_post();
+				$people[] = get_post_meta(get_the_ID(), 'staff_username', true);
+			endwhile;
+			wp_reset_postdata();
+			wp_reset_query();
+			return $this->table_list(["people"=>implode(",",$people)]);
+		}
+
 		function two_column($post_id) {
 			global $post;
 
@@ -396,7 +428,7 @@
 										echo $this->card_title('h3', $card_title);
 									}
 								?>
-									<h4><a href="mailto:<?php echo $emai; ?>"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> <a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a><span class="qualifications"><?php echo $qualifications; ?></span></h4>
+									<h4><a href="mailto:<?php echo $email; ?>"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> <a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a><span class="qualifications"><?php echo $qualifications; ?></span></h4>
 
 									<?php echo $this->get_first_paragraph(); ?>
 
