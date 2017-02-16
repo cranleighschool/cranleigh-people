@@ -5,7 +5,7 @@
 			add_shortcode("card_list", array($this, 'tutors_list'));
 			add_shortcode("table_list", array($this, 'table_list'));
 			add_shortcode( "people_taxonomy", array($this, 'as_taxonomy') );
-
+			add_shortcode( "person_table", array($this, 'table_list_shortcode') );
 			$this->query_args = array(
 				"post_type" => "staff",
 				"orderby" => "meta_value_num",
@@ -14,6 +14,65 @@
 
 		}
 
+		function table_list_shortcode($atts, $content=null) {
+			$atts = shortcode_atts( [
+				"users" => null,
+				"with_headers" => false
+			], $atts );
+			$all_users = explode(",", $atts['users']);
+			$users = [];
+			foreach ($all_users as $user):
+				$users[] = trim($user);
+			endforeach;
+			$args = [
+				"post_type" => "staff",
+				"posts_per_page" => -1,
+				"orderby" => "meta_value",
+				"meta_key" => "staff_surname",
+				"order" => "ASC",
+				"meta_query" => [
+					[
+						"key" => "staff_username",
+						"value" => $users,
+						"compare" => "IN"
+					]
+				]
+			];
+			$staff = new WP_Query(wp_parse_args( $args, $this->query_args ));
+			?>
+			<div class="table-responsive">
+				<table class="table table-condensed table-striped table-hover">
+					<?php if ($atts['with_headers']!==false): ?>
+					<thead>
+						<th>Staff</th>
+						<th>Job Title</th>
+					</thead>
+					<?php endif; ?>
+					<tbody>
+					<?php
+
+						while($staff->have_posts()): $staff->the_post();
+						if (get_post_status()=="private"){
+							echo '<tr class="danger">';
+						} else {
+							echo '<tr>';
+						}
+echo '<td><a href="'.get_permalink().'"><span class="staff-title">'.get_post_meta( get_the_ID(), "staff_full_title", true ).'</span></a><span class="qualifications">'.get_post_meta(get_the_ID(), 'staff_qualifications', true).'</span></td>';
+
+					?>
+
+
+					<td><?php echo get_post_meta(get_the_ID(), 'staff_leadjobtitle', true); ?></td>
+
+					<?php
+						echo "</tr>";
+						endwhile;
+					?>
+					</tbody>
+				</table>
+			</div>
+			<?php
+		}
 
 		/**
 		 * as_taxonomy function.
