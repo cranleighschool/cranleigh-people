@@ -39,6 +39,7 @@
 				]
 			];
 			$staff = new WP_Query(wp_parse_args( $args, $this->query_args ));
+			ob_start();
 			?>
 			<div class="table-responsive">
 				<table class="table table-condensed table-striped table-hover">
@@ -71,7 +72,12 @@ echo '<td><a href="'.get_permalink().'"><span class="staff-title">'.get_post_met
 					</tbody>
 				</table>
 			</div>
+
 			<?php
+				$output = ob_get_contents();
+			ob_end_clean();
+			return $output;
+
 		}
 
 		/**
