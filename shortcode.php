@@ -13,6 +13,7 @@
 			);
 
 		}
+
 		function table_list_row($atts, $content=null) {
 			$atts = shortcode_atts( [
 				"username" => null
@@ -326,6 +327,9 @@
 					$post_id = get_the_ID();
 
 					switch($a['type']):
+						case "biography-only":
+							$output = $this->just_bio($post_id);
+						break;
 						case "house":
 							$output = $this->house_staff($post_id, $a['title']);
 						break;
@@ -528,6 +532,34 @@
 							</div><!-- .xs-8 -->
 						</div><!-- .row -->
 					</div><!-- .card landscape light -->
+				</section>
+
+			<?php
+			$output = ob_get_contents();
+			ob_end_clean();
+			return $output;
+		}
+		function just_bio($post_id=null) {
+			global $post;
+			$card_title = "person-bio-".$post_id;
+			ob_start();
+			?>
+				<section id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
+					<div class="pull-out">
+
+						<?php echo $this->get_first_paragraph(); ?>
+
+						<?php if (strlen($this->get_second_paragraph()) > 1): ?>
+						<p class="read-more">
+							<a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-bio" data-toggle="collapse" aria-controls="person-bio" aria-expanded="false">Read more…</a>
+						</p>
+						<?php endif; ?>
+
+						<div id="<?php echo $this->sanitize_title_to_id($card_title); ?>-bio" class="collapse" aria-expanded="false">
+							<?php echo $this->get_second_paragraph(); ?>
+						</div>
+
+					</div>
 				</section>
 
 			<?php
