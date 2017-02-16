@@ -75,7 +75,14 @@
 					<tbody>
 					<?php
 						foreach ($users as $user):
-							echo $this->table_list_row(["username"=>$user]);
+							$row = $this->table_list_row(["username" => $user]);
+							if (!is_wp_error( $row )) {
+								echo $row;
+							} else {
+								var_dump($row);
+//								echo "<tr class=\"danger\">
+							}
+//							echo $this->table_list_row(["username"=>$user]);
 						endforeach;
 					?>
 					</tbody>
