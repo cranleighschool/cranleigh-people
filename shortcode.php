@@ -45,7 +45,7 @@
 			$all_users = explode(",", $atts['users']);
 			$users = [];
 			foreach ($all_users as $user):
-				$users[] = trim($user);
+				$users[] = preg_replace("/[^A-Za-z]/", "", trim($user));
 			endforeach;
 			$args = [
 				"post_type" => "staff",
