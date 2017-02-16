@@ -22,7 +22,7 @@
 			if (count($posts)==1) {
 				$post = $posts[0];
 			} else {
-				return new WP_Error("Error getting User Data", "More than one person with the username: ".$atts['username'].".");
+				return new WP_Error("Error getting User Data", "Not not locate data for the user: &quot;".$atts['username']."&quot;.");
 			}
 			$output = "";
 			if (get_post_status()=="private"){
