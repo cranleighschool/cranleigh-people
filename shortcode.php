@@ -22,7 +22,7 @@
 			if (count($posts)==1) {
 				$post = $posts[0];
 			} else {
-				return new WP_Error("More than one person with the username: ".$atts['username'].".");
+				return new WP_Error("Error getting User Data", "More than one person with the username: ".$atts['username'].".");
 			}
 			$output = "";
 			if (get_post_status()=="private"){
@@ -79,8 +79,7 @@
 							if (!is_wp_error( $row )) {
 								echo $row;
 							} else {
-								var_dump($row);
-//								echo "<tr class=\"danger\">
+								echo "<tr class=\"danger\"><td colspan=\"2\">".$row->get_error_message()."</td></tr>";
 							}
 //							echo $this->table_list_row(["username"=>$user]);
 						endforeach;
