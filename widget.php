@@ -78,6 +78,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 
 				?>
 			</select>
+		</p>
 		<?php
 	}
 	function html($username) {
