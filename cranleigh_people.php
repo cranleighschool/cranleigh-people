@@ -649,10 +649,10 @@ class cran_peeps {
 	}
 	function admin_notice() {
 		global $pagenow, $wpdb;
-		// We have to use WPDB to get the staff username as the post data hasn't been called yet (we're in the admin!)
-		$user = $wpdb->get_row("SELECT meta_value from $wpdb->postmeta WHERE post_id=".get_the_ID()." AND meta_key='staff_username'");
 
 		if ($pagenow=='post.php' && get_post_type()=='staff') {
+			// We have to use WPDB to get the staff username as the post data hasn't been called yet (we're in the admin!)
+			$user = $wpdb->get_row("SELECT meta_value from $wpdb->postmeta WHERE post_id=".get_the_ID()." AND meta_key='staff_username'");
 			echo '<div class="notice notice-warning"><p class="blink"><strong>Warning:</strong> This data is managed by a daily syncronisation from ISAMS. You can safely modify the profile photo. Any other changes you make will be overridden at the next sync.</p><p>To amend the biography <a target="_blank" href="https://marketing.cranleigh.org/staff-biographies/find/'.$user->meta_value.'">please click here.</a></div>';
 		}
 	}
