@@ -13,6 +13,29 @@
 			);
 
 		}
+		function table_list_row($atts, $content=null) {
+			$atts = shortcode_atts( [
+				"username" => null
+			], $atts );
+
+			$posts = get_posts(["post_type"=>"staff", "posts_per_page" => -1, "meta_key" => "staff_username", "meta_value" => $atts['username']]);
+			if (count($posts)==1) {
+				$post = $posts[0];
+			} else {
+				return new WP_Error("More than one person with the username: ".$atts['username'].".");
+			}
+			$output = "";
+			if (get_post_status()=="private"){
+				$output .= '<tr class="danger">';
+			} else {
+				$output .= '<tr>';
+			}
+
+			$output .= '<td><a href="'.get_permalink($post->ID).'"><span class="staff-title">'.get_post_meta( $post->ID, "staff_full_title", true ).'</span></a><span class="qualifications">'.get_post_meta($post->ID, 'staff_qualifications', true).'</span></td>';
+			$output .= "<td>".get_post_meta($post->ID, 'staff_leadjobtitle', true)."</td>";
+			$output .= "</tr>";
+			return $output;
+		}
 
 		function table_list_shortcode($atts, $content=null) {
 			$atts = shortcode_atts( [
@@ -51,23 +74,9 @@
 					<?php endif; ?>
 					<tbody>
 					<?php
-
-						while($staff->have_posts()): $staff->the_post();
-						if (get_post_status()=="private"){
-							echo '<tr class="danger">';
-						} else {
-							echo '<tr>';
-						}
-echo '<td><a href="'.get_permalink().'"><span class="staff-title">'.get_post_meta( get_the_ID(), "staff_full_title", true ).'</span></a><span class="qualifications">'.get_post_meta(get_the_ID(), 'staff_qualifications', true).'</span></td>';
-
-					?>
-
-
-					<td><?php echo get_post_meta(get_the_ID(), 'staff_leadjobtitle', true); ?></td>
-
-					<?php
-						echo "</tr>";
-						endwhile;
+						foreach ($users as $user):
+							echo $this->table_list_row(["username"=>$user]);
+						endforeach;
 					?>
 					</tbody>
 				</table>
