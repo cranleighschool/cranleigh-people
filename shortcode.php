@@ -544,7 +544,7 @@
 			$card_title = "person-bio-".$post_id;
 			ob_start();
 			?>
-				<section id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
+				<section class="biography-pullout" id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
 					<div class="pull-out">
 
 						<?php echo $this->get_first_paragraph(); ?>
