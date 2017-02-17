@@ -521,7 +521,7 @@
 
 									<?php if (strlen($this->get_second_paragraph()) > 1): ?>
 									<p class="read-more">
-										<a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" class="cranleigh-hide-readmore-link" aria-expanded="false">Read more…</a>
+										<a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-<?php echo $post->ID; ?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" class="cranleigh-hide-readmore-link" aria-expanded="false">Read more…</a>
 									</p>
 									<?php endif; ?>
 
