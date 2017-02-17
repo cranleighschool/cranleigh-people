@@ -472,7 +472,7 @@
 										endif;
 									echo $this->get_first_paragraph(); ?>
 
-									<p class="read-more"><a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" aria-expanded="false">Read more…</a></p>
+									<p class="read-more"><a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" class="cranleigh-hide-readmore-link" aria-expanded="false">Read more…</a></p>
 									<div id="<?php echo $this->sanitize_title_to_id($card_title); ?>-bio" class="collapse" aria-expanded="false">
 										<?php echo $this->get_second_paragraph(); ?>
 									</div>
