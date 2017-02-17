@@ -521,7 +521,7 @@
 
 									<?php if (strlen($this->get_second_paragraph()) > 1): ?>
 									<p class="read-more">
-										<a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" aria-expanded="false">Read more…</a>
+										<a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" class="cranleigh-hide-readmore-link" aria-expanded="false">Read more…</a>
 									</p>
 									<?php endif; ?>
 
@@ -551,7 +551,7 @@
 
 						<?php if (strlen($this->get_second_paragraph()) > 1): ?>
 						<p class="read-more">
-							<a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-bio" data-toggle="collapse" aria-controls="person-bio" aria-expanded="false">Read more…</a>
+							<a href="#<?php echo $this->sanitize_title_to_id($card_title);?>-bio" data-toggle="collapse" clas="cranleigh-hide-readmore-link" aria-controls="person-bio" aria-expanded="false">Read more…</a>
 						</p>
 						<?php endif; ?>
 
