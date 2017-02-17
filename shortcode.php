@@ -525,7 +525,7 @@
 									</p>
 									<?php endif; ?>
 
-									<div id="<?php echo $this->sanitize_title_to_id($card_title); ?>-bio" class="collapse" aria-expanded="false">
+									<div id="<?php echo $this->sanitize_title_to_id($card_title); ?>-<?php echo $post->ID; ?>-bio" class="collapse" aria-expanded="false">
 										<?php echo $this->get_second_paragraph(); ?>
 									</div>
 								</div><!-- .card-text -->
