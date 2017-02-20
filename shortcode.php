@@ -517,7 +517,7 @@
 										echo $this->card_title('h3', $card_title);
 									}
 								?>
-									<h4><a href="mailto:<?php echo $email; ?>"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> <a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a><span class="qualifications"><?php echo $qualifications; ?></span></h4>
+									<h4><a class="hidden-xs" href="mailto:<?php echo $email; ?>"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> <a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a><span class="hidden-xs qualifications"><?php echo $qualifications; ?></span></h4>
 									<span class="hidden-xs">
 
 									<?php echo $this->get_first_paragraph(); ?>
