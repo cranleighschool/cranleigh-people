@@ -255,6 +255,7 @@
 			if (!$position) {
 				$position = get_post_meta($post->ID, 'staff_leadjobtitle', true);
 			}
+			$position = get_post_meta($post->ID, 'staff_leadjobtitle', true);
 			ob_start();
 			?>
 			<div class="card landscape">
