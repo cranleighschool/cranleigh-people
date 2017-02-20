@@ -516,6 +516,7 @@
 									}
 								?>
 									<h4><a href="mailto:<?php echo $email; ?>"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span></a> <a href="<?php echo get_permalink($post->ID); ?>"><?php echo $full_title; ?></a><span class="qualifications"><?php echo $qualifications; ?></span></h4>
+									<span class="hidden-xs">
 
 									<?php echo $this->get_first_paragraph(); ?>
 
@@ -528,6 +529,7 @@
 									<div id="<?php echo $this->sanitize_title_to_id($card_title); ?>-<?php echo $post->ID; ?>-bio" class="collapse" aria-expanded="false">
 										<?php echo $this->get_second_paragraph(); ?>
 									</div>
+									</span>
 								</div><!-- .card-text -->
 							</div><!-- .xs-8 -->
 						</div><!-- .row -->
