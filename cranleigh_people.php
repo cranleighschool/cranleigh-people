@@ -255,7 +255,7 @@ class cran_peeps {
 			'singular_name'         => _x( 'Person', 'Post Type Singular Name', 'text_domain' ),
 			'menu_name'             => __( 'People', 'text_domain' ),
 			'name_admin_bar'        => __( 'People', 'text_domain' ),
-			'archives'              => __( 'Cranleigh People', 'text_domain' ),
+			'archives'              => __( 'All Staff', 'text_domain' ),
 			'parent_item_colon'     => __( 'Parent Item:', 'text_domain' ),
 			'all_items'             => __( 'All Cranleigh People', 'text_domain' ),
 			'add_new_item'          => __( 'Add New Person', 'text_domain' ),
