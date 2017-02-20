@@ -505,7 +505,9 @@
 						<div class="row">
 							<div class="col-xs-4">
 								<div class="card-image">
-									<?php $this->get_staff_photo(); ?>
+									<a href="<?php echo get_permalink($post->ID); ?>">
+										<?php $this->get_staff_photo(); ?>
+									</a>
 								</div>
 							</div>
 							<div class="col-xs-8">
