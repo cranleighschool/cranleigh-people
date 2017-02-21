@@ -264,7 +264,7 @@
 						<div class="card-image">
 							<a href="<?php the_permalink(); ?>">
 							<?php if (has_post_thumbnail( )):
-								the_post_thumbnail('thumbnail', array("class" => "img-responsive"));
+								the_post_thumbnail('staff-photo', array("class" => "img-responsive"));
 								else:
 								/*
 									$check = wp_remote_head(site_url("staff_photos/database.php?user_=".get_post_meta(get_the_ID(), 'staff_username', true)), ['timeout'=>2]);
