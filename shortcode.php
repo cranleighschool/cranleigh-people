@@ -1,5 +1,6 @@
 <?php
 	class Cranleigh_People_Shortcode {
+		public $default_attachment_id = false;
 		function __construct() {
 			add_shortcode("person_card", array($this, 'shortcode'));
 			add_shortcode("card_list", array($this, 'tutors_list'));
@@ -11,6 +12,8 @@
 				"orderby" => "meta_value_num",
 				"meta_key" => "staff_username"
 			);
+
+			$this->default_attachment_id = get_option("cran_people_basic")['default_photo_attachment_id'];
 
 		}
 
@@ -263,19 +266,12 @@
 					<div class="col-xs-4">
 						<div class="card-image">
 							<a href="<?php the_permalink(); ?>">
-							<?php if (has_post_thumbnail( )):
-								the_post_thumbnail('staff-photo', array("class" => "img-responsive"));
+							<?php
+								if (has_post_thumbnail( )):
+									the_post_thumbnail('staff-photo', array("class" => "img-responsive"));
 								else:
-								/*
-									$check = wp_remote_head(site_url("staff_photos/database.php?user_=".get_post_meta(get_the_ID(), 'staff_username', true)), ['timeout'=>2]);
-									if ($check['response']['code']==200):
-										echo "<img class=\"img-responsive\" alt=\"".get_the_title()."\" src=\"".site_url("staff_photos/database.php?user_=".get_post_meta(get_the_ID(), 'staff_username', true))."\" />";
-									else:
-										$photo = get_option("cran_people_basic")['default_photo'];
-										echo "<img src=\"".$photo."\">";
-									endif; */
-									$photo = get_option("cran_people_basic")['default_photo'];
-									echo "<img src=\"".$photo."\" />";
+									$photo = wp_get_attachment_image( $this->default_attachment_id, 'staff-photo', false, ["class"=>"img-responsive"] );
+									echo $photo;
 								endif;
 							?>
 							</a>

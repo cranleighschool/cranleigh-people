@@ -59,6 +59,13 @@ class Cranleigh_CranleighPeople_Settings {
 	                'desc' => __("Where a photo isn't found for a user what placeholder image do you want to use?", "cranleigh-2016"),
 					'type'    => 'file',
                     'default' => ''
+				),
+				array(
+					'name' => 'default_photo_attachment_id',
+					"label" => __("Default Photo Attachment ID", "cranleigh-2016"),
+					"desc" => "The attachment ID of the photo you want to use for the default photo",
+					"type" => "text",
+					"sanitize_callback" => "intval"
 				)
 	        ),
             'wedevs_basics' => array(
