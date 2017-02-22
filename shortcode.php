@@ -419,8 +419,10 @@
 					the_post_thumbnail('thumbnail', array("class"=>"img-responsive"));
 				}
 			else:
-				$photo = get_option("cran_people_basic")['default_photo'];
-				echo "<img src=\"".$photo."\">";
+			$photo = wp_get_attachment_image( $this->default_attachment_id, 'staff-photo', false, ["class"=>"img-responsive"] );
+									echo $photo;
+//				$photo = get_option("cran_people_basic")['default_photo'];
+//				echo "<img src=\"".$photo."\">";
 			endif;
 		}
 
