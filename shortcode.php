@@ -12,8 +12,11 @@
 				"orderby" => "meta_value_num",
 				"meta_key" => "staff_username"
 			);
-
-			$this->default_attachment_id = get_option("cran_people_basic")['default_photo_attachment_id'];
+			if (isset(get_option("cran_people_basic")['default_photo_attachment_id'])):
+				$this->default_attachment_id = get_option("cran_people_basic")['default_photo_attachment_id'];
+			else:
+				$this->default_attachment_id = null;
+			endif;
 
 		}
 
@@ -269,7 +272,7 @@
 							<?php
 								if (has_post_thumbnail( )):
 									the_post_thumbnail('staff-photo', array("class" => "img-responsive"));
-								else:
+								elseif($this->default_attachment_id !== null):
 									$photo = wp_get_attachment_image( $this->default_attachment_id, 'staff-photo', false, ["class"=>"img-responsive"] );
 									echo $photo;
 								endif;
