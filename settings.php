@@ -65,7 +65,8 @@ class Cranleigh_CranleighPeople_Settings {
 					"label" => __("Default Photo Attachment ID", "cranleigh-2016"),
 					"desc" => "The attachment ID of the photo you want to use for the default photo",
 					"type" => "text",
-					"sanitize_callback" => "intval"
+					"sanitize_callback" => "intval",
+					"default" => 32492
 				)
 	        ),
             'wedevs_basics' => array(
