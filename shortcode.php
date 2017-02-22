@@ -15,7 +15,7 @@
 			if (isset(get_option("cran_people_basic")['default_photo_attachment_id'])):
 				$this->default_attachment_id = get_option("cran_people_basic")['default_photo_attachment_id'];
 			else:
-				$this->default_attachment_id = null;
+				$this->default_attachment_id = 32492;
 			endif;
 
 		}
