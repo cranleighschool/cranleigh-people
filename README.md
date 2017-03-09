@@ -39,3 +39,4 @@ By default, when you activate this plugin it only loads relevant widgets and sho
 ## Developers
 * [Fred Bradley](mailto:frb@cranleigh.org)
 
+
