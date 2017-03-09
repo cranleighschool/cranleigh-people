@@ -8,7 +8,7 @@ class Plugin extends BaseController {
 
 
 	/**
-	 * __construct function. 
+	 * __construct function.
 	 *
 	 * @access public
 	 * @return void
@@ -30,22 +30,22 @@ class Plugin extends BaseController {
 		} else {
 			$this->isams_controlled = false;
 		}
-		
+
 		if (isset($this->settings['load_cpt'])):
-			
+
 			if ($this->settings['load_cpt']=="yes"):
-			
+
 				$this->load_if_cpt();
-			
+
 			endif;
-			
+
 			$this->load_in_all_cases();
 		else:
 
 			add_action( 'admin_notices', array($this, 'notice_no_settings'));
 
 		endif;
-		
+
 	}
 	function load_in_all_cases() {
 		add_action('media_buttons', array($this, 'add_media_button'), 900);
@@ -58,7 +58,7 @@ class Plugin extends BaseController {
 		});
 
 	}
-	
+
 	function load_if_cpt() {
 		register_activation_hook(__FILE__, array($this, 'activate'));
 
@@ -81,7 +81,7 @@ class Plugin extends BaseController {
 
 		add_action( 'pre_get_posts', array($this,'owd_post_order') );
 
-		
+
 		add_action('admin_notices', array($this, 'admin_notice'));
 		add_action('admin_head', array($this, 'admin_head'));
 
@@ -98,8 +98,8 @@ class Plugin extends BaseController {
 			add_filter('wp_default_editor', array($this, 'force_default_editor'));
 		endif;
 	}
-	
-	
+
+
 	function notice_no_settings() {
 		echo '<div class="notice notice-warning"><p><strong>Cranleigh People:</strong> You need to save your Cranleigh People Settings. Please <a href="'.menu_page_url( 'cranleigh_people_settings', false ).'">click here</a></p></div>';
 	}
@@ -350,7 +350,7 @@ class Plugin extends BaseController {
 			$editor_role->add_cap($cap);
 			$admin_role->add_cap($cap);
 		endforeach;
-		
+
 	}
 
 	// Register Custom Taxonomy
@@ -548,7 +548,7 @@ class Plugin extends BaseController {
 		}
 		return $defaults;
 	}
-	
+
 	function add_photo_to_listing($column_name, $post_ID) {
 		if ($column_name == 'staff_photo') {
 			$post_featured_image = $this->get_staff_photo($post_ID);
@@ -681,20 +681,21 @@ class Plugin extends BaseController {
 			}
 
 	}
-	
+
 	function force_default_editor() {
 		return 'tinymce';
 	}
-	
+
 	function admin_notice() {
 		global $pagenow, $wpdb;
 		if (in_array($pagenow, ['post.php', 'post-new.php']) && get_post_type()=='staff' && $this->isams_controlled===true) {
 			// We have to use WPDB to get the staff username as the post data hasn't been called yet (we're in the admin!)
 			$user = $wpdb->get_row("SELECT meta_value from $wpdb->postmeta WHERE post_id=".get_the_ID()." AND meta_key='staff_username'");
-			echo '<div class="notice notice-warning"><p class="blink"><strong>Warning:</strong> This data is managed by a daily syncronisation from ISAMS. You can safely modify the profile photo. Any other changes you make will be overridden at the next sync.</p><p>To amend the biography <a target="_blank" href="https://marketing.cranleigh.org/staff-biographies/find/'.$user->meta_value.'">please click here.</a></div>';
+			echo '<div class="notice notice-warning"><p class="blink"><strong>Warning!</strong> This data is managed by a daily syncronisation from ISAMS. You can safely modify the profile photo. Any other changes you make will be overridden at the next sync.</p><p>To amend the biography <a target="_blank" href="https://marketing.cranleigh.org/staff-biographies/find/'.$user->meta_value.'">please click here.</a></div>';
 		}
 	}
 
 }
+
 
 
