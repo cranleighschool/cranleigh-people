@@ -141,7 +141,7 @@ class Plugin extends BaseController {
 	 * @return void
 	 */
 	function profile_pictures() {
-		add_image_size("staff-photo", 500, 500, true);
+		add_image_size("staff-photo", 400, 600, true);
 	}
 
 	/**
