@@ -23,8 +23,13 @@ By default, when you activate this plugin it only loads relevant widgets and sho
 | `type` | same as `type` for the `[person_card]`.| `small`|
 
 ## Changelog
+### 1.3.0
+* Cleanup
+* Using `CranleighPeople` PHP Namespaces
+* Functionality to allow Cranleigh AE to use as a stand alone plugin without the iSAMS sync
+
 ### 1.2.0 
-* Working with Shorcode and Widget
+* Working with Shortcode and Widget
 
 ### 1.0.0 "Bare Bones"
 * Initial Plugin Developed

@@ -1,9 +1,9 @@
 <?php
-add_action('widgets_init', function() {
-	// You can keep adding to this if you have added more class files
-	// - just ensure that the name of the child class is what you put in as a registered widget.
-	register_widget('Cranleigh_People_Widget');
-});
+namespace CranleighPeople;
+
+use WP_Widget;
+use WP_Query;
+
 class Cranleigh_People_Widget extends WP_Widget {
 	function __construct() {
 		$widget_ops = array(
@@ -11,7 +11,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 			'description' => 'Shows a widget for a person.'
 		);
 
-		parent::__construct('cranleigh-person', 'Person Card (Sidebar)', $widget_ops);
+		parent::__construct('cranleigh-person', 'Cranleigh Person Card', $widget_ops);
 
 		$this->query_args = array(
 			"posts_per_page" => -1,
@@ -56,7 +56,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 				<option value="">Select User</option>
 				<?php
 
-					switch_to_blog(BLOG_ID_CURRENT_SITE);
+					BaseController::switch_to_blog(BLOG_ID_CURRENT_SITE);
 					$query = new WP_Query($this->query_args);
 
 					if ($query->have_posts()):
@@ -71,10 +71,9 @@ class Cranleigh_People_Widget extends WP_Widget {
 						endwhile;
 						wp_reset_postdata();
 					else:
-						//echo "<input class=\"widefat\" id=\"".esc_attr($this->get_field_id('username'))."\" name=\"".esc_attr($this->get_field_name('username'))."\" type=\"autocomplete\" value=\"".esc_attr($username)."\" />";
 						echo 'You have no staff to choose from...';
 					endif;
-					restore_current_blog();
+					BaseController::restore_current_blog();
 
 				?>
 			</select>
@@ -91,7 +90,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 				)
 			)
 		);
-		switch_to_blog(BLOG_ID_CURRENT_SITE);
+		BaseController::switch_to_blog(BLOG_ID_CURRENT_SITE);
 		$query = new WP_Query(wp_parse_args($args, $this->query_args));
 
 		if ($query->have_posts()):
@@ -123,7 +122,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 
 			endwhile;
 			wp_reset_postdata();
-			restore_current_blog();
+			BaseController::restore_current_blog();
 		else:
 			echo "<p class=\"alert-warning\">Staff Member not selected</p>";
 		endif;
