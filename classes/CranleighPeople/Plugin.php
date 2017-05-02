@@ -586,7 +586,7 @@ class Plugin extends BaseController {
 	}
 
 	function include_media_button_js_file() {
-		wp_enqueue_script('cranleigh_people_media_button', plugins_url('javascripts/popme.js', __FILE__), array('jquery'), time(), true);
+		wp_enqueue_script('cranleigh_people_media_button', plugins_url('javascripts/popme.js', CRAN_PEOPLE_FILE_PATH), array('jquery'), time(), true);
 	}
 
 	function add_mce_popup() {

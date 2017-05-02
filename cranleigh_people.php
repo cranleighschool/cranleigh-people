@@ -4,12 +4,14 @@
 	Plugin URI: http://www.cranleigh.org
 	Description: One plugin that controls the people who work at Cranleigh.
 	Author: Fred Bradley
-	Version: 1.3.0
+	Version: 1.3.1
 	Author URI: http://fred.im
 */
 
 namespace CranleighPeople;
-	
+
+define("CRAN_PEOPLE_FILE_PATH", __FILE__);
+
 spl_autoload_register(function ($class) {
 	if ( false === strpos( $class, 'CranleighPeople' ) ) {
 		return;
