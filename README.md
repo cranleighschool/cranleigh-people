@@ -23,6 +23,9 @@ By default, when you activate this plugin it only loads relevant widgets and sho
 | `type` | same as `type` for the `[person_card]`.| `small`|
 
 ## Changelog
+### 1.3.2
+* Added setting so that admins can now choose which blog it pulls data from, rather than assuming you want to do it from the default blog id
+
 ### 1.3.0
 * Cleanup
 * Using `CranleighPeople` PHP Namespaces

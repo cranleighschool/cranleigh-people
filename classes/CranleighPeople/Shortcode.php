@@ -19,6 +19,7 @@ class Shortcode extends BaseController {
 			"orderby" => "meta_value_num",
 			"meta_key" => "staff_username"
 		);
+
 		if (isset($this->settings['default_photo_attachment_id'])):
 			$this->default_attachment_id = $this->settings['default_photo_attachment_id'];
 		else:
@@ -326,7 +327,7 @@ class Shortcode extends BaseController {
 			)
 		);
 
-		$this->switch_to_blog(BLOG_ID_CURRENT_SITE);
+		$this->switch_to_blog($this->load_from_blog_id);
 		$query = new WP_Query(wp_parse_args($args, $this->query_args));
 
 		if ($query->have_posts()):

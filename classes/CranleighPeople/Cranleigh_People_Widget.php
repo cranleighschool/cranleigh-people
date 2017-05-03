@@ -5,7 +5,11 @@ use WP_Widget;
 use WP_Query;
 
 class Cranleigh_People_Widget extends WP_Widget {
+
 	function __construct() {
+		$this->cranleigh_people_settings = get_option('cran_people_basic');
+		$this->load_from_blog_id = $this->cranleigh_people_settings['load_from_blog_id'];
+
 		$widget_ops = array(
 			'classname' => 'person-card',
 			'description' => 'Shows a widget for a person.'
@@ -44,8 +48,12 @@ class Cranleigh_People_Widget extends WP_Widget {
 	function form($instance) {
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'Staff Member', 'cranleigh-2016' );
 		$username = ! empty($instance['username']) ? $instance['username'] : "";
+
+		if ($this->load_from_blog_id == 1):
+			echo '<p class="notice-error notice">Warning: You need to set which Blog you want to pull your data from. Your widget may not display correctly on the frontend until you do this. Visit the <a href="options-general.php?page=cranleigh_people_settings">Cranleigh People Settings Page</a>.</p>';
+		endif;
 		?>
-		<p>Custom Email, Phone and address first line can be defined in the <a href="customize.php">Theme Customiser</a></p>
+
 		<p>
 		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( esc_attr( 'Title:' ) ); ?></label>
 		<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
@@ -56,7 +64,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 				<option value="">Select User</option>
 				<?php
 
-					BaseController::switch_to_blog(BLOG_ID_CURRENT_SITE);
+					BaseController::switch_to_blog($this->load_from_blog_id);
 					$query = new WP_Query($this->query_args);
 
 					if ($query->have_posts()):
@@ -90,7 +98,8 @@ class Cranleigh_People_Widget extends WP_Widget {
 				)
 			)
 		);
-		BaseController::switch_to_blog(BLOG_ID_CURRENT_SITE);
+
+		BaseController::switch_to_blog($this->load_from_blog_id);
 		$query = new WP_Query(wp_parse_args($args, $this->query_args));
 
 		if ($query->have_posts()):
