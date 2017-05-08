@@ -417,7 +417,8 @@ class Shortcode extends BaseController {
 		return "<".$heading.">".$title."</".$heading.">";
 	}
 	function sanitize_title_to_id($card_title) {
-		return strtolower(str_replace(" ", "", $card_title));
+			$string = strtolower(str_replace(" ", "", $card_title));
+		return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
 	}
 	function get_staff_photo($thumb=false) {
 		if (has_post_thumbnail()):
