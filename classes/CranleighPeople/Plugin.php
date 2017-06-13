@@ -17,7 +17,7 @@ class Plugin extends BaseController {
 		parent::__construct();
 
 		new Shortcode();
-
+		new RestAPI();
 		$this->card_types = (object) [
 			["value" => "hod", "title" => "Head of Department"],
 			["value" => "house", "title" => "House"],
@@ -323,6 +323,9 @@ class Plugin extends BaseController {
 			'exclude_from_search'   => true,
 			'publicly_queryable'    => true,
 			'capabilities' => $capabilities,
+			'show_in_rest'       => true,
+			'rest_base'          => 'people',
+			'rest_controller_class' => 'WP_REST_Posts_Controller',
 		);
 		register_post_type( $this->post_type_key, $args );
 		$this->roles_and_caps();
