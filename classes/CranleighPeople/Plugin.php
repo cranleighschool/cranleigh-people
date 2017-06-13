@@ -17,7 +17,7 @@ class Plugin extends BaseController {
 		parent::__construct();
 
 		new Shortcode();
-		new RestAPI();
+
 		$this->card_types = (object) [
 			["value" => "hod", "title" => "Head of Department"],
 			["value" => "house", "title" => "House"],
@@ -97,6 +97,10 @@ class Plugin extends BaseController {
 		if (get_post_type()=='staff'):
 			add_filter('wp_default_editor', array($this, 'force_default_editor'));
 		endif;
+
+		// Add Rest API Support
+		new RestAPI();
+
 	}
 
 
