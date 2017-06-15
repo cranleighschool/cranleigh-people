@@ -31,8 +31,11 @@ class Cranleigh_People_Widget extends WP_Widget {
 		if ( ! empty( $instance['title'] ) ) {
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 		}
-
-		$this->html($instance['username']);
+		if (isset($instance['condensed']) && $instance['condensed']==true):
+			echo do_shortcode("[person_card type=small user=".$instance['username']."]");
+		else:
+			$this->html($instance['username']);
+		endif;
 
 		echo $args['after_widget'];
 	}
