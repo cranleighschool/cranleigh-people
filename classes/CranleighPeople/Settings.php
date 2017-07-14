@@ -97,6 +97,10 @@ if ( !class_exists('CranleighPeople\Settings' ) ):
 	    }
 
 		function get_sites() {
+			if (is_multisite()===false) {
+				return new \WP_Error("Not A MultiSite", "This is not a multi site therefore I can't let you call a function that won't exist!");
+			}
+
 			$subsites = get_sites();
 			$output = array();
 			foreach( $subsites as $subsite ):
@@ -109,6 +113,12 @@ if ( !class_exists('CranleighPeople\Settings' ) ):
 		}
 
 		function selectSite_optionList() {
+
+			$sites = $this->get_sites();
+			if (is_wp_error( $sites )) {
+				return [1 => "This is not a multisite - so you have no choice here!"];
+			}
+
 			$list = array();
 			foreach ($this->get_sites() as $site):
 				$list[$site->blog_id] = $site->name;
