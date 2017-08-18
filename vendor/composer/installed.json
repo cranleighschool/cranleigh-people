@@ -1,0 +1,96 @@
+[
+    {
+        "name": "yahnis-elsts/plugin-update-checker",
+        "version": "v4.2",
+        "version_normalized": "4.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/YahnisElsts/plugin-update-checker.git",
+            "reference": "846d11194719111c94296dabcf97a86e95b69449"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/846d11194719111c94296dabcf97a86e95b69449",
+            "reference": "846d11194719111c94296dabcf97a86e95b69449",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.0"
+        },
+        "time": "2017-07-21 11:27:31",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "plugin-update-checker.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Yahnis Elsts",
+                "email": "whiteshadow@w-shadow.com",
+                "homepage": "http://w-shadow.com/",
+                "role": "Developer"
+            }
+        ],
+        "description": "A custom update checker for WordPress plugins and themes. Useful if you can't host your plugin in the official WP repository but still want it to support automatic updates.",
+        "homepage": "https://github.com/YahnisElsts/plugin-update-checker/",
+        "keywords": [
+            "automatic updates",
+            "plugin updates",
+            "theme updates",
+            "wordpress"
+        ]
+    },
+    {
+        "name": "rilwis/meta-box",
+        "version": "4.12.2",
+        "version_normalized": "4.12.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/rilwis/meta-box.git",
+            "reference": "459bfb7d8385b6b678fabfc065452f1c630f50bc"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/rilwis/meta-box/zipball/459bfb7d8385b6b678fabfc065452f1c630f50bc",
+            "reference": "459bfb7d8385b6b678fabfc065452f1c630f50bc",
+            "shasum": ""
+        },
+        "time": "2017-07-12 04:03:47",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "meta-box.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Tran Ngoc Tuan Anh",
+                "email": "rilwis@gmail.com",
+                "homepage": "http://www.deluxeblogtips.com/",
+                "role": "Developer"
+            }
+        ],
+        "description": "A powerful, professional developer toolkit to create custom meta boxes and custom fields for WordPress websites.",
+        "homepage": "https://metabox.io",
+        "keywords": [
+            "custom-field",
+            "meta-box",
+            "select2",
+            "ui",
+            "wordpress",
+            "wordpress-plugin",
+            "wp-admin"
+        ]
+    }
+]

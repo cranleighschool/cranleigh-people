@@ -1,0 +1,19 @@
+{
+    "name": "fredbradley/cranleigh-people",
+    "description": "Cranleigh People Wordpress Plugin for Cranleigh School",
+    "require": {
+        "yahnis-elsts/plugin-update-checker": "^4.2",
+	  	"rilwis/meta-box": "4.*"
+    },
+    "authors": [
+        {
+            "name": "Fred Bradley",
+            "email": "hello@fredbradley.co.uk"
+        }
+    ],
+  	"autoload": {
+		"psr-4": {
+	  		"CranleighSchool\\CranleighPeople\\": "src"
+		}
+  	}
+}
