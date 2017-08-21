@@ -21,8 +21,8 @@ class BaseController {
 	 */
 	public function __construct() {
 
-		$plugin_data = get_plugin_data(CRAN_PEOPLE_FILE_PATH);
-		$this->version = $plugin_data['Version'];
+		//$plugin_data = get_plugin_data(CRAN_PEOPLE_FILE_PATH);
+		//$this->version = $plugin_data['Version'];
 
 		$this->loadSettings();
 		$this->setLoadFromBlogId();
