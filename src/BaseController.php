@@ -20,6 +20,7 @@ class BaseController {
 	}
 
 	public function load() {
+
 		$this->loadSettings();
 		$this->setLoadFromBlogId();
 	}
@@ -29,7 +30,7 @@ class BaseController {
 	 */
 	private function loadSettings() {
 
-		$load           = new Settings();
+		//$load           = new Settings();
 		$this->settings = get_option( 'cran_people_basic' );
 	}
 
