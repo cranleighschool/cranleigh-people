@@ -3,13 +3,13 @@ namespace CranleighSchool\CranleighPeople;
 
 use WP_Query;
 use WP_Error;
+use stdClass;
 
 class RestAPI {
 
 	public function __construct() {
 		add_action( 'rest_api_init', array($this,'wpshout_register_routes') );
 		add_action( 'rest_api_init', array($this, 'listStaff'));
-
 		add_filter( 'rest_query_vars', array($this,'my_allow_meta_query' ));
 	}
 
@@ -35,7 +35,7 @@ class RestAPI {
 		$output = [];
 
 		while($query->have_posts()): $query->the_post();
-			$person = new \stdClass();
+			$person = new stdClass();
 			$person->username = get_post_meta(get_the_ID(), 'staff_username', true);
 			$photoAttachmentID = get_post_thumbnail_id();
 			$person->imageHTML = wp_get_attachment_image($photoAttachmentID, "staff-profile");
