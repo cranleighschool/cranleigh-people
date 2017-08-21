@@ -10,6 +10,7 @@ class Shortcode extends BaseController {
 	public $default_attachment_id = false;
 
 	function __construct() {
+		$this->load();
 
 		add_shortcode( "person_card", [ $this, 'shortcode' ] );
 		add_shortcode( "card_list", [ $this, 'tutors_list' ] );

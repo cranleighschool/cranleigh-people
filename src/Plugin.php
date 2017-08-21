@@ -22,6 +22,8 @@ class Plugin extends BaseController {
 
 		parent::__construct();
 
+		$this->load();
+
 		$this->loadShortcode();
 
 		$this->card_types = (object) [

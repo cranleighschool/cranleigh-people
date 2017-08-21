@@ -16,14 +16,7 @@ class BaseController {
 
 	public $settings = [];
 
-	/**
-	 * BaseController constructor.
-	 */
-	public function __construct() {
-
-		//$plugin_data = get_plugin_data(CRAN_PEOPLE_FILE_PATH);
-		//$this->version = $plugin_data['Version'];
-
+	public function load() {
 		$this->loadSettings();
 		$this->setLoadFromBlogId();
 	}
@@ -41,7 +34,6 @@ class BaseController {
 	 *
 	 */
 	public function setLoadFromBlogId() {
-
 		if ( isset( $this->settings[ 'load_from_blog_id' ] ) ):
 			$this->load_from_blog_id = $this->settings[ 'load_from_blog_id' ];
 		else:
