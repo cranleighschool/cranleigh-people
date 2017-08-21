@@ -16,6 +16,9 @@ class BaseController {
 
 	public $settings = [];
 
+	public function __construct() {
+	}
+
 	public function load() {
 		$this->loadSettings();
 		$this->setLoadFromBlogId();
