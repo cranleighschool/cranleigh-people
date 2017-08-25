@@ -33,7 +33,7 @@ class Plugin extends BaseController {
 			[ "value" => "two-column", "title" => "Two Column" ]
 		];
 
-		if ( $this->settings[ 'isams_controlled' ] == 'yes' ) {
+		if ( isset($this->settings['isams_controlled']) && $this->settings[ 'isams_controlled' ] == 'yes' ) {
 			$this->isams_controlled = true;
 		} else {
 			$this->isams_controlled = false;
