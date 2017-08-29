@@ -369,7 +369,7 @@ class Shortcode extends BaseController {
 					case "biography-only":
 						$output = $this->just_bio( $post_id );
 						break;
-					case "house":
+					case "house": 
 						$output = $this->house_staff( $post_id, $a[ 'title' ] );
 						break;
 					case "hod":
