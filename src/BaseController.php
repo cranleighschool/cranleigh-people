@@ -45,6 +45,15 @@ class BaseController {
 		endif;
 	}
 
+	public function get_permalink(int $post_id) {
+
+		if ( is_multisite() ):
+			return get_blog_permalink($this->load_from_blog_id, $post_id);
+		else:
+			return $this->get_permalink($post_id);
+		endif;
+
+	}
 	/**
 	 * @param string $variable
 	 *
