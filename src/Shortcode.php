@@ -520,7 +520,7 @@ class Shortcode extends BaseController {
 							endswitch;
 							?>
 							<h4>
-								<a href="<?php echo $this->get_permalink( $post->ID ); ?>"><?php echo $full_title; ?></a><span class="qualifications"><?php echo $qualifications; ?></span>
+								<a href="<?php echo get_permalink( $post->ID ); ?>"><?php echo $full_title; ?></a><span class="qualifications"><?php echo $qualifications; ?></span>
 							</h4>
 							<?php
 							if ( $card_title !== "Matron" ):
