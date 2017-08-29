@@ -12,6 +12,7 @@ class Plugin extends BaseController {
 
 	private $isams_controlled = false;
 
+	private $load_cpt = false;
 	/**
 	 * __construct function.
 	 *
@@ -43,8 +44,12 @@ class Plugin extends BaseController {
 
 			if ( $this->settings[ 'load_cpt' ] == "yes" ):
 
+				$this->load_cpt = true;
+
 				$this->load_if_cpt();
 
+			else:
+				add_action('init', [ $this, 'CPT_Cranleigh_People'] );
 			endif;
 
 			$this->load_in_all_cases();
@@ -366,6 +371,7 @@ class Plugin extends BaseController {
 	// Register Custom Taxonomy
 
 	function CPT_Cranleigh_People() {
+		$public = $this->load_cpt;
 
 		$labels       = [
 			'name'                  => _x( 'Cranleigh People', 'Post Type General Name', 'text_domain' ),
@@ -412,19 +418,19 @@ class Plugin extends BaseController {
 			'supports'              => [ 'title', 'editor', 'thumbnail', 'excerpt' ],
 			'taxonomies'            => [],
 			'hierarchical'          => false,
-			'public'                => true,
-			'show_ui'               => true,
-			'show_in_menu'          => true,
+			'public'                => $public,
+			'show_ui'               => $public,
+			'show_in_menu'          => $public,
 			'menu_position'         => 27,
 			'menu_icon'             => 'dashicons-businessman',
-			'show_in_admin_bar'     => true,
-			'show_in_nav_menus'     => true,
+			'show_in_admin_bar'     => $public,
+			'show_in_nav_menus'     => $public,
 			'can_export'            => true,
 			'has_archive'           => true,
 			'exclude_from_search'   => true,
 			'publicly_queryable'    => true,
 			'capabilities'          => $capabilities,
-			'show_in_rest'          => true,
+			'show_in_rest'          => $public,
 			'rest_base'             => 'people',
 			'rest_controller_class' => 'WP_REST_Posts_Controller',
 		];
