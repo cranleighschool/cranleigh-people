@@ -100,11 +100,15 @@ class Cranleigh_People_Widget extends WP_Widget {
 				echo $this->get_first_paragraph();
 
 			endwhile;
-			wp_reset_postdata();
-			BaseController::restore_current_blog();
+
 		else:
-			echo "<p class=\"alert-warning\">Staff Member not selected</p>";
+			echo "<p class=\"alert-warning\">Staff Member not found</p>";
+			$slacker = new Slacker();
+			$slacker->setUsername("Cranleigh People Error Catcher");
+			$slacker->post("<!everyone> The Cranleigh People Widget is trying to find `".$username."` but failing miserably! (".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].")");
 		endif;
+		wp_reset_postdata();
+		BaseController::restore_current_blog();
 		echo "<div class=\"clearfix clear\">&nbsp;</div>";
 	}
 
