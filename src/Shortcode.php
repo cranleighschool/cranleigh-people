@@ -431,30 +431,12 @@ class Shortcode extends BaseController {
 
 	function phone_href( $number ) {
 
-		if ( substr( $number, 0, 1 ) == "+" ) {
-			return $number;
-		} else {
-			$str = str_replace( "01483", "+441483", $number );
-			$str = str_replace( " ", "", $str );
-
-			return $str;
-		}
+		return Helper::santitizePhoneHref($number);
 	}
 
 	function get_position( $positions, $not = null ) {
 
-		if ( is_array( $positions ) ):
-			foreach ( $positions as $position ):
-				if ( $position == $not ):
-					continue;
-				endif;
-				break;;
-			endforeach;
-
-			return $position;
-		endif;
-
-		return false;
+		return Helper::santitizePositions($positions, $not);
 	}
 
 	function card_title( $heading, $title ) {
