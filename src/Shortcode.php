@@ -195,12 +195,13 @@ class Shortcode extends BaseController {
 
 	function table_list( $atts, $content = null ) {
 
-		$a      = shortcode_atts(
+		$a = shortcode_atts(
 			[
 				"people"       => null,
 				"class"        => "table-striped",
 				"first_column" => "full_title",
-				"last_column"  => "email_address"
+				"last_column"  => "email_address",
+				"sort" => false
 			],
 			$atts );
 		$people = explode( ",", $a[ 'people' ] );
@@ -222,9 +223,7 @@ class Shortcode extends BaseController {
 			<?php
 			foreach ( $users as $person => $dull ) {
 				$username = trim( $person );
-				echo "<div class=\"col-sm-" . $class . "\">";
 				echo $this->table_row( array_merge( [ "user" => $username ], $a ) );
-				echo "</div>";
 			}
 			?>
 		</table>
