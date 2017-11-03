@@ -559,6 +559,9 @@ class Shortcode extends BaseController {
 
 		global $post;
 
+		if (empty($card_title))
+			$card_title = get_post_meta( $post->ID, 'staff_leadjobtitle', true);
+
 		$full_title     = get_post_meta( $post->ID, 'staff_full_title', true );
 		$phone          = get_post_meta( $post->ID, 'staff_phone', true );
 		$phone_href     = $this->phone_href( $phone );
@@ -628,7 +631,7 @@ class Shortcode extends BaseController {
 
 				<?php if ( strlen( $this->get_second_paragraph() ) > 1 ): ?>
 					<p class="read-more">
-						<a href="#<?php echo $this->sanitize_title_to_id( $card_title ); ?>-bio" data-toggle="collapse" clas="cranleigh-hide-readmore-link" aria-controls="person-bio" aria-expanded="false">Read more…</a>
+						<a href="#<?php echo $this->sanitize_title_to_id( $card_title ); ?>-bio" data-toggle="collapse" class="cranleigh-hide-readmore-link" aria-controls="person-bio" aria-expanded="false">Read more…</a>
 					</p>
 				<?php endif; ?>
 

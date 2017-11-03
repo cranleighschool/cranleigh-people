@@ -64,14 +64,14 @@ class BaseController {
 		return $this->settings[ $variable ];
 	}
 
-	public function restore_current_blog() {
+	public static function restore_current_blog() {
 
 		if ( is_multisite() ):
 			return restore_current_blog();
 		endif;
 	}
 
-	public function switch_to_blog( $new_blog ) {
+	public static function switch_to_blog( $new_blog ) {
 
 		if ( is_multisite() ):
 			return switch_to_blog( $new_blog );
