@@ -17,6 +17,7 @@ class Shortcode extends BaseController {
 		add_shortcode( "table_list", [ $this, 'table_list' ] );
 		add_shortcode( "people_taxonomy", [ $this, 'as_taxonomy' ] );
 		add_shortcode( "person_table", [ $this, 'table_list_shortcode' ] );
+		add_shortcode( "cran_person_table", [ $this, 'table_list_shortcode' ] );
 
 		$this->query_args = [
 			"post_type" => "staff",
