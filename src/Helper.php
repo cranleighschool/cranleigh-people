@@ -14,8 +14,8 @@ class Helper {
 
 	public static $phoneNumber;
 
-	public static function santitizePhoneHref( string $number ) {
-
+	public static function santitizePhoneHref( string $number = null ) {
+		if ($number === null) return false;
 
 		if ( self::phoneStartsWith("+", $number) ) {
 			return $number;
@@ -26,7 +26,9 @@ class Helper {
 
 	}
 
-	public static function sanitizePhoneDisplay( string $number ) {
+	public static function sanitizePhoneDisplay( string $number = null ) {
+		if ($number === null) return false;
+
 		$number = preg_replace('/\D/', '', $number);
 
 		self::$phoneNumber = $number;
