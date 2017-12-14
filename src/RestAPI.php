@@ -13,7 +13,7 @@ class RestAPI {
 		add_filter( 'rest_query_vars', array($this,'my_allow_meta_query' ));
 	}
 
-	public function my_allow_meta_query( $valid_vars ) {
+	public function my_allow_meta_query( array $valid_vars ) {
 
 		$valid_vars = array_merge( $valid_vars, array( 'meta_key', 'meta_value' ) );
 		return $valid_vars;
