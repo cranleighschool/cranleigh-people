@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "rilwis/meta-box",
-            "version": "4.12.2",
+            "version": "4.12.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/rilwis/meta-box.git",
-                "reference": "459bfb7d8385b6b678fabfc065452f1c630f50bc"
+                "url": "https://github.com/wpmetabox/meta-box.git",
+                "reference": "1781efdb247ef8b9cac1723786a8ff682452e131"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rilwis/meta-box/zipball/459bfb7d8385b6b678fabfc065452f1c630f50bc",
-                "reference": "459bfb7d8385b6b678fabfc065452f1c630f50bc",
+                "url": "https://api.github.com/repos/wpmetabox/meta-box/zipball/1781efdb247ef8b9cac1723786a8ff682452e131",
+                "reference": "1781efdb247ef8b9cac1723786a8ff682452e131",
                 "shasum": ""
             },
             "type": "library",
@@ -35,7 +35,7 @@
                 {
                     "name": "Tran Ngoc Tuan Anh",
                     "email": "rilwis@gmail.com",
-                    "homepage": "http://www.deluxeblogtips.com/",
+                    "homepage": "https://deluxeblogtips.com",
                     "role": "Developer"
                 }
             ],
@@ -50,20 +50,20 @@
                 "wordpress-plugin",
                 "wp-admin"
             ],
-            "time": "2017-07-12 04:03:47"
+            "time": "2017-12-04 10:06:38"
         },
         {
             "name": "yahnis-elsts/plugin-update-checker",
-            "version": "v4.2",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/YahnisElsts/plugin-update-checker.git",
-                "reference": "846d11194719111c94296dabcf97a86e95b69449"
+                "reference": "22fd23a32b158ac051f09690c757f5fe509d21aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/846d11194719111c94296dabcf97a86e95b69449",
-                "reference": "846d11194719111c94296dabcf97a86e95b69449",
+                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/22fd23a32b158ac051f09690c757f5fe509d21aa",
+                "reference": "22fd23a32b158ac051f09690c757f5fe509d21aa",
                 "shasum": ""
             },
             "require": {
@@ -95,7 +95,7 @@
                 "theme updates",
                 "wordpress"
             ],
-            "time": "2017-07-21 11:27:31"
+            "time": "2017-11-03 17:20:11"
         }
     ],
     "packages-dev": [],

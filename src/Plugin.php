@@ -19,9 +19,9 @@ class Plugin extends BaseController {
 	 * @access public
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct(string $plugin_name) {
 
-		parent::__construct();
+		parent::__construct($plugin_name);
 
 		$this->load();
 

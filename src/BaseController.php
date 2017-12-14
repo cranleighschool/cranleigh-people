@@ -16,8 +16,10 @@ class BaseController {
 
 	public $settings = [];
 
-	public function __construct() {
+	public function __construct(string $plugin_name) {
+		new PluginUpdateCheck($plugin_name);
 	}
+
 
 	public function load() {
 
