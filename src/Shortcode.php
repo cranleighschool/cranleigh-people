@@ -515,14 +515,16 @@ class Shortcode extends BaseController {
 								<a href="tel:' . $phone_href . '"><span class="sr-only">Phone:</span><span class="glyphicon glyphicon-earphone"></span>' . $phone . '</a></p>';
 								endif;
 							endif;
-							echo $this->get_first_paragraph(); ?>
+							echo $this->get_first_paragraph();
 
-							<p class="read-more">
-								<a href="#<?php echo $this->sanitize_title_to_id( $card_title ); ?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" class="cranleigh-hide-readmore-link" aria-expanded="false">Read more…</a>
-							</p>
-							<div id="<?php echo $this->sanitize_title_to_id( $card_title ); ?>-bio" class="collapse" aria-expanded="false">
-								<?php echo $this->get_second_paragraph(); ?>
-							</div>
+							if ($this->get_second_paragraph()): ?>
+								<p class="read-more">
+									<a href="#<?php echo $this->sanitize_title_to_id( $card_title ); ?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" class="cranleigh-hide-readmore-link" aria-expanded="false">Read more…</a>
+								</p>
+								<div id="<?php echo $this->sanitize_title_to_id( $card_title ); ?>-bio" class="collapse" aria-expanded="false">
+									<?php echo $this->get_second_paragraph(); ?>
+								</div>
+							<?php endif; ?>
 
 						</div><!-- .card-text -->
 					</div><!-- .xs-8 -->
