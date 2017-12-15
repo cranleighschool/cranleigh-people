@@ -4,9 +4,44 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "24e857bac5ab95129e9aeba1e3b6151a",
-    "content-hash": "351657ad9bf1fc12106395793812a06b",
+    "hash": "424efa98acce6c90d982e23926a3444b",
+    "content-hash": "104bed80a3a386fd5542848afaf858fa",
     "packages": [
+        {
+            "name": "fredbradley/cranleigh-slacker",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fredbradley/cranleigh-slacker.git",
+                "reference": "3f01ad0c14dd7a1a423f25ce6abb90e61dc4731a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fredbradley/cranleigh-slacker/zipball/3f01ad0c14dd7a1a423f25ce6abb90e61dc4731a",
+                "reference": "3f01ad0c14dd7a1a423f25ce6abb90e61dc4731a",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FredBradley\\CranleighSlacker\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fred Bradley",
+                    "email": "hello@fredbradley.co.uk",
+                    "homepage": "https://github.com/fredbradley",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A class package that is used in various plugins and scripts to connect to Slack",
+            "time": "2017-12-15 10:34:22"
+        },
         {
             "name": "rilwis/meta-box",
             "version": "4.12.6",

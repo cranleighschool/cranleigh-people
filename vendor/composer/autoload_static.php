@@ -12,6 +12,10 @@ class ComposerStaticInit6336e8b2c954b7e9477116d6d53da2e5
     );
 
     public static $prefixLengthsPsr4 = array (
+        'F' => 
+        array (
+            'FredBradley\\CranleighSlacker\\' => 29,
+        ),
         'C' => 
         array (
             'CranleighSchool\\CranleighPeople\\' => 32,
@@ -19,6 +23,10 @@ class ComposerStaticInit6336e8b2c954b7e9477116d6d53da2e5
     );
 
     public static $prefixDirsPsr4 = array (
+        'FredBradley\\CranleighSlacker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fredbradley/cranleigh-slacker/src',
+        ),
         'CranleighSchool\\CranleighPeople\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',

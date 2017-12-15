@@ -92,5 +92,42 @@
             "wordpress-plugin",
             "wp-admin"
         ]
+    },
+    {
+        "name": "fredbradley/cranleigh-slacker",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fredbradley/cranleigh-slacker.git",
+            "reference": "3f01ad0c14dd7a1a423f25ce6abb90e61dc4731a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fredbradley/cranleigh-slacker/zipball/3f01ad0c14dd7a1a423f25ce6abb90e61dc4731a",
+            "reference": "3f01ad0c14dd7a1a423f25ce6abb90e61dc4731a",
+            "shasum": ""
+        },
+        "time": "2017-12-15 10:34:22",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "FredBradley\\CranleighSlacker\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fred Bradley",
+                "email": "hello@fredbradley.co.uk",
+                "homepage": "https://github.com/fredbradley",
+                "role": "Developer"
+            }
+        ],
+        "description": "A class package that is used in various plugins and scripts to connect to Slack"
     }
 ]

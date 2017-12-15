@@ -3,7 +3,8 @@
     "description": "Cranleigh People Wordpress Plugin for Cranleigh School",
     "require": {
         "yahnis-elsts/plugin-update-checker": "^4.2",
-	  	"rilwis/meta-box": "4.*"
+	  	"rilwis/meta-box": "4.*",
+        "fredbradley/cranleigh-slacker": "^1.0"
     },
     "authors": [
         {
