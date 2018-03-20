@@ -2,7 +2,7 @@
   - Update Version Control
   - Add VERSION and CHANGELOG.md files, Bump version to v0.1.0.
 
-## 0.1.0 (March 20, 2018)
+## Up to this point (March 20, 2018)
   - Enhance the API output ready for Admissions project
   - Amend Slacker class to use composer project
   - Add composer package for cranleigh slacker class
