@@ -1,3 +1,7 @@
+## 1.6.4 (March 20, 2018)
+  - Update Version Control
+  - Add VERSION and CHANGELOG.md files, Bump version to v0.1.0.
+
 ## 0.1.0 (March 20, 2018)
   - Enhance the API output ready for Admissions project
   - Amend Slacker class to use composer project
