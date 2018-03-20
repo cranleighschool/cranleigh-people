@@ -1,0 +1,149 @@
+## 0.1.0 (March 20, 2018)
+  - Enhance the API output ready for Admissions project
+  - Amend Slacker class to use composer project
+  - Add composer package for cranleigh slacker class
+  - Update and push
+  - Typehint
+  - Renamed key plugin file
+  - Update Composer dependancies and fix puc4 update class
+  - Hide the readmore link if there is nothing more to read
+  - Allow null on new sanitize functions when typehinting
+  - Version Bump
+  - Refactored how phone numbers are santizied
+  - Live Version was not up to date with current version
+  - Update Version Number
+  - Fix two other php notice errors
+  - Create Helper Function with static methods
+  - Change two methods in `BaseController` to be `static` and correct typo in `Shortcode`
+  - Version bump
+  - Add slacker check to be alerted to "user not found" instances
+  - fix to force checkout remotely amended code
+  - fix to force checkout remotely amended code
+  - A fix for the permalink issue - the sub site needs to load part of the custom post type as that is what adds the rewrite permastruct, therefore we have added the custom post type but hidden it from view unless the setting is ticked specifically
+  - Trying to fix permalink errors
+  - Fix php notice error if setting has not been set previously
+  - Fixed issue where settings were loading twice
+  - Add constructor back in
+  - Fixed an issue caused by previous refactoring whereby the plugin would not keep the variable of `load_from_blog_id` within the `BaseController`.
+  - Remove offending code
+  - Updated Plugin
+  - Moving into composer managed plugin
+  - Add REST API Endpoint
+  - Add non-multisite support, to output blank array rather than hit a function not found error
+  - Add in condensed version of people widget - bit of a hack, we are actually just using the small shortcode
+  - Only load RestAPI Class if the CPT is loaded
+  - Add Rest API Route and API for Photos
+  - Version Bump
+  - Fixes error where readmore link fails if the title has brackets in it
+  - Updates to allow Cranleigh Abu Dhabi to use it
+  - Fix error where `popme.js` was not loading
+  - Staff Profile Size change
+  - Little bump, because live webserver push failed
+  - Merge pull request #5 from cranleighschool/version-for-cranae
+  - typo change
+  - Move settings class instance outside of base controller class so that it only loads once.
+  - Cleanup, namespaced, and ready for Cranleigh AE
+  - Add default attachment id, based on the main website
+  - Add default attachment id, based on the main website
+  - Remove support for `default_photo` in favour of `default_attachment_id`
+  - Surpress errors if theme mod not set
+  - Changed default image to use attachement id rather than URL, that way the wordpress src set will match - see #141
+  - Change staff image size
+  - Change person card to use leadjobtitle rather than position
+  - Change ARdhives title
+  - Added class back for email link; ;
+  - Rollback
+  - Hide email envolope on small screens, hide qualifications on small screens
+  - Add `a href` to photo of head of dept
+  - HOD template hide biogrphy on small screen
+  - Forgot to add it to the `a href`
+  - Add give hod shortcode a unique title by adding the post id, this was because West have two cards with the same title on the same page, which was causing errors
+  - Add the new hide readmore link class to other shortcodes
+  - Testing out things with the readmore link
+  - Increase the capabilities needed to get to the settings page
+  - Found this in the error log, so I have moved it to within the if statement. Hopefully it fixes another bug
+  - Added class to just bio shortcode in case we want to style it differently
+  - Typo
+  - Added new shortcode for just the biography - using on MSR page
+  - Error message update
+  - Remove non alpha spaces from usernames, as sometimes quote marks were being applied
+  - Neater error message
+  - Error
+  - Added a new function that gets the row, so we can order the page ourselves
+  - Return output rather than echo
+  - Add a shortcode that mimicks the common room page template
+  - Spotted a missing `</p>` tag
+  - Remove fall back as it is mysteriously not working anymore
+  - Add start of `as_taxonomy()` and correct typo in `$email`
+  - Remove Yoast Columns from Edit Screen
+  - Image should be linkable on small cards
+  - Add isams backup photo as a fallback for small cards
+  - Add a clearfix div at the bottom of the widget
+  - This is overkill and probably not great in a live environomnet, but essentially we are checking if the backup photo gives us a 200 response, if not then we just will not show an image at all
+  - Widget Title now using `staff_full_title` rather than `the_title()`
+  - Enhanced styling and content of the sidebar widget
+  - Change where the default fallback photo comes from
+  - Unlink the Qualifications in the `h4` headings
+  - Add `.qualifications` `span` to housemaster cards and hod cards
+  - Hold Qualifications separate from Full Title"
+  - Link housemaster titles to staff profile page
+  - Hide phone if it does not exist
+  - Remove spaces, do spacing with css
+  - Link email
+  - Show email address
+  - Better define filters. Some rules were being defined across the whole admin rather than just this post type
+  - Menu Order
+  - Open marketing sub site in new window
+  - Disable the ability to edit the biography now that we have to sync the biography from `marketing.cranleigh.org`
+  - Put warning on for sync purposes
+  - Surname should be `readonly` not `disabled`
+  - Custom Capabilities added
+  - Added a Media Button and Thick Box for shortcode insert
+  - Sort Order by surname
+  - Adding surname for sorting purposes"
+  - parsing first and last columns
+  - Add in Table List and Table Row functions
+  - return ob contents
+  - Fix
+  - Started to add in table list shortcode
+  - Square image for widget
+  - Show all staff in drop down for person card widget
+  - Redesing admin table for Cranleigh people
+  - Truncate the first paragraph if there is no second paragraph
+  - Only show the read more link in hod if there is more to read
+  - Added a `head_of_dept` method which will display slightly differently to how the house staff functino works
+  - Alphabetical sorting on the tutor list make optional
+  - Coded in the fallback image from the settings file
+  - Add option for default placeholder photo
+  - If no positions are set then fall back to Lead Job Title
+  - fixed error where I hadn't done something correclty
+  - bump to v1.2
+  - bumped to v1.2
+  - Output Buffering the content of the shortcodes
+  - corrected default type
+  - Update README.md
+  - Update README.md
+  - Updated readme
+  - Updated readme
+  - Added shortcode control
+  - Get the primary blog id as a PHP definition  which is set in  for all Multipress installs. This may well break things if you install this plugin on a non-multisite install
+  - added  functions to allow the use of this whilst getting content from the primary site. Warning - this assumes that the primary site id is
+  - Turned the plugin into a two tier system, ready for use on child themes that don't need the full custom post type, but do need all the other gubbins
+  - added the cranleigh people widget for the sidebar
+  - Better labelling
+  - Removed default settings from array as was causing duplication issues
+  - Merge branch 'master' of https://github.com/cranleighschool/cranleigh-people
+  - Resolves #3
+  - fixes #1
+  - Merge pull request #2 from cranleighschool/develop
+  - Bump to 1.1.0
+  - Renamed the Settings Class so as not to conflict with other instances
+  - Merge branch 'master' of https://github.com/cranleighschool/cranleigh-people into develop
+  - Fixed an undefined variable notice
+  - Fixes an issue where the photo column was being shown on every post type list page
+  - Merge pull request #1 from cranleighschool/develop
+  - Update README.md
+  - Modifications, including adding TGMPA plugin to ensure inclusion of meta-box plugin, which is needed for this plugin to work
+  - Added initial plugin files
+  - Initial commit
+
