@@ -1,3 +1,6 @@
+## 1.6.6 (March 20, 2018)
+  - Update to 1.6
+
 ## 1.6.5 (March 20, 2018)
   - UPdated changelog
 
