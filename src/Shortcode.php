@@ -388,10 +388,12 @@ class Shortcode extends BaseController {
 			endwhile;
 			wp_reset_postdata();
 		else:
-			$output = "<div class=\"alert alert-warning\">Staff member &quot;" . $a[ 'user' ] . "&quot; not found.</div>";
-			$slacker = new Slacker();
-			$slacker->setUsername("Cranleigh People Error Catcher");
-			$slacker->post("<!everyone> The Cranleigh People Shortcode is trying to find `".$a['user']."` but failing miserably! (".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].")");
+			if (!wp_doing_ajax()):
+				$output = "<div class=\"alert alert-warning\">Staff member &quot;" . $a[ 'user' ] . "&quot; not found.</div>";
+				$slacker = new Slacker();
+				$slacker->setUsername("Cranleigh People Error Catcher");
+				$slacker->post("The Cranleigh People Shortcode is trying to find `".$a['user']."` but failing miserably! (".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].")");
+			endif;
 		endif;
 
 		$this->restore_current_blog();
