@@ -86,12 +86,6 @@ class Cranleigh_People_Widget extends WP_Widget {
 					if ( has_post_thumbnail() ):
 						the_post_thumbnail( 'full',
 							[ "class" => "img-responsive" ] ); // This needs to not be `full` but we haven't confirmed image sizes yet
-					else:
-						$check = wp_remote_head( site_url( "staff_photos/database.php?user_=" . $username ),
-							[ 'timeout' => 5 ] );
-						if ( $check[ 'response' ][ 'code' ] == 200 ):
-							echo "<img class=\"img-responsive\" alt=\"" . get_the_title() . "\" src=\"" . site_url( "staff_photos/database.php?user_=" . $username ) . "\" />";
-						endif;
 					endif;
 					?>
 				</div>
