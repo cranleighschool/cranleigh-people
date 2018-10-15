@@ -415,7 +415,7 @@ class Plugin extends BaseController {
 			'label'                 => __( 'Person', 'text_domain' ),
 			'description'           => __( 'A List of People that are mentioned on the website', 'text_domain' ),
 			'labels'                => $labels,
-			'supports'              => [ 'title', 'editor', 'thumbnail', 'excerpt' ],
+			'supports'              => [ 'title', 'editor', 'thumbnail', 'excerpt', 'page-attributes' ],
 			'taxonomies'            => [],
 			'hierarchical'          => false,
 			'public'                => $public,
