@@ -51,7 +51,7 @@ class Shortcode extends BaseController {
 				"Could not locate data for the user: &quot;" . $atts[ 'username' ] . "&quot;." );
 		}
 		$output = "";
-		if ( get_post_status() == "private" ) {
+		if ( get_post_status() == "private" && current_user_can('manage_options') ) {
 			$output .= '<tr class="danger">';
 		} else {
 			$output .= '<tr>';
