@@ -14,20 +14,20 @@ class Cranleigh_People_Widget extends WP_Widget {
 	public function __construct() {
 
 		$this->cranleigh_people_settings = get_option( 'cran_people_basic' );
-		$this->load_from_blog_id         = $this->cranleigh_people_settings[ 'load_from_blog_id' ];
+		$this->load_from_blog_id         = $this->cranleigh_people_settings['load_from_blog_id'];
 
 		$widget_ops = [
 			'classname'   => 'person-card',
-			'description' => 'Shows a widget for a person.'
+			'description' => 'Shows a widget for a person.',
 		];
 
 		parent::__construct( 'cranleigh-person', 'Cranleigh Person Card', $widget_ops );
 
 		$this->query_args = [
-			"posts_per_page" => - 1,
-			"post_type"      => "staff",
-			"orderby"        => "meta_value_num",
-			"meta_key"       => "staff_username"
+			'posts_per_page' => - 1,
+			'post_type'      => 'staff',
+			'orderby'        => 'meta_value_num',
+			'meta_key'       => 'staff_username',
 		];
 
 	}
@@ -38,42 +38,45 @@ class Cranleigh_People_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		echo $args[ 'before_widget' ];
-		if ( ! empty( $instance[ 'title' ] ) ) {
-			echo $args[ 'before_title' ] . apply_filters( 'widget_title',
-					$instance[ 'title' ] ) . $args[ 'after_title' ];
+		echo $args['before_widget'];
+		if ( ! empty( $instance['title'] ) ) {
+			echo $args['before_title'] . apply_filters(
+				'widget_title',
+				$instance['title']
+			) . $args['after_title'];
 		}
-		if ( isset( $instance[ 'condensed' ] ) && $instance[ 'condensed' ] == true ):
-			echo do_shortcode( "[person_card type=small user=" . $instance[ 'username' ] . "]" );
-		else:
-			$this->html( $instance[ 'username' ] );
+		if ( isset( $instance['condensed'] ) && $instance['condensed'] == true ) :
+			echo do_shortcode( '[person_card type=small user=' . $instance['username'] . ']' );
+		else :
+			$this->html( $instance['username'] );
 		endif;
 
-		echo $args[ 'after_widget' ];
+		echo $args['after_widget'];
 	}
 
 	/**
 	 * @param string $username
 	 */
-	public function html(string $username ) {
+	public function html( string $username ) {
 
 		$args = [
-			"posts_per_page" => 1,
-			"meta_query"     => [
+			'posts_per_page' => 1,
+			'meta_query'     => [
 				[
-					"key"   => "staff_username",
-					"value" => $username
-				]
-			]
+					'key'   => 'staff_username',
+					'value' => $username,
+				],
+			],
 		];
 
 		BaseController::switch_to_blog( $this->load_from_blog_id );
 		$query = new WP_Query( wp_parse_args( $args, $this->query_args ) );
 
-		if ( $query->have_posts() ):
-			while ( $query->have_posts() ): $query->the_post();
+		if ( $query->have_posts() ) :
+			while ( $query->have_posts() ) :
+				$query->the_post();
 
-				?><?php edit_post_link( "[Edit " . $username . "]", "<small class='pull-right'>", "</small>" ); ?>
+				?><?php edit_post_link( '[Edit ' . $username . ']', "<small class='pull-right'>", '</small>' ); ?>
 				<h5>
 					<a href="<?php the_permalink(); ?>">
 						<span class="glyphicon glyphicon-envelope"></span>
@@ -83,9 +86,11 @@ class Cranleigh_People_Widget extends WP_Widget {
 				</h5>
 				<div class="person-image">
 					<?php
-					if ( has_post_thumbnail() ):
-						the_post_thumbnail( 'full',
-							[ "class" => "img-responsive" ] ); // This needs to not be `full` but we haven't confirmed image sizes yet
+					if ( has_post_thumbnail() ) :
+						the_post_thumbnail(
+							'full',
+							[ 'class' => 'img-responsive' ]
+						); // This needs to not be `full` but we haven't confirmed image sizes yet
 					endif;
 					?>
 				</div>
@@ -95,15 +100,15 @@ class Cranleigh_People_Widget extends WP_Widget {
 
 			endwhile;
 
-		else:
-			echo "<p class=\"alert-warning\">Staff Member not found</p>";
-			$slacker = new Slacker();
-			$slacker->setUsername("Cranleigh People Error Catcher");
-			$slacker->post("<!everyone> The Cranleigh People Widget is trying to find `".$username."` but failing miserably! (".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].")");
+			else :
+				echo '<p class="alert-warning">Staff Member not found</p>';
+				$slacker = new Slacker();
+				$slacker->setUsername( 'Cranleigh People Error Catcher' );
+				$slacker->post( '<!everyone> The Cranleigh People Widget is trying to find `' . $username . '` but failing miserably! (' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . ')' );
 		endif;
-		wp_reset_postdata();
-		BaseController::restore_current_blog();
-		echo "<div class=\"clearfix clear\">&nbsp;</div>";
+			wp_reset_postdata();
+			BaseController::restore_current_blog();
+			echo '<div class="clearfix clear">&nbsp;</div>';
 	}
 
 	/**
@@ -127,9 +132,9 @@ class Cranleigh_People_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 
-		$instance               = [];
-		$instance[ 'title' ]    = ( ! empty( $new_instance[ 'title' ] ) ) ? strip_tags( $new_instance[ 'title' ] ) : '';
-		$instance[ 'username' ] = ( ! empty( $new_instance[ 'username' ] ) ) ? strip_tags( $new_instance[ 'username' ] ) : '';
+		$instance             = [];
+		$instance['title']    = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance['username'] = ( ! empty( $new_instance['username'] ) ) ? strip_tags( $new_instance['username'] ) : '';
 
 		return $instance;
 	}
@@ -139,10 +144,10 @@ class Cranleigh_People_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 
-		$title    = ! empty( $instance[ 'title' ] ) ? $instance[ 'title' ] : __( 'Staff Member', 'cranleigh-2016' );
-		$username = ! empty( $instance[ 'username' ] ) ? $instance[ 'username' ] : "";
+		$title    = ! empty( $instance['title'] ) ? $instance['title'] : __( 'Staff Member', 'cranleigh-2016' );
+		$username = ! empty( $instance['username'] ) ? $instance['username'] : '';
 
-		if ( $this->load_from_blog_id == 1 ):
+		if ( $this->load_from_blog_id == 1 ) :
 			echo '<p class="notice-error notice">Warning: You need to set which Blog you want to pull your data from. Your widget may not display correctly on the frontend until you do this. Visit the <a href="options-general.php?page=cranleigh_people_settings">Cranleigh People Settings Page</a>.</p>';
 		endif;
 		?>
@@ -160,23 +165,24 @@ class Cranleigh_People_Widget extends WP_Widget {
 				BaseController::switch_to_blog( $this->load_from_blog_id );
 				$query = new WP_Query( $this->query_args );
 
-				if ( $query->have_posts() ):
-					while ( $query->have_posts() ): $query->the_post();
+				if ( $query->have_posts() ) :
+					while ( $query->have_posts() ) :
+						$query->the_post();
 						$staff_username = get_post_meta( get_the_ID(), 'staff_username', true );
 						if ( $staff_username === $username ) {
-							$selected = "selected=\"selected\"";
+							$selected = 'selected="selected"';
 						} else {
 							$selected = null;
 						}
-						echo "<option value=\"" . $staff_username . "\" " . $selected . ">" . strtoupper( $staff_username ) . " (" . get_the_title() . ")" . "</option>";
+						echo '<option value="' . $staff_username . '" ' . $selected . '>' . strtoupper( $staff_username ) . ' (' . get_the_title() . ')' . '</option>';
 					endwhile;
 					wp_reset_postdata();
-				else:
-					echo 'You have no staff to choose from...';
+					else :
+						echo 'You have no staff to choose from...';
 				endif;
-				BaseController::restore_current_blog();
+					BaseController::restore_current_blog();
 
-				?>
+					?>
 			</select>
 		</p>
 		<?php

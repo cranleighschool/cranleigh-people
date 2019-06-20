@@ -12,22 +12,22 @@ class Shortcode extends BaseController {
 	function __construct() {
 		$this->load();
 
-		add_shortcode( "person_card", [ $this, 'shortcode' ] );
-		add_shortcode( "card_list", [ $this, 'tutors_list' ] );
-		add_shortcode( "table_list", [ $this, 'table_list' ] );
-		add_shortcode( "people_taxonomy", [ $this, 'as_taxonomy' ] );
-		add_shortcode( "person_table", [ $this, 'table_list_shortcode' ] );
-		add_shortcode( "cran_person_table", [ $this, 'table_list_shortcode' ] );
+		add_shortcode( 'person_card', [ $this, 'shortcode' ] );
+		add_shortcode( 'card_list', [ $this, 'tutors_list' ] );
+		add_shortcode( 'table_list', [ $this, 'table_list' ] );
+		add_shortcode( 'people_taxonomy', [ $this, 'as_taxonomy' ] );
+		add_shortcode( 'person_table', [ $this, 'table_list_shortcode' ] );
+		add_shortcode( 'cran_person_table', [ $this, 'table_list_shortcode' ] );
 
 		$this->query_args = [
-			"post_type" => "staff",
-			"orderby"   => "meta_value_num",
-			"meta_key"  => "staff_username"
+			'post_type' => 'staff',
+			'orderby'   => 'meta_value_num',
+			'meta_key'  => 'staff_username',
 		];
 
-		if ( isset( $this->settings[ 'default_photo_attachment_id' ] ) ):
-			$this->default_attachment_id = $this->settings[ 'default_photo_attachment_id' ];
-		else:
+		if ( isset( $this->settings['default_photo_attachment_id'] ) ) :
+			$this->default_attachment_id = $this->settings['default_photo_attachment_id'];
+		else :
 			$this->default_attachment_id = 32492;
 		endif;
 
@@ -35,68 +35,85 @@ class Shortcode extends BaseController {
 
 	function table_list_row( $atts, $content = null ) {
 
-		$atts = shortcode_atts( [
-			"username" => null
-		], $atts );
+		$atts = shortcode_atts(
+			[
+				'username' => null,
+			],
+			$atts
+		);
 
-		$posts = get_posts( [ "post_type"      => "staff",
-		                      "posts_per_page" => - 1,
-		                      "meta_key"       => "staff_username",
-		                      "meta_value"     => $atts[ 'username' ]
-		] );
+		$posts = get_posts(
+			[
+				'post_type'      => 'staff',
+				'posts_per_page' => - 1,
+				'meta_key'       => 'staff_username',
+				'meta_value'     => $atts['username'],
+			]
+		);
 		if ( count( $posts ) == 1 ) {
-			$post = $posts[ 0 ];
+			$post = $posts[0];
 		} else {
-			return new WP_Error( "Error getting User Data",
-				"Could not locate data for the user: &quot;" . $atts[ 'username' ] . "&quot;." );
+			return new WP_Error(
+				'Error getting User Data',
+				'Could not locate data for the user: &quot;' . $atts['username'] . '&quot;.'
+			);
 		}
-		$output = "";
-		if ( get_post_status() == "private" && current_user_can('manage_options') ) {
+		$output = '';
+		if ( get_post_status() == 'private' && current_user_can( 'manage_options' ) ) {
 			$output .= '<tr class="danger">';
 		} else {
 			$output .= '<tr>';
 		}
 
-		$output .= '<td><a href="' . get_permalink( $post->ID ) . '"><span class="staff-title">' . get_post_meta( $post->ID,
-				"staff_full_title", true ) . '</span></a><span class="qualifications">' . get_post_meta( $post->ID,
-				'staff_qualifications', true ) . '</span></td>';
-		$output .= "<td>" . get_post_meta( $post->ID, 'staff_leadjobtitle', true ) . "</td>";
-		$output .= "</tr>";
+		$output .= '<td><a href="' . get_permalink( $post->ID ) . '"><span class="staff-title">' . get_post_meta(
+			$post->ID,
+			'staff_full_title',
+			true
+		) . '</span></a><span class="qualifications">' . get_post_meta(
+			$post->ID,
+			'staff_qualifications',
+			true
+		) . '</span></td>';
+		$output .= '<td>' . get_post_meta( $post->ID, 'staff_leadjobtitle', true ) . '</td>';
+		$output .= '</tr>';
 
 		return $output;
 	}
 
 	function table_list_shortcode( $atts, $content = null ) {
 
-		$atts      = shortcode_atts( [
-			"users"        => null,
-			"with_headers" => false
-		], $atts );
-		$all_users = explode( ",", $atts[ 'users' ] );
+		$atts      = shortcode_atts(
+			[
+				'users'        => null,
+				'with_headers' => false,
+			],
+			$atts
+		);
+		$all_users = explode( ',', $atts['users'] );
 		$users     = [];
-		foreach ( $all_users as $user ):
-			$users[] = preg_replace( "/[^A-Za-z]/", "", trim( $user ) );
+		foreach ( $all_users as $user ) :
+			$users[] = preg_replace( '/[^A-Za-z]/', '', trim( $user ) );
 		endforeach;
 		$args  = [
-			"post_type"      => "staff",
-			"posts_per_page" => - 1,
-			"orderby"        => "meta_value",
-			"meta_key"       => "staff_surname",
-			"order"          => "ASC",
-			"meta_query"     => [
+			'post_type'      => 'staff',
+			'posts_per_page' => - 1,
+			'orderby'        => 'meta_value',
+			'meta_key'       => 'staff_surname',
+			'order'          => 'ASC',
+			'meta_query'     => [
 				[
-					"key"     => "staff_username",
-					"value"   => $users,
-					"compare" => "IN"
-				]
-			]
+					'key'     => 'staff_username',
+					'value'   => $users,
+					'compare' => 'IN',
+				],
+			],
 		];
 		$staff = new WP_Query( wp_parse_args( $args, $this->query_args ) );
 		ob_start();
 		?>
 		<div class="table-responsive">
 			<table class="table table-condensed table-striped table-hover">
-				<?php if ( $atts[ 'with_headers' ] !== false ): ?>
+				<?php if ( $atts['with_headers'] !== false ) : ?>
 					<thead>
 					<th>Staff</th>
 					<th>Job Title</th>
@@ -104,14 +121,14 @@ class Shortcode extends BaseController {
 				<?php endif; ?>
 				<tbody>
 				<?php
-				foreach ( $users as $user ):
-					$row = $this->table_list_row( [ "username" => $user ] );
+				foreach ( $users as $user ) :
+					$row = $this->table_list_row( [ 'username' => $user ] );
 					if ( ! is_wp_error( $row ) ) {
 						echo $row;
 					} else {
-						echo "<tr class=\"danger\"><td colspan=\"2\">" . $row->get_error_message() . "</td></tr>";
+						echo '<tr class="danger"><td colspan="2">' . $row->get_error_message() . '</td></tr>';
 					}
-					//							echo $this->table_list_row(["username"=>$user]);
+					// echo $this->table_list_row(["username"=>$user]);
 				endforeach;
 				?>
 				</tbody>
@@ -137,26 +154,30 @@ class Shortcode extends BaseController {
 	 */
 	function as_taxonomy( $atts, $content = null ) {
 
-		$atts  = shortcode_atts( [
-			"taxonomy" => $taxonomy
-		], $atts );
+		$atts  = shortcode_atts(
+			[
+				'taxonomy' => $taxonomy,
+			],
+			$atts
+		);
 		$args  = [
-			"tax_query" => [
+			'tax_query' => [
 				[
-					"taxonomy" => "staff_categories",
-					"field"    => "slug",
-					"terms"    => $atts[ 'taxonomy' ]
-				]
-			]
+					'taxonomy' => 'staff_categories',
+					'field'    => 'slug',
+					'terms'    => $atts['taxonomy'],
+				],
+			],
 		];
 		$query = new WP_Query( wp_parse_args( $args, $this->query_args ) );
-		while ( $query->have_posts() ): $query->the_post();
+		while ( $query->have_posts() ) :
+			$query->the_post();
 			$people[] = get_post_meta( get_the_ID(), 'staff_username', true );
 		endwhile;
 		wp_reset_postdata();
 		wp_reset_query();
 
-		return $this->table_list( [ "people" => implode( ",", $people ) ] );
+		return $this->table_list( [ 'people' => implode( ',', $people ) ] );
 	}
 
 	function two_column( $post_id ) {
@@ -182,49 +203,58 @@ class Shortcode extends BaseController {
 
 	function table_row( $atts, $content = null ) {
 
-		$a = shortcode_atts( [
-			"user"         => null,
-			"first_column" => "full_title",
-			"last_column"  => "email_address"
-		], $atts );
+		$a = shortcode_atts(
+			[
+				'user'         => null,
+				'first_column' => 'full_title',
+				'last_column'  => 'email_address',
+			],
+			$atts
+		);
 
-		$this->first_column = $a[ 'first_column' ];
-		$this->last_column  = $a[ 'last_column' ];
+		$this->first_column = $a['first_column'];
+		$this->last_column  = $a['last_column'];
 
-		return $this->shortcode( [ "type" => "two-column", "user" => $a[ 'user' ] ] );
+		return $this->shortcode(
+			[
+				'type' => 'two-column',
+				'user' => $a['user'],
+			]
+		);
 	}
 
 	function table_list( $atts, $content = null ) {
 
-		$a = shortcode_atts(
+		$a      = shortcode_atts(
 			[
-				"people"       => null,
-				"class"        => "table-striped",
-				"first_column" => "full_title",
-				"last_column"  => "email_address",
-				"sort" => false
+				'people'       => null,
+				'class'        => 'table-striped',
+				'first_column' => 'full_title',
+				'last_column'  => 'email_address',
+				'sort'         => false,
 			],
-			$atts );
-		$people = explode( ",", $a[ 'people' ] );
+			$atts
+		);
+		$people = explode( ',', $a['people'] );
 
 		$users = [];
-		foreach ( $people as $person ):
+		foreach ( $people as $person ) :
 			$initial          = str_split( $person );
 			$last             = end( $initial );
 			$users[ $person ] = $last;
 		endforeach;
 
-		if ( $a[ 'sort' ] == true ) {
+		if ( $a['sort'] == true ) {
 			asort( $users );
 		}
 
 		ob_start();
 		?>
-		<table class="table <?php echo $a[ 'class' ]; ?>">
+		<table class="table <?php echo $a['class']; ?>">
 			<?php
 			foreach ( $users as $person => $dull ) {
 				$username = trim( $person );
-				echo $this->table_row( array_merge( [ "user" => $username ], $a ) );
+				echo $this->table_row( array_merge( [ 'user' => $username ], $a ) );
 			}
 			?>
 		</table>
@@ -238,14 +268,17 @@ class Shortcode extends BaseController {
 
 	function tutors_list( $atts ) {
 
-		$a = shortcode_atts( [
-			"people"  => null,
-			"columns" => 2,
-			"type"    => "small",
-			"sort"    => null,
-		], $atts );
+		$a = shortcode_atts(
+			[
+				'people'  => null,
+				'columns' => 2,
+				'type'    => 'small',
+				'sort'    => null,
+			],
+			$atts
+		);
 
-		switch ( $a[ 'columns' ] ):
+		switch ( $a['columns'] ) :
 			case 2:
 				$class = 6;
 				break;
@@ -257,29 +290,34 @@ class Shortcode extends BaseController {
 				break;
 		endswitch;
 
-		$people = explode( ",", $a[ 'people' ] );
+		$people = explode( ',', $a['people'] );
 
 		$users = [];
-		foreach ( $people as $person ):
+		foreach ( $people as $person ) :
 			$initial          = str_split( $person );
 			$last             = end( $initial );
 			$users[ $person ] = $last;
 		endforeach;
 
-		if ( $a[ 'sort' ] == true ) {
+		if ( $a['sort'] == true ) {
 			asort( $users );
 		}
 
 		ob_start();
 
-		echo "<div class=\"row\">";
+		echo '<div class="row">';
 		foreach ( $users as $person => $dull ) {
 			$username = trim( $person );
-			echo "<div class=\"col-sm-" . $class . "\">";
-			echo $this->shortcode( [ "type" => $a[ 'type' ], "user" => $username ] );
-			echo "</div>";
+			echo '<div class="col-sm-' . $class . '">';
+			echo $this->shortcode(
+				[
+					'type' => $a['type'],
+					'user' => $username,
+				]
+			);
+			echo '</div>';
 		}
-		echo "</div>";
+		echo '</div>';
 
 		$output = ob_get_contents();
 		ob_end_clean();
@@ -306,11 +344,15 @@ class Shortcode extends BaseController {
 					<div class="card-image">
 						<a href="<?php the_permalink(); ?>">
 							<?php
-							if ( has_post_thumbnail() ):
-								the_post_thumbnail( 'staff-photo', [ "class" => "img-responsive" ] );
-							elseif ( $this->default_attachment_id !== null ):
-								$photo = wp_get_attachment_image( $this->default_attachment_id, 'staff-photo', false,
-									[ "class" => "img-responsive" ] );
+							if ( has_post_thumbnail() ) :
+								the_post_thumbnail( 'staff-photo', [ 'class' => 'img-responsive' ] );
+							elseif ( $this->default_attachment_id !== null ) :
+								$photo = wp_get_attachment_image(
+									$this->default_attachment_id,
+									'staff-photo',
+									false,
+									[ 'class' => 'img-responsive' ]
+								);
 								echo $photo;
 							endif;
 							?>
@@ -335,70 +377,74 @@ class Shortcode extends BaseController {
 
 	function shortcode( $atts, $content = null ) {
 
-		$a = shortcode_atts( [
-			'type'  => 'small',
-			'user'  => null,
-			'title' => null
-		], $atts );
+		$a = shortcode_atts(
+			[
+				'type'  => 'small',
+				'user'  => null,
+				'title' => null,
+			],
+			$atts
+		);
 
-		if ( $a[ 'user' ] === null ) {
-			return "<div class=\"alert alert-warning\">Staff member not specified.</div>";
+		if ( $a['user'] === null ) {
+			return '<div class="alert alert-warning">Staff member not specified.</div>';
 		}
-		if ( $a[ 'type' ] == "house" && $a[ 'title' ] === null ) {
-			return "<div class=\"alert alert-warning\">Card title not specified.</div>";
+		if ( $a['type'] == 'house' && $a['title'] === null ) {
+			return '<div class="alert alert-warning">Card title not specified.</div>';
 		}
 
 		$args = [
-			"posts_per_page" => 1,
-			"meta_query"     => [
+			'posts_per_page' => 1,
+			'meta_query'     => [
 				[
-					"key"   => "staff_username",
-					"value" => $a[ 'user' ]
-				]
-			]
+					'key'   => 'staff_username',
+					'value' => $a['user'],
+				],
+			],
 		];
 
 		$this->switch_to_blog( $this->load_from_blog_id );
 		$query = new WP_Query( wp_parse_args( $args, $this->query_args ) );
 
-		if ( $query->have_posts() ):
-			while ( $query->have_posts() ): $query->the_post();
+		if ( $query->have_posts() ) :
+			while ( $query->have_posts() ) :
+				$query->the_post();
 				$post_id = get_the_ID();
 
-				switch ( $a[ 'type' ] ):
-					case "biography-only":
+				switch ( $a['type'] ) :
+					case 'biography-only':
 						$output = $this->just_bio( $post_id );
 						break;
-					case "house":
-						$output = $this->house_staff( $post_id, $a[ 'title' ] );
+					case 'house':
+						$output = $this->house_staff( $post_id, $a['title'] );
 						break;
-					case "hod":
-						$output = $this->head_of_dept( $post_id, $a[ 'title' ] );
+					case 'hod':
+						$output = $this->head_of_dept( $post_id, $a['title'] );
 						break;
-					case "small":
-						$output = $this->small( $post_id, $a[ 'title' ] );
+					case 'small':
+						$output = $this->small( $post_id, $a['title'] );
 						break;
-					case "two-column":
+					case 'two-column':
 						$output = $this->two_column( $post_id );
 						break;
 					default:
-						$output = $this->small( $post_id, $a[ 'title' ] );
+						$output = $this->small( $post_id, $a['title'] );
 						break;
 				endswitch;
 			endwhile;
 			wp_reset_postdata();
-		else:
-			if (!wp_doing_ajax()):
-				$output = "<div class=\"alert alert-warning\">Staff member &quot;" . $a[ 'user' ] . "&quot; not found.</div>";
-				$slacker = new Slacker();
-				$slacker->setUsername("Cranleigh People Error Catcher");
-				$slacker->post("The Cranleigh People Shortcode is trying to find `".$a['user']."` but failing miserably! (".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].")");
-			endif;
+			else :
+				if ( ! wp_doing_ajax() ) :
+					$output  = '<div class="alert alert-warning">Staff member &quot;' . $a['user'] . '&quot; not found.</div>';
+					$slacker = new Slacker();
+					$slacker->setUsername( 'Cranleigh People Error Catcher' );
+					$slacker->post( 'The Cranleigh People Shortcode is trying to find `' . $a['user'] . '` but failing miserably! (' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . ')' );
+				endif;
 		endif;
 
-		$this->restore_current_blog();
+			$this->restore_current_blog();
 
-		return $output;
+			return $output;
 
 	}
 
@@ -409,9 +455,9 @@ class Shortcode extends BaseController {
 		$str = substr( $str, 0, strpos( $str, '</p>' ) + 4 );
 		$str = strip_tags( $str, '<a><strong><em>' );
 
-		if ( strlen( $this->get_second_paragraph() ) <= 1 && strlen( $str ) > 400 ):
+		if ( strlen( $this->get_second_paragraph() ) <= 1 && strlen( $str ) > 400 ) :
 			return '<p class="biography">' . substr( $str, 0, 400 ) . '...</p>';
-		else:
+		else :
 			return '<p class="biography">' . $str . '</p>';
 		endif;
 	}
@@ -433,49 +479,53 @@ class Shortcode extends BaseController {
 
 	function phone_href( $number ) {
 
-		return Helper::santitizePhoneHref($number);
+		return Helper::santitizePhoneHref( $number );
 	}
 
 	function get_position( $positions, $not = null ) {
 
-		return Helper::santitizePositions($positions, $not);
+		return Helper::santitizePositions( $positions, $not );
 	}
 
 	function card_title( $heading, $title ) {
 
-		return "<" . $heading . ">" . $title . "</" . $heading . ">";
+		return '<' . $heading . '>' . $title . '</' . $heading . '>';
 	}
 
 	function sanitize_title_to_id( $card_title ) {
 
-		$string = strtolower( str_replace( " ", "", $card_title ) );
+		$string = strtolower( str_replace( ' ', '', $card_title ) );
 
 		return preg_replace( '/[^A-Za-z0-9\-]/', '', $string );
 	}
 
 	function get_staff_photo( $thumb = false ) {
 
-		if ( has_post_thumbnail() ):
-			if ( $thumb === false ):
-				the_post_thumbnail( [ 600, 800 ], [ "class" => "img-responsive" ] );
-			else:
-				the_post_thumbnail( 'thumbnail', [ "class" => "img-responsive" ] );
+		if ( has_post_thumbnail() ) :
+			if ( $thumb === false ) :
+				the_post_thumbnail( [ 600, 800 ], [ 'class' => 'img-responsive' ] );
+			else :
+				the_post_thumbnail( 'thumbnail', [ 'class' => 'img-responsive' ] );
 			endif;
-		else:
-			$photo = wp_get_attachment_image( $this->default_attachment_id, 'staff-photo', false,
-				[ "class" => "img-responsive" ] );
-			echo $photo;
+			else :
+				$photo = wp_get_attachment_image(
+					$this->default_attachment_id,
+					'staff-photo',
+					false,
+					[ 'class' => 'img-responsive' ]
+				);
+				echo $photo;
 		endif;
 	}
 
-	function house_staff( $post_id = null, $card_title = "Housemaster" ) {
+	function house_staff( $post_id = null, $card_title = 'Housemaster' ) {
 
 		global $post;
 
 		$full_title     = get_post_meta( $post->ID, 'staff_full_title', true );
 		$phone          = get_post_meta( $post->ID, 'staff_phone', true );
 		$phone_href     = $this->phone_href( $phone );
-		$position       = $this->get_position( get_post_meta( $post->ID, 'staff_position', true ), "Housemaster" );
+		$position       = $this->get_position( get_post_meta( $post->ID, 'staff_position', true ), 'Housemaster' );
 		$email          = get_post_meta( $post->ID, 'staff_email_address', true );
 		$qualifications = get_post_meta( $post->ID, 'staff_qualifications', true );
 		ob_start();
@@ -491,15 +541,15 @@ class Shortcode extends BaseController {
 					<div class="col-xs-8">
 						<div class="card-text">
 							<?php
-							switch ( $card_title ):
-								case "Housemaster":
-								case "Housemistress":
+							switch ( $card_title ) :
+								case 'Housemaster':
+								case 'Housemistress':
 									echo $this->card_title( 'h2', $card_title );
 									break;
-								case "Deputy Housemaster":
-								case "Deputy Housemistress":
-								case "Day Warden":
-								case "Matron":
+								case 'Deputy Housemaster':
+								case 'Deputy Housemistress':
+								case 'Day Warden':
+								case 'Matron':
 									echo $this->card_title( 'h3', $card_title );
 									break;
 								default:
@@ -510,16 +560,17 @@ class Shortcode extends BaseController {
 								<a href="<?php echo get_permalink( $post->ID ); ?>"><?php echo $full_title; ?></a><span class="qualifications"><?php echo $qualifications; ?></span>
 							</h4>
 							<?php
-							if ( $card_title !== "Matron" ):
+							if ( $card_title !== 'Matron' ) :
 								echo '<p><a href="mailto:' . $email . '"><span class="sr-only">E-mail:</span><span class="glyphicon glyphicon-envelope"></span>' . strtolower( $email ) . '</a>';
-								if ( $phone ):
+								if ( $phone ) :
 									echo '<br>
 								<a href="tel:' . $phone_href . '"><span class="sr-only">Phone:</span><span class="glyphicon glyphicon-earphone"></span>' . $phone . '</a></p>';
 								endif;
 							endif;
 							echo $this->get_first_paragraph();
 
-							if ($this->get_second_paragraph()): ?>
+							if ( $this->get_second_paragraph() ) :
+								?>
 								<p class="read-more">
 									<a href="#<?php echo $this->sanitize_title_to_id( $card_title ); ?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" class="cranleigh-hide-readmore-link" aria-expanded="false">Read more…</a>
 								</p>
@@ -541,17 +592,18 @@ class Shortcode extends BaseController {
 		return $output;
 	}
 
-	function head_of_dept( $post_id = null, $card_title = "Head of Department" ) {
+	function head_of_dept( $post_id = null, $card_title = 'Head of Department' ) {
 
 		global $post;
 
-		if (empty($card_title))
-			$card_title = get_post_meta( $post->ID, 'staff_leadjobtitle', true);
+		if ( empty( $card_title ) ) {
+			$card_title = get_post_meta( $post->ID, 'staff_leadjobtitle', true );
+		}
 
 		$full_title     = get_post_meta( $post->ID, 'staff_full_title', true );
 		$phone          = get_post_meta( $post->ID, 'staff_phone', true );
 		$phone_href     = $this->phone_href( $phone );
-		$position       = $this->get_position( get_post_meta( $post->ID, 'staff_position', true ), "Housemaster" );
+		$position       = $this->get_position( get_post_meta( $post->ID, 'staff_position', true ), 'Housemaster' );
 		$email          = get_post_meta( $post->ID, 'staff_email_address', true );
 		$qualifications = get_post_meta( $post->ID, 'staff_qualifications', true );
 		ob_start();
@@ -581,7 +633,7 @@ class Shortcode extends BaseController {
 
 								<?php echo $this->get_first_paragraph(); ?>
 
-								<?php if ( strlen( $this->get_second_paragraph() ) > 1 ): ?>
+								<?php if ( strlen( $this->get_second_paragraph() ) > 1 ) : ?>
 									<p class="read-more">
 									<a href="#<?php echo $this->sanitize_title_to_id( $card_title ); ?>-<?php echo $post->ID; ?>-bio" data-toggle="collapse" aria-controls="housemaster-bio" class="cranleigh-hide-readmore-link" aria-expanded="false">Read more…</a>
 								</p>
@@ -607,7 +659,7 @@ class Shortcode extends BaseController {
 	function just_bio( $post_id = null ) {
 
 		global $post;
-		$card_title = "person-bio-" . $post_id;
+		$card_title = 'person-bio-' . $post_id;
 		ob_start();
 		?>
 		<section class="biography-pullout" id="<?php echo $this->sanitize_title_to_id( $card_title ); ?>">
@@ -615,7 +667,7 @@ class Shortcode extends BaseController {
 
 				<?php echo $this->get_first_paragraph(); ?>
 
-				<?php if ( strlen( $this->get_second_paragraph() ) > 1 ): ?>
+				<?php if ( strlen( $this->get_second_paragraph() ) > 1 ) : ?>
 					<p class="read-more">
 						<a href="#<?php echo $this->sanitize_title_to_id( $card_title ); ?>-bio" data-toggle="collapse" class="cranleigh-hide-readmore-link" aria-controls="person-bio" aria-expanded="false">Read more…</a>
 					</p>
