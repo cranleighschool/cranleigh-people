@@ -1,20 +1,23 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: fredbradley
- * Date: 30/08/2017
- * Time: 14:42
- */
+	/**
+	 * Created by PhpStorm.
+	 * User: fredbradley
+	 * Date: 30/08/2017
+	 * Time: 14:42
+	 */
 
-namespace CranleighSchool\CranleighPeople;
+	namespace CranleighSchool\CranleighPeople;
 
-class Slacker extends \FredBradley\CranleighSlacker\Slacker {
+	class Slacker extends \FredBradley\CranleighSlacker\Slacker
+	{
 
-	private static $webhookEndpoint = 'https://hooks.slack.com/services/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';
+		public static $room = 'website-project';
+		private static $webhookEndpoint;
 
-	public static $room = 'website-project';
+		public function __construct()
+		{
+			self::$webhookEndpoint = get_option('cran_people_basic')['slack_webhook_endpoint'];
 
-	public function __construct() {
-		parent::__construct( self::$webhookEndpoint, self::$room );
+			parent::__construct(self::$webhookEndpoint, self::$room);
+		}
 	}
-}

@@ -88,6 +88,13 @@ if ( ! class_exists( 'CranleighSchool\CranleighPeople\Settings' ) ) :
 						'default' => 1,
 						'options' => $this->selectSite_optionList(),
 					),
+					array(
+						'name' => 'slack_webhook_endpoint',
+						'label' => 'Slack Webhook Endpoint',
+						'desc' => 'The Slack Webhook',
+						'type' => 'text',
+						'default' => null,
+					)
 
 				),
 			);
