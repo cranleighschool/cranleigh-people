@@ -13,8 +13,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 
 	public function __construct() {
 
-		$this->cranleigh_people_settings = get_option( 'cran_people_basic' );
-		$this->load_from_blog_id         = $this->cranleigh_people_settings['load_from_blog_id'];
+		$this->load_from_blog_id         = Plugin::getPluginSetting('load_from_blog_id');
 
 		$widget_ops = [
 			'classname'   => 'person-card',
@@ -25,9 +24,9 @@ class Cranleigh_People_Widget extends WP_Widget {
 
 		$this->query_args = [
 			'posts_per_page' => - 1,
-			'post_type'      => 'staff',
+			'post_type'      => Plugin::POST_TYPE_KEY,
 			'orderby'        => 'meta_value_num',
-			'meta_key'       => 'staff_username',
+			'meta_key'       => Metaboxes::fieldID('username'),
 		];
 
 	}
@@ -63,7 +62,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 			'posts_per_page' => 1,
 			'meta_query'     => [
 				[
-					'key'   => 'staff_username',
+					'key'   => Metaboxes::fieldID('username'),
 					'value' => $username,
 				],
 			],
@@ -81,14 +80,14 @@ class Cranleigh_People_Widget extends WP_Widget {
 					<a href="<?php the_permalink(); ?>">
 						<span class="glyphicon glyphicon-envelope"></span>
 
-						<?php echo get_post_meta( get_the_ID(), 'staff_full_title', true ); ?></a>
+						<?php echo get_post_meta( get_the_ID(), Metaboxes::fieldID('full_title'), true ); ?></a>
 
 				</h5>
 				<div class="person-image">
 					<?php
 					if ( has_post_thumbnail() ) :
 						the_post_thumbnail(
-							'full',
+							Plugin::PROFILE_PHOTO_SIZE_NAME,
 							[ 'class' => 'img-responsive' ]
 						); // This needs to not be `full` but we haven't confirmed image sizes yet
 					endif;
@@ -168,7 +167,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 				if ( $query->have_posts() ) :
 					while ( $query->have_posts() ) :
 						$query->the_post();
-						$staff_username = get_post_meta( get_the_ID(), 'staff_username', true );
+						$staff_username = get_post_meta( get_the_ID(), Metaboxes::fieldID('username'), true );
 						if ( $staff_username === $username ) {
 							$selected = 'selected="selected"';
 						} else {

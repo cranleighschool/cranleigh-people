@@ -15,4 +15,4 @@ define( 'CRAN_PEOPLE_FILE_PATH', __FILE__ );
 require_once 'vendor/autoload.php';
 
 new Plugin( 'cranleigh-people' );
-new Settings();
+Settings::register();

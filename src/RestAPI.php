@@ -17,7 +17,7 @@ class RestAPI {
 	public function defaultArgs() {
 		return [
 			'posts_per_page' => -1,
-			'post_type'      => 'staff',
+			'post_type'      => Plugin::POST_TYPE_KEY,
 		];
 	}
 
@@ -34,7 +34,7 @@ class RestAPI {
 		if ( $request->get_param( 'username' ) ) :
 			$args['meta_query'] = [
 				[
-					'key'   => 'staff_username',
+					'key'   => Metaboxes::fieldID('username'),
 					'value' => $request->get_param( 'username' ),
 				],
 			];
@@ -71,13 +71,13 @@ class RestAPI {
 
 		$args = [
 			'posts_per_page' => -1,
-			'post_type'      => 'staff',
+			'post_type'      => Plugin::POST_TYPE_KEY,
 		];
 
 		if ( isset( $_GET['username'] ) ) {
 			$args['meta_query'] = [
 				[
-					'key'   => 'staff_username',
+					'key'   => Metaboxes::fieldID('username'),
 					'value' => $_GET['username'],
 				],
 			];
@@ -88,11 +88,11 @@ class RestAPI {
 		while ( $query->have_posts() ) :
 			$query->the_post();
 			$person                      = new stdClass();
-			$person->username            = get_post_meta( get_the_ID(), 'staff_username', true );
+			$person->username            = get_post_meta( get_the_ID(), Metaboxes::fieldID('username'), true );
 			$photoAttachmentID           = get_post_thumbnail_id();
-			$person->imageHTML           = wp_get_attachment_image( $photoAttachmentID, 'staff-profile' );
+			$person->imageHTML           = wp_get_attachment_image( $photoAttachmentID, Plugin::PROFILE_PHOTO_SIZE_NAME );
 			$person->name                = get_the_title();
-			$person->jobTitle            = get_post_meta( get_the_ID(), 'staff_leadjobtitle', true );
+			$person->jobTitle            = get_post_meta( get_the_ID(), Metaboxes::fieldID('leadjobtitle'), true );
 			$person->ID                  = get_the_ID();
 			$output[ $person->username ] = $person;
 		endwhile;
@@ -158,15 +158,15 @@ class RestAPI {
 		global $wpdb;
 
 		$people = $wpdb->get_results(
-			'SELECT
+			"SELECT
 				wp.ID as post_id,
 				wp.post_title,
 				wm.meta_value as username,
 				sss.isams_id
-			FROM `' . $wpdb->prefix . 'posts` wp
-			INNER JOIN `' . $wpdb->prefix . "postmeta` wm ON (wm.`post_id` = wp.`ID` AND wm.`meta_key`='staff_username')
+			FROM `" . $wpdb->prefix . "posts` wp
+			INNER JOIN `" . $wpdb->prefix . "postmeta` wm ON (wm.`post_id` = wp.`ID` AND wm.`meta_key`='".Metaboxes::fieldID('username')."')
 			INNER JOIN `senior_staff_sync` sss on (sss.`username` = wm.`meta_value`)
-			WHERE `post_type`='staff' AND `post_status`='publish'
+			WHERE `post_type`='".Plugin::POST_TYPE_KEY."' AND `post_status`='publish'
 			ORDER BY wp.post_date ASC"
 		);
 
