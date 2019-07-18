@@ -16,7 +16,7 @@
 
 		public function __construct()
 		{
-			self::$webhookEndpoint = get_option('cran_people_basic')['slack_webhook_endpoint'];
+			self::$webhookEndpoint = Plugin::getPluginSetting('slack_webhook_endpoint');
 
 			parent::__construct(self::$webhookEndpoint, self::$room);
 		}
