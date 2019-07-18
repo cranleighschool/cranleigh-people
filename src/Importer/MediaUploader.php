@@ -30,23 +30,62 @@
 		 */
 		protected $image_description = NULL;
 
+		protected $persons_name = NULL;
+
 		/**
 		 * MediaUploader constructor.
 		 *
 		 * @param string $url
 		 */
-		public function __construct(string $url, int $parent_post_id, string $image_description)
+		public function __construct(string $url, int $parent_post_id, string $persons_name, string $image_description = NULL)
 		{
 			$this->url = $url;
 			$this->parent_post_id = $parent_post_id;
 			$this->image_description = $image_description;
+			$this->persons_name = $persons_name;
+
+			if (is_null($this->url) || is_null($this->parent_post_id) || is_null($this->persons_name)) {
+				throw new \Exception("Uploader class is lacking some detail", 400);
+			}
+		}
+
+		public function upload(): \WP_Post
+		{
+			if (wp_doing_ajax()) {
+				return false;
+			}
+			if ($this->image_description === NULL) {
+				$this->image_description = "Portrait Photo of " . $this->persons_name;
+			}
+			$upload = wp_upload_bits(basename($this->url), NULL, file_get_contents($this->url));
+
+			$filename = $upload['file'];
+			$wp_filetype = wp_check_filetype($filename, NULL);
+
+			$attachment = array(
+				'post_mime_type' => $wp_filetype['type'],
+				'post_title'     => $this->persons_name,
+				'post_content'   => $this->image_description,
+				'post_status'    => 'inherit'
+			);
+
+			$this->featured_image_id = wp_insert_attachment($attachment, $filename, $this->parent_post_id);
+			require_once(ABSPATH . 'wp-admin/includes/image.php');
+			$attach_data = wp_generate_attachment_metadata($this->featured_image_id, $filename);
+			wp_update_attachment_metadata($this->featured_image_id, $attach_data);
+			set_post_thumbnail($this->parent_post_id, $this->featured_image_id);
+			wp_set_post_terms($this->featured_image_id, "staff_profile_image", "category");
+			update_post_meta($this->featured_image_id, "_wp_attachment_image_alt", $this->image_description, "");
+
+
+			return get_post($this->featured_image_id);
 		}
 
 		/**
 		 * @return \WP_Post
 		 * @throws \Exception
 		 */
-		public function upload(): \WP_Post
+		public function altUpload(): \WP_Post
 		{
 			if (is_null($this->url) || is_null($this->parent_post_id) || is_null($this->image_description)) {
 				throw new \Exception("Uploader class is lacking some detail", 400);
@@ -63,6 +102,7 @@
 
 			if (is_wp_error($media)):
 				error_log("There was a WP Error when trying to add image from: " . $this->url);
+				throw new \Exception($media->get_error_message(), 500);
 			endif;
 
 			// therefore we must find it so we can set it as featured ID
