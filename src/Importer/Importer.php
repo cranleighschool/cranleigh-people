@@ -118,6 +118,8 @@
 			while ($posts->have_posts()) : $posts->the_post();
 				$staff_post = get_post(get_the_ID());
 			endwhile;
+			wp_reset_query();
+			wp_reset_postdata();
 
 			return $staff_post;
 
@@ -266,6 +268,7 @@
 			 * If People Manager has no photo, but WordPress does, then remove the Featured Image.
 			 */
 			if ($person->photo_uri === NULL && has_post_thumbnail($staff_post)) {
+				// TODO: Should we delete the Media Library item as well as remove the thumbnail meta link?
 				return delete_post_thumbnail($staff_post); // True on success, false on failure
 			}
 
@@ -284,6 +287,7 @@
 			 * AND if the People Manager photo is newer than the Featured Image photo...
 			 */
 			if ($person->photo_uri !== NULL && has_post_thumbnail($staff_post) && self::api_photo_is_newer_than_wp_featured_image($person, $staff_post)) {
+				// TODO: Should we delete the Media Library item as well as remove the thumbnail meta link?
 				// Run Importer
 				return self::importImage($person->photo_uri, $staff_post);
 			}
