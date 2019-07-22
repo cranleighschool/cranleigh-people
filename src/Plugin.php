@@ -13,32 +13,6 @@
 
 		private $load_cpt = false;
 
-
-		/**
-		 * Retrieves the IMG Tag for the "Staff Profile Photo" sized image of the person.
-		 *
-		 * @param string      $username
-		 * @param string|NULL $output_type "ID" for the attachment_id, or "URL" for the image url. Default: null
-		 *
-		 * @return false|int|string
-		 * @throws \Exception
-		 */
-		public static function getMugshotOf(string $username, string $output_type = null)
-		{
-			remove_filter( 'post_thumbnail_html', 'cranleigh_post_thumbnail_fallback' );
-
-			$staff_post = Importer::find_wp_staff_post($username);
-
-			if (strtoupper($output_type) === 'URL') {
-				return get_the_post_thumbnail_url($staff_post, Plugin::PROFILE_PHOTO_SIZE_NAME);
-			} elseif ($output_type == 'id') {
-				$thumbnail_id = get_post_thumbnail_id($staff_post);
-				return ($thumbnail_id ==='') ? 0 : (int) $thumbnail_id;
-			}
-
-			return get_the_post_thumbnail($staff_post, Plugin::PROFILE_PHOTO_SIZE_NAME);
-		}
-
 		/**
 		 * __construct function.
 		 *
@@ -83,7 +57,6 @@
 
 		}
 
-
 		private function loadShortcodes()
 		{
 			return new Shortcodes();
@@ -126,6 +99,31 @@
 
 		}
 
+		/**
+		 * Retrieves the IMG Tag for the "Staff Profile Photo" sized image of the person.
+		 *
+		 * @param string      $username
+		 * @param string|NULL $output_type "ID" for the attachment_id, or "URL" for the image url. Default: null
+		 *
+		 * @return false|int|string
+		 * @throws \Exception
+		 */
+		public static function getMugshotOf(string $username, string $output_type = NULL)
+		{
+			remove_filter('post_thumbnail_html', 'cranleigh_post_thumbnail_fallback');
+
+			$staff_post = Importer::find_wp_staff_post($username);
+
+			if (strtoupper($output_type) === 'URL') {
+				return get_the_post_thumbnail_url($staff_post, Plugin::PROFILE_PHOTO_SIZE_NAME);
+			} elseif ($output_type == 'id') {
+				$thumbnail_id = get_post_thumbnail_id($staff_post);
+
+				return ($thumbnail_id === '') ? 0 : (int)$thumbnail_id;
+			}
+
+			return get_the_post_thumbnail($staff_post, Plugin::PROFILE_PHOTO_SIZE_NAME);
+		}
 
 		/**
 		 * profile_pictures function.
