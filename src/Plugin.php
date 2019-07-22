@@ -65,6 +65,8 @@
 		public function load_if_cpt()
 		{
 			register_activation_hook(CRAN_PEOPLE_FILE_PATH, [Activate::class, 'activate']);
+			register_deactivation_hook(CRAN_PEOPLE_FILE_PATH, [Deactivate::class, 'deactivate']);
+
 
 			CustomPostType::register();
 			StaffCategoriesTaxonomy::register();
@@ -96,6 +98,8 @@
 					register_widget(__NAMESPACE__ . '\Cranleigh_People_Widget');
 				}
 			);
+
+			add_action(Activate::SYNC_CRONJOB_NAME, [Importer::class, 'import']);
 
 		}
 
