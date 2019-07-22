@@ -4,6 +4,7 @@
 	namespace CranleighSchool\CranleighPeople;
 
 
+	use CranleighSchool\CranleighPeople\Importer\Importer;
 	use WP_Query;
 
 	class Admin
@@ -46,6 +47,8 @@
 			add_action('admin_notices', [$instance, 'admin_notice']);
 			add_action('admin_head', [$instance, 'admin_head']);
 
+			add_action("after_setup_theme", [$instance, "manual_importer"]);
+
 
 			$instance->tinymceFilters();
 
@@ -82,6 +85,13 @@
 			);
 
 
+		}
+
+		public function manual_importer()
+		{
+			if (method_exists(\CranleighSchool\CranleighPeople\Importer\Admin::class, 'add_submenu_page')) {
+				\CranleighSchool\CranleighPeople\Importer\Admin::add_submenu_page();
+			}
 		}
 
 		public function notice_no_settings()

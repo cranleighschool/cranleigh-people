@@ -53,6 +53,31 @@
 		public function meta_boxes(array $meta_boxes): array
 		{
 			$meta_boxes[] = [
+				'id' => 'photo_updated_meta',
+				'title' => 'Photo Meta',
+				'post_types' => [Plugin::POST_TYPE_KEY],
+				'context' => 'side',
+				'priority'=>'low',
+				'autosave' => true,
+				'fields' => [
+					[
+						'name' => __('Mugshot Last Updated', 'cranleigh'),
+						'id' => self::fieldID('mugshot_updated_time'),
+						'type' => 'text',
+						'desc' => 'The date that the photo on People Manager was updated...',
+						'readonly' => true,
+					],
+					[
+						'name' => __('Featured Image Date Set', 'cranleigh'),
+						'id' => self::fieldID('featured_image_set_time'),
+						'type' => 'text',
+						'desc' => 'The date that the featured image here was set...',
+						'readonly' => true
+					]
+				]
+			];
+
+			$meta_boxes[] = [
 				'id'         => 'staff_meta_side',
 				'title'      => 'Staff Info',
 				'post_types' => [Plugin::POST_TYPE_KEY],

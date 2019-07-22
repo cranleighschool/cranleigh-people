@@ -103,7 +103,13 @@
 							'desc'    => 'The Slack Webhook',
 							'type'    => 'text',
 							'default' => NULL,
-						)
+						),
+						[
+							'name' => 'importer_api_endpoint',
+							'label' => 'Importer API Endpoint (full url)',
+							'desc' => 'The full url of the People Manager endpoint',
+							'type' => 'url',
+						]
 
 					),
 				);

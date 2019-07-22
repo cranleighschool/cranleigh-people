@@ -2,6 +2,7 @@
 
 	namespace CranleighSchool\CranleighPeople;
 
+	use CranleighSchool\CranleighPeople\Importer\Importer;
 	use WP_Query;
 
 	class Plugin extends BaseController
