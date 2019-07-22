@@ -7,6 +7,7 @@
 	use CranleighSchool\CranleighPeople\Exceptions\TooManyStaffFound;
 	use CranleighSchool\CranleighPeople\Metaboxes;
 	use CranleighSchool\CranleighPeople\Plugin;
+	use CranleighSchool\CranleighPeople\Slacker;
 
 	/**
 	 * Class Importer
@@ -48,7 +49,7 @@
 
 			$result = json_decode($body);
 
-
+			$i = 0;
 			foreach ($result->data as $person) {
 				$person = new Person($person);
 
@@ -65,8 +66,10 @@
 
 
 				self::updateOrCreate($person, $post_id);
+				$i++;
 
 			}
+			self::slackmessage("Updated ".$i." People");
 
 
 		}
@@ -125,6 +128,14 @@
 
 		}
 
+		public static function slackmessage(string $message) {
+			$slacker = new Slacker();
+			$slacker->setRoom('it-cranleigh-people');
+			$slacker->setUsername( 'Cranleigh People Importer' );
+			$slacker->post( $message );
+
+		}
+
 		/**
 		 * @param \CranleighSchool\CranleighPeople\Importer\Person $person
 		 * @param int                                              $post_id
@@ -135,6 +146,9 @@
 		public static function updateOrCreate(Person $person, int $post_id = 0)
 		{
 			error_log("Start " . self::present_tense_verb($post_id) . " " . $person->prename_surname);
+
+
+
 			$post_title = $person->prename_surname;
 			$post_content = is_null($person->biography) ? '' : $person->biography;
 
