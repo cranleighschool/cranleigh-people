@@ -2,70 +2,140 @@
 
 	namespace CranleighSchool\CranleighPeople\Api;
 
-class Person {
+	use CranleighSchool\CranleighPeople\Metaboxes;
+	use CranleighSchool\CranleighPeople\Plugin;
 
+	/**
+	 * Class Person
+	 *
+	 * @package CranleighSchool\CranleighPeople\Api
+	 */
+	class Person
+	{
 
-	public $post_id;
-	public $post_slug;
-	public $adult_name;
-	public $school_name;
-	public $jobtitle;
-	public $biography;
-	public $permalink;
-	public $imageHTML;
-	public $profile_photo;
-	private $post;
+		/**
+		 * @var false|int
+		 */
+		public $post_id;
 
-	public function __construct( \WP_Post $person ) {
-		$this->post          = $person;
-		$this->adult_name    = get_the_title( $person );
-		$this->school_name   = $this->getMeta( 'staff_full_title' );
-		$this->profile_photo = $this->getImages();
-		$this->permalink     = get_permalink( $person );
-		$this->biography     = $this->getBiography();
-		$this->jobtitle      = $this->getMeta( 'staff_leadjobtitle' );
-		$this->imageHTML     = $this->getPhotoImageHTML();
-		$this->post_id       = get_the_ID( $person );
-		$this->post_slug     = $person->post_name;
+		/**
+		 * @var string
+		 */
+		public $post_slug;
 
-	}
+		/**
+		 * @var string
+		 */
+		public $adult_name;
 
-	private function getMeta( $key ) {
-		return get_post_meta( $this->post->ID, $key, true );
-	}
+		/**
+		 * @var mixed
+		 */
+		public $school_name;
 
-	private function getImages() {
-		if ( has_post_thumbnail( $this->post->ID ) ) {
-			$photos = array();
-			foreach ( $this->imageSizes() as $size ) {
-				$photos[ $size ] = wp_get_attachment_image_src( get_post_thumbnail_id( $this->post->ID ), $size );
+		/**
+		 * @var mixed
+		 */
+		public $jobtitle;
+		/**
+		 * @var string
+		 */
+		public $biography;
+		/**
+		 * @var false|string
+		 */
+		public $permalink;
+		/**
+		 * @var string
+		 */
+		public $imageHTML;
+		/**
+		 * @var array|bool
+		 */
+		public $profile_photo;
+		/**
+		 * @var \WP_Post
+		 */
+		private $post;
+
+		/**
+		 * Person constructor.
+		 *
+		 * @param \WP_Post $person
+		 */
+		public function __construct(\WP_Post $person)
+		{
+			$this->post = $person;
+			$this->adult_name = get_the_title($person);
+			$this->school_name = $this->getMeta('full_title');
+			$this->profile_photo = $this->getImages();
+			$this->permalink = get_permalink($person);
+			$this->biography = $this->getBiography();
+			$this->jobtitle = $this->getMeta('leadjobtitle');
+			$this->imageHTML = $this->getPhotoImageHTML();
+			$this->post_id = get_the_ID($person);
+			$this->post_slug = $person->post_name;
+
+		}
+
+		/**
+		 * @param string $fieldID
+		 *
+		 * @return mixed
+		 */
+		private function getMeta(string $fieldID)
+		{
+			return get_post_meta($this->post->ID, Metaboxes::fieldID($fieldID), true);
+		}
+
+		/**
+		 * @return array|bool
+		 */
+		private function getImages()
+		{
+			if (has_post_thumbnail($this->post->ID)) {
+				$photos = array();
+				foreach ($this->imageSizes() as $size) {
+					$photos[ $size ] = wp_get_attachment_image_src(get_post_thumbnail_id($this->post->ID), $size);
+				}
+
+				return $photos;
 			}
 
-			return $photos;
+			return false;
 		}
 
-		return false;
-	}
-
-	private function imageSizes() {
-		 return [
-			 'thumbnail',
-			 'staff-photo',
-			 'full',
-		 ];
-	}
-
-	private function getBiography() {
-		$content = get_the_content( $this->post );
-		if ( $content ) {
-			return $content;
+		/**
+		 * @return array
+		 */
+		private function imageSizes(): array
+		{
+			return [
+				'thumbnail',
+				Plugin::PROFILE_PHOTO_SIZE_NAME,
+				'full',
+			];
 		}
 
-		return;
+		/**
+		 * @return string
+		 */
+		private function getBiography(): string
+		{
+			$content = get_the_content($this->post);
+			if ($content) {
+				return $content;
+			}
 
-	}
+			return '';
 
-	private function getPhotoImageHTML() {
-		return wp_get_attachment_image( get_post_thumbnail_id( $this->post->ID ), 'staff-profile' );
+		}
+
+		/**
+		 * @return string
+		 */
+		private function getPhotoImageHTML(): string
+		{
+			return wp_get_attachment_image(get_post_thumbnail_id($this->post->ID), Plugin::PROFILE_PHOTO_SIZE_NAME);
+		}
 	}
-}
