@@ -62,6 +62,7 @@
 					continue;
 				} catch (StaffNotFoundException $exception) {
 					$post_id = 0;
+					self::slackmessage("Going to create ".$person->school_initials);
 				}
 
 
@@ -69,7 +70,7 @@
 				$i++;
 
 			}
-			self::slackmessage("Updated ".$i." People");
+			self::slackmessage("Updated/Created ".$i." People");
 
 
 		}
@@ -304,6 +305,7 @@
 			 */
 			if ($person->photo_uri === NULL && has_post_thumbnail($staff_post)) {
 				// TODO: Should we delete the Media Library item as well as remove the thumbnail meta link?
+
 				return delete_post_thumbnail($staff_post); // True on success, false on failure
 			}
 
