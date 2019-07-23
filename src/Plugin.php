@@ -62,7 +62,7 @@
 			return new Shortcodes();
 		}
 
-		public function load_if_cpt()
+		private function load_if_cpt()
 		{
 			register_activation_hook(CRAN_PEOPLE_FILE_PATH, [Activate::class, 'activate']);
 			register_deactivation_hook(CRAN_PEOPLE_FILE_PATH, [Deactivate::class, 'deactivate']);
@@ -81,7 +81,7 @@
 
 		}
 
-		public function load_in_all_cases()
+		private function load_in_all_cases()
 		{
 			add_action('after_setup_theme', [$this, 'profile_pictures']);
 
@@ -135,15 +135,14 @@
 		 * @access public
 		 * @return void
 		 */
-		function profile_pictures()
+		public function profile_pictures()
 		{
 			add_image_size(self::PROFILE_PHOTO_SIZE_NAME, 400, 600, true);
 		}
 
 
-		function staff_roles()
+		public function staff_roles()
 		{
-
 			$args = [
 				'hide_empty' => false,
 			];
@@ -159,7 +158,7 @@
 
 		// Order custom post types alphabetically
 
-		function owd_post_order($query)
+		public function owd_post_order($query)
 		{
 
 			if ($query->is_post_type_archive(CustomPostType::POST_TYPE_KEY) && $query->is_main_query()) {
