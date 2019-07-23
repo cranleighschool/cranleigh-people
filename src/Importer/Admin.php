@@ -4,7 +4,7 @@
 	namespace CranleighSchool\CranleighPeople\Importer;
 
 
-	use CranleighSchool\CranleighPeople\Plugin;
+	use CranleighSchool\CranleighPeople\Cron;use CranleighSchool\CranleighPeople\Plugin;
 
 	class Admin
 	{
@@ -69,6 +69,7 @@
 				<h3>Screw that, just import the lot!</h3>
 				<p>This process happens magically every day, but if you want to run it manually you can do so here. It
 					takes a while though...</p>
+				<p>This is next scheduled in: <strong><?php echo Cron::next_scheduled_sync(); ?></strong></p>
 				<form method="post">
 					<input type="hidden" name="thewholelot"/>
 					<input type="submit" class="button button-primary button-large"/>
