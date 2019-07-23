@@ -147,7 +147,7 @@ class Cranleigh_People_Widget extends WP_Widget {
 		$username = ! empty( $instance['username'] ) ? $instance['username'] : '';
 
 		if ( $this->load_from_blog_id == 1 ) :
-			echo '<p class="notice-error notice">Warning: You need to set which Blog you want to pull your data from. Your widget may not display correctly on the frontend until you do this. Visit the <a href="options-general.php?page=cranleigh_people_settings">Cranleigh People Settings Page</a>.</p>';
+			echo '<p class="notice-error notice">Warning: You need to set which Blog you want to pull your data from. Your widget may not display correctly on the frontend until you do this. Visit the <a href="admin.php?page=cranleigh_people_settings">Cranleigh People Settings Page</a>.</p>';
 		endif;
 		?>
 
