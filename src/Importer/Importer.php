@@ -8,6 +8,7 @@
 	use CranleighSchool\CranleighPeople\Metaboxes;
 	use CranleighSchool\CranleighPeople\Plugin;
 	use CranleighSchool\CranleighPeople\Slacker;
+	use CranleighSchool\CranleighPeople\StaffCategoriesTaxonomy;
 
 	/**
 	 * Class Importer
@@ -80,7 +81,7 @@
 
 			}
 			self::slackmessage("Updated/Created " . $i . " People");
-			self::slackmessage("Skipped ".count($skipped).": ".implode(", ", $skipped));
+			self::slackmessage("Skipped " . count($skipped) . ": " . implode(", ", $skipped));
 
 		}
 
@@ -136,12 +137,18 @@
 
 		}
 
-		public static function slackmessage(string $message)
+		/**
+		 * @param \CranleighSchool\CranleighPeople\Importer\Person $person
+		 *
+		 * @return bool
+		 */
+		private static function shouldBotherCreating(Person $person): bool
 		{
-			$slacker = new Slacker();
-			$slacker->setUsername('Cranleigh People Importer');
-			$slacker->post($message);
+			if (self::set_wp_post_status($person) === 'publish') {
+				return true;
+			}
 
+			return false;
 		}
 
 		/**
@@ -149,7 +156,7 @@
 		 *
 		 * @return string
 		 */
-		public static function set_wp_post_status(Person $person): string
+		private static function set_wp_post_status(Person $person): string
 		{
 			if ($person->system_status !== '1') {
 				return 'private';
@@ -162,13 +169,15 @@
 			return 'publish';
 		}
 
-		public static function shouldBotherCreating(Person $person): bool
+		/**
+		 * @param string $message
+		 */
+		private static function slackmessage(string $message)
 		{
-			if (self::set_wp_post_status($person) === 'publish') {
-				return true;
-			}
+			$slacker = new Slacker();
+			$slacker->setUsername('Cranleigh People Importer');
+			$slacker->post($message);
 
-			return false;
 		}
 
 		/**
@@ -178,7 +187,7 @@
 		 * @return array|\WP_Post|null
 		 * @throws \Exception
 		 */
-		public static function updateOrCreate(Person $person, int $post_id = 0)
+		private static function updateOrCreate(Person $person, int $post_id = 0)
 		{
 			error_log("Start " . self::present_tense_verb($post_id) . " " . $person->prename_surname);
 
@@ -221,6 +230,9 @@
 			self::saveMeta($staff_post, 'email_address', $person->email);
 			self::saveMeta($staff_post, 'phone', $person->phone);
 
+			// Set the Taxonomy Objects
+			self::set_staff_categories($staff_post, $person);
+
 			// Do the Profile Pic
 			$image = self::featureImageLogic($staff_post, $person);
 			if ($image instanceof \WP_Post) {
@@ -245,7 +257,7 @@
 		 *
 		 * @return string
 		 */
-		public static function present_tense_verb(int $post_id)
+		private static function present_tense_verb(int $post_id)
 		{
 			if ($post_id === 0) {
 				return 'creating';
@@ -259,7 +271,7 @@
 		 * @param string   $fieldName
 		 * @param          $value
 		 */
-		public static function saveMeta(\WP_Post $staff_post, string $fieldName, $value)
+		private static function saveMeta(\WP_Post $staff_post, string $fieldName, $value)
 		{
 
 			$get = get_post_meta($staff_post->ID, Metaboxes::fieldID($fieldName), true);
@@ -308,11 +320,94 @@
 		/**
 		 * @param \WP_Post                                         $staff_post
 		 * @param \CranleighSchool\CranleighPeople\Importer\Person $person
+		 */
+		private static function set_staff_categories(\WP_Post $staff_post, Person $person)
+		{
+			$staff_categories = self::staff_categories($person->roles, $person->departments);
+
+			wp_set_post_terms(
+				$staff_post->ID,
+				$staff_categories,
+				StaffCategoriesTaxonomy::TAXONOMY_KEY
+			);
+		}
+
+		/**
+		 * staff_categories function.
+		 *
+		 * @access public
+		 *
+		 * @param array $roles
+		 * @param array $depts
+		 *
+		 * @return array $staff_categories
+		 */
+		private static function staff_categories(array $roles, array $depts): array
+		{
+
+			$staff_categories = [];
+
+			// Roles
+			if (preg_grep("/teacher/i", $roles)) {
+				$staff_categories[] = "teacher";
+			}
+			if (preg_grep("/school governor/i", $roles)) {
+				$staff_categories[] = "school-governor";
+			}
+			if (preg_grep("/head of department/i", $roles)) {
+				$staff_categories[] = "head-of-department";
+			}
+			if (preg_grep("/senior management team/i", $roles)) {
+				$staff_categories[] = "smt";
+			}
+			if (preg_grep("/housemaster\/mistress/i", $roles)) {
+				if (preg_grep("/deputy/i", $roles)) {
+					$staff_categories[] = "deputy-housemaster-housemistress";
+				} else {
+					$staff_categories[] = "housemaster-housemistress";
+				}
+			}
+			if (preg_grep("/vmt/i", $roles)) {
+				$staff_categories[] = "visiting-music-teachers";
+			}
+
+
+			// Departments
+			//	foreach($arr as $preg_grep => $subject)
+
+			if (preg_grep("/accounts/i", $depts)) {
+				$staff_categories[] = "accounts";
+			}
+			if (preg_grep("/bursarial/i", $depts)) {
+				$staff_categories[] = "bursarial";
+			}
+			if (preg_grep("/catering/i", $depts)) {
+				$staff_categories[] = "catering";
+			}
+			if (preg_grep("/domestic services/i", $depts)) {
+				$staff_categories[] = "domestic-services";
+			}
+			if (preg_grep("/grounds/i", $depts)) {
+				$staff_categories[] = "grounds";
+			}
+			if (preg_grep("/hr/i", $depts)) {
+				$staff_categories[] = "hr";
+			}
+			if (preg_grep("/it support/i", $depts)) {
+				$staff_categories[] = "it-support";
+			}
+
+			return $staff_categories;
+		}
+
+		/**
+		 * @param \WP_Post                                         $staff_post
+		 * @param \CranleighSchool\CranleighPeople\Importer\Person $person
 		 *
 		 * @return bool|\WP_Post
 		 * @throws \Exception
 		 */
-		public static function featureImageLogic(\WP_Post $staff_post, Person $person)
+		private static function featureImageLogic(\WP_Post $staff_post, Person $person)
 		{
 			/**
 			 * First, save the `photo_updated` property from People Manager into WordPress.
@@ -358,7 +453,7 @@
 		 * @return \WP_Post
 		 * @throws \Exception
 		 */
-		public static function importImage(string $url, \WP_Post $parent_post, string $image_description = NULL): \WP_Post
+		private static function importImage(string $url, \WP_Post $parent_post, string $image_description = NULL): \WP_Post
 		{
 			$image = new MediaUploader($url, $parent_post->ID, $parent_post->post_title);
 
@@ -371,7 +466,7 @@
 		 *
 		 * @return bool
 		 */
-		public static function api_photo_is_newer_than_wp_featured_image(Person $api_person_object, \WP_Post $wp_post): bool
+		private static function api_photo_is_newer_than_wp_featured_image(Person $api_person_object, \WP_Post $wp_post): bool
 		{
 
 			if (strtotime($api_person_object->photo_updated) > strtotime(get_post_meta($wp_post->ID, Metaboxes::fieldID('featured_image_set_time'), true))) {
