@@ -75,14 +75,12 @@
 		}
 
 		/**
-		 * @return bool
+		 * @return string
 		 */
 		public static function getSchoolApiEndPoint()
 		{
 			return Plugin::getPluginSetting('importer_api_endpoint');
 		}
-
-		// TODO: Don't we need a method in here for checking the system status of a Person?
 
 		/**
 		 * @param string $school_initials
@@ -136,6 +134,18 @@
 
 		}
 
+		public static function set_wp_post_status(Person $person): string {
+			if ($person->system_status !== '1') {
+				return 'private';
+			}
+
+			if ($person->hide_from_website !== null && strtotime($person->hide_from_website) > time()) {
+				return 'pending';
+			}
+
+			return 'publish';
+		}
+
 		/**
 		 * @param \CranleighSchool\CranleighPeople\Importer\Person $person
 		 * @param int                                              $post_id
@@ -147,14 +157,20 @@
 		{
 			error_log("Start " . self::present_tense_verb($post_id) . " " . $person->prename_surname);
 
-
-
 			$post_title = $person->prename_surname;
 			$post_content = is_null($person->biography) ? '' : $person->biography;
 
+			/**
+			 * Let's ignore the insert/update process
+			 * if it's a new staff member who isn't yet set to publish.
+			 */
+			if ($post_id===0 && self::set_wp_post_status($person) !== "publish") {
+				return null;
+			}
+
 			$staff_post = wp_insert_post([
 				'post_type'    => Plugin::POST_TYPE_KEY,
-				'post_status'  => 'publish', // TODO: Do we always want to publish?
+				'post_status'  => self::set_wp_post_status($person),
 				'ID'           => $post_id,
 				'post_title'   => $post_title,
 				'post_content' => $post_content
