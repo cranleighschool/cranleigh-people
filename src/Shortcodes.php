@@ -5,6 +5,9 @@ namespace CranleighSchool\CranleighPeople;
 use WP_Query;
 use WP_Error;
 
+/*
+ * TODO: Convert these shortcodes into a more SOLID principle design.
+ */
 class Shortcodes extends BaseController {
 
 	public $default_attachment_id = false;
