@@ -10,8 +10,6 @@
 
 	namespace CranleighSchool\CranleighPeople;
 
-	use CranleighSchool\CranleighPeople\Importer\Importer;
-
 	ini_set('max_execution_time', 0); //0=NOLIMIT
 
 	define('CRAN_PEOPLE_FILE_PATH', __FILE__);
