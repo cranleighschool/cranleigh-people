@@ -1,12 +1,12 @@
 <?php
 /**
  * Plugin Name: Meta Box
- * Plugin URI: https://metabox.io
+ * Plugin URI:  https://metabox.io
  * Description: Create custom meta boxes and custom fields in WordPress.
- * Version: 4.12.6
- * Author: MetaBox.io
- * Author URI: https://metabox.io
- * License: GPL2+
+ * Version:     4.18.4
+ * Author:      MetaBox.io
+ * Author URI:  https://metabox.io
+ * License:     GPL2+
  * Text Domain: meta-box
  * Domain Path: /languages/
  *
@@ -15,6 +15,6 @@
 
 if ( defined( 'ABSPATH' ) && ! defined( 'RWMB_VER' ) ) {
 	require_once dirname( __FILE__ ) . '/inc/loader.php';
-	$loader = new RWMB_Loader();
-	$loader->init();
+	$rwmb_loader = new RWMB_Loader();
+	$rwmb_loader->init();
 }

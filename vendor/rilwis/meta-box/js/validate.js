@@ -35,14 +35,24 @@ jQuery( function ( $ ) {
 		var subRules = $( this ).data( 'rules' );
 		$.extend( true, rules, subRules );
 
-		// Required field styling
+		// Required field styling.
 		$.each( subRules.rules, function ( k, v ) {
-			if ( v['required'] ) {
-				$( '#' + k ).parent().siblings( '.rwmb-label' ).append( '<span class="rwmb-required">*</span>' );
+			if ( ! v['required'] ) {
+				return;
 			}
+			var $el = $( '[name="' + k + '"]' );
+			if ( ! $el.length ) {
+				return;
+			}
+			$el.closest( '.rwmb-input' ).siblings( '.rwmb-label' ).find( 'label' ).append( '<span class="rwmb-required">*</span>' );
 		} );
 	} );
 
 	// Execute.
-	$form.validate( rules );
+	$form.on( 'submit', function() {
+		// Update underlying textarea before submit validation.
+		if ( typeof tinyMCE !== 'undefined' ) {
+			tinyMCE.triggerSave();
+		}
+	} ).validate( rules );
 } );

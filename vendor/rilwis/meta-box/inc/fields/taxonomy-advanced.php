@@ -10,27 +10,7 @@
  */
 class RWMB_Taxonomy_Advanced_Field extends RWMB_Taxonomy_Field {
 	/**
-	 * Normalize the field parameters.
-	 *
-	 * @param array $field Field parameters.
-	 *
-	 * @return array
-	 */
-	public static function normalize( $field ) {
-		$field = wp_parse_args( $field, array(
-			'clone' => false,
-		) );
-
-		$clone          = $field['clone'];
-		$field          = parent::normalize( $field );
-		$field['clone'] = $clone;
-
-		return $field;
-	}
-
-	/**
-	 * Get meta values to save.
-	 * Save terms in custom field in form of comma-separated IDs, no more by setting post terms.
+	 * Save terms in form of comma-separated IDs.
 	 *
 	 * @param mixed $new     The submitted meta value.
 	 * @param mixed $old     The existing meta value.
@@ -40,7 +20,9 @@ class RWMB_Taxonomy_Advanced_Field extends RWMB_Taxonomy_Field {
 	 * @return string
 	 */
 	public static function value( $new, $old, $post_id, $field ) {
-		return implode( ',', array_unique( (array) $new ) );
+		$new = parent::value( $new, $old, $post_id, $field );
+
+		return implode( ',', $new );
 	}
 
 	/**
@@ -52,12 +34,25 @@ class RWMB_Taxonomy_Advanced_Field extends RWMB_Taxonomy_Field {
 	 * @param array $field   The field parameters.
 	 */
 	public static function save( $new, $old, $post_id, $field ) {
+		if ( empty( $field['id'] ) || ! $field['save_field'] ) {
+			return;
+		}
 		$storage = $field['storage'];
 
-		if ( $new ) {
-			$storage->update( $post_id, $field['id'], $new );
-		} else {
+		if ( ! $new ) {
 			$storage->delete( $post_id, $field['id'] );
+			return;
+		}
+
+		if ( ! $field['clone'] || ! $field['clone_as_multiple'] ) {
+			$storage->update( $post_id, $field['id'], $new );
+			return;
+		}
+
+		// clone and clone_as_multiple.
+		$storage->delete( $post_id, $field['id'] );
+		foreach ( $new as $value ) {
+			$storage->add( $post_id, $field['id'], $value );
 		}
 	}
 
@@ -72,15 +67,17 @@ class RWMB_Taxonomy_Advanced_Field extends RWMB_Taxonomy_Field {
 	 */
 	public static function raw_meta( $object_id, $field, $args = array() ) {
 		$args['single'] = true;
-		$meta = RWMB_Field::raw_meta( $object_id, $field, $args );
+		$meta           = RWMB_Field::raw_meta( $object_id, $field, $args );
 
 		if ( empty( $meta ) ) {
 			return $field['multiple'] ? array() : '';
 		}
+
 		$meta = is_array( $meta ) ? array_map( 'wp_parse_id_list', $meta ) : wp_parse_id_list( $meta );
+
 		$meta = array_filter( $meta );
 
-		return $field['multiple'] ? $meta : reset( $meta );
+		return $meta;
 	}
 
 	/**
@@ -94,28 +91,43 @@ class RWMB_Taxonomy_Advanced_Field extends RWMB_Taxonomy_Field {
 	 * @return array List of post term objects.
 	 */
 	public static function get_value( $field, $args = array(), $post_id = null ) {
-		if ( ! $post_id ) {
-			$post_id = get_the_ID();
-		}
-
-		// Get raw meta value in the database, no escape.
-		$value = self::call( $field, 'raw_meta', $post_id, $args );
-		if ( empty( $value ) ) {
-			return null;
-		}
-
-		// Allow to pass more arguments to "get_terms".
-		$args  = wp_parse_args( array(
-			'include'    => $value,
-			'hide_empty' => false,
-		), $args );
-		$value = get_terms( $field['taxonomy'], $args );
-
-		// Get single value if necessary.
-		if ( ! $field['clone'] && ! $field['multiple'] ) {
-			$value = reset( $value );
+		$value = RWMB_Field::get_value( $field, $args, $post_id );
+		if ( ! $field['clone'] ) {
+			$value = self::call( 'terms_info', $field, $value, $args );
+		} else {
+			$return = array();
+			foreach ( $value as $subvalue ) {
+				$return[] = self::call( 'terms_info', $field, $subvalue, $args );
+			}
+			$value = $return;
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Get terms information.
+	 *
+	 * @param array  $field    Field parameters.
+	 * @param string $term_ids Term IDs, in CSV format.
+	 * @param array  $args     Additional arguments (for image size).
+	 *
+	 * @return array
+	 */
+	public static function terms_info( $field, $term_ids, $args ) {
+		if ( empty( $term_ids ) ) {
+			return array();
+		}
+		$args = wp_parse_args(
+			array(
+				'include'    => $term_ids,
+				'hide_empty' => false,
+			),
+			$args
+		);
+
+		$info = get_terms( $field['taxonomy'], $args );
+		$info = is_array( $info ) ? $info : array();
+		return $field['multiple'] ? $info : reset( $info );
 	}
 }

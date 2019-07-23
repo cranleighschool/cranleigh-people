@@ -79,7 +79,7 @@ class RWMB_Datetime_Field extends RWMB_Text_Field {
 			'localeShort' => $locale_short,
 		);
 		foreach ( $handles as $handle ) {
-			self::localize_script( "rwmb-$handle", 'RWMB_' . ucfirst( $handle ), $data );
+			RWMB_Helpers_Field::localize_script_once( "rwmb-$handle", 'RWMB_' . ucfirst( $handle ), $data );
 		}
 	}
 
@@ -104,16 +104,19 @@ class RWMB_Datetime_Field extends RWMB_Text_Field {
 		$output = '';
 
 		if ( $field['timestamp'] ) {
-			$name  = $field['field_name'];
-			$field = wp_parse_args( array(
-				'field_name' => $name . '[formatted]',
-			), $field );
+			$name    = $field['field_name'];
+			$field   = wp_parse_args(
+				array(
+					'field_name' => $name . '[formatted]',
+				),
+				$field
+			);
 			$output .= sprintf(
 				'<input type="hidden" name="%s" class="rwmb-datetime-timestamp" value="%s">',
 				esc_attr( $name . '[timestamp]' ),
 				isset( $meta['timestamp'] ) ? intval( $meta['timestamp'] ) : ''
 			);
-			$meta = isset( $meta['formatted'] ) ? $meta['formatted'] : '';
+			$meta    = isset( $meta['formatted'] ) ? $meta['formatted'] : '';
 		}
 
 		$output .= parent::html( $meta, $field );
@@ -136,7 +139,16 @@ class RWMB_Datetime_Field extends RWMB_Text_Field {
 	 * @return string|int
 	 */
 	public static function value( $new, $old, $post_id, $field ) {
-		return $field['timestamp'] ? $new['timestamp'] : $new;
+		if ( $field['timestamp'] ) {
+			return $new['timestamp'];
+		}
+
+		if ( $field['save_format'] ) {
+			$date = DateTime::createFromFormat( self::call( 'translate_format', $field ), $new );
+			$new  = false === $date ? $new : $date->format( $field['save_format'] );
+		}
+
+		return $new;
 	}
 
 	/**
@@ -150,9 +162,19 @@ class RWMB_Datetime_Field extends RWMB_Text_Field {
 	 */
 	public static function meta( $post_id, $saved, $field ) {
 		$meta = parent::meta( $post_id, $saved, $field );
+
 		if ( $field['timestamp'] ) {
 			$meta = self::prepare_meta( $meta, $field );
+			return $meta;
 		}
+
+		if ( ! $field['save_format'] || ! $meta ) {
+			return $meta;
+		}
+
+		$date = DateTime::createFromFormat( $field['save_format'], $meta );
+		$meta = false === $date ? $meta : $date->format( self::call( 'translate_format', $field ) );
+
 		return $meta;
 	}
 
@@ -183,25 +205,35 @@ class RWMB_Datetime_Field extends RWMB_Text_Field {
 	 * @return array
 	 */
 	public static function normalize( $field ) {
-		$field = wp_parse_args( $field, array(
-			'timestamp'  => false,
-			'inline'     => false,
-			'js_options' => array(),
-		) );
+		$field = wp_parse_args(
+			$field,
+			array(
+				'timestamp'   => false,
+				'inline'      => false,
+				'js_options'  => array(),
+				'save_format' => '',
+			)
+		);
 
 		// Deprecate 'format', but keep it for backward compatible.
 		// Use 'js_options' instead.
-		$field['js_options'] = wp_parse_args( $field['js_options'], array(
-			'timeFormat'      => 'HH:mm',
-			'separator'       => ' ',
-			'dateFormat'      => empty( $field['format'] ) ? 'yy-mm-dd' : $field['format'],
-			'showButtonPanel' => true,
-		) );
+		$field['js_options'] = wp_parse_args(
+			$field['js_options'],
+			array(
+				'timeFormat'      => 'HH:mm',
+				'separator'       => ' ',
+				'dateFormat'      => empty( $field['format'] ) ? 'yy-mm-dd' : $field['format'],
+				'showButtonPanel' => true,
+			)
+		);
 
 		if ( $field['inline'] ) {
-			$field['js_options'] = wp_parse_args( $field['js_options'], array(
-				'altFieldTimeOnly' => false,
-			) );
+			$field['js_options'] = wp_parse_args(
+				$field['js_options'],
+				array(
+					'altFieldTimeOnly' => false,
+				)
+			);
 		}
 
 		$field = parent::normalize( $field );
@@ -218,10 +250,13 @@ class RWMB_Datetime_Field extends RWMB_Text_Field {
 	 * @return array
 	 */
 	public static function get_attributes( $field, $value = null ) {
-		$attributes = parent::get_attributes( $field, $value );
-		$attributes = wp_parse_args( $attributes, array(
-			'data-options' => wp_json_encode( $field['js_options'] ),
-		) );
+		$attributes         = parent::get_attributes( $field, $value );
+		$attributes         = wp_parse_args(
+			$attributes,
+			array(
+				'data-options' => wp_json_encode( $field['js_options'] ),
+			)
+		);
 		$attributes['type'] = 'text';
 
 		return $attributes;
@@ -252,12 +287,14 @@ class RWMB_Datetime_Field extends RWMB_Text_Field {
 	 * @return string
 	 */
 	public static function format_single_value( $field, $value, $args, $post_id ) {
-		if ( ! isset( $args['format'] ) ) {
-			return $value;
+		if ( $field['timestamp'] ) {
+			$value = self::prepare_meta( $value, $field );
+		} else {
+			$value = array(
+				'timestamp' => strtotime( $value ),
+				'formatted' => $value,
+			);
 		}
-		if ( ! $field['timestamp'] ) {
-			$value = strtotime( $value );
-		}
-		return date( $args['format'], $value );
+		return empty( $args['format'] ) ? $value['formatted'] : date( $args['format'], $value['timestamp'] );
 	}
 }
