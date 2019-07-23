@@ -7,15 +7,31 @@
 	use Carbon\Carbon;
 	use Carbon\CarbonInterface;
 
+	/**
+	 * Class Cron
+	 *
+	 * @package CranleighSchool\CranleighPeople
+	 */
 	class Cron
 	{
+		/**
+		 *
+		 */
 		public CONST SYNC_CRONJOB_NAME = "cranleigh_people_daily_sync";
 
+		/**
+		 * Callback which sets up the scheduled event.
+		 */
 		public static function setup_sync_cronjob() {
 			if (! wp_next_scheduled ( self::SYNC_CRONJOB_NAME )) {
 				wp_schedule_event(time(), 'daily', self::SYNC_CRONJOB_NAME);
 			}
 		}
+
+		/**
+		 * @return string
+		 * @throws \Exception
+		 */
 		public static function next_scheduled_sync() {
 			$date_next_scheduled = Carbon::createFromTimestamp(wp_next_scheduled(self::SYNC_CRONJOB_NAME), get_option('timezone_string'));
 
