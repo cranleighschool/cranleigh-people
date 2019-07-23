@@ -99,7 +99,7 @@
 				}
 			);
 
-			add_action(Activate::SYNC_CRONJOB_NAME, [Importer::class, 'import']);
+			add_action(Cron::SYNC_CRONJOB_NAME, [Importer::class, 'import']);
 
 		}
 
