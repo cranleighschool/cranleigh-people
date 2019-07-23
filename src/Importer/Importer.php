@@ -134,6 +134,11 @@
 
 		}
 
+		/**
+		 * @param \CranleighSchool\CranleighPeople\Importer\Person $person
+		 *
+		 * @return string
+		 */
 		public static function set_wp_post_status(Person $person): string {
 			if ($person->system_status !== '1') {
 				return 'private';
