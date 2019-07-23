@@ -107,20 +107,20 @@
     },
     {
         "name": "rilwis/meta-box",
-        "version": "4.12.6",
-        "version_normalized": "4.12.6.0",
+        "version": "4.18.4",
+        "version_normalized": "4.18.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/wpmetabox/meta-box.git",
-            "reference": "1781efdb247ef8b9cac1723786a8ff682452e131"
+            "reference": "d299ea6d2dcfb55b05201fd1ac10e4cc1a6e839a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/wpmetabox/meta-box/zipball/1781efdb247ef8b9cac1723786a8ff682452e131",
-            "reference": "1781efdb247ef8b9cac1723786a8ff682452e131",
+            "url": "https://api.github.com/repos/wpmetabox/meta-box/zipball/d299ea6d2dcfb55b05201fd1ac10e4cc1a6e839a",
+            "reference": "d299ea6d2dcfb55b05201fd1ac10e4cc1a6e839a",
             "shasum": ""
         },
-        "time": "2017-12-04T10:06:38+00:00",
+        "time": "2019-07-06T01:57:45+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -135,9 +135,9 @@
         "authors": [
             {
                 "name": "Tran Ngoc Tuan Anh",
-                "email": "rilwis@gmail.com",
-                "homepage": "https://deluxeblogtips.com",
-                "role": "Developer"
+                "role": "Developer",
+                "email": "anhtnt@elightup.com",
+                "homepage": "https://deluxeblogtips.com"
             }
         ],
         "description": "A powerful, professional developer toolkit to create custom meta boxes and custom fields for WordPress websites.",
@@ -352,23 +352,23 @@
     },
     {
         "name": "yahnis-elsts/plugin-update-checker",
-        "version": "v4.3.1",
-        "version_normalized": "4.3.1.0",
+        "version": "v4.7",
+        "version_normalized": "4.7.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/YahnisElsts/plugin-update-checker.git",
-            "reference": "22fd23a32b158ac051f09690c757f5fe509d21aa"
+            "reference": "6da68b119277a400fad0ca6ec54f223b10bd8230"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/22fd23a32b158ac051f09690c757f5fe509d21aa",
-            "reference": "22fd23a32b158ac051f09690c757f5fe509d21aa",
+            "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/6da68b119277a400fad0ca6ec54f223b10bd8230",
+            "reference": "6da68b119277a400fad0ca6ec54f223b10bd8230",
             "shasum": ""
         },
         "require": {
             "php": ">=5.2.0"
         },
-        "time": "2017-11-03T17:20:11+00:00",
+        "time": "2019-07-05T18:39:53+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
