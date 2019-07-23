@@ -99,7 +99,7 @@
 		/**
 		 *
 		 */
-		public function update_feature_image_to_post()
+		private function update_feature_image_to_post()
 		{
 			set_post_thumbnail($this->parent_post_id, $this->featured_image_id);
 			update_post_meta($this->parent_post_id, Metaboxes::fieldID('featured_image_set_time'), date_i18n('Y-m-d H:i:s'));
