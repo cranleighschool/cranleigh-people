@@ -80,6 +80,7 @@
 			$attachment = array(
 				'post_mime_type' => $wp_filetype['type'],
 				'post_title'     => $this->persons_name,
+				'post_name'      => sanitize_title($this->persons_name) . '-portrait-photo',
 				'post_content'   => $this->image_description,
 				'post_status'    => 'inherit'
 			);
