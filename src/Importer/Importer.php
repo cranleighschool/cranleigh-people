@@ -129,7 +129,6 @@
 
 		public static function slackmessage(string $message) {
 			$slacker = new Slacker();
-			$slacker->setRoom('it-cranleigh-people');
 			$slacker->setUsername( 'Cranleigh People Importer' );
 			$slacker->post( $message );
 
