@@ -50,6 +50,7 @@
 			$result = json_decode($body);
 
 			$i = 0;
+			$skipped = [];
 			foreach ($result->data as $person) {
 				$person = new Person($person);
 
@@ -62,7 +63,15 @@
 					continue;
 				} catch (StaffNotFoundException $exception) {
 					$post_id = 0;
-					self::slackmessage("Going to create ".$person->school_initials);
+					/**
+					 * There's no point creating objects into WordPress before they're needed,
+					 * just to set them as private or pending. So let's skip them.
+					 */
+					if (!self::shouldBotherCreating($person)) {
+						$skipped[] = $person->school_initials;
+						continue;
+					}
+					self::slackmessage("Going to create " . $person->school_initials);
 				}
 
 
@@ -70,8 +79,8 @@
 				$i++;
 
 			}
-			self::slackmessage("Updated/Created ".$i." People");
-
+			self::slackmessage("Updated/Created " . $i . " People");
+			self::slackmessage("Skipped ".count($skipped).": ".implode(", ", $skipped));
 
 		}
 
@@ -139,16 +148,26 @@
 		 *
 		 * @return string
 		 */
-		public static function set_wp_post_status(Person $person): string {
+		public static function set_wp_post_status(Person $person): string
+		{
 			if ($person->system_status !== '1') {
 				return 'private';
 			}
 
-			if ($person->hide_from_website !== null && strtotime($person->hide_from_website) > time()) {
+			if ($person->hide_from_website !== NULL && strtotime($person->hide_from_website) > time()) {
 				return 'pending';
 			}
 
 			return 'publish';
+		}
+
+		public static function shouldBotherCreating(Person $person): bool
+		{
+			if (self::set_wp_post_status($person) === 'publish') {
+				return true;
+			}
+
+			return false;
 		}
 
 		/**
