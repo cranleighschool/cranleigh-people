@@ -8,6 +8,6 @@
 	{
 		public function deactivate()
 		{
-			wp_clear_scheduled_hook(Activate::SYNC_CRONJOB_NAME);
+			wp_clear_scheduled_hook(Cron::SYNC_CRONJOB_NAME);
 		}
 	}
