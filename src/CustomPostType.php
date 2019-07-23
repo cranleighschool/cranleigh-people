@@ -16,7 +16,7 @@
 
 		}
 
-		function CPT_Cranleigh_People()
+		public function CPT_Cranleigh_People()
 		{
 			$public = $this->loading_cpt();
 
@@ -100,7 +100,7 @@
 			}
 		}
 
-		function roles_and_caps()
+		private function roles_and_caps()
 		{
 
 			$admin_role = get_role('administrator');
