@@ -14,7 +14,7 @@
 			add_action('init', [$instance, 'TAX_staff_cats']);
 		}
 
-		function TAX_staff_cats()
+		public function TAX_staff_cats()
 		{
 
 			$labels = [
