@@ -136,10 +136,11 @@
 
 		}
 
-		public static function slackmessage(string $message) {
+		public static function slackmessage(string $message)
+		{
 			$slacker = new Slacker();
-			$slacker->setUsername( 'Cranleigh People Importer' );
-			$slacker->post( $message );
+			$slacker->setUsername('Cranleigh People Importer');
+			$slacker->post($message);
 
 		}
 
@@ -188,8 +189,8 @@
 			 * Let's ignore the insert/update process
 			 * if it's a new staff member who isn't yet set to publish.
 			 */
-			if ($post_id===0 && self::set_wp_post_status($person) !== "publish") {
-				return null;
+			if ($post_id === 0 && self::set_wp_post_status($person) !== "publish") {
+				return NULL;
 			}
 
 			$staff_post = wp_insert_post([
