@@ -2,8 +2,12 @@
 
 	namespace CranleighSchool\CranleighPeople;
 
+	use CranleighSchool\CranleighPeople\Shortcodes\DynamicTableListShortcode;
+	use CranleighSchool\CranleighPeople\Shortcodes\PersonTableShortcode;
+	use CranleighSchool\CranleighPeople\Shortcodes\ShortcodeTrait;
+	use CranleighSchool\CranleighPeople\Shortcodes\TaxonomyShortcode;
+	use CranleighSchool\CranleighPeople\Shortcodes\TutorListShortcode;
 	use WP_Query;
-	use WP_Error;
 
 	/*
      * TODO: Convert these shortcodes into a more SOLID principle design.
@@ -16,11 +20,14 @@
 	 */
 	class Shortcodes extends BaseController
 	{
+		use ShortcodeTrait;
 
 		/**
 		 * @var bool|int
 		 */
 		public $default_attachment_id = false;
+
+		public $query_args = [];
 
 		/**
 		 * Shortcodes constructor.
@@ -30,11 +37,10 @@
 			$this->load();
 
 			add_shortcode('person_card', [$this, 'shortcode']);
-			add_shortcode('card_list', [$this, 'tutors_list']);
-			add_shortcode('table_list', [$this, 'table_list']);
-			add_shortcode('people_taxonomy', [$this, 'as_taxonomy']);
-			add_shortcode('person_table', [$this, 'table_list_shortcode']);
-			add_shortcode('cran_person_table', [$this, 'table_list_shortcode']);
+			TaxonomyShortcode::register();
+			PersonTableShortcode::register();
+			TutorListShortcode::register();
+			DynamicTableListShortcode::register();
 
 			$this->query_args = [
 				'post_type' => Plugin::POST_TYPE_KEY,
@@ -48,245 +54,6 @@
 				$this->default_attachment_id = 32492;
 			endif;
 
-		}
-
-		/**
-		 * @param array $atts
-		 * @param null  $content
-		 *
-		 * @return string
-		 */
-		public function table_list_shortcode(array $atts, $content = NULL): string
-		{
-
-			$atts = shortcode_atts(
-				[
-					'users'        => NULL,
-					'with_headers' => false,
-				],
-				$atts
-			);
-			$all_users = explode(',', $atts['users']);
-			$users = [];
-			foreach ($all_users as $user) :
-				$users[] = preg_replace('/[^A-Za-z]/', '', trim($user));
-			endforeach;
-			$args = [
-				'post_type'      => Plugin::POST_TYPE_KEY,
-				'posts_per_page' => -1,
-				'orderby'        => 'meta_value',
-				'meta_key'       => Metaboxes::fieldID('surname'),
-				'order'          => 'ASC',
-				'meta_query'     => [
-					[
-						'key'     => Metaboxes::fieldID('username'),
-						'value'   => $users,
-						'compare' => 'IN',
-					],
-				],
-			];
-			$staff = new WP_Query(wp_parse_args($args, $this->query_args));
-			ob_start();
-			?>
-			<div class="table-responsive">
-				<table class="table table-condensed table-striped table-hover">
-					<?php if ($atts['with_headers'] !== false) : ?>
-						<thead>
-						<th>Staff</th>
-						<th>Job Title</th>
-						</thead>
-					<?php endif; ?>
-					<tbody>
-					<?php
-						foreach ($users as $user) :
-							$row = $this->table_list_row(['username' => $user]);
-							if (!is_wp_error($row)) {
-								echo $row;
-							} else {
-								echo '<tr class="danger"><td colspan="2">' . $row->get_error_message() . '</td></tr>';
-							}
-							// echo $this->table_list_row(["username"=>$user]);
-						endforeach;
-					?>
-					</tbody>
-				</table>
-			</div>
-
-			<?php
-			$output = ob_get_contents();
-			ob_end_clean();
-
-			return $output;
-
-		}
-
-		/**
-		 * @param array $atts
-		 * @param null  $content
-		 *
-		 * @return string
-		 */
-		public function table_list_row(array $atts, $content = NULL): string
-		{
-
-			$atts = shortcode_atts(
-				[
-					'username' => NULL,
-				],
-				$atts
-			);
-
-			$posts = get_posts(
-				[
-					'post_type'      => Plugin::POST_TYPE_KEY,
-					'posts_per_page' => -1,
-					'meta_key'       => Metaboxes::fieldID('username'),
-					'meta_value'     => $atts['username'],
-				]
-			);
-			if (count($posts) == 1) {
-				$post = $posts[0];
-			} else {
-				return new WP_Error(
-					'Error getting User Data',
-					'Could not locate data for the user: &quot;' . $atts['username'] . '&quot;.'
-				);
-			}
-			$output = '';
-			if (get_post_status() == 'private' && current_user_can('manage_options')) {
-				$output .= '<tr class="danger">';
-			} else {
-				$output .= '<tr>';
-			}
-
-			$output .= '<td><a href="' . get_permalink($post->ID) . '"><span class="staff-title">' . get_post_meta(
-					$post->ID,
-					Metaboxes::fieldID('full_title'),
-					true
-				) . '</span></a><span class="qualifications">' . get_post_meta(
-					$post->ID,
-					Metaboxes::fieldID('qualifications'),
-					true
-				) . '</span></td>';
-			$output .= '<td>' . get_post_meta($post->ID, Metaboxes::fieldID('leadjobtitle'), true) . '</td>';
-			$output .= '</tr>';
-
-			return $output;
-		}
-
-		/**
-		 * as_taxonomy function.
-		 *
-		 * @access public
-		 *
-		 * @return void
-		 */
-		public function as_taxonomy(array $atts, $content = NULL): string
-		{
-
-			$atts = shortcode_atts(
-				[
-					'taxonomy' => $taxonomy,
-				],
-				$atts
-			);
-			$args = [
-				'tax_query' => [
-					[
-						'taxonomy' => StaffCategoriesTaxonomy::TAXONOMY_KEY,
-						'field'    => 'slug',
-						'terms'    => $atts['taxonomy'],
-					],
-				],
-			];
-			$query = new WP_Query(wp_parse_args($args, $this->query_args));
-			while ($query->have_posts()) :
-				$query->the_post();
-				$people[] = get_post_meta(get_the_ID(), Metaboxes::fieldID('username'), true);
-			endwhile;
-			wp_reset_postdata();
-			wp_reset_query();
-
-			return $this->table_list(['people' => implode(',', $people)]);
-		}
-
-		/**
-		 * @param array $atts
-		 * @param null  $content
-		 *
-		 * @return string
-		 */
-		public function table_list(array $atts, $content = NULL): string
-		{
-
-			$a = shortcode_atts(
-				[
-					'people'       => NULL,
-					'class'        => 'table-striped',
-					'first_column' => 'full_title',
-					'last_column'  => 'email_address',
-					'sort'         => false,
-				],
-				$atts
-			);
-			$people = explode(',', $a['people']);
-
-			$users = [];
-			foreach ($people as $person) :
-				$initial = str_split($person);
-				$last = end($initial);
-				$users[ $person ] = $last;
-			endforeach;
-
-			if ($a['sort'] == true) {
-				asort($users);
-			}
-
-			ob_start();
-			?>
-			<table class="table <?php echo $a['class']; ?>">
-				<?php
-					foreach ($users as $person => $dull) {
-						$username = trim($person);
-						echo $this->table_row(array_merge(['user' => $username], $a));
-					}
-				?>
-			</table>
-			<?php
-
-			$output = ob_get_contents();
-			ob_end_clean();
-
-			return $output;
-		}
-
-		/**
-		 * @param array $atts
-		 * @param null  $content
-		 *
-		 * @return string
-		 */
-		public function table_row(array $atts, $content = NULL): string
-		{
-
-			$a = shortcode_atts(
-				[
-					'user'         => NULL,
-					'first_column' => 'full_title',
-					'last_column'  => 'email_address',
-				],
-				$atts
-			);
-
-			$this->first_column = $a['first_column'];
-			$this->last_column = $a['last_column'];
-
-			return $this->shortcode(
-				[
-					'type' => 'two-column',
-					'user' => $a['user'],
-				]
-			);
 		}
 
 		/**
@@ -324,7 +91,7 @@
 				],
 			];
 
-			$this->switch_to_blog($this->load_from_blog_id);
+			self::switch_to_blog($this->load_from_blog_id);
 			$query = new WP_Query(wp_parse_args($args, $this->query_args));
 
 			if ($query->have_posts()) :
@@ -363,7 +130,7 @@
 				endif;
 			endif;
 
-			$this->restore_current_blog();
+			self::restore_current_blog();
 
 			return $output;
 
@@ -374,84 +141,12 @@
 		 *
 		 * @return false|string
 		 */
-		function just_bio($post_id = NULL)
+		function just_bio(int $post_id):string
 		{
-
-			global $post;
 			$card_title = 'person-bio-' . $post_id;
-			ob_start();
-			?>
-			<section class="biography-pullout" id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
-				<div class="pull-out">
 
-					<?php echo $this->get_first_paragraph(); ?>
+			return View::render('biography-only', compact('card_title', 'post_id'));
 
-					<?php if (strlen($this->get_second_paragraph()) > 1) : ?>
-						<p class="read-more">
-							<a href="#<?php echo $this->sanitize_title_to_id($card_title); ?>-bio"
-							   data-toggle="collapse" class="cranleigh-hide-readmore-link" aria-controls="person-bio"
-							   aria-expanded="false">Read more…</a>
-						</p>
-					<?php endif; ?>
-
-					<div id="<?php echo $this->sanitize_title_to_id($card_title); ?>-bio" class="collapse"
-						 aria-expanded="false">
-						<?php echo $this->get_second_paragraph(); ?>
-					</div>
-
-				</div>
-			</section>
-
-			<?php
-			$output = ob_get_contents();
-			ob_end_clean();
-
-			return $output;
-		}
-
-		/**
-		 * @param $card_title
-		 *
-		 * @return string|string[]|null
-		 */
-		function sanitize_title_to_id($card_title)
-		{
-
-			$string = strtolower(str_replace(' ', '', $card_title));
-
-			return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
-		}
-
-		/**
-		 * @return string
-		 */
-		public function get_first_paragraph(): string
-		{
-
-			global $post;
-			$str = wpautop(get_the_content());
-			$str = substr($str, 0, strpos($str, '</p>') + 4);
-			$str = strip_tags($str, '<a><strong><em>');
-
-			if (strlen($this->get_second_paragraph()) <= 1 && strlen($str) > 400) :
-				return '<p class="biography">' . substr($str, 0, 400) . '...</p>';
-			else :
-				return '<p class="biography">' . $str . '</p>';
-			endif;
-		}
-
-		/**
-		 * @return string
-		 */
-		public function get_second_paragraph(): string
-		{
-
-			global $post;
-			$str = wpautop(get_the_content());
-			$str = substr($str, strpos($str, '</p>') + 4);
-			$str = strip_tags($str, '<p><a><strong><em>');
-
-			return $str;
 		}
 
 		/**
@@ -465,20 +160,20 @@
 
 			global $post;
 
-			$full_title = get_post_meta($post->ID, Metaboxes::fieldID('full_title'), true);
-			$phone = get_post_meta($post->ID, Metaboxes::fieldID('phone'), true);
+			$full_title = get_post_meta($post_id, Metaboxes::fieldID('full_title'), true);
+			$phone = get_post_meta($post_id, Metaboxes::fieldID('phone'), true);
 			$phone_href = $this->phone_href($phone);
-			$position = $this->get_position(get_post_meta($post->ID, Metaboxes::fieldID('position'), true), 'Housemaster');
-			$email = get_post_meta($post->ID, Metaboxes::fieldID('email_address'), true);
-			$qualifications = get_post_meta($post->ID, Metaboxes::fieldID('qualifications'), true);
+			$position = $this->get_position(get_post_meta($post_id, Metaboxes::fieldID('position'), true), 'Housemaster');
+			$email = get_post_meta($post_id, Metaboxes::fieldID('email_address'), true);
+			$qualifications = get_post_meta($post_id, Metaboxes::fieldID('qualifications'), true);
 			ob_start();
 			?>
-			<section class="person-card" id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
+			<section class="person-card" id="<?php echo self::sanitize_title_to_id($card_title); ?>">
 				<div class="card landscape light">
 					<div class="row">
 						<div class="col-xs-4">
 							<div class="card-image">
-								<?php $this->get_staff_photo(); ?>
+								<?php View::the_post_thumbnail(); ?>
 							</div>
 						</div>
 						<div class="col-xs-8">
@@ -511,18 +206,18 @@
 								<a href="tel:' . $phone_href . '"><span class="sr-only">Phone:</span><span class="glyphicon glyphicon-earphone"></span>' . $phone . '</a></p>';
 										endif;
 									endif;
-									echo $this->get_first_paragraph();
+									echo self::get_first_paragraph();
 
-									if ($this->get_second_paragraph()) :
+									if (self::get_second_paragraph()) :
 										?>
 										<p class="read-more">
-											<a href="#<?php echo $this->sanitize_title_to_id($card_title); ?>-bio"
+											<a href="#<?php echo self::sanitize_title_to_id($card_title); ?>-bio"
 											   data-toggle="collapse" aria-controls="housemaster-bio"
 											   class="cranleigh-hide-readmore-link" aria-expanded="false">Read more…</a>
 										</p>
-										<div id="<?php echo $this->sanitize_title_to_id($card_title); ?>-bio"
+										<div id="<?php echo self::sanitize_title_to_id($card_title); ?>-bio"
 											 class="collapse" aria-expanded="false">
-											<?php echo $this->get_second_paragraph(); ?>
+											<?php echo self::get_second_paragraph(); ?>
 										</div>
 									<?php endif; ?>
 
@@ -540,66 +235,6 @@
 		}
 
 		/**
-		 * @param string $number
-		 *
-		 * @return bool|string|string[]|null
-		 * @throws \Exception
-		 */
-		public function phone_href(string $number)
-		{
-			return Helper::santitizePhoneHref($number);
-		}
-
-		/**
-		 * @param      $positions
-		 * @param null $not
-		 *
-		 * @return bool|mixed
-		 */
-		public function get_position($positions, $not = NULL)
-		{
-
-			return Helper::santitizePositions($positions, $not);
-		}
-
-		/**
-		 * @param bool $thumb
-		 *
-		 * @return string
-		 */
-		public function get_staff_photo(bool $thumb = false): string
-		{
-
-			if (has_post_thumbnail()) :
-				if ($thumb === false) :
-					the_post_thumbnail(Plugin::PROFILE_PHOTO_SIZE_NAME, ['class' => 'img-responsive']);
-				else :
-					the_post_thumbnail('thumbnail', ['class' => 'img-responsive']);
-				endif;
-			else :
-				$photo = wp_get_attachment_image(
-					$this->default_attachment_id,
-					Plugin::PROFILE_PHOTO_SIZE_NAME,
-					false,
-					['class' => 'img-responsive']
-				);
-				echo $photo;
-			endif;
-		}
-
-		/**
-		 * @param string $heading
-		 * @param string $title
-		 *
-		 * @return string
-		 */
-		public function card_title(string $heading, string $title): string
-		{
-
-			return '<' . $heading . '>' . $title . '</' . $heading . '>';
-		}
-
-		/**
 		 * @param null   $post_id
 		 * @param string $card_title
 		 *
@@ -608,7 +243,6 @@
 		 */
 		public function head_of_dept($post_id = NULL, string $card_title = 'Head of Department'): string
 		{
-
 			global $post;
 
 			if (empty($card_title)) {
@@ -623,13 +257,13 @@
 			$qualifications = get_post_meta($post->ID, Metaboxes::fieldID('qualifications'), true);
 			ob_start();
 			?>
-			<section id="<?php echo $this->sanitize_title_to_id($card_title); ?>">
+			<section id="<?php echo self::sanitize_title_to_id($card_title); ?>">
 				<div class="card landscape light">
 					<div class="row">
 						<div class="col-xs-4">
 							<div class="card-image">
 								<a href="<?php echo get_permalink($post->ID); ?>">
-									<?php $this->get_staff_photo(); ?>
+									<?php View::the_post_thumbnail(); ?>
 								</a>
 							</div>
 						</div>
@@ -648,20 +282,20 @@
 								</h4>
 								<span class="hidden-xs">
 
-								<?php echo $this->get_first_paragraph(); ?>
+								<?php echo self::get_first_paragraph(); ?>
 
-									<?php if (strlen($this->get_second_paragraph()) > 1) : ?>
+									<?php if (strlen(self::get_second_paragraph()) > 1) : ?>
 										<p class="read-more">
-									<a href="#<?php echo $this->sanitize_title_to_id($card_title); ?>-<?php echo $post->ID; ?>-bio"
+									<a href="#<?php echo self::sanitize_title_to_id($card_title); ?>-<?php echo $post->ID; ?>-bio"
 									   data-toggle="collapse" aria-controls="housemaster-bio"
 									   class="cranleigh-hide-readmore-link" aria-expanded="false">Read more…</a>
 								</p>
 									<?php endif; ?>
 
 								<div
-									id="<?php echo $this->sanitize_title_to_id($card_title); ?>-<?php echo $post->ID; ?>-bio"
+									id="<?php echo self::sanitize_title_to_id($card_title); ?>-<?php echo $post->ID; ?>-bio"
 									class="collapse" aria-expanded="false">
-									<?php echo $this->get_second_paragraph(); ?>
+									<?php echo self::get_second_paragraph(); ?>
 								</div>
 								</span>
 							</div><!-- .card-text -->
@@ -677,166 +311,7 @@
 			return $output;
 		}
 
-		/**
-		 * @param int    $post_id
-		 * @param string $card_title
-		 *
-		 * @return string
-		 * @throws \Exception
-		 */
-		public function small(int $post_id, string $card_title): string
-		{
 
-			global $post;
-			$full_title = get_post_meta($post->ID, Metaboxes::fieldID('full_title'), true);
-			$phone = get_post_meta($post->ID, Metaboxes::fieldID('phone'), true);
-			$phone_href = $this->phone_href($phone);
-			$position = $this->get_position(get_post_meta($post->ID, Metaboxes::fieldID('position'), true));
-			if (!$position) {
-				$position = get_post_meta($post->ID, Metaboxes::fieldID('leadjobtitle'), true);
-			}
-			$position = get_post_meta($post->ID, Metaboxes::fieldID('leadjobtitle'), true);
-			ob_start();
-			?>
-			<div class="card landscape">
-				<div class="row">
-					<div class="col-xs-4">
-						<div class="card-image">
-							<a href="<?php the_permalink(); ?>">
-								<?php
-									if (has_post_thumbnail()) :
-										the_post_thumbnail(Plugin::PROFILE_PHOTO_SIZE_NAME, ['class' => 'img-responsive']);
-									elseif ($this->default_attachment_id !== NULL) :
-										$photo = wp_get_attachment_image(
-											$this->default_attachment_id,
-											Plugin::PROFILE_PHOTO_SIZE_NAME,
-											false,
-											['class' => 'img-responsive']
-										);
-										echo $photo;
-									endif;
-								?>
-							</a>
-						</div>
-					</div>
-					<div class="col-xs-8">
-						<div class="card-text">
-							<h4><a href="<?php the_permalink(); ?>"><?php echo $full_title; ?></a></h4>
-							<p><?php echo $position; ?></p>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<?php
-			$output = ob_get_contents();
-			ob_end_clean();
-
-			return $output;
-		}
-
-		/**
-		 * @param int $post_id
-		 *
-		 * @return string
-		 */
-		public function two_column(int $post_id): string
-		{
-
-			global $post;
-
-			$first_column = get_post_meta($post->ID, Metaboxes::fieldID($this->first_column), true);
-			$last_column = get_post_meta($post->ID, Metaboxes::fieldID($this->last_column), true);
-
-			ob_start();
-
-			?>
-			<tr>
-				<td><?php echo $first_column; ?></td>
-				<td><?php echo $last_column; ?></td>
-			</tr>
-			<?php
-			$output = ob_get_contents();
-			ob_end_clean();
-
-			return $output;
-		}
-
-		/**
-		 * @param array $atts
-		 * @param null  $content
-		 *
-		 * @return string
-		 * @throws \Exception
-		 */
-		public function tutors_list(array $atts, $content = NULL): string
-		{
-
-			$a = shortcode_atts(
-				[
-					'people'  => NULL,
-					'columns' => 2,
-					'type'    => 'small',
-					'sort'    => NULL,
-				],
-				$atts
-			);
-
-			switch ($a['columns']) :
-				case 2:
-					$class = 6;
-					break;
-				case 3:
-					$class = 4;
-					break;
-				default:
-					$class = 6;
-					break;
-			endswitch;
-
-			$people = explode(',', $a['people']);
-
-			$users = [];
-			foreach ($people as $person) :
-				$initial = str_split($person);
-				$last = end($initial);
-				$users[ $person ] = $last;
-			endforeach;
-
-			if ($a['sort'] == true) {
-				asort($users);
-			}
-
-			ob_start();
-
-			echo '<div class="row">';
-			foreach ($users as $person => $dull) {
-				$username = trim($person);
-				echo '<div class="col-sm-' . $class . '">';
-				echo $this->shortcode(
-					[
-						'type' => $a['type'],
-						'user' => $username,
-					]
-				);
-				echo '</div>';
-			}
-			echo '</div>';
-
-			$output = ob_get_contents();
-			ob_end_clean();
-
-			return $output;
-		}
-
-		/**
-		 * @return string
-		 */
-		public function default_card(): string
-		{
-
-			return 'Not Written Yet';
-		}
 
 
 	}

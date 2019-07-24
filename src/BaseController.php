@@ -64,6 +64,10 @@
 			$this->settings = get_option(Settings::SETTINGS_SECTION_ID);
 		}
 
+		public static function get_default_attachment_id() {
+			return self::getPluginSetting('default_photo_attachment_id');
+		}
+
 		/**
 		 *
 		 */

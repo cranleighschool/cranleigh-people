@@ -106,7 +106,9 @@ class Helper {
 
 			endforeach;
 
-			return $position;
+			if (isset($position)) {
+				return $position;
+			}
 		endif;
 
 		return false;
