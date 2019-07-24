@@ -567,7 +567,7 @@
 		 *
 		 * @return string
 		 */
-		public function get_staff_photo(bool $thumb = false):string
+		public function get_staff_photo(bool $thumb = false): string
 		{
 
 			if (has_post_thumbnail()) :
