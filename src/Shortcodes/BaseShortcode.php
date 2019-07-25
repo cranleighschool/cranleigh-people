@@ -2,7 +2,7 @@
 
 	namespace CranleighSchool\CranleighPeople\Shortcodes;
 
-	use CranleighSchool\CranleighPeople\Shortcodes\ShortcodeTrait;
+	use CranleighSchool\CranleighPeople\Traits\ShortcodeTrait;
 	/**
 	 * Class BaseShortcode
 	 *
