@@ -33,7 +33,7 @@
 
 			function admin_menu()
 			{
-				add_submenu_page('edit.php?post_type='.Plugin::POST_TYPE_KEY, "Cranleigh People Settings", "Settings", "manage_options", "cranleigh_people_settings", array($this, 'plugin_page'));
+				add_options_page('Cranleigh People', 'Cranleigh People', 'manage_options', 'cranleigh_people_settings', array($this, 'plugin_page'));
 			}
 
 			function get_settings_sections()
