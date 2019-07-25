@@ -4,16 +4,8 @@
 	namespace CranleighSchool\CranleighPeople;
 
 
-
 	class View
 	{
-		public static function view(string $template, array $vars)
-		{
-			extract($vars);
-
-			return include trailingslashit(dirname(CRAN_PEOPLE_FILE_PATH)) . "src/Views/" . $template . ".php";
-		}
-
 		/**
 		 * -------------------------------------
 		 * Render a Template.
