@@ -4,7 +4,8 @@
 	namespace CranleighSchool\CranleighPeople\Importer;
 
 
-	use CranleighSchool\CranleighPeople\Cron;use CranleighSchool\CranleighPeople\Plugin;
+	use CranleighSchool\CranleighPeople\Cron;
+	use CranleighSchool\CranleighPeople\Plugin;
 
 	class Admin
 	{
@@ -13,14 +14,16 @@
 		 */
 		public static function add_submenu_page()
 		{
-			add_submenu_page(
-				'edit.php?post_type=' . Plugin::POST_TYPE_KEY,
-				__('Manual Importer', 'cranleigh'),
-				__('Manual Importer', 'cranleigh'),
-				'manage_options',
-				'cranleigh_people_manual_importer',
-				[__CLASS__, 'importPage']
-			);
+			add_action('admin_menu', function () {
+				add_submenu_page(
+					'edit.php?post_type=' . Plugin::POST_TYPE_KEY,
+					__('Manual Importer', 'cranleigh'),
+					__('Manual Importer', 'cranleigh'),
+					'manage_options',
+					'cranleigh_people_manual_importer',
+					[__CLASS__, 'importPage']
+				);
+			});
 		}
 
 		/**
