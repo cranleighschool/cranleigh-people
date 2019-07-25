@@ -4,7 +4,7 @@
 
 	use CranleighSchool\CranleighPeople\Shortcodes\DynamicTableListShortcode;
 	use CranleighSchool\CranleighPeople\Shortcodes\PersonTableShortcode;
-	use CranleighSchool\CranleighPeople\Shortcodes\ShortcodeTrait;
+	use CranleighSchool\CranleighPeople\Traits\ShortcodeTrait;
 	use CranleighSchool\CranleighPeople\Shortcodes\TaxonomyShortcode;
 	use CranleighSchool\CranleighPeople\Shortcodes\TutorListShortcode;
 	use WP_Query;

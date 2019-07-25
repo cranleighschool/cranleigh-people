@@ -1,6 +1,6 @@
 <?php
 
-	namespace CranleighSchool\CranleighPeople\Shortcodes;
+	namespace CranleighSchool\CranleighPeople\Traits;
 
 	use CranleighSchool\CranleighPeople\Exceptions\TooManyStaffFound;
 	use CranleighSchool\CranleighPeople\Helper;
