@@ -37,7 +37,9 @@
 		{
 
 			if (is_multisite()) :
-				return restore_current_blog();
+				if (ms_is_switched()) {
+					return restore_current_blog();
+				}
 			endif;
 		}
 
@@ -45,7 +47,9 @@
 		{
 
 			if (is_multisite()) :
-				return switch_to_blog($new_blog);
+				if (!ms_is_switched()) {
+					return switch_to_blog($new_blog);
+				}
 			endif;
 		}
 
