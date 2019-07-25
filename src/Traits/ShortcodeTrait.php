@@ -125,8 +125,10 @@
 		 */
 		public static function small(int $post_id, string $card_title = NULL): string
 		{
+			Plugin::switch_to_blog(Plugin::switch_to_blog('load_from_blog_id'));
 			$full_title = get_post_meta($post_id, Metaboxes::fieldID('full_title'), true);
 			$position = get_post_meta($post_id, Metaboxes::fieldID('leadjobtitle'), true);
+			Plugin::restore_current_blog();
 
 			return View::render('small-card', compact('full_title', 'position'));
 		}
