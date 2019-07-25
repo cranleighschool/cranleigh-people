@@ -21,6 +21,8 @@
 		{
 
 
+			Plugin::switch_to_blog(Plugin::getPluginSetting('load_from_blog_id'));
+
 			// Was any data sent through?
 			($viewData) ? extract($viewData) : NULL;
 
@@ -32,12 +34,15 @@
 			wp_reset_postdata();
 			wp_reset_query();
 
+
+			Plugin::restore_current_blog();
+
 			return $template;
 		}
 
 		public static function the_post_thumbnail()
 		{
-			Plugin::switch_to_blog(Plugin::getPluginSetting('load_from_blog_id'));
+
 			if (has_post_thumbnail()) :
 				the_post_thumbnail(Plugin::PROFILE_PHOTO_SIZE_NAME, ['class' => 'img-responsive']);
 			elseif (Plugin::get_default_attachment_id() !== NULL) :
@@ -49,7 +54,6 @@
 				);
 				echo $photo;
 			endif;
-			Plugin::restore_current_blog();
 		}
 
 		private static function get_template_path(string $templateName): string
@@ -58,7 +62,7 @@
 			if (file_exists($templateFile)) {
 				return $templateFile;
 			} else {
-				throw new \Exception("Cranleigh People View '".$templateName."' is not found.", 500);
+				throw new \Exception("Cranleigh People View '" . $templateName . "' is not found.", 500);
 			}
 
 		}
