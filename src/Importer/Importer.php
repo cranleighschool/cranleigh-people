@@ -26,6 +26,10 @@
 		 */
 		public static function import($specific_people = NULL)
 		{
+			if (Plugin::getPluginSetting('isams_controlled') !== 'yes') {
+				return false;
+			}
+
 			/** Annoyingly needed for WordPress callback parameters, only delivered as strings */
 			if ($specific_people === '') {
 				$specific_people = NULL;
