@@ -3,6 +3,7 @@
 	namespace CranleighSchool\CranleighPeople\Shortcodes;
 
 	use CranleighSchool\CranleighPeople\Traits\ShortcodeTrait;
+
 	/**
 	 * Class BaseShortcode
 	 *
@@ -11,6 +12,8 @@
 	abstract class BaseShortcode implements ShortcodeInterface
 	{
 		use ShortcodeTrait;
+
+		public $tag;
 
 		/**
 		 * BaseShortcode constructor.
