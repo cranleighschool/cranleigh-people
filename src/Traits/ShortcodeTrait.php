@@ -131,7 +131,7 @@
 		 * @return bool|string|string[]|null
 		 * @throws \Exception
 		 */
-		public function phone_href(string $number)
+		public function phone_href(string $number=null)
 		{
 			return Helper::santitizePhoneHref($number);
 		}
