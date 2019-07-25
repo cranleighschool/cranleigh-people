@@ -92,6 +92,8 @@
 		 */
 		public static function get_wp_query_from_usernames(array $usernames): WP_Query
 		{
+			Plugin::switch_to_blog(Plugin::getPluginSetting('load_from_blog_id'));
+
 			$args = [
 				'post_type'      => Plugin::POST_TYPE_KEY,
 				'posts_per_page' => -1,
@@ -107,7 +109,11 @@
 				],
 			];
 
-			return new WP_Query($args);
+			$query = new WP_Query($args);
+
+			Plugin::restore_current_blog();
+
+			return $query;
 		}
 
 		/**
