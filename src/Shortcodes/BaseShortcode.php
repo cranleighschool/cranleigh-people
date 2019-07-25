@@ -31,7 +31,7 @@
 		abstract protected function tagName(): string;
 
 		/**
-		 *
+		 * Static method that registers the shortcode.
 		 */
 		public static function register(): void
 		{
