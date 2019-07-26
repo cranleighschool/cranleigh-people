@@ -70,6 +70,7 @@
 
 			CustomPostType::register();
 			StaffCategoriesTaxonomy::register();
+			StaffHousesTaxonomy::register();
 			Metaboxes::register();
 			TGMPA::register();
 

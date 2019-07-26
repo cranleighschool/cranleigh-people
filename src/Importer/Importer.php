@@ -9,6 +9,7 @@
 	use CranleighSchool\CranleighPeople\Plugin;
 	use CranleighSchool\CranleighPeople\Slacker;
 	use CranleighSchool\CranleighPeople\StaffCategoriesTaxonomy;
+	use CranleighSchool\CranleighPeople\StaffHousesTaxonomy;
 
 	/**
 	 * Class Importer
@@ -236,6 +237,7 @@
 
 			// Set the Taxonomy Objects
 			self::set_staff_categories($staff_post, $person);
+			self::set_staff_houses($staff_post, $person);
 
 			// Do the Profile Pic
 			$image = self::featureImageLogic($staff_post, $person);
@@ -319,6 +321,15 @@
 		public static function qualificationsAsList(array $qualifications): string
 		{
 			return implode(", ", $qualifications);
+		}
+
+		private static function set_staff_houses(\WP_Post $staff_post, Person $person)
+		{
+			wp_set_post_terms(
+				$staff_post->ID,
+				$person->houses,
+				StaffHousesTaxonomy::TAXONOMY_KEY
+			);
 		}
 
 		/**
