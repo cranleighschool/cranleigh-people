@@ -49,41 +49,9 @@
 
 			add_action("after_setup_theme", [$instance, "manual_importer"]);
 
-
-			$instance->tinymceFilters();
-
 			if (Plugin::getPluginSetting('load_cpt', true) === false) {
 				add_action('admin_notices', [$instance, 'notice_no_settings']);
 			}
-
-		}
-
-		public function tinymceFilters()
-		{
-
-			// Force TinyMce on people
-			add_filter('wp_default_editor', function () {
-				if (get_post_type() == CustomPostType::POST_TYPE_KEY) {
-					return 'tinymce';
-				}
-			});
-
-			add_filter(
-				'tiny_mce_before_init',
-				function ($args) {
-					global $pagenow;
-					if (get_post_type() == CustomPostType::POST_TYPE_KEY) {
-
-						if ($pagenow == 'post.php') {
-							$args['readonly'] = true;
-							$args['toolbar'] = false;
-						}
-					}
-
-					return $args;
-				}
-			);
-
 
 		}
 
