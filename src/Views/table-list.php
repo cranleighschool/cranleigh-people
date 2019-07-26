@@ -1,4 +1,4 @@
-<div class="table-responsive">
+Found Posts: <?php echo $staff->found_posts; ?><div class="table-responsive">
 	<table class="table table-condensed table-striped table-hover">
 		<?php if (isset($atts['with_headers']) && $atts['with_headers'] !== false) : ?>
 			<thead>
@@ -8,6 +8,7 @@
 		<?php endif; ?>
 		<tbody>
 		<?php
+
 			while ($staff->have_posts()): $staff->the_post(); ?>
 				<tr>
 					<td>

@@ -22,10 +22,17 @@
 			$atts = shortcode_atts(
 				[
 					'people'        => NULL,
+					'users' => NULL, //Backwards compatibility
 					'with_headers' => false,
 				],
 				$atts
 			);
+			/**
+			 * For backwards compatibility. (Before version 2, we used "users" as the parameter name)
+			 */
+			if ($atts['people']===null && $atts['users'] !== null) {
+				$atts['people'] = $atts['users'];
+			}
 
 			$all_users = explode(',', $atts['people']);
 

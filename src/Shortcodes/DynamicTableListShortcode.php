@@ -11,6 +11,7 @@
 			$a = shortcode_atts(
 				[
 					'people'       => NULL,
+					'users'        => NULL, // backward compatibility
 					'class'        => 'table-striped',
 					'first_column' => 'full_title',
 					'last_column'  => 'email_address',
@@ -18,6 +19,14 @@
 				],
 				$atts
 			);
+
+			/**
+			 * For backwards compatibility. (Before version 2, we used "users" as the parameter name)
+			 */
+			if ($a['people'] === NULL && $a['users'] !== NULL) {
+				$a['people'] = $a['users'];
+			}
+
 			$people = explode(',', $a['people']);
 
 			$users = [];
