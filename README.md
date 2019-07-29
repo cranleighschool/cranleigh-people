@@ -1,5 +1,8 @@
 # Cranleigh People
 
+## Server Requirements
+- Requires PHP ^7.2
+
 This is the plugin used by the Cranleigh websites. It creates the Staff Custom Post Type and staff group taxonomies. It also puts in the custom meta fields needed. 
 
 ## Setup
