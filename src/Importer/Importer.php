@@ -77,7 +77,7 @@
 						$skipped[] = $person->school_initials;
 						continue;
 					}
-					self::slackmessage("Going to create " . $person->school_initials);
+					self::slackmessage("Going to create " . $person->school_initials." (".$person->prename_surname.")");
 				}
 
 
