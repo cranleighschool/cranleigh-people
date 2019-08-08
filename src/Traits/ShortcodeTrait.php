@@ -77,7 +77,8 @@
 			} catch (\Exception $e) {
 				$slacker = new Slacker();
 				$slacker->post($e->getMessage());
-				return null;
+
+				return NULL;
 			}
 		}
 
@@ -150,7 +151,7 @@
 		 * @return bool|string|string[]|null
 		 * @throws \Exception
 		 */
-		public function phone_href(string $number=null)
+		public function phone_href(string $number = NULL)
 		{
 			return Helper::santitizePhoneHref($number);
 		}

@@ -17,7 +17,7 @@
 		public function __construct()
 		{
 			self::$webhookEndpoint = Plugin::getPluginSetting('slack_webhook_endpoint');
-			if (defined('APP_ENV') && APP_ENV=='local') {
+			if (defined('APP_ENV') && APP_ENV == 'local') {
 				self::$room = "development-app-logs";
 			}
 
