@@ -20,7 +20,7 @@
 					'people'  => NULL,
 					'columns' => 2,
 					'type'    => 'small',
-					'sort'    => NULL,
+					'sort'    => 'surname',
 				],
 				$atts
 			);
@@ -37,10 +37,14 @@
 					break;
 			endswitch;
 
-			$people = explode(',', $a['people']);
+			$people = array_map("trim", explode(',', $a['people']));
 
+//			if ($a['sort']==='surname') {
 			$staff = self::get_wp_query_from_usernames($people);
+//			} else {
+//				$staff = [];
 
+//			}
 			return View::render('tutor-list', compact('staff', 'class'));
 		}
 	}
