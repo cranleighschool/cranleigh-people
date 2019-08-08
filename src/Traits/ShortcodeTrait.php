@@ -7,6 +7,7 @@
 	use CranleighSchool\CranleighPeople\Helper;
 	use CranleighSchool\CranleighPeople\Metaboxes;
 	use CranleighSchool\CranleighPeople\Plugin;
+	use CranleighSchool\CranleighPeople\Slacker;
 	use CranleighSchool\CranleighPeople\View;
 	use WP_Query;
 
@@ -55,24 +56,29 @@
 		/**
 		 * @param string $username
 		 *
-		 * @return \WP_Post
-		 * @throws \CranleighSchool\CranleighPeople\Exceptions\TooManyStaffFound
+		 * @return \WP_Post | null
 		 */
-		public static function get_wp_post_from_username(string $username): \WP_Post
+		public static function get_wp_post_from_username(string $username)
 		{
 			$staff = self::get_wp_query_from_usernames([$username]);
 			wp_reset_postdata();
 			wp_reset_query();
 
-			if ($staff->found_posts > 1) {
-				throw new TooManyStaffFound("Too Many Staff found: &quot;".$username."&quot;", 400, $staff);
-			}
+			try {
+				if ($staff->found_posts > 1) {
+					throw new TooManyStaffFound("Too Many Staff found: &quot;" . $username . "&quot;", 400, $staff);
+				}
 
-			if ($staff->found_posts == 0) {
-				throw new StaffNotFoundException("Staff Member Not Found: &quot;".$username."&quot", 404, $staff);
-			}
+				if ($staff->found_posts < 1) {
+					throw new StaffNotFoundException("Staff Member Not Found: &quot;" . $username . "&quot", 404, $staff);
+				}
 
-			return $staff->posts[0];
+				return $staff->posts[0];
+			} catch (\Exception $e) {
+				$slacker = new Slacker();
+				$slacker->post($e->getMessage());
+				return null;
+			}
 		}
 
 		/**

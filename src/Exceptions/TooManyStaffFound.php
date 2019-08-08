@@ -1,8 +1,6 @@
 <?php
 
-
 	namespace CranleighSchool\CranleighPeople\Exceptions;
-
 
 	use CranleighSchool\CranleighPeople\Slacker;
 	use Throwable;
