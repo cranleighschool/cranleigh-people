@@ -2,6 +2,7 @@
 
 	namespace CranleighSchool\CranleighPeople\Traits;
 
+	use CranleighSchool\CranleighPeople\Exceptions\StaffNotFoundException;
 	use CranleighSchool\CranleighPeople\Exceptions\TooManyStaffFound;
 	use CranleighSchool\CranleighPeople\Helper;
 	use CranleighSchool\CranleighPeople\Metaboxes;
@@ -63,8 +64,12 @@
 			wp_reset_postdata();
 			wp_reset_query();
 
-			if ($staff->found_posts !== 1) {
-				throw new TooManyStaffFound("Too Many Staff found", 400);
+			if ($staff->found_posts > 1) {
+				throw new TooManyStaffFound("Too Many Staff found: &quot;".$username."&quot;", 400, $staff);
+			}
+
+			if ($staff->found_posts == 0) {
+				throw new StaffNotFoundException("Staff Member Not Found: &quot;".$username."&quot", 404, $staff);
 			}
 
 			return $staff->posts[0];
