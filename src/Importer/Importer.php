@@ -85,7 +85,7 @@
 				$i++;
 
 			}
-			self::slackmessage("Updated/Created " . $i . " People");
+			self::slackmessage("Updated/Created " . $i . " People (".get_site_url().")");
 			self::slackmessage("Skipped " . count($skipped) . ": " . implode(", ", $skipped));
 
 		}
