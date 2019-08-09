@@ -4,6 +4,7 @@
 
 	use CranleighSchool\CranleighPeople\Shortcodes\DynamicTableListShortcode;
 	use CranleighSchool\CranleighPeople\Shortcodes\PersonTableShortcode;
+	use CranleighSchool\CranleighPeople\Shortcodes\StaffEmailFormShortcode;
 	use CranleighSchool\CranleighPeople\Traits\ShortcodeTrait;
 	use CranleighSchool\CranleighPeople\Shortcodes\TaxonomyShortcode;
 	use CranleighSchool\CranleighPeople\Shortcodes\TutorListShortcode;
@@ -41,6 +42,7 @@
 			PersonTableShortcode::register();
 			TutorListShortcode::register();
 			DynamicTableListShortcode::register();
+			StaffEmailFormShortcode::register();
 
 			$this->query_args = [
 				'post_type' => Plugin::POST_TYPE_KEY,
