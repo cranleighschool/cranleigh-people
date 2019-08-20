@@ -13,7 +13,7 @@
 
 		public function __construct($message = "", $code = 0, \WP_Query $wp_query = NULL, Throwable $previous = NULL)
 		{
-			self::slackPost($message);
+			self::slackPost($message." (". site_url() .")");
 			parent::__construct($message, $code, $previous);
 		}
 	}
