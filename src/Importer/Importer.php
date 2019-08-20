@@ -276,14 +276,13 @@
 		 * @param \WP_Post $staff_post
 		 * @param string   $fieldName
 		 * @param          $value
+		 * @return boolean
 		 */
-		private static function saveMeta(\WP_Post $staff_post, string $fieldName, $value)
+		private static function saveMeta(\WP_Post $staff_post, string $fieldName, $value): bool
 		{
+			//$get = get_post_meta($staff_post->ID, Metaboxes::fieldID($fieldName), true);
 
-			$get = get_post_meta($staff_post->ID, Metaboxes::fieldID($fieldName), true);
-
-			$done = update_post_meta($staff_post->ID, Metaboxes::fieldID($fieldName), $value);
-
+			return update_post_meta($staff_post->ID, Metaboxes::fieldID($fieldName), $value);
 		}
 
 		/**
