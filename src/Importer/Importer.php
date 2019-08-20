@@ -77,7 +77,7 @@
 						$skipped[] = $person->school_initials;
 						continue;
 					}
-					self::slackmessage("Going to create " . $person->school_initials." (".$person->prename_surname.")");
+					self::slackmessage("Going to create " . $person->school_initials . " (" . $person->prename_surname . ")");
 				}
 
 
@@ -85,7 +85,7 @@
 				$i++;
 
 			}
-			self::slackmessage("Updated/Created " . $i . " People (".get_site_url().")");
+			self::slackmessage("Updated/Created " . $i . " People (" . get_site_url() . ")");
 			self::slackmessage("Skipped " . count($skipped) . ": " . implode(", ", $skipped));
 
 		}
