@@ -25,6 +25,10 @@
 			return array_key_exists($property, $this->_data) ? $this->_data->{$property} : NULL;
 		}
 
+		/**
+		 * @deprecated No longer used in application. To be removed.
+		 * @return bool
+		 */
 		public static function setup()
 		{
 			$request = wp_remote_get("https://people.cranleigh.org/api/v1/people/1");
