@@ -10,6 +10,7 @@
 	use CranleighSchool\CranleighPeople\Slacker;
 	use CranleighSchool\CranleighPeople\StaffCategoriesTaxonomy;
 	use CranleighSchool\CranleighPeople\StaffHousesTaxonomy;
+	use CranleighSchool\CranleighPeople\StaffSubjectsTaxonomy;
 
 	/**
 	 * Class Importer
@@ -238,6 +239,7 @@
 			// Set the Taxonomy Objects
 			self::set_staff_categories($staff_post, $person);
 			self::set_staff_houses($staff_post, $person);
+			self::set_staff_subjects($staff_post, $person);
 
 			// Do the Profile Pic
 			$image = self::featureImageLogic($staff_post, $person);
@@ -322,12 +324,29 @@
 			return implode(", ", $qualifications);
 		}
 
+		/**
+		 * @param \WP_Post                                         $staff_post
+		 * @param \CranleighSchool\CranleighPeople\Importer\Person $person
+		 */
 		private static function set_staff_houses(\WP_Post $staff_post, Person $person)
 		{
 			wp_set_post_terms(
 				$staff_post->ID,
 				$person->houses,
 				StaffHousesTaxonomy::TAXONOMY_KEY
+			);
+		}
+
+		/**
+		 * @param \WP_Post                                         $staff_post
+		 * @param \CranleighSchool\CranleighPeople\Importer\Person $person
+		 */
+		private static function set_staff_subjects(\WP_Post $staff_post, Person $person)
+		{
+			wp_set_post_terms(
+				$staff_post->ID,
+				$person->subjects,
+				StaffSubjectsTaxonomy::TAXONOMY_KEY
 			);
 		}
 
