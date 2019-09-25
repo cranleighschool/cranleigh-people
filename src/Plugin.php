@@ -71,6 +71,7 @@
 			CustomPostType::register();
 			StaffCategoriesTaxonomy::register();
 			StaffHousesTaxonomy::register();
+			StaffSubjectsTaxonomy::register();
 			Metaboxes::register();
 			TGMPA::register();
 
