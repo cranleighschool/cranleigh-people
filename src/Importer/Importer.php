@@ -343,6 +343,13 @@
 		 */
 		private static function set_staff_subjects(\WP_Post $staff_post, Person $person)
 		{
+			$unsets = ['House', 'Deputy House', 'Tutor Period', 'Guided Reading', 'Read', 'Prep'];
+			foreach ($person->subjects as $subject) {
+				if (in_array($subject, $unsets)) {
+					unset($person->subjects[ $subject ]);
+				}
+			}
+
 			wp_set_post_terms(
 				$staff_post->ID,
 				$person->subjects,
