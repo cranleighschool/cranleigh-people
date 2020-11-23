@@ -3,6 +3,7 @@
 	namespace CranleighSchool\CranleighPeople\Importer;
 
 
+	use CranleighSchool\CranleighPeople\Cron;
 	use CranleighSchool\CranleighPeople\Exceptions\StaffNotFoundException;
 	use CranleighSchool\CranleighPeople\Exceptions\TooManyStaffFound;
 	use CranleighSchool\CranleighPeople\Metaboxes;
@@ -88,6 +89,7 @@
 			}
 			self::slackmessage("Updated/Created " . $i . " People (" . get_site_url() . ")");
 			self::slackmessage("Skipped " . count($skipped) . ": " . implode(", ", $skipped));
+			self::slackmessage("Next WPCRONJOB will run at: ".Cron::next_scheduled_sync());
 
 		}
 
