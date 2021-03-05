@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 /**
@@ -88,7 +89,7 @@ trait Macro
      */
     public static function genericMacro($macro, $priority = 0)
     {
-        if (!isset(static::$globalGenericMacros[$priority])) {
+        if (! isset(static::$globalGenericMacros[$priority])) {
             static::$globalGenericMacros[$priority] = [];
             krsort(static::$globalGenericMacros, SORT_NUMERIC);
         }

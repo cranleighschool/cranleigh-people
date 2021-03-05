@@ -19,7 +19,7 @@
  * - JD Isaacks
  * - Zeno Zeng
  * - Chris Hemp
- * - shankesgk2
+ * - shankesgk2.
  */
 return [
     'year' => ':count年',

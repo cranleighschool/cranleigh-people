@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon;
 
 use BadMethodCallException;
@@ -298,7 +299,7 @@ class CarbonPeriod implements Iterator, Countable
      */
     protected static function isIso8601($var)
     {
-        if (!is_string($var)) {
+        if (! is_string($var)) {
             return false;
         }
 
@@ -533,7 +534,7 @@ class CarbonPeriod implements Iterator, Countable
      */
     public function setDateClass(string $dateClass)
     {
-        if (!is_a($dateClass, CarbonInterface::class, true)) {
+        if (! is_a($dateClass, CarbonInterface::class, true)) {
             throw new InvalidArgumentException(sprintf(
                 'Given class does not implement %s: %s',
                 CarbonInterface::class,
@@ -573,11 +574,11 @@ class CarbonPeriod implements Iterator, Countable
      */
     public function setDateInterval($interval)
     {
-        if (!$interval = CarbonInterval::make($interval)) {
+        if (! $interval = CarbonInterval::make($interval)) {
             throw new InvalidArgumentException('Invalid interval.');
         }
 
-        if ($interval->spec() === 'PT0S' && !$interval->f) {
+        if ($interval->spec() === 'PT0S' && ! $interval->f) {
             throw new InvalidArgumentException('Empty interval is not accepted.');
         }
 
@@ -629,7 +630,7 @@ class CarbonPeriod implements Iterator, Countable
      */
     public function setOptions($options)
     {
-        if (!is_int($options) && !is_null($options)) {
+        if (! is_int($options) && ! is_null($options)) {
             throw new InvalidArgumentException('Invalid options.');
         }
 
@@ -812,7 +813,7 @@ class CarbonPeriod implements Iterator, Countable
     {
         $method = array_shift($parameters);
 
-        if (!$this->isCarbonPredicateMethod($method)) {
+        if (! $this->isCarbonPredicateMethod($method)) {
             return [$method, array_shift($parameters)];
         }
 
@@ -923,11 +924,11 @@ class CarbonPeriod implements Iterator, Countable
      */
     protected function updateInternalState()
     {
-        if (!$this->hasFilter(static::END_DATE_FILTER)) {
+        if (! $this->hasFilter(static::END_DATE_FILTER)) {
             $this->endDate = null;
         }
 
-        if (!$this->hasFilter(static::RECURRENCES_FILTER)) {
+        if (! $this->hasFilter(static::RECURRENCES_FILTER)) {
             $this->recurrences = null;
         }
     }
@@ -943,7 +944,7 @@ class CarbonPeriod implements Iterator, Countable
      */
     public function setRecurrences($recurrences)
     {
-        if (!is_numeric($recurrences) && !is_null($recurrences) || $recurrences < 0) {
+        if (! is_numeric($recurrences) && ! is_null($recurrences) || $recurrences < 0) {
             throw new InvalidArgumentException('Invalid number of recurrences.');
         }
 
@@ -953,7 +954,7 @@ class CarbonPeriod implements Iterator, Countable
 
         $this->recurrences = (int) $recurrences;
 
-        if (!$this->hasFilter(static::RECURRENCES_FILTER)) {
+        if (! $this->hasFilter(static::RECURRENCES_FILTER)) {
             return $this->addFilter(static::RECURRENCES_FILTER);
         }
 
@@ -993,14 +994,14 @@ class CarbonPeriod implements Iterator, Countable
      */
     public function setStartDate($date, $inclusive = null)
     {
-        if (!$date = call_user_func([$this->dateClass, 'make'], $date)) {
+        if (! $date = call_user_func([$this->dateClass, 'make'], $date)) {
             throw new InvalidArgumentException('Invalid start date.');
         }
 
         $this->startDate = $date;
 
         if ($inclusive !== null) {
-            $this->toggleOptions(static::EXCLUDE_START_DATE, !$inclusive);
+            $this->toggleOptions(static::EXCLUDE_START_DATE, ! $inclusive);
         }
 
         return $this;
@@ -1018,21 +1019,21 @@ class CarbonPeriod implements Iterator, Countable
      */
     public function setEndDate($date, $inclusive = null)
     {
-        if (!is_null($date) && !$date = call_user_func([$this->dateClass, 'make'], $date)) {
+        if (! is_null($date) && ! $date = call_user_func([$this->dateClass, 'make'], $date)) {
             throw new InvalidArgumentException('Invalid end date.');
         }
 
-        if (!$date) {
+        if (! $date) {
             return $this->removeFilter(static::END_DATE_FILTER);
         }
 
         $this->endDate = $date;
 
         if ($inclusive !== null) {
-            $this->toggleOptions(static::EXCLUDE_END_DATE, !$inclusive);
+            $this->toggleOptions(static::EXCLUDE_END_DATE, ! $inclusive);
         }
 
-        if (!$this->hasFilter(static::END_DATE_FILTER)) {
+        if (! $this->hasFilter(static::END_DATE_FILTER)) {
             return $this->addFilter(static::END_DATE_FILTER);
         }
 
@@ -1050,7 +1051,7 @@ class CarbonPeriod implements Iterator, Countable
      */
     protected function filterEndDate($current)
     {
-        if (!$this->isEndExcluded() && $current == $this->endDate) {
+        if (! $this->isEndExcluded() && $current == $this->endDate) {
             return true;
         }
 
@@ -1078,7 +1079,7 @@ class CarbonPeriod implements Iterator, Countable
     {
         if (($this->getOptions() & static::IMMUTABLE) && $this->dateClass === Carbon::class) {
             $this->setDateClass(CarbonImmutable::class);
-        } elseif (!($this->getOptions() & static::IMMUTABLE) && $this->dateClass === CarbonImmutable::class) {
+        } elseif (! ($this->getOptions() & static::IMMUTABLE) && $this->dateClass === CarbonImmutable::class) {
             $this->setDateClass(Carbon::class);
         }
 
@@ -1128,7 +1129,7 @@ class CarbonPeriod implements Iterator, Countable
                 return static::END_ITERATION;
             }
 
-            if (!$result) {
+            if (! $result) {
                 return false;
             }
         }
@@ -1317,7 +1318,7 @@ class CarbonPeriod implements Iterator, Countable
 
         $parts = [];
 
-        $format = !$this->startDate->isStartOfDay() || $this->endDate && !$this->endDate->isStartOfDay()
+        $format = ! $this->startDate->isStartOfDay() || $this->endDate && ! $this->endDate->isStartOfDay()
             ? 'Y-m-d H:i:s'
             : 'Y-m-d';
 
@@ -1583,7 +1584,7 @@ class CarbonPeriod implements Iterator, Countable
     {
         $range = $rangeEnd ? static::create($rangeOrRangeStart, $rangeEnd) : $rangeOrRangeStart;
 
-        if (!($range instanceof self)) {
+        if (! ($range instanceof self)) {
             $range = static::create($range);
         }
 

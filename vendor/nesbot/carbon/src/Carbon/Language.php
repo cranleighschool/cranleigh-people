@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon;
 
 use JsonSerializable;
@@ -66,7 +67,7 @@ class Language implements JsonSerializable
         $this->code = $parts[0];
 
         if (isset($parts[1])) {
-            if (!preg_match('/^[A-Z]+$/', $parts[1])) {
+            if (! preg_match('/^[A-Z]+$/', $parts[1])) {
                 $this->variant = $parts[1];
                 $parts[1] = $parts[2] ?? null;
             }
@@ -83,7 +84,7 @@ class Language implements JsonSerializable
      */
     public static function all()
     {
-        if (!static::$languagesNames) {
+        if (! static::$languagesNames) {
             static::$languagesNames = include __DIR__.'/List/languages.php';
         }
 
@@ -97,7 +98,7 @@ class Language implements JsonSerializable
      */
     public static function regions()
     {
-        if (!static::$regionsNames) {
+        if (! static::$regionsNames) {
             static::$regionsNames = include __DIR__.'/List/regions.php';
         }
 
@@ -111,7 +112,7 @@ class Language implements JsonSerializable
      */
     public function getNames(): array
     {
-        if (!$this->names) {
+        if (! $this->names) {
             $this->names = static::all()[$this->code] ?? [
                 'isoName' => $this->code,
                 'nativeName' => $this->code,
@@ -196,7 +197,7 @@ class Language implements JsonSerializable
      */
     public function getFullIsoName(): string
     {
-        if (!$this->isoName) {
+        if (! $this->isoName) {
             $this->isoName = $this->getNames()['isoName'];
         }
 
@@ -222,7 +223,7 @@ class Language implements JsonSerializable
      */
     public function getFullNativeName(): string
     {
-        if (!$this->nativeName) {
+        if (! $this->nativeName) {
             $this->nativeName = $this->getNames()['nativeName'];
         }
 

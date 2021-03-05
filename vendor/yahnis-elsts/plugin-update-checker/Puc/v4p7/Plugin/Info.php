@@ -1,130 +1,135 @@
 <?php
-if ( !class_exists('Puc_v4p7_Plugin_Info', false) ):
 
-	/**
-	 * A container class for holding and transforming various plugin metadata.
-	 *
-	 * @author Janis Elsts
-	 * @copyright 2016
-	 * @access public
-	 */
-	class Puc_v4p7_Plugin_Info extends Puc_v4p7_Metadata {
-		//Most fields map directly to the contents of the plugin's info.json file.
-		//See the relevant docs for a description of their meaning.
-		public $name;
-		public $slug;
-		public $version;
-		public $homepage;
-		public $sections = array();
-		public $download_url;
+if (! class_exists('Puc_v4p7_Plugin_Info', false)) {
 
-		public $banners;
-		public $icons = array();
-		public $translations = array();
+    /**
+     * A container class for holding and transforming various plugin metadata.
+     *
+     * @author Janis Elsts
+     * @copyright 2016
+     */
+    class Puc_v4p7_Plugin_Info extends Puc_v4p7_Metadata
+    {
+        //Most fields map directly to the contents of the plugin's info.json file.
+        //See the relevant docs for a description of their meaning.
+        public $name;
+        public $slug;
+        public $version;
+        public $homepage;
+        public $sections = [];
+        public $download_url;
 
-		public $author;
-		public $author_homepage;
+        public $banners;
+        public $icons = [];
+        public $translations = [];
 
-		public $requires;
-		public $tested;
-		public $upgrade_notice;
+        public $author;
+        public $author_homepage;
 
-		public $rating;
-		public $num_ratings;
-		public $downloaded;
-		public $active_installs;
-		public $last_updated;
+        public $requires;
+        public $tested;
+        public $upgrade_notice;
 
-		public $id = 0; //The native WP.org API returns numeric plugin IDs, but they're not used for anything.
+        public $rating;
+        public $num_ratings;
+        public $downloaded;
+        public $active_installs;
+        public $last_updated;
 
-		public $filename; //Plugin filename relative to the plugins directory.
+        public $id = 0; //The native WP.org API returns numeric plugin IDs, but they're not used for anything.
 
-		/**
-		 * Create a new instance of Plugin Info from JSON-encoded plugin info
-		 * returned by an external update API.
-		 *
-		 * @param string $json Valid JSON string representing plugin info.
-		 * @return self|null New instance of Plugin Info, or NULL on error.
-		 */
-		public static function fromJson($json){
-			$instance = new self();
+        public $filename; //Plugin filename relative to the plugins directory.
 
-			if ( !parent::createFromJson($json, $instance) ) {
-				return null;
-			}
+        /**
+         * Create a new instance of Plugin Info from JSON-encoded plugin info
+         * returned by an external update API.
+         *
+         * @param string $json Valid JSON string representing plugin info.
+         * @return self|null New instance of Plugin Info, or NULL on error.
+         */
+        public static function fromJson($json)
+        {
+            $instance = new self();
 
-			//json_decode decodes assoc. arrays as objects. We want them as arrays.
-			$instance->sections = (array)$instance->sections;
-			$instance->icons = (array)$instance->icons;
+            if (! parent::createFromJson($json, $instance)) {
+                return null;
+            }
 
-			return $instance;
-		}
+            //json_decode decodes assoc. arrays as objects. We want them as arrays.
+            $instance->sections = (array) $instance->sections;
+            $instance->icons = (array) $instance->icons;
 
-		/**
-		 * Very, very basic validation.
-		 *
-		 * @param StdClass $apiResponse
-		 * @return bool|WP_Error
-		 */
-		protected function validateMetadata($apiResponse) {
-			if (
-				!isset($apiResponse->name, $apiResponse->version)
-				|| empty($apiResponse->name)
-				|| empty($apiResponse->version)
-			) {
-				return new WP_Error(
-					'puc-invalid-metadata',
-					"The plugin metadata file does not contain the required 'name' and/or 'version' keys."
-				);
-			}
-			return true;
-		}
+            return $instance;
+        }
 
+        /**
+         * Very, very basic validation.
+         *
+         * @param StdClass $apiResponse
+         * @return bool|WP_Error
+         */
+        protected function validateMetadata($apiResponse)
+        {
+            if (
+                ! isset($apiResponse->name, $apiResponse->version)
+                || empty($apiResponse->name)
+                || empty($apiResponse->version)
+            ) {
+                return new WP_Error(
+                    'puc-invalid-metadata',
+                    "The plugin metadata file does not contain the required 'name' and/or 'version' keys."
+                );
+            }
 
-		/**
-		 * Transform plugin info into the format used by the native WordPress.org API
-		 *
-		 * @return object
-		 */
-		public function toWpFormat(){
-			$info = new stdClass;
+            return true;
+        }
 
-			//The custom update API is built so that many fields have the same name and format
-			//as those returned by the native WordPress.org API. These can be assigned directly.
-			$sameFormat = array(
-				'name', 'slug', 'version', 'requires', 'tested', 'rating', 'upgrade_notice',
-				'num_ratings', 'downloaded', 'active_installs', 'homepage', 'last_updated',
-			);
-			foreach($sameFormat as $field){
-				if ( isset($this->$field) ) {
-					$info->$field = $this->$field;
-				} else {
-					$info->$field = null;
-				}
-			}
+        /**
+         * Transform plugin info into the format used by the native WordPress.org API.
+         *
+         * @return object
+         */
+        public function toWpFormat()
+        {
+            $info = new stdClass;
 
-			//Other fields need to be renamed and/or transformed.
-			$info->download_link = $this->download_url;
-			$info->author = $this->getFormattedAuthor();
-			$info->sections = array_merge(array('description' => ''), $this->sections);
+            //The custom update API is built so that many fields have the same name and format
+            //as those returned by the native WordPress.org API. These can be assigned directly.
+            $sameFormat = [
+                'name', 'slug', 'version', 'requires', 'tested', 'rating', 'upgrade_notice',
+                'num_ratings', 'downloaded', 'active_installs', 'homepage', 'last_updated',
+            ];
+            foreach ($sameFormat as $field) {
+                if (isset($this->$field)) {
+                    $info->$field = $this->$field;
+                } else {
+                    $info->$field = null;
+                }
+            }
 
-			if ( !empty($this->banners) ) {
-				//WP expects an array with two keys: "high" and "low". Both are optional.
-				//Docs: https://wordpress.org/plugins/about/faq/#banners
-				$info->banners = is_object($this->banners) ? get_object_vars($this->banners) : $this->banners;
-				$info->banners = array_intersect_key($info->banners, array('high' => true, 'low' => true));
-			}
+            //Other fields need to be renamed and/or transformed.
+            $info->download_link = $this->download_url;
+            $info->author = $this->getFormattedAuthor();
+            $info->sections = array_merge(['description' => ''], $this->sections);
 
-			return $info;
-		}
+            if (! empty($this->banners)) {
+                //WP expects an array with two keys: "high" and "low". Both are optional.
+                //Docs: https://wordpress.org/plugins/about/faq/#banners
+                $info->banners = is_object($this->banners) ? get_object_vars($this->banners) : $this->banners;
+                $info->banners = array_intersect_key($info->banners, ['high' => true, 'low' => true]);
+            }
 
-		protected function getFormattedAuthor() {
-			if ( !empty($this->author_homepage) ){
-				/** @noinspection HtmlUnknownTarget */
-				return sprintf('<a href="%s">%s</a>', $this->author_homepage, $this->author);
-			}
-			return $this->author;
-		}
-	}
+            return $info;
+        }
 
-endif;
+        protected function getFormattedAuthor()
+        {
+            if (! empty($this->author_homepage)) {
+                /** @noinspection HtmlUnknownTarget */
+                return sprintf('<a href="%s">%s</a>', $this->author_homepage, $this->author);
+            }
+
+            return $this->author;
+        }
+    }
+}

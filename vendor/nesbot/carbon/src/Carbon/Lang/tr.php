@@ -18,7 +18,7 @@
  * - JD Isaacks
  * - Murat Yüksel
  * - Baran Şengül
- * - Selami (selamialtin)
+ * - Selami (selamialtin).
  */
 return [
     'year' => ':count yıl',

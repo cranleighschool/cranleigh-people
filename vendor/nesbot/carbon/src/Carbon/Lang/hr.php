@@ -24,7 +24,7 @@
  * - Serhan Apaydın
  * - JD Isaacks
  * - tomhorvat
- * - Stjepan
+ * - Stjepan.
  */
 return [
     'year' => ':count godinu|:count godine|:count godina',

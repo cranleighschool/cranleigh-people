@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\CarbonInterface;
@@ -31,7 +32,7 @@ use InvalidArgumentException;
 trait Comparison
 {
     /**
-     * Determines if the instance is equal to another
+     * Determines if the instance is equal to another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -45,7 +46,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is equal to another
+     * Determines if the instance is equal to another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -57,7 +58,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is not equal to another
+     * Determines if the instance is not equal to another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -71,7 +72,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is not equal to another
+     * Determines if the instance is not equal to another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -79,11 +80,11 @@ trait Comparison
      */
     public function notEqualTo($date): bool
     {
-        return !$this->equalTo($date);
+        return ! $this->equalTo($date);
     }
 
     /**
-     * Determines if the instance is greater (after) than another
+     * Determines if the instance is greater (after) than another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -97,7 +98,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than another
+     * Determines if the instance is greater (after) than another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -109,7 +110,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than another
+     * Determines if the instance is greater (after) than another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -123,7 +124,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than or equal to another
+     * Determines if the instance is greater (after) than or equal to another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -137,7 +138,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than or equal to another
+     * Determines if the instance is greater (after) than or equal to another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -149,7 +150,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) than another
+     * Determines if the instance is less (before) than another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -163,7 +164,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) than another
+     * Determines if the instance is less (before) than another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -175,7 +176,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) than another
+     * Determines if the instance is less (before) than another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -189,7 +190,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) or equal to another
+     * Determines if the instance is less (before) or equal to another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -203,7 +204,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) or equal to another
+     * Determines if the instance is less (before) or equal to another.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date
      *
@@ -215,7 +216,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is between two others
+     * Determines if the instance is between two others.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date1
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date2
@@ -242,7 +243,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is between two others
+     * Determines if the instance is between two others.
      *
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date1
      * @param \Carbon\Carbon|\DateTimeInterface|mixed $date2
@@ -262,7 +263,7 @@ trait Comparison
      */
     public function isWeekday()
     {
-        return !$this->isWeekend();
+        return ! $this->isWeekend();
     }
 
     /**
@@ -336,7 +337,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is a long year
+     * Determines if the instance is a long year.
      *
      * @see https://en.wikipedia.org/wiki/ISO_8601#Week_dates
      *
@@ -399,7 +400,7 @@ trait Comparison
             'microsecond' => 'Y-m-d H:i:s.u',
         ];
 
-        if (!isset($units[$unit])) {
+        if (! isset($units[$unit])) {
             if (isset($this->$unit)) {
                 $date = $date ? static::instance($date) : static::now($this->tz);
 
@@ -446,7 +447,7 @@ trait Comparison
 
         static::expectDateTime($date, 'null');
 
-        return $this->quarter === $date->quarter && (!$ofSameYear || $this->isSameYear($date));
+        return $this->quarter === $date->quarter && (! $ofSameYear || $this->isSameYear($date));
     }
 
     /**
@@ -494,7 +495,7 @@ trait Comparison
     }
 
     /**
-     * Check if today is the last day of the Month
+     * Check if today is the last day of the Month.
      *
      * @return bool
      */
@@ -578,7 +579,7 @@ trait Comparison
 
             // Build the regex string
             $regex = '';
-            for ($i = 0; $i < strlen($quotedFormat); ++$i) {
+            for ($i = 0; $i < strlen($quotedFormat); $i++) {
                 // Backslash – the next character does not represent a date token so add it on as-is and continue.
                 // We're doing an extra ++$i here to increment the loop by 2.
                 if ($quotedFormat[$i] === '\\') {

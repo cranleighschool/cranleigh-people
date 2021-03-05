@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - csb_PL locale Michal Ostrowski bug-glibc-locales@gnu.org
+ * - csb_PL locale Michal Ostrowski bug-glibc-locales@gnu.org.
  */
 return [
     'formats' => [

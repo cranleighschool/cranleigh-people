@@ -31,7 +31,7 @@
  * - JeroenG
  * - RikSomers
  * - proclame
- * - Rik de Groot (hwdegroot)
+ * - Rik de Groot (hwdegroot).
  */
 return [
     'year' => ':count jaar|:count jaar',

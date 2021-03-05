@@ -13,7 +13,7 @@
  * Authors:
  * - Josh Soref
  * - Kaushik Thanki
- * - Josh Soref
+ * - Josh Soref.
  */
 return [
     'year' => 'એક વર્ષ|:count વર્ષ',

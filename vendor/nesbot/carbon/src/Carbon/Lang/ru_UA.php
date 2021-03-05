@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - RFC 2319    bug-glibc-locales@gnu.org
+ * - RFC 2319    bug-glibc-locales@gnu.org.
  */
 return array_replace_recursive(require __DIR__.'/ru.php', [
     'weekdays' => ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],

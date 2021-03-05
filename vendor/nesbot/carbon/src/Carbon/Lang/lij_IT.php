@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Gastaldi    alessio.gastaldi@libero.it
+ * - Gastaldi    alessio.gastaldi@libero.it.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

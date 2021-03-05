@@ -14,7 +14,7 @@
  * - Kruy Vanna
  * - Sereysethy Touch
  * - JD Isaacks
- * - Sovichet Tep
+ * - Sovichet Tep.
  */
 return [
     'year' => '{1}មួយឆ្នាំ|]1,Inf[:count ឆ្នាំ',

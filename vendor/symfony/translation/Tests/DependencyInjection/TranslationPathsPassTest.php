@@ -31,46 +31,34 @@ class TranslationPathsPassTest extends TestCase
         $container = new ContainerBuilder();
         $container->register('translator');
         $debugCommand = $container->register('console.command.translation_debug')
-            ->setArguments([null, null, null, null, null, [], []])
-        ;
+            ->setArguments([null, null, null, null, null, [], []]);
         $updateCommand = $container->register('console.command.translation_update')
-            ->setArguments([null, null, null, null, null, null, [], []])
-        ;
+            ->setArguments([null, null, null, null, null, null, [], []]);
         $container->register(ControllerArguments::class, ControllerArguments::class)
-            ->setTags(['controller.service_arguments'])
-        ;
+            ->setTags(['controller.service_arguments']);
         $container->register(ServiceArguments::class, ServiceArguments::class)
-            ->setArguments([new Reference('translator')])
-        ;
+            ->setArguments([new Reference('translator')]);
         $container->register(ServiceProperties::class, ServiceProperties::class)
-            ->setProperties([new Reference('translator')])
-        ;
+            ->setProperties([new Reference('translator')]);
         $container->register(ServiceMethodCalls::class, ServiceMethodCalls::class)
-            ->setMethodCalls([['setTranslator', [new Reference('translator')]]])
-        ;
+            ->setMethodCalls([['setTranslator', [new Reference('translator')]]]);
         $container->register('service_rc')
-            ->setArguments([new Definition(), new Reference(ServiceMethodCalls::class)])
-        ;
+            ->setArguments([new Definition(), new Reference(ServiceMethodCalls::class)]);
         $serviceLocator1 = $container->register('.service_locator.foo', ServiceLocator::class)
-            ->setArguments([new ServiceClosureArgument(new Reference('translator'))])
-        ;
+            ->setArguments([new ServiceClosureArgument(new Reference('translator'))]);
         $serviceLocator2 = (new Definition(ServiceLocator::class))
             ->setArguments([ServiceSubscriber::class, new Reference('service_container')])
-            ->setFactory([$serviceLocator1, 'withContext'])
-        ;
+            ->setFactory([$serviceLocator1, 'withContext']);
         $container->register('service_subscriber', ServiceSubscriber::class)
-            ->setArguments([$serviceLocator2])
-        ;
+            ->setArguments([$serviceLocator2]);
         $container->register('.service_locator.bar', ServiceLocator::class)
             ->setArguments([[
                 ControllerArguments::class.'::index' => new ServiceClosureArgument(new Reference('.service_locator.foo')),
                 ControllerArguments::class.'::__invoke' => new ServiceClosureArgument(new Reference('.service_locator.foo')),
                 ControllerArguments::class => new ServiceClosureArgument(new Reference('.service_locator.foo')),
-            ]])
-        ;
+            ]]);
         $container->register('argument_resolver.service')
-            ->setArguments([new Reference('.service_locator.bar')])
-        ;
+            ->setArguments([new Reference('.service_locator.bar')]);
 
         $pass = new TranslatorPathsPass('translator', 'console.command.translation_debug', 'console.command.translation_update', 'argument_resolver.service');
         $pass->process($container);

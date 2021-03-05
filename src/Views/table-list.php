@@ -1,15 +1,16 @@
 Found Posts: <?php echo $staff->found_posts; ?><div class="table-responsive">
 	<table class="table table-condensed table-striped table-hover">
-		<?php if (isset($atts['with_headers']) && $atts['with_headers'] !== false) : ?>
+		<?php if (isset($atts['with_headers']) && $atts['with_headers'] !== false) { ?>
 			<thead>
 			<th>Staff</th>
 			<th>Job Title</th>
 			</thead>
-		<?php endif; ?>
+		<?php } ?>
 		<tbody>
 		<?php
 
-			while ($staff->have_posts()): $staff->the_post(); ?>
+            while ($staff->have_posts()) {
+                $staff->the_post(); ?>
 				<tr>
 					<td>
 						<a href="<?php the_permalink(); ?>">
@@ -22,10 +23,11 @@ Found Posts: <?php echo $staff->found_posts; ?><div class="table-responsive">
 					<td><?php echo get_post_meta(get_the_ID(), \CranleighSchool\CranleighPeople\Metaboxes::fieldID('leadjobtitle'), true); ?></td>
 
 				</tr>
-			<?php endwhile;
-			wp_reset_postdata();
-			wp_reset_query();
-		?>
+			<?php
+            }
+            wp_reset_postdata();
+            wp_reset_query();
+        ?>
 		</tbody>
 	</table>
 </div>

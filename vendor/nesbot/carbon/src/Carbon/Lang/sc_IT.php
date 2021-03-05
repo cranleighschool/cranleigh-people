@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Sardinian Translators Team Massimeddu Cireddu massimeddu@gmail.com
+ * - Sardinian Translators Team Massimeddu Cireddu massimeddu@gmail.com.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

@@ -13,7 +13,7 @@
  * Authors:
  * - Josh Soref
  * - tgfjt
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => '{1}setaun|]1,Inf[:count taun',

@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon;
 
 use BadMethodCallException;
@@ -90,7 +91,7 @@ class CarbonInterval extends DateInterval
     use Options;
 
     /**
-     * Interval spec period designators
+     * Interval spec period designators.
      */
     const PERIOD_PREFIX = 'P';
     const PERIOD_YEARS = 'Y';
@@ -102,7 +103,7 @@ class CarbonInterval extends DateInterval
     const PERIOD_SECONDS = 'S';
 
     /**
-     * A translator to ... er ... translate stuff
+     * A translator to ... er ... translate stuff.
      *
      * @var \Symfony\Component\Translation\TranslatorInterface
      */
@@ -175,7 +176,7 @@ class CarbonInterval extends DateInterval
 
     private static function getFlipCascadeFactors()
     {
-        if (!self::$flipCascadeFactors) {
+        if (! self::$flipCascadeFactors) {
             self::$flipCascadeFactors = [];
             foreach (static::getCascadeFactors() as $to => [$factor, $from]) {
                 self::$flipCascadeFactors[self::standardizeUnit($from)] = [self::standardizeUnit($to), $factor];
@@ -218,7 +219,7 @@ class CarbonInterval extends DateInterval
     {
         $spec = $years;
 
-        if (!is_string($spec) || floatval($years) || preg_match('/^[0-9.]/', $years)) {
+        if (! is_string($spec) || floatval($years) || preg_match('/^[0-9.]/', $years)) {
             $spec = static::PERIOD_PREFIX;
 
             $spec .= $years > 0 ? $years.static::PERIOD_YEARS : '';
@@ -245,7 +246,7 @@ class CarbonInterval extends DateInterval
 
         parent::__construct($spec);
 
-        if (!is_null($microseconds)) {
+        if (! is_null($microseconds)) {
             $this->f = $microseconds / Carbon::MICROSECONDS_PER_SECOND;
         }
     }
@@ -667,7 +668,7 @@ class CarbonInterval extends DateInterval
             return static::instance($var);
         }
 
-        if (!is_string($var)) {
+        if (! is_string($var)) {
             return null;
         }
 
@@ -684,7 +685,7 @@ class CarbonInterval extends DateInterval
         /** @var static $interval */
         $interval = static::createFromDateString($var);
 
-        return !$interval || $interval->isEmpty() ? null : $interval;
+        return ! $interval || $interval->isEmpty() ? null : $interval;
     }
 
     /**
@@ -863,7 +864,7 @@ class CarbonInterval extends DateInterval
         return $this->years === 0 &&
             $this->months === 0 &&
             $this->dayz === 0 &&
-            !$this->days &&
+            ! $this->days &&
             $this->hours === 0 &&
             $this->minutes === 0 &&
             $this->seconds === 0 &&
@@ -1295,7 +1296,7 @@ class CarbonInterval extends DateInterval
 
     protected function solveNegativeInterval()
     {
-        if (!$this->isEmpty() && $this->years <= 0 && $this->months <= 0 && $this->dayz <= 0 && $this->hours <= 0 && $this->minutes <= 0 && $this->seconds <= 0 && $this->microseconds <= 0) {
+        if (! $this->isEmpty() && $this->years <= 0 && $this->months <= 0 && $this->dayz <= 0 && $this->hours <= 0 && $this->minutes <= 0 && $this->seconds <= 0 && $this->microseconds <= 0) {
             $this->years *= -1;
             $this->months *= -1;
             $this->dayz *= -1;
@@ -1323,14 +1324,14 @@ class CarbonInterval extends DateInterval
             [$value, $unit] = [$unit, $value];
         }
 
-        if (is_string($unit) && !preg_match('/^\s*\d/', $unit)) {
+        if (is_string($unit) && ! preg_match('/^\s*\d/', $unit)) {
             $unit = "$value $unit";
             $value = 1;
         }
 
         $interval = static::make($unit);
 
-        if (!$interval) {
+        if (! $interval) {
             throw new InvalidArgumentException('This type of data cannot be added/subtracted.');
         }
 
@@ -1601,7 +1602,7 @@ class CarbonInterval extends DateInterval
 
         if (in_array($unit, ['days', 'weeks'])) {
             $realUnit = 'dayz';
-        } elseif (!in_array($unit, ['microseconds', 'milliseconds', 'seconds', 'minutes', 'hours', 'dayz', 'months', 'years'])) {
+        } elseif (! in_array($unit, ['microseconds', 'milliseconds', 'seconds', 'minutes', 'hours', 'dayz', 'months', 'years'])) {
             throw new InvalidArgumentException("Unknown unit '$unit'.");
         }
 
@@ -1652,11 +1653,11 @@ class CarbonInterval extends DateInterval
             $result = ($result + $value) / $factor;
         }
 
-        if (isset($target) && !$cumulativeFactor) {
+        if (isset($target) && ! $cumulativeFactor) {
             $result += $this->$target;
         }
 
-        if (!$unitFound) {
+        if (! $unitFound) {
             throw new \InvalidArgumentException("Unit $unit have no configuration to get total from other units.");
         }
 

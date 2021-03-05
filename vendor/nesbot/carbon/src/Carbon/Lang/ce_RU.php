@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - ANCHR
+ * - ANCHR.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon;
 
 /**
@@ -59,7 +60,7 @@ namespace Carbon;
  * @method array                                              getFormatsToIsoReplacements()                                                                                                      List of replacements from date() format to isoFormat().
  * @method int                                                getHumanDiffOptions()                                                                                                              Return default humanDiff() options (merged flags as integer).
  * @method array                                              getIsoUnits()                                                                                                                      Returns list of locale units for ISO formatting.
- * @method Carbon                                             getLastErrors()                                                                                                                    {@inheritdoc}
+ * @method Carbon                                             getLastErrors()
  * @method string                                             getLocale()                                                                                                                        Get the current translator locale.
  * @method int                                                getMidDayAt()                                                                                                                      get midday/noon hour
  * @method Carbon                                             getTestNow()                                                                                                                       Get the Carbon instance (real or mock) to be returned when a "now"

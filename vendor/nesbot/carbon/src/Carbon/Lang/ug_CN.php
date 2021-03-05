@@ -12,6 +12,6 @@
 /**
  * Authors:
  * - Kunal Marwaha
- * - Alim Boyaq
+ * - Alim Boyaq.
  */
 return require __DIR__.'/ug.php';

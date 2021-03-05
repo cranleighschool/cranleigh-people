@@ -5,11 +5,11 @@
 $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
-return array(
-    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
-    'Symfony\\Contracts\\Translation\\' => array($vendorDir . '/symfony/translation-contracts'),
-    'Symfony\\Component\\Translation\\' => array($vendorDir . '/symfony/translation'),
-    'FredBradley\\CranleighSlacker\\' => array($vendorDir . '/fredbradley/cranleigh-slacker/src'),
-    'CranleighSchool\\CranleighPeople\\' => array($baseDir . '/src'),
-    'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
-);
+return [
+    'Symfony\\Polyfill\\Mbstring\\' => [$vendorDir.'/symfony/polyfill-mbstring'],
+    'Symfony\\Contracts\\Translation\\' => [$vendorDir.'/symfony/translation-contracts'],
+    'Symfony\\Component\\Translation\\' => [$vendorDir.'/symfony/translation'],
+    'FredBradley\\CranleighSlacker\\' => [$vendorDir.'/fredbradley/cranleigh-slacker/src'],
+    'CranleighSchool\\CranleighPeople\\' => [$baseDir.'/src'],
+    'Carbon\\' => [$vendorDir.'/nesbot/carbon/src/Carbon'],
+];

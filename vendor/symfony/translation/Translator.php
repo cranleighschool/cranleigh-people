@@ -203,7 +203,7 @@ class Translator implements LegacyTranslatorInterface, TranslatorInterface, Tran
         $id = (string) $id;
         $catalogue = $this->getCatalogue($locale);
         $locale = $catalogue->getLocale();
-        while (!$catalogue->defines($id, $domain)) {
+        while (! $catalogue->defines($id, $domain)) {
             if ($cat = $catalogue->getFallbackCatalogue()) {
                 $catalogue = $cat;
                 $locale = $catalogue->getLocale();
@@ -228,7 +228,7 @@ class Translator implements LegacyTranslatorInterface, TranslatorInterface, Tran
     {
         @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.2, use the trans() one instead with a "%%count%%" parameter.', __METHOD__), E_USER_DEPRECATED);
 
-        if (!$this->formatter instanceof ChoiceMessageFormatterInterface) {
+        if (! $this->formatter instanceof ChoiceMessageFormatterInterface) {
             throw new LogicException(sprintf('The formatter "%s" does not support plural translations.', \get_class($this->formatter)));
         }
 
@@ -239,7 +239,7 @@ class Translator implements LegacyTranslatorInterface, TranslatorInterface, Tran
         $id = (string) $id;
         $catalogue = $this->getCatalogue($locale);
         $locale = $catalogue->getLocale();
-        while (!$catalogue->defines($id, $domain)) {
+        while (! $catalogue->defines($id, $domain)) {
             if ($cat = $catalogue->getFallbackCatalogue()) {
                 $catalogue = $cat;
                 $locale = $catalogue->getLocale();
@@ -266,7 +266,7 @@ class Translator implements LegacyTranslatorInterface, TranslatorInterface, Tran
             $this->assertValidLocale($locale);
         }
 
-        if (!isset($this->catalogues[$locale])) {
+        if (! isset($this->catalogues[$locale])) {
             $this->loadCatalogue($locale);
         }
 
@@ -305,7 +305,7 @@ class Translator implements LegacyTranslatorInterface, TranslatorInterface, Tran
         try {
             $this->doLoadCatalogue($locale);
         } catch (NotFoundResourceException $e) {
-            if (!$this->computeFallbackLocales($locale)) {
+            if (! $this->computeFallbackLocales($locale)) {
                 throw $e;
             }
         }
@@ -404,7 +404,7 @@ EOF
 
         if (isset($this->resources[$locale])) {
             foreach ($this->resources[$locale] as $resource) {
-                if (!isset($this->loaders[$resource[0]])) {
+                if (! isset($this->loaders[$resource[0]])) {
                     throw new RuntimeException(sprintf('The "%s" translation loader is not registered.', $resource[0]));
                 }
                 $this->catalogues[$locale]->addCatalogue($this->loaders[$resource[0]]->load($resource[1], $locale, $resource[2]));
@@ -417,7 +417,7 @@ EOF
         $current = $this->catalogues[$locale];
 
         foreach ($this->computeFallbackLocales($locale) as $fallback) {
-            if (!isset($this->catalogues[$fallback])) {
+            if (! isset($this->catalogues[$fallback])) {
                 $this->initializeCatalogue($fallback);
             }
 
@@ -448,7 +448,7 @@ EOF
         while ($locale) {
             $parent = $parentLocales[$locale] ?? null;
 
-            if (!$parent && false !== strrchr($locale, '_')) {
+            if (! $parent && false !== strrchr($locale, '_')) {
                 $locale = substr($locale, 0, -\strlen(strrchr($locale, '_')));
             } elseif ('root' !== $parent) {
                 $locale = $parent;
@@ -484,7 +484,7 @@ EOF
      */
     private function getConfigCacheFactory(): ConfigCacheFactoryInterface
     {
-        if (!$this->configCacheFactory) {
+        if (! $this->configCacheFactory) {
             $this->configCacheFactory = new ConfigCacheFactory($this->debug);
         }
 

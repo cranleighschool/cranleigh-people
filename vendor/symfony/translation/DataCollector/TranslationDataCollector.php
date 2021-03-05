@@ -93,7 +93,7 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
 
     public function getLocale()
     {
-        return !empty($this->data['locale']) ? $this->data['locale'] : null;
+        return ! empty($this->data['locale']) ? $this->data['locale'] : null;
     }
 
     /**
@@ -118,17 +118,17 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
         foreach ($messages as $key => $message) {
             $messageId = $message['locale'].$message['domain'].$message['id'];
 
-            if (!isset($result[$messageId])) {
+            if (! isset($result[$messageId])) {
                 $message['count'] = 1;
-                $message['parameters'] = !empty($message['parameters']) ? [$message['parameters']] : [];
+                $message['parameters'] = ! empty($message['parameters']) ? [$message['parameters']] : [];
                 $messages[$key]['translation'] = $this->sanitizeString($message['translation']);
                 $result[$messageId] = $message;
             } else {
-                if (!empty($message['parameters'])) {
+                if (! empty($message['parameters'])) {
                     $result[$messageId]['parameters'][] = $message['parameters'];
                 }
 
-                ++$result[$messageId]['count'];
+                $result[$messageId]['count']++;
             }
 
             unset($messages[$key]);
@@ -146,7 +146,7 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
         ];
 
         foreach ($messages as $message) {
-            ++$count[$message['state']];
+            $count[$message['state']]++;
         }
 
         return $count;

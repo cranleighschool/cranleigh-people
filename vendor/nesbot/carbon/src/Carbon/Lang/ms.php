@@ -16,7 +16,7 @@
  * - JD Isaacks
  * - Josh Soref
  * - Azri Jamil
- * - Hariadi Hinta
+ * - Hariadi Hinta.
  */
 return [
     'year' => '{1}setahun|]1,Inf[:count tahun',

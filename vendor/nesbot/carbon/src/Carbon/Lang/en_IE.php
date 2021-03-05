@@ -14,7 +14,7 @@
  * - Martin McWhorter
  * - François B
  * - Chris Cartlidge
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'from_now' => 'in :time',

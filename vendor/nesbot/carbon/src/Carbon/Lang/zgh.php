@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - BAKTETE Miloud
+ * - BAKTETE Miloud.
  */
 return [
     'year' => ':count ⵓⵙⴳⴳⵯⴰⵙ|:count ⵉⵙⴳⴳⵓⵙⴰ',

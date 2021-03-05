@@ -13,7 +13,7 @@
  * Authors:
  * - Josh Soref
  * - François B
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => 'urte bat|:count urte',

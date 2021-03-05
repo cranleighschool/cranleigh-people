@@ -13,7 +13,7 @@
  * Authors:
  * - François B
  * - Tim Fish
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => ':count jier|:count jierren',

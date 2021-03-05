@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Mashrab Kuvatov Mashrab Kuvatov, Pablo Saratxaga kmashrab@uni-bremen.de, pablo@mandrakesoft.com
+ * - Mashrab Kuvatov Mashrab Kuvatov, Pablo Saratxaga kmashrab@uni-bremen.de, pablo@mandrakesoft.com.
  */
 return array_replace_recursive(require __DIR__.'/uz.php', [
     'formats' => [

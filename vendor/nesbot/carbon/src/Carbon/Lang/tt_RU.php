@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Rinat Norkin Pablo Saratxaga, Rinat Norkin pablo@mandrakesoft.com, rinat@taif.ru
+ * - Rinat Norkin Pablo Saratxaga, Rinat Norkin pablo@mandrakesoft.com, rinat@taif.ru.
  */
 return [
     'formats' => [

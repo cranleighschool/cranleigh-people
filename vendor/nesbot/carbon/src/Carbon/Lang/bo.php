@@ -12,7 +12,7 @@
 /**
  * Authors:
  * - Josh Soref
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => '{1}ལོ་གཅིག|]1,Inf[:count ལོ',

@@ -17,7 +17,7 @@
  * - JD Isaacks
  * - Jens Herlevsen
  * - Ulrik McArdle (mcardle)
- * - Frederik Sauer (FrittenKeeZ)
+ * - Frederik Sauer (FrittenKeeZ).
  */
 return [
     'year' => ':count år|:count år',

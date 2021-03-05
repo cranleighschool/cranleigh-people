@@ -57,7 +57,7 @@ abstract class AbstractFileExtractor
      */
     protected function isFile($file)
     {
-        if (!is_file($file)) {
+        if (! is_file($file)) {
             throw new InvalidArgumentException(sprintf('The "%s" file does not exist.', $file));
         }
 

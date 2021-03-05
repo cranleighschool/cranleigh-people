@@ -41,14 +41,14 @@ class TranslatorPathsPass extends AbstractRecursivePass
 
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition($this->translatorServiceId)) {
+        if (! $container->hasDefinition($this->translatorServiceId)) {
             return;
         }
 
         foreach ($this->findControllerArguments($container) as $controller => $argument) {
             $id = substr($controller, 0, strpos($controller, ':') ?: \strlen($controller));
             if ($container->hasDefinition($id)) {
-                list($locatorRef) = $argument->getValues();
+                [$locatorRef] = $argument->getValues();
                 $this->controllers[(string) $locatorRef][$container->getDefinition($id)->getClass()] = true;
             }
         }
@@ -58,7 +58,7 @@ class TranslatorPathsPass extends AbstractRecursivePass
 
             $paths = [];
             foreach ($this->paths as $class => $_) {
-                if (($r = $container->getReflectionClass($class)) && !$r->isInterface()) {
+                if (($r = $container->getReflectionClass($class)) && ! $r->isInterface()) {
                     $paths[] = $r->getFileName();
                 }
             }
@@ -83,11 +83,11 @@ class TranslatorPathsPass extends AbstractRecursivePass
     {
         if ($value instanceof Reference) {
             if ((string) $value === $this->translatorServiceId) {
-                for ($i = $this->level - 1; $i >= 0; --$i) {
+                for ($i = $this->level - 1; $i >= 0; $i--) {
                     $class = $this->definitions[$i]->getClass();
 
                     if (ServiceLocator::class === $class) {
-                        if (!isset($this->controllers[$this->currentId])) {
+                        if (! isset($this->controllers[$this->currentId])) {
                             continue;
                         }
                         foreach ($this->controllers[$this->currentId] as $class => $_) {

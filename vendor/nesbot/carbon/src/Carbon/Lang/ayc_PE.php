@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - runasimipi.org    libc-alpha@sourceware.org
+ * - runasimipi.org    libc-alpha@sourceware.org.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

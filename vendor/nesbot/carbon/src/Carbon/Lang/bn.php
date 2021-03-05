@@ -17,7 +17,7 @@
  * - Aniruddha Adhikary
  * - JD Isaacks
  * - Saiful Islam
- * - Faisal Islam
+ * - Faisal Islam.
  */
 return [
     'year' => ':count বছর',

@@ -78,7 +78,7 @@ class PoFileLoader extends FileLoader
 
             if ('' === $line) {
                 // Whitespace indicated current item is done
-                if (!\in_array('fuzzy', $flags)) {
+                if (! \in_array('fuzzy', $flags)) {
                     $this->addMessage($messages, $item);
                 }
                 $item = $defaults;
@@ -110,7 +110,7 @@ class PoFileLoader extends FileLoader
             }
         }
         // save last item
-        if (!\in_array('fuzzy', $flags)) {
+        if (! \in_array('fuzzy', $flags)) {
             $this->addMessage($messages, $item);
         }
         fclose($stream);
@@ -141,7 +141,7 @@ class PoFileLoader extends FileLoader
                 ksort($plurals);
                 $messages[stripcslashes($item['ids']['plural'])] = stripcslashes(implode('|', $plurals));
             }
-        } elseif (!empty($item['ids']['singular'])) {
+        } elseif (! empty($item['ids']['singular'])) {
             $messages[stripcslashes($item['ids']['singular'])] = stripcslashes($item['translated']);
         }
     }

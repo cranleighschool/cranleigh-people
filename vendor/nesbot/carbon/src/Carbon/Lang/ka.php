@@ -21,7 +21,7 @@
  * - Lasha Dolidze
  * - JD Isaacks
  * - LONGMAN
- * - Avtandil Kikabidze (akalongman)
+ * - Avtandil Kikabidze (akalongman).
  */
 return [
     'year' => ':count წელი',

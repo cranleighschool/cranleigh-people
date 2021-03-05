@@ -64,7 +64,7 @@ class XliffUtils
         $disableEntities = libxml_disable_entity_loader(false);
 
         $isValid = @$dom->schemaValidateSource(self::getSchema($xliffVersion));
-        if (!$isValid) {
+        if (! $isValid) {
             libxml_disable_entity_loader($disableEntities);
 
             return self::getXmlErrors($internalErrors);

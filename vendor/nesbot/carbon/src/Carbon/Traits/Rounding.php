@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\CarbonInterface;
@@ -59,7 +60,7 @@ trait Rounding
         }
         $precision *= $factor;
 
-        if (!isset($ranges[$normalizedUnit])) {
+        if (! isset($ranges[$normalizedUnit])) {
             throw new InvalidArgumentException("Unknown unit '$unit' to floor");
         }
 

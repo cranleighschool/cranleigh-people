@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\CarbonInterface;
@@ -164,7 +165,7 @@ trait Localization
      */
     public static function getTranslationMessageWith($translator, string $key, string $locale = null, string $default = null)
     {
-        if (!($translator instanceof TranslatorBagInterface && $translator instanceof TranslatorInterface)) {
+        if (! ($translator instanceof TranslatorBagInterface && $translator instanceof TranslatorInterface)) {
             throw new InvalidArgumentException(
                 'Translator does not implement '.TranslatorInterface::class.' and '.TranslatorBagInterface::class.'.'
             );
@@ -272,7 +273,7 @@ trait Localization
             $translator = Translator::get($language);
             $translations = $translator->getMessages();
 
-            if (!isset($translations[$language])) {
+            if (! isset($translations[$language])) {
                 return $timeString;
             }
 
@@ -364,10 +365,10 @@ trait Localization
             return $this->getLocalTranslator()->getLocale();
         }
 
-        if (!$this->localTranslator || $this->localTranslator->getLocale() !== $locale) {
+        if (! $this->localTranslator || $this->localTranslator->getLocale() !== $locale) {
             $translator = Translator::get($locale);
 
-            if (!empty($fallbackLocales)) {
+            if (! empty($fallbackLocales)) {
                 $translator->setFallbackLocales($fallbackLocales);
 
                 foreach ($fallbackLocales as $fallbackLocale) {
@@ -505,7 +506,7 @@ trait Localization
     public static function localeHasDiffSyntax($locale)
     {
         return static::executeWithLocale($locale, function ($newLocale, TranslatorInterface $translator) {
-            if (!$newLocale) {
+            if (! $newLocale) {
                 return false;
             }
 
@@ -579,7 +580,7 @@ trait Localization
 
     /**
      * Returns the list of internally available locales and already loaded custom locales.
-     * (It will ignore custom translator dynamic loading.)
+     * (It will ignore custom translator dynamic loading.).
      *
      * @return array
      */

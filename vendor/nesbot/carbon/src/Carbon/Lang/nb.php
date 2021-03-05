@@ -14,7 +14,7 @@
  * - François B
  * - Alexander Tømmerås
  * - Sigurd Gartmann
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => ':count år|:count år',

@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - NehaGautam
+ * - NehaGautam.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'from_now' => 'in :time',

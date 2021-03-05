@@ -14,7 +14,7 @@
  * - Josh Soref
  * - Nusret Parlak
  * - JD Isaacks
- * - Atef Ben Ali (atefBB)
+ * - Atef Ben Ali (atefBB).
  */
 return [
     'year' => implode('|', ['سنة', 'سنة', 'سنتين', 'سنوات'.' :count', 'سنة'.' :count']),

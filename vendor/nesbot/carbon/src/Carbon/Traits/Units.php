@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\CarbonInterface;
@@ -212,7 +213,7 @@ trait Units
         /** @var CarbonInterface $date */
         $date = $this;
 
-        if (!is_numeric($value) || !floatval($value)) {
+        if (! is_numeric($value) || ! floatval($value)) {
             return $date->isMutable() ? $date : $date->copy();
         }
 
@@ -247,12 +248,12 @@ trait Units
 
             $timeString = $date->toTimeString();
         } elseif ($canOverflow = in_array($unit, [
-                'month',
-                'year',
-            ]) && ($overflow === false || (
+            'month',
+            'year',
+        ]) && ($overflow === false || (
                 $overflow === null &&
                 ($ucUnit = ucfirst($unit).'s') &&
-                !($this->{'local'.$ucUnit.'Overflow'} ?? static::{'shouldOverflow'.$ucUnit}())
+                ! ($this->{'local'.$ucUnit.'Overflow'} ?? static::{'shouldOverflow'.$ucUnit}())
             ))) {
             $day = $date->day;
         }

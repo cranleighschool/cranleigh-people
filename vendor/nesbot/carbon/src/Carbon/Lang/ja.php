@@ -19,7 +19,7 @@
  * - XueWei
  * - JD Isaacks
  * - toyama satoshi
- * - atakigawa
+ * - atakigawa.
  */
 return [
     'year' => ':count年',

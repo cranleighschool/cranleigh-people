@@ -14,7 +14,7 @@
  * - Josh Soref
  * - MOHAN M U
  * - François B
- * - rajeevnaikte
+ * - rajeevnaikte.
  */
 return [
     'year' => '{1}ಒಂದು ವರ್ಷ|]1,Inf[:count ವರ್ಷ',

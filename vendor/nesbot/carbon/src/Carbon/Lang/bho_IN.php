@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - bhashaghar@googlegroups.com
+ * - bhashaghar@googlegroups.com.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

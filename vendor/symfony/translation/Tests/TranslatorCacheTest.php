@@ -35,7 +35,7 @@ class TranslatorCacheTest extends TestCase
 
     protected function deleteTmpDir()
     {
-        if (!file_exists($dir = $this->tmpDir)) {
+        if (! file_exists($dir = $this->tmpDir)) {
             return;
         }
 
@@ -104,8 +104,7 @@ class TranslatorCacheTest extends TestCase
         $loader
             ->expects($this->exactly(2))
             ->method('load')
-            ->willReturn($catalogue)
-        ;
+            ->willReturn($catalogue);
 
         // 1st pass
         $translator = new Translator($locale, null, $this->tmpDir, true);

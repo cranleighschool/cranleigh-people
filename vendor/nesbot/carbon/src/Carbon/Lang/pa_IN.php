@@ -14,6 +14,6 @@
  * - Guo Xiang Tan
  * - Josh Soref
  * - Ash
- * - harpreetkhalsagtbit
+ * - harpreetkhalsagtbit.
  */
 return require __DIR__.'/pa.php';

@@ -17,7 +17,7 @@
  * - JD Isaacks
  * - ROKAISAKKON
  * - RO'KAISAKKON
- * - Andreas Möller
+ * - Andreas Möller.
  */
 return [
     'year' => ':count ปี',

@@ -17,7 +17,7 @@
  * - Serhan Apaydın
  * - JD Isaacks
  * - Glavić
- * - Milos Sakovic
+ * - Milos Sakovic.
  */
 return [
     'year' => ':count godina|:count godine|:count godina',

@@ -13,7 +13,7 @@
  * Authors:
  * - François B
  * - JD Isaacks
- * - Fadion Dashi
+ * - Fadion Dashi.
  */
 return [
     'year' => ':count vit|:count vjet',

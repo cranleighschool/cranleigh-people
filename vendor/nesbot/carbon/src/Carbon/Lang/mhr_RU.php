@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - PeshSajSoft Ltd. Vyacheslav Kileev slavakileev@yandex.ru
+ * - PeshSajSoft Ltd. Vyacheslav Kileev slavakileev@yandex.ru.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

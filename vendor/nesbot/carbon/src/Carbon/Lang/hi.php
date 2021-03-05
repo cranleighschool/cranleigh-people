@@ -13,7 +13,7 @@
  * Authors:
  * - abhimanyu003
  * - Josh Soref
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => 'एक वर्ष|:count वर्ष',

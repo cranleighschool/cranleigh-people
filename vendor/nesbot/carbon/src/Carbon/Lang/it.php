@@ -19,7 +19,7 @@
  * - Andrea Martini
  * - Francesco Marasco
  * - Tizianoz93
- * - Davide Casiraghi (davide-casiraghi)
+ * - Davide Casiraghi (davide-casiraghi).
  */
 return [
     'year' => ':count anno|:count anni',

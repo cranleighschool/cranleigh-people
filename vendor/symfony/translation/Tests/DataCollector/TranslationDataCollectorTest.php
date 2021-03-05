@@ -19,7 +19,7 @@ class TranslationDataCollectorTest extends TestCase
 {
     protected function setUp()
     {
-        if (!class_exists('Symfony\Component\HttpKernel\DataCollector\DataCollector')) {
+        if (! class_exists('Symfony\Component\HttpKernel\DataCollector\DataCollector')) {
             $this->markTestSkipped('The "DataCollector" is not available');
         }
     }
@@ -142,8 +142,7 @@ class TranslationDataCollectorTest extends TestCase
         $translator = $this
             ->getMockBuilder('Symfony\Component\Translation\DataCollectorTranslator')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
 
         return $translator;
     }

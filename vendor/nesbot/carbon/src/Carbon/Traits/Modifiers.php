@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\CarbonInterface;
@@ -27,7 +28,7 @@ trait Modifiers
     protected static $midDayAt = 12;
 
     /**
-     * get midday/noon hour
+     * get midday/noon hour.
      *
      * @return int
      */
@@ -56,7 +57,7 @@ trait Modifiers
     }
 
     /**
-     * Modify to midday, default to self::$midDayAt
+     * Modify to midday, default to self::$midDayAt.
      *
      * @return static
      */

@@ -14,7 +14,7 @@
  * - François B
  * - Mayank Badola
  * - Luke McGregor
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'from_now' => 'in :time',

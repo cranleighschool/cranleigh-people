@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Fedora Project Nik Kalach nikka@fedoraproject.org
+ * - Fedora Project Nik Kalach nikka@fedoraproject.org.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

@@ -18,7 +18,7 @@
  * - Kevin Huang
  * - Jacob Middag
  * - JD Isaacks
- * - Propaganistas
+ * - Propaganistas.
  */
 return array_replace_recursive(require __DIR__.'/nl.php', [
     'formats' => [

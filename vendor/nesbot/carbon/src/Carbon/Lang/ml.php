@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => ':count വർഷം',

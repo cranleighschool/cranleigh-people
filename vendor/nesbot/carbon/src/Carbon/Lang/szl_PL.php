@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - szl_PL locale Przemyslaw Buczkowski libc-alpha@sourceware.org
+ * - szl_PL locale Przemyslaw Buczkowski libc-alpha@sourceware.org.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

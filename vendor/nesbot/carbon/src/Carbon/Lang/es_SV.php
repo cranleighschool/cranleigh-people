@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - RAP    bug-glibc-locales@gnu.org
+ * - RAP    bug-glibc-locales@gnu.org.
  */
 return array_replace_recursive(require __DIR__.'/es.php', [
     'months' => ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],

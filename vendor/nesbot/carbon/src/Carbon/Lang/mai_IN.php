@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Maithili Computing Research Center, Pune, India    rajeshkajha@yahoo.com,akhilesh.k@samusng.com
+ * - Maithili Computing Research Center, Pune, India    rajeshkajha@yahoo.com,akhilesh.k@samusng.com.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

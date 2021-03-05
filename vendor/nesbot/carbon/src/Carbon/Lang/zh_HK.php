@@ -20,7 +20,7 @@
  * - Gary Lo
  * - JD Isaacks
  * - Chris Hemp
- * - shankesgk2
+ * - shankesgk2.
  */
 return [
     'year' => ':count年',

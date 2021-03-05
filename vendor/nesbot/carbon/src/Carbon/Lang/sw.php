@@ -13,7 +13,7 @@
  * Authors:
  * - leyluj
  * - Josh Soref
- * - ryanhart2
+ * - ryanhart2.
  */
 return [
     'year' => 'mwaka :count|miaka :count',

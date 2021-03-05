@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - belkacem77@gmail.com
+ * - belkacem77@gmail.com.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

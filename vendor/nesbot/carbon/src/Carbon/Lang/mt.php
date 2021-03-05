@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Alessandro Maruccia
+ * - Alessandro Maruccia.
  */
 return [
     'year' => 'sena|:count sni|:count sni|:count sni',

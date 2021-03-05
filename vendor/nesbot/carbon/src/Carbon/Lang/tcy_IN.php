@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - IndLinux.org, Samsung Electronics Co., Ltd.    alexey.merzlyakov@samsung.com
+ * - IndLinux.org, Samsung Electronics Co., Ltd.    alexey.merzlyakov@samsung.com.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

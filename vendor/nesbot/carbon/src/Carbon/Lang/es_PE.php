@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - RAP    bug-glibc-locales@gnu.org
+ * - RAP    bug-glibc-locales@gnu.org.
  */
 return array_replace_recursive(require __DIR__.'/es.php', [
     'first_day_of_week' => 0,

@@ -91,13 +91,13 @@ class DataCollectorTranslatorTest extends TestCase
         $expectedMessages = [];
 
         $expectedMessages[] = [
-              'id' => 'choice',
-              'translation' => 'choice',
-              'locale' => 'en',
-              'domain' => 'messages',
-              'state' => DataCollectorTranslator::MESSAGE_MISSING,
-              'parameters' => ['%count%' => 0],
-              'transChoiceNumber' => 0,
+            'id' => 'choice',
+            'translation' => 'choice',
+            'locale' => 'en',
+            'domain' => 'messages',
+            'state' => DataCollectorTranslator::MESSAGE_MISSING,
+            'parameters' => ['%count%' => 0],
+            'transChoiceNumber' => 0,
         ];
 
         $this->assertEquals($expectedMessages, $collector->getCollectedMessages());

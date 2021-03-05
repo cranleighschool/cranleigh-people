@@ -13,7 +13,7 @@
  * Authors:
  * - François B
  * - JD Isaacks
- * - Pierre du Plessis
+ * - Pierre du Plessis.
  */
 return [
     'year' => ':count jaar|:count jare',

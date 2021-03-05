@@ -55,7 +55,7 @@ class XliffLintCommand extends Command
             ->setDescription('Lints a XLIFF file and outputs encountered errors')
             ->addArgument('filename', InputArgument::IS_ARRAY, 'A file or a directory or STDIN')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format', 'txt')
-            ->setHelp(<<<EOF
+            ->setHelp(<<<'EOF'
 The <info>%command.name%</info> command lints a XLIFF file and outputs to STDOUT
 the first encountered syntax error.
 
@@ -73,8 +73,7 @@ Or of a whole directory:
   <info>php %command.full_name% dirname --format=json</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -85,7 +84,7 @@ EOF
         $this->displayCorrectFiles = $output->isVerbose();
 
         if (0 === \count($filenames)) {
-            if (!$stdin = $this->getStdin()) {
+            if (! $stdin = $this->getStdin()) {
                 throw new RuntimeException('Please provide a filename or pipe file content to STDIN.');
             }
 
@@ -94,7 +93,7 @@ EOF
 
         $filesInfo = [];
         foreach ($filenames as $filename) {
-            if (!$this->isReadable($filename)) {
+            if (! $this->isReadable($filename)) {
                 throw new RuntimeException(sprintf('File or directory "%s" is not readable.', $filename));
             }
 
@@ -171,8 +170,8 @@ EOF
         foreach ($filesInfo as $info) {
             if ($info['valid'] && $this->displayCorrectFiles) {
                 $io->comment('<info>OK</info>'.($info['file'] ? sprintf(' in %s', $info['file']) : ''));
-            } elseif (!$info['valid']) {
-                ++$erroredFiles;
+            } elseif (! $info['valid']) {
+                $erroredFiles++;
                 $io->text('<error> ERROR </error>'.($info['file'] ? sprintf(' in %s', $info['file']) : ''));
                 $io->listing(array_map(function ($error) {
                     // general document errors have a '-1' line number
@@ -196,8 +195,8 @@ EOF
 
         array_walk($filesInfo, function (&$v) use (&$errors) {
             $v['file'] = (string) $v['file'];
-            if (!$v['valid']) {
-                ++$errors;
+            if (! $v['valid']) {
+                $errors++;
             }
         });
 
@@ -215,7 +214,7 @@ EOF
         }
 
         foreach ($this->getDirectoryIterator($fileOrDirectory) as $file) {
-            if (!\in_array($file->getExtension(), ['xlf', 'xliff'])) {
+            if (! \in_array($file->getExtension(), ['xlf', 'xliff'])) {
                 continue;
             }
 
@@ -230,7 +229,7 @@ EOF
         }
 
         $inputs = '';
-        while (!feof(STDIN)) {
+        while (! feof(STDIN)) {
             $inputs .= fread(STDIN, 1024);
         }
 

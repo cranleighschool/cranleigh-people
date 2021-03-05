@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\Carbon;
@@ -38,7 +39,7 @@ trait Converter
     protected static $toStringFormat = null;
 
     /**
-     * Reset the format used to the default when type juggling a Carbon instance to a string
+     * Reset the format used to the default when type juggling a Carbon instance to a string.
      *
      * @return void
      */
@@ -75,7 +76,7 @@ trait Converter
     {
         $function = $this->localFormatFunction ?: static::$formatFunction;
 
-        if (!$function) {
+        if (! $function) {
             return $this->rawFormat($format);
         }
 
@@ -99,7 +100,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as a string using the set format
+     * Format the instance as a string using the set format.
      *
      * @example
      * ```
@@ -122,7 +123,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as date
+     * Format the instance as date.
      *
      * @example
      * ```
@@ -137,7 +138,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as a readable date
+     * Format the instance as a readable date.
      *
      * @example
      * ```
@@ -152,7 +153,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as time
+     * Format the instance as time.
      *
      * @example
      * ```
@@ -167,7 +168,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as date and time
+     * Format the instance as date and time.
      *
      * @example
      * ```
@@ -182,7 +183,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as date and time T-separated with no timezone
+     * Format the instance as date and time T-separated with no timezone.
      *
      * @example
      * ```
@@ -197,7 +198,7 @@ trait Converter
     }
 
     /**
-     * Format the instance with day, date and time
+     * Format the instance with day, date and time.
      *
      * @example
      * ```
@@ -212,7 +213,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as ATOM
+     * Format the instance as ATOM.
      *
      * @example
      * ```
@@ -227,7 +228,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as COOKIE
+     * Format the instance as COOKIE.
      *
      * @example
      * ```
@@ -242,7 +243,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as ISO8601
+     * Format the instance as ISO8601.
      *
      * @example
      * ```
@@ -257,7 +258,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as RFC822
+     * Format the instance as RFC822.
      *
      * @example
      * ```
@@ -272,7 +273,7 @@ trait Converter
     }
 
     /**
-     * Convert the instance to UTC and return as Zulu ISO8601
+     * Convert the instance to UTC and return as Zulu ISO8601.
      *
      * @example
      * ```
@@ -287,7 +288,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as RFC850
+     * Format the instance as RFC850.
      *
      * @example
      * ```
@@ -302,7 +303,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as RFC1036
+     * Format the instance as RFC1036.
      *
      * @example
      * ```
@@ -317,7 +318,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as RFC1123
+     * Format the instance as RFC1123.
      *
      * @example
      * ```
@@ -332,7 +333,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as RFC2822
+     * Format the instance as RFC2822.
      *
      * @example
      * ```
@@ -347,7 +348,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as RFC3339
+     * Format the instance as RFC3339.
      *
      * @example
      * ```
@@ -362,7 +363,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as RSS
+     * Format the instance as RSS.
      *
      * @example
      * ```
@@ -377,7 +378,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as W3C
+     * Format the instance as W3C.
      *
      * @example
      * ```
@@ -392,7 +393,7 @@ trait Converter
     }
 
     /**
-     * Format the instance as RFC7231
+     * Format the instance as RFC7231.
      *
      * @example
      * ```
@@ -482,7 +483,7 @@ trait Converter
      */
     public function toISOString($keepOffset = false)
     {
-        if (!$this->isValid()) {
+        if (! $this->isValid()) {
             return null;
         }
 

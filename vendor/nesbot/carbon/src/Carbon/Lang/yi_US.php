@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - http://www.uyip.org/ Pablo Saratxaga pablo@mandrakesoft.com
+ * - http://www.uyip.org/ Pablo Saratxaga pablo@mandrakesoft.com.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

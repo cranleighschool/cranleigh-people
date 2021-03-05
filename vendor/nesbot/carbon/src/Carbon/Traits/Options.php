@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\CarbonInterface;
@@ -232,7 +233,7 @@ trait Options
 
     /**
      * Returns true if the strict mode is globally in use, false else.
-     * (It can be overridden in specific instances.)
+     * (It can be overridden in specific instances.).
      *
      * @return bool
      */
@@ -340,7 +341,7 @@ trait Options
      *  - locale: string|null
      *  - timezone: \DateTimeZone|string|int|null
      *  - macros: array|null
-     *  - genericMacros: array|null
+     *  - genericMacros: array|null.
      *
      * @param array $settings
      *
@@ -361,7 +362,7 @@ trait Options
         if (isset($settings['locale'])) {
             $locales = $settings['locale'];
 
-            if (!is_array($locales)) {
+            if (! is_array($locales)) {
                 $locales = [$locales];
             }
 
@@ -420,11 +421,11 @@ trait Options
         // @codeCoverageIgnoreStart
 
         if ($this instanceof CarbonInterface || $this instanceof DateTimeInterface) {
-            if (!isset($infos['date'])) {
+            if (! isset($infos['date'])) {
                 $infos['date'] = $this->format(CarbonInterface::MOCK_DATETIME_FORMAT);
             }
 
-            if (!isset($infos['timezone'])) {
+            if (! isset($infos['timezone'])) {
                 $infos['timezone'] = $this->tzName;
             }
         }

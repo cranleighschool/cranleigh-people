@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Valery Timiriliyev Valery Timiriliyev timiriliyev@gmail.com
+ * - Valery Timiriliyev Valery Timiriliyev timiriliyev@gmail.com.
  */
 return array_replace_recursive(require __DIR__.'/ru.php', [
     'formats' => [

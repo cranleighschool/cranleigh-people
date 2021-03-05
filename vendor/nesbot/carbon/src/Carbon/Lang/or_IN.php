@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - IBM AP Linux Technology Center, Yamato Software Laboratory    bug-glibc@gnu.org
+ * - IBM AP Linux Technology Center, Yamato Software Laboratory    bug-glibc@gnu.org.
  */
 return [
     'formats' => [

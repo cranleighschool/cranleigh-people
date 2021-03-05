@@ -22,7 +22,7 @@
  * - Chris Hemp
  * - Eddie
  * - KID
- * - shankesgk2
+ * - shankesgk2.
  */
 return [
     'year' => ':count年',

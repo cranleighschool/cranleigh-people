@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Pablo Saratxaga pablo@mandriva.com
+ * - Pablo Saratxaga pablo@mandriva.com.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

@@ -12,7 +12,7 @@
 /**
  * Authors:
  * - Ghorban M. Tavakoly Pablo Saratxaga & Ghorban M. Tavakoly pablo@walon.org & gmt314@yahoo.com
- * - SuperManPHP
+ * - SuperManPHP.
  */
 $transformDiff = function ($input) {
     return strtr($input, [

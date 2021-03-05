@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Information from Michael Wolf    bug-glibc-locales@gnu.org
+ * - Information from Michael Wolf    bug-glibc-locales@gnu.org.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

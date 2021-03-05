@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Free Software Foundation, Inc.    bug-glibc-locales@gnu.org
+ * - Free Software Foundation, Inc.    bug-glibc-locales@gnu.org.
  */
 return array_replace_recursive(require __DIR__.'/fy.php', [
     'formats' => [

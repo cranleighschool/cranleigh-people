@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Akademe ya Luganda Kizito Birabwa kompyuta@kizito.uklinux.net
+ * - Akademe ya Luganda Kizito Birabwa kompyuta@kizito.uklinux.net.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

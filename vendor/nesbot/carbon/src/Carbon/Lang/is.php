@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Kristján Ingi Geirsson
+ * - Kristján Ingi Geirsson.
  */
 return [
     'year' => '1 ár|:count ár',

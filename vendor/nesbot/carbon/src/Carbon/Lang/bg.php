@@ -15,7 +15,7 @@
  * - François B
  * - Serhan Apaydın
  * - JD Isaacks
- * - Glavić
+ * - Glavić.
  */
 return [
     'year' => ':count година|:count години',

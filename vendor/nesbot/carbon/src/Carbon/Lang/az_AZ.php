@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Pablo Saratxaga pablo@mandrakesoft.com
+ * - Pablo Saratxaga pablo@mandrakesoft.com.
  */
 return array_replace_recursive(require __DIR__.'/az.php', [
     'months_short' => ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyn', 'İyl', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek'],

@@ -13,7 +13,7 @@
  * Authors:
  * - François B
  * - Andre Polykanine A.K.A. Menelion Elensúlë
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => ':count năm',

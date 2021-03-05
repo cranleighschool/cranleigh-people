@@ -14,7 +14,7 @@
  * - Daniel Cohen Gindi
  * - JD Isaacks
  * - Itai Nathaniel
- * - GabMic
+ * - GabMic.
  */
 return [
     'year' => 'שנה|{2}שנתיים|:count שנים',

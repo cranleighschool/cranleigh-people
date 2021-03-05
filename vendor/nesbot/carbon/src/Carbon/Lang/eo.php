@@ -14,7 +14,7 @@
  * - Josh Soref
  * - François B
  * - Mia Nordentoft
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => ':count jaro|:count jaroj',

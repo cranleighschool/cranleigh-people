@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - RockET Systems Emani Fakaotimanava-Lui emani@niue.nu
+ * - RockET Systems Emani Fakaotimanava-Lui emani@niue.nu.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

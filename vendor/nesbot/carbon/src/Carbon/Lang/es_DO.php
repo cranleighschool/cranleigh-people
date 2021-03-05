@@ -18,7 +18,7 @@
  * - Claire Coloma
  * - Steven Heinrich
  * - JD Isaacks
- * - Raphael Amorim
+ * - Raphael Amorim.
  */
 return array_replace_recursive(require __DIR__.'/es.php', [
     'diff_before_yesterday' => 'anteayer',

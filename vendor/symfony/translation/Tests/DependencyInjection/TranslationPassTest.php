@@ -40,13 +40,11 @@ class TranslationPassTest extends TestCase
 
         $expectedReader = (new Definition())
             ->addMethodCall('addLoader', ['xliff', new Reference('translation.xliff_loader')])
-            ->addMethodCall('addLoader', ['xlf', new Reference('translation.xliff_loader')])
-        ;
+            ->addMethodCall('addLoader', ['xlf', new Reference('translation.xliff_loader')]);
         $this->assertEquals($expectedReader, $reader);
 
         $expectedLoader = (new Definition())
-            ->addTag('translation.loader', ['alias' => 'xliff', 'legacy-alias' => 'xlf'])
-        ;
+            ->addTag('translation.loader', ['alias' => 'xliff', 'legacy-alias' => 'xlf']);
         $this->assertEquals($expectedLoader, $loader);
 
         $this->assertSame(['translation.xliff_loader' => ['xliff', 'xlf']], $translator->getArgument(3));
@@ -59,17 +57,13 @@ class TranslationPassTest extends TestCase
     {
         $container = new ContainerBuilder();
         $container->register('translator.default')
-            ->setArguments([null, null, null, null])
-        ;
+            ->setArguments([null, null, null, null]);
         $debugCommand = $container->register('console.command.translation_debug')
-            ->setArguments([null, null, null, null, null, [], []])
-        ;
+            ->setArguments([null, null, null, null, null, [], []]);
         $updateCommand = $container->register('console.command.translation_update')
-            ->setArguments([null, null, null, null, null, null, [], []])
-        ;
+            ->setArguments([null, null, null, null, null, null, [], []]);
         $container->register('twig.template_iterator')
-            ->setArguments([null, null, ['other/templates' => null, 'tpl' => 'App']])
-        ;
+            ->setArguments([null, null, ['other/templates' => null, 'tpl' => 'App']]);
         $container->setParameter('twig.default_path', 'templates');
 
         $pass = new TranslatorPass('translator.default');
@@ -87,8 +81,7 @@ class TranslationPassTest extends TestCase
     {
         $container = new ContainerBuilder();
         $container->register('translator.default')
-            ->setArguments([null, null, null, null])
-        ;
+            ->setArguments([null, null, null, null]);
         $debugCommand = $container->register('console.command.translation_debug')
             ->setArguments([
                 new Reference('translator'),
@@ -96,8 +89,7 @@ class TranslationPassTest extends TestCase
                 new Reference('translation.extractor'),
                 '%translator.default_path%',
                 null,
-            ])
-        ;
+            ]);
         $updateCommand = $container->register('console.command.translation_update')
             ->setArguments([
                 new Reference('translation.writer'),
@@ -106,11 +98,9 @@ class TranslationPassTest extends TestCase
                 '%kernel.default_locale%',
                 '%translator.default_path%',
                 null,
-            ])
-        ;
+            ]);
         $container->register('twig.template_iterator')
-            ->setArguments([null, null, ['other/templates' => null, 'tpl' => 'App']])
-        ;
+            ->setArguments([null, null, ['other/templates' => null, 'tpl' => 'App']]);
         $container->setParameter('twig.default_path', 'templates');
 
         $pass = new TranslatorPass('translator.default');

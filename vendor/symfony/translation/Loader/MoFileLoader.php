@@ -73,7 +73,7 @@ class MoFileLoader extends FileLoader
 
         $messages = [];
 
-        for ($i = 0; $i < $count; ++$i) {
+        for ($i = 0; $i < $count; $i++) {
             $pluralId = null;
             $translated = null;
 
@@ -90,7 +90,7 @@ class MoFileLoader extends FileLoader
             $singularId = fread($stream, $length);
 
             if (false !== strpos($singularId, "\000")) {
-                list($singularId, $pluralId) = explode("\000", $singularId);
+                [$singularId, $pluralId] = explode("\000", $singularId);
             }
 
             fseek($stream, $offsetTranslated + $i * 8);
@@ -120,7 +120,7 @@ class MoFileLoader extends FileLoader
                     }
                     $messages[$item['ids']['plural']] = stripcslashes(implode('|', $plurals));
                 }
-            } elseif (!empty($item['ids']['singular'])) {
+            } elseif (! empty($item['ids']['singular'])) {
                 $messages[$item['ids']['singular']] = stripcslashes($item['translated']);
             }
         }

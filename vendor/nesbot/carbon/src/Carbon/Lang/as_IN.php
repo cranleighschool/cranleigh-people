@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Amitakhya Phukan, Red Hat    bug-glibc@gnu.org
+ * - Amitakhya Phukan, Red Hat    bug-glibc@gnu.org.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

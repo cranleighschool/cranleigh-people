@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - bug-glibc-locales@gnu.org
+ * - bug-glibc-locales@gnu.org.
  */
 return array_replace_recursive(require __DIR__.'/be.php', [
     'months' => ['студзеня', 'лютага', 'сакавіка', 'красавіка', 'мая', 'чэрвеня', 'ліпеня', 'жніўня', 'верасня', 'кастрычніка', 'лістапада', 'снежня'],

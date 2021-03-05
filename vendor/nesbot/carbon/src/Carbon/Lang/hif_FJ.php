@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Samsung Electronics Co., Ltd.    akhilesh.k@samsung.com
+ * - Samsung Electronics Co., Ltd.    akhilesh.k@samsung.com.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

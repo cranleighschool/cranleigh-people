@@ -18,7 +18,7 @@
  * - Seokjun Kim
  * - Junho Kim
  * - JD Isaacks
- * - Juwon Kim
+ * - Juwon Kim.
  */
 return [
     'year' => '{1}일 년|]1,Inf[:count년',

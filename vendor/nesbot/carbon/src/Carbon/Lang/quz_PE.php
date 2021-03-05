@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Sugar Labs // OLPC sugarlabs.org libc-alpha@sourceware.org
+ * - Sugar Labs // OLPC sugarlabs.org libc-alpha@sourceware.org.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

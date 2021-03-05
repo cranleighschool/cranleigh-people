@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Cherokee Nation Joseph Erb josepherb7@gmail.com
+ * - Cherokee Nation Joseph Erb josepherb7@gmail.com.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

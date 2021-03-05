@@ -13,7 +13,7 @@
  * Authors:
  * - François B
  * - JD Isaacks
- * - Daniel Monaghan
+ * - Daniel Monaghan.
  */
 return [
     'year' => '{1}blwyddyn|]1,Inf[:count flynedd',

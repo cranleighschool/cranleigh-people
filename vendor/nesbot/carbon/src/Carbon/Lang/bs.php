@@ -16,7 +16,7 @@
  * - François B
  * - shaishavgandhi05
  * - Serhan Apaydın
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => ':count godina|:count godine|:count godina',

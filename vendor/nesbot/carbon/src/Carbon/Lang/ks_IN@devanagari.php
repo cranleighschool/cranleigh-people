@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - ks-gnome-trans-commits@lists.code.indlinux.net
+ * - ks-gnome-trans-commits@lists.code.indlinux.net.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

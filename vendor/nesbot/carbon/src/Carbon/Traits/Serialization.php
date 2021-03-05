@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use InvalidArgumentException;
@@ -68,7 +69,7 @@ trait Serialization
     {
         $instance = @unserialize("$value");
 
-        if (!$instance instanceof static) {
+        if (! $instance instanceof static) {
             throw new InvalidArgumentException('Invalid serialized value.');
         }
 

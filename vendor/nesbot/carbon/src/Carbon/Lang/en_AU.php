@@ -14,7 +14,7 @@
  * - Kunal Marwaha
  * - François B
  * - Mayank Badola
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'from_now' => 'in :time',

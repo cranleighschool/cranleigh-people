@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Arnas Udovičius bug-glibc-locales@gnu.org
+ * - Arnas Udovičius bug-glibc-locales@gnu.org.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

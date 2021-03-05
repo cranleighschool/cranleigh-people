@@ -17,7 +17,7 @@
  * - Serhan Apaydın
  * - Borislav Mickov
  * - JD Isaacks
- * - Tomi Atanasoski
+ * - Tomi Atanasoski.
  */
 return [
     'year' => ':count година|:count години',

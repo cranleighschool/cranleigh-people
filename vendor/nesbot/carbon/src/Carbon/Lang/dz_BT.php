@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Sherubtse College    bug-glibc@gnu.org
+ * - Sherubtse College    bug-glibc@gnu.org.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

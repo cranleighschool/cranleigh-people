@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\Carbon;
@@ -154,7 +155,7 @@ trait Creator
     {
         $function = static::$parseFunction;
 
-        if (!$function) {
+        if (! $function) {
             return static::rawParse($time, $tz);
         }
 
@@ -292,7 +293,7 @@ trait Creator
      */
     public static function create($year = 0, $month = 1, $day = 1, $hour = 0, $minute = 0, $second = 0, $tz = null)
     {
-        if (is_string($year) && !is_numeric($year)) {
+        if (is_string($year) && ! is_numeric($year)) {
             return static::parse($year, $tz);
         }
 
@@ -380,7 +381,7 @@ trait Creator
         $fields = static::getRangesByUnit();
 
         foreach ($fields as $field => $range) {
-            if ($$field !== null && (!is_int($$field) || $$field < $range[0] || $$field > $range[1])) {
+            if ($$field !== null && (! is_int($$field) || $$field < $range[0] || $$field > $range[1])) {
                 if (static::isStrictModeEnabled()) {
                     throw new InvalidDateException($field, $$field);
                 }
@@ -392,7 +393,7 @@ trait Creator
         $instance = static::create($year, $month, $day, $hour, $minute, $second, $tz);
 
         foreach (array_reverse($fields) as $field => $range) {
-            if ($$field !== null && (!is_int($$field) || $$field !== $instance->$field)) {
+            if ($$field !== null && (! is_int($$field) || $$field !== $instance->$field)) {
                 if (static::isStrictModeEnabled()) {
                     throw new InvalidDateException($field, $$field);
                 }
@@ -534,7 +535,7 @@ trait Creator
 
             $nonIgnored = preg_replace("/^.*{$nonEscaped}!/s", '', $format);
 
-            if ($tz === null && !preg_match("/{$nonEscaped}[eOPT]/", $nonIgnored)) {
+            if ($tz === null && ! preg_match("/{$nonEscaped}[eOPT]/", $nonIgnored)) {
                 $tz = $mock->getTimezone();
             }
 
@@ -543,7 +544,7 @@ trait Creator
             $mock = $mock->copy()->microsecond(0);
 
             // Prepend mock datetime only if the format does not contain non escaped unix epoch reset flag.
-            if (!preg_match("/{$nonEscaped}[!|]/", $format)) {
+            if (! preg_match("/{$nonEscaped}[!|]/", $format)) {
                 $format = static::MOCK_DATETIME_FORMAT.' '.$format;
                 $time = ($mock instanceof self ? $mock->rawFormat(static::MOCK_DATETIME_FORMAT) : $mock->format(static::MOCK_DATETIME_FORMAT)).' '.$time;
             }
@@ -581,7 +582,7 @@ trait Creator
     {
         $function = static::$createFromFormatFunction;
 
-        if (!$function) {
+        if (! $function) {
             return static::rawCreateFromFormat($format, $time, $tz);
         }
 

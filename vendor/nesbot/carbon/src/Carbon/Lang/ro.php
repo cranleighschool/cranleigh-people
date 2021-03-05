@@ -14,7 +14,7 @@
  * - Josh Soref
  * - JD Isaacks
  * - Cătălin Georgescu
- * - Valentin Ivaşcu (oriceon)
+ * - Valentin Ivaşcu (oriceon).
  */
 return [
     'year' => ':count an|:count ani|:count ani',

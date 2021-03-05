@@ -15,7 +15,7 @@
  * - du
  * - JD Isaacks
  * - Nafies Luthfi
- * - Raymundus Jati Primanda (mundusjp)
+ * - Raymundus Jati Primanda (mundusjp).
  */
 return [
     'year' => ':count tahun',

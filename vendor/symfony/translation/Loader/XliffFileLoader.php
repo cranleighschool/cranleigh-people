@@ -30,11 +30,11 @@ class XliffFileLoader implements LoaderInterface
      */
     public function load($resource, $locale, $domain = 'messages')
     {
-        if (!stream_is_local($resource)) {
+        if (! stream_is_local($resource)) {
             throw new InvalidResourceException(sprintf('This is not a local file "%s".', $resource));
         }
 
-        if (!file_exists($resource)) {
+        if (! file_exists($resource)) {
             throw new NotFoundResourceException(sprintf('File "%s" not found.', $resource));
         }
 
@@ -93,7 +93,7 @@ class XliffFileLoader implements LoaderInterface
             foreach ($file->xpath('.//xliff:trans-unit') as $translation) {
                 $attributes = $translation->attributes();
 
-                if (!(isset($attributes['resname']) || isset($translation->source))) {
+                if (! (isset($attributes['resname']) || isset($translation->source))) {
                     continue;
                 }
 
@@ -177,7 +177,7 @@ class XliffFileLoader implements LoaderInterface
      */
     private function utf8ToCharset(string $content, string $encoding = null): string
     {
-        if ('UTF-8' !== $encoding && !empty($encoding)) {
+        if ('UTF-8' !== $encoding && ! empty($encoding)) {
             return mb_convert_encoding($content, $encoding, 'UTF-8');
         }
 

@@ -6,63 +6,53 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit6336e8b2c954b7e9477116d6d53da2e5
 {
-    public static $files = array (
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        'f7d520a7dfd4979ca7d4b88dfbc5d7f5' => __DIR__ . '/..' . '/rilwis/meta-box/meta-box.php',
-        '89ff252b349d4d088742a09c25f5dd74' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/plugin-update-checker.php',
-    );
+    public static $files = [
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__.'/..'.'/symfony/polyfill-mbstring/bootstrap.php',
+        'f7d520a7dfd4979ca7d4b88dfbc5d7f5' => __DIR__.'/..'.'/rilwis/meta-box/meta-box.php',
+        '89ff252b349d4d088742a09c25f5dd74' => __DIR__.'/..'.'/yahnis-elsts/plugin-update-checker/plugin-update-checker.php',
+    ];
 
-    public static $prefixLengthsPsr4 = array (
-        'S' => 
-        array (
+    public static $prefixLengthsPsr4 = [
+        'S' => [
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Contracts\\Translation\\' => 30,
             'Symfony\\Component\\Translation\\' => 30,
-        ),
-        'F' => 
-        array (
+        ],
+        'F' => [
             'FredBradley\\CranleighSlacker\\' => 29,
-        ),
-        'C' => 
-        array (
+        ],
+        'C' => [
             'CranleighSchool\\CranleighPeople\\' => 32,
             'Carbon\\' => 7,
-        ),
-    );
+        ],
+    ];
 
-    public static $prefixDirsPsr4 = array (
-        'Symfony\\Polyfill\\Mbstring\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
-        ),
-        'Symfony\\Contracts\\Translation\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/translation-contracts',
-        ),
-        'Symfony\\Component\\Translation\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/translation',
-        ),
-        'FredBradley\\CranleighSlacker\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/fredbradley/cranleigh-slacker/src',
-        ),
-        'CranleighSchool\\CranleighPeople\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
-        ),
-        'Carbon\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
-        ),
-    );
+    public static $prefixDirsPsr4 = [
+        'Symfony\\Polyfill\\Mbstring\\' => [
+            0 => __DIR__.'/..'.'/symfony/polyfill-mbstring',
+        ],
+        'Symfony\\Contracts\\Translation\\' => [
+            0 => __DIR__.'/..'.'/symfony/translation-contracts',
+        ],
+        'Symfony\\Component\\Translation\\' => [
+            0 => __DIR__.'/..'.'/symfony/translation',
+        ],
+        'FredBradley\\CranleighSlacker\\' => [
+            0 => __DIR__.'/..'.'/fredbradley/cranleigh-slacker/src',
+        ],
+        'CranleighSchool\\CranleighPeople\\' => [
+            0 => __DIR__.'/../..'.'/src',
+        ],
+        'Carbon\\' => [
+            0 => __DIR__.'/..'.'/nesbot/carbon/src/Carbon',
+        ],
+    ];
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit6336e8b2c954b7e9477116d6d53da2e5::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit6336e8b2c954b7e9477116d6d53da2e5::$prefixDirsPsr4;
-
         }, null, ClassLoader::class);
     }
 }

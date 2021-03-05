@@ -2,29 +2,30 @@
 
 namespace FredBradley\CranleighSlacker;
 
-class Slacker {
+class Slacker
+{
+    private static $webhookEndpoint = false;
+    public static $room = false;
+    public static $attachments = [];
+    public static $fields = [];
+    public static $authorName;
+    public static $title;
+    public static $username = 'Slacker Script';
+    public static $attachmentColor = '#0c223f';
 
-	private static $webhookEndpoint = false;
-	public static $room = false;
-	public static $attachments = array();
-	public static $fields = array();
-	public static $authorName;
-	public static $title;
-	public static $username = "Slacker Script";
-	public static $attachmentColor = "#0c223f";
+    private static $_instance = null;
 
-	private static $_instance = null;
-
-    public function __construct($webhook = null, $room = null) {
-    	if ($webhook !== null) {
-			self::setWebhook($webhook);
-	    }
-	    if ($room !== null) {
-    		self::setRoom($room);
-	    }
+    public function __construct($webhook = null, $room = null)
+    {
+        if ($webhook !== null) {
+            self::setWebhook($webhook);
+        }
+        if ($room !== null) {
+            self::setRoom($room);
+        }
     }
 
-    public static function getInstance ()
+    public static function getInstance()
     {
         if (self::$_instance === null) {
             self::$_instance = new self;
@@ -33,32 +34,34 @@ class Slacker {
         return self::$_instance;
     }
 
-	public static function post(string $message=null) {
-		$room = self::$room;
+    public static function post(string $message = null)
+    {
+        $room = self::$room;
 
-		$data = array(
-			"channel" => "#{$room}",
-			"text" => $message,
-			"mrkdown" => true,
-			"username" => self::getUsername()
-		);
+        $data = [
+            'channel' => "#{$room}",
+            'text' => $message,
+            'mrkdown' => true,
+            'username' => self::getUsername(),
+        ];
 
-		if (!empty(self::$attachments)) {
-			$data["attachments"] = self::$attachments;
-		}
+        if (! empty(self::$attachments)) {
+            $data['attachments'] = self::$attachments;
+        }
 
-		if ($_SERVER['HTTP_USER_AGENT']==="nagios-check") {
-			return false;
-		}
+        if ($_SERVER['HTTP_USER_AGENT'] === 'nagios-check') {
+            return false;
+        }
 
-		return self::curler($data);
+        return self::curler($data);
     }
 
-    private static function curler(array $data) {
-	    $data = "payload=" . json_encode($data);
+    private static function curler(array $data)
+    {
+        $data = 'payload='.json_encode($data);
 
         $ch = curl_init(self::$webhookEndpoint);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
@@ -67,80 +70,97 @@ class Slacker {
         return $result;
     }
 
-	public static function getAuthor() {
-		if (self::$authorName==null) {
-			return gethostname();
-		} else {
-			return self::$authorName;
-		}
-	}
+    public static function getAuthor()
+    {
+        if (self::$authorName == null) {
+            return gethostname();
+        } else {
+            return self::$authorName;
+        }
+    }
 
-	public static function setWebhook($webhook) {
-    	self::$webhookEndpoint = $webhook;
+    public static function setWebhook($webhook)
+    {
+        self::$webhookEndpoint = $webhook;
 
-    	return new self;
-	}
-	public static function setRoom($room) {
-		self::$room = $room;
+        return new self;
+    }
 
-		return new self;
-	}
+    public static function setRoom($room)
+    {
+        self::$room = $room;
 
-	public static function setAuthor($name) {
-		self::$authorName = $name;
+        return new self;
+    }
 
-		return new self;
-	}
-	public static function setUsername($name) {
-		self::$username = $name;
-		return new self;
-	}
-	public static function getUsername() {
-		return self::$username;
-	}
+    public static function setAuthor($name)
+    {
+        self::$authorName = $name;
 
-	public static function getTitle() {
-		if (self::$title==null) {
-			return "Sync Script Report";
-		} else {
-			return self::$title;
-		}
-	}
+        return new self;
+    }
 
-	public static function setTitle($name) {
-		self::$title = $name;
+    public static function setUsername($name)
+    {
+        self::$username = $name;
 
-		return new self;
-	}
+        return new self;
+    }
 
-	public static function addAttachmentField($title, $value) {
-		self::$fields[] = array(
-			"title" => $title,
-			"value" => $value,
-			"short" => true
-		);
+    public static function getUsername()
+    {
+        return self::$username;
+    }
 
-		return new self;
-	}
-	public static function setAttachmentColor($color) {
-    	self::$attachmentColor = $color;
+    public static function getTitle()
+    {
+        if (self::$title == null) {
+            return 'Sync Script Report';
+        } else {
+            return self::$title;
+        }
+    }
 
-    	return new self;
-	}
-	public static function addAttachment($text) {
-		self::$attachments[] = array(
-			"pretext" => $text,
-			"fallback" => $text,
-			"title" => $text,
-			"title_link" => "https://www.cranleigh.org",
-			"color" => self::$attachmentColor,
-			"author_name" => self::getAuthor(),
-			"ts" => time(),
-			"footer" => "Fred's Slacker Class",
-			"fields" => self::$fields,
-			"mrkdwn_in" => ["text", "pretext"]
-		);
-		return new self;
-	}
+    public static function setTitle($name)
+    {
+        self::$title = $name;
+
+        return new self;
+    }
+
+    public static function addAttachmentField($title, $value)
+    {
+        self::$fields[] = [
+            'title' => $title,
+            'value' => $value,
+            'short' => true,
+        ];
+
+        return new self;
+    }
+
+    public static function setAttachmentColor($color)
+    {
+        self::$attachmentColor = $color;
+
+        return new self;
+    }
+
+    public static function addAttachment($text)
+    {
+        self::$attachments[] = [
+            'pretext' => $text,
+            'fallback' => $text,
+            'title' => $text,
+            'title_link' => 'https://www.cranleigh.org',
+            'color' => self::$attachmentColor,
+            'author_name' => self::getAuthor(),
+            'ts' => time(),
+            'footer' => "Fred's Slacker Class",
+            'fields' => self::$fields,
+            'mrkdwn_in' => ['text', 'pretext'],
+        ];
+
+        return new self;
+    }
 }
-

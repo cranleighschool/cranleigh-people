@@ -132,11 +132,11 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
             $t = $tokenIterator->current();
 
             if ('[' === $t[0] || '(' === $t[0]) {
-                ++$openBraces;
+                $openBraces++;
             }
 
             if (']' === $t[0] || ')' === $t[0]) {
-                --$openBraces;
+                $openBraces--;
             }
 
             if ((0 === $openBraces && ',' === $t[0]) || (-1 === $openBraces && ')' === $t[0])) {
@@ -161,7 +161,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
                 // Concatenate with next token
                 continue;
             }
-            if (!isset($t[1])) {
+            if (! isset($t[1])) {
                 break;
             }
 
@@ -201,14 +201,14 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
      */
     protected function parseTokens($tokens, MessageCatalogue $catalog/*, string $filename*/)
     {
-        if (\func_num_args() < 3 && __CLASS__ !== \get_class($this) && __CLASS__ !== (new \ReflectionMethod($this, __FUNCTION__))->getDeclaringClass()->getName() && !$this instanceof \PHPUnit\Framework\MockObject\MockObject && !$this instanceof \Prophecy\Prophecy\ProphecySubjectInterface) {
+        if (\func_num_args() < 3 && __CLASS__ !== \get_class($this) && __CLASS__ !== (new \ReflectionMethod($this, __FUNCTION__))->getDeclaringClass()->getName() && ! $this instanceof \PHPUnit\Framework\MockObject\MockObject && ! $this instanceof \Prophecy\Prophecy\ProphecySubjectInterface) {
             @trigger_error(sprintf('The "%s()" method will have a new "string $filename" argument in version 5.0, not defining it is deprecated since Symfony 4.3.', __METHOD__), E_USER_DEPRECATED);
         }
         $filename = 2 < \func_num_args() ? func_get_arg(2) : '';
 
         $tokenIterator = new \ArrayIterator($tokens);
 
-        for ($key = 0; $key < $tokenIterator->count(); ++$key) {
+        for ($key = 0; $key < $tokenIterator->count(); $key++) {
             foreach ($this->sequences as $sequence) {
                 $message = '';
                 $domain = 'messages';

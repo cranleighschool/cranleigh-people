@@ -15,7 +15,7 @@
  * - François B
  * - Tim Fish
  * - Serhan Apaydın
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return array_replace_recursive(require __DIR__.'/hy.php', [
     'from_now' => ':time հետո',

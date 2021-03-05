@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - The Debian Project Christian Perrier bubulle@debian.org
+ * - The Debian Project Christian Perrier bubulle@debian.org.
  */
 return [
     'formats' => [

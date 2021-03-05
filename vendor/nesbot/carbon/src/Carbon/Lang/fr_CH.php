@@ -15,7 +15,7 @@
  * - François B
  * - Gaspard Bucher
  * - Maxime VALY
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return array_replace_recursive(require __DIR__.'/fr.php', [
     'formats' => [

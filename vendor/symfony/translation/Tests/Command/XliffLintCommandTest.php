@@ -120,7 +120,7 @@ class XliffLintCommandTest extends TestCase
     public function testGetHelp()
     {
         $command = new XliffLintCommand();
-        $expected = <<<EOF
+        $expected = <<<'EOF'
 The <info>%command.name%</info> command lints a XLIFF file and outputs to STDOUT
 the first encountered syntax error.
 
@@ -174,7 +174,7 @@ XLIFF;
      */
     private function createCommandTester($requireStrictFileNames = true, $application = null)
     {
-        if (!$application) {
+        if (! $application) {
             $application = new Application();
             $application->add(new XliffLintCommand(null, null, null, $requireStrictFileNames));
         }

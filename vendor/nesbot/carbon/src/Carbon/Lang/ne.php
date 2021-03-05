@@ -14,7 +14,7 @@
  * - nootanghimire
  * - Josh Soref
  * - Nj Subedi
- * - JD Isaacks
+ * - JD Isaacks.
  */
 return [
     'year' => 'एक बर्ष|:count बर्ष',

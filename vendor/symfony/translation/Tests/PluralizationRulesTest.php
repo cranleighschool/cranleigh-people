@@ -113,7 +113,7 @@ class PluralizationRulesTest extends TestCase
     {
         $matrix = [];
         foreach ($langCodes as $langCode) {
-            for ($count = 0; $count < 200; ++$count) {
+            for ($count = 0; $count < 200; $count++) {
                 $plural = PluralizationRules::get($count, $langCode);
                 $matrix[$langCode][$count] = $plural;
             }

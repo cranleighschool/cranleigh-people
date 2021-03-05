@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Arne Goetje arne@canonical.com
+ * - Arne Goetje arne@canonical.com.
  */
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [

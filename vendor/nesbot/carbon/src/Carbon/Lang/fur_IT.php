@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Pablo Saratxaga pablo@mandrakesoft.com
+ * - Pablo Saratxaga pablo@mandrakesoft.com.
  */
 return [
     'formats' => [

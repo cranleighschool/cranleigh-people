@@ -31,7 +31,7 @@ class TranslationDumperPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition($this->writerServiceId)) {
+        if (! $container->hasDefinition($this->writerServiceId)) {
             return;
         }
 

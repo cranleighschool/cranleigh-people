@@ -11,7 +11,7 @@
 
 /**
  * Authors:
- * - Bobir Ismailov Bobir Ismailov, Pablo Saratxaga, Mashrab Kuvatov bobir_is@yahoo.com, pablo@mandrakesoft.com, kmashrab@uni-bremen.de
+ * - Bobir Ismailov Bobir Ismailov, Pablo Saratxaga, Mashrab Kuvatov bobir_is@yahoo.com, pablo@mandrakesoft.com, kmashrab@uni-bremen.de.
  */
 return array_replace_recursive(require __DIR__.'/uz_Latn.php', [
     'formats' => [

@@ -22,7 +22,7 @@
  * - Paul
  * - damlys
  * - Marek (marast78)
- * - Peter (UnrulyNatives)
+ * - Peter (UnrulyNatives).
  */
 return [
     'year' => ':count rok|:count lata|:count lat',

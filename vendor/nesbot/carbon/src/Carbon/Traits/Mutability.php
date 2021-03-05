@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\Carbon;
@@ -37,7 +38,7 @@ trait Mutability
      */
     public static function isImmutable()
     {
-        return !static::isMutable();
+        return ! static::isMutable();
     }
 
     /**
@@ -49,7 +50,7 @@ trait Mutability
      */
     public function cast(string $className)
     {
-        if (!method_exists($className, 'instance')) {
+        if (! method_exists($className, 'instance')) {
             throw new \InvalidArgumentException("$className has not the instance() method needed to cast the date.");
         }
 
