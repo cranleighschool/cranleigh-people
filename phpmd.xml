@@ -9,8 +9,7 @@
 		Required for WordPress development.
 	</description>
 	<exclude-pattern>vendor/*</exclude-pattern>
-	<exclude-pattern>javascript/*</exclude-pattern>
-	<exclude-pattern>example/*</exclude-pattern>
+	<exclude-pattern>javascripts/*</exclude-pattern>
 	<exclude-pattern>.github/*</exclude-pattern>
 
 	<rule ref="rulesets/codesize.xml"/>

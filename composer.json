@@ -11,7 +11,7 @@
 	"phpcs": "vendor/bin/phpcs src/ cranleigh-people.php",
 	"phpcbf": "vendor/bin/phpcbf src/ cranleigh-people.php",
 	"phpstan": "vendor/bin/phpstan analyse --memory-limit=2G",
-	"phpmd": "vendor/bin/phpmd . html phpmd.xml > test.html",
+	"phpmd": "vendor/bin/phpmd . html phpmd.xml > phpmd.html",
 	"post-autoload-dump": [
 	  "vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs"
 	]
