@@ -1,15 +1,7 @@
 includes:
   - vendor/szepeviktor/phpstan-wordpress/extension.neon
 parameters:
-  ignoreErrors:
-    -
-      message: '#Function apply_filters invoked with 3 parameters, 2 required.#'
-      path: src/Api/SiteMapRestController.php
-    -
-      message: '#Function cranleigh_breadcrumbs not found.#'
-      path: templates/
   level: 5
   paths:
-    - site-map.php
+    - cranleigh-people.php
     - src/
-    - templates/
