@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class PropertyDeclarationSniff extends AbstractVariableSniff
 {
-
-
     /**
      * Processes the function tokens within the class.
      *
@@ -31,14 +29,14 @@ class PropertyDeclarationSniff extends AbstractVariableSniff
 
         if ($tokens[$stackPtr]['content'][1] === '_') {
             $error = 'Property name "%s" should not be prefixed with an underscore to indicate visibility';
-            $data  = [$tokens[$stackPtr]['content']];
+            $data = [$tokens[$stackPtr]['content']];
             $phpcsFile->addWarning($error, $stackPtr, 'Underscore', $data);
         }
 
         // Detect multiple properties defined at the same time. Throw an error
         // for this, but also only process the first property in the list so we don't
         // repeat errors.
-        $find   = Tokens::$scopeModifiers;
+        $find = Tokens::$scopeModifiers;
         $find[] = T_VARIABLE;
         $find[] = T_VAR;
         $find[] = T_SEMICOLON;
@@ -72,14 +70,14 @@ class PropertyDeclarationSniff extends AbstractVariableSniff
 
         if ($propertyInfo['type'] !== '') {
             $typeToken = $propertyInfo['type_end_token'];
-            $error     = 'There must be 1 space after the property type declaration; %s found';
+            $error = 'There must be 1 space after the property type declaration; %s found';
             if ($tokens[($typeToken + 1)]['code'] !== T_WHITESPACE) {
                 $data = ['0'];
-                $fix  = $phpcsFile->addFixableError($error, $typeToken, 'SpacingAfterType', $data);
+                $fix = $phpcsFile->addFixableError($error, $typeToken, 'SpacingAfterType', $data);
                 if ($fix === true) {
                     $phpcsFile->fixer->addContent($typeToken, ' ');
                 }
-            } else if ($tokens[($typeToken + 1)]['content'] !== ' ') {
+            } elseif ($tokens[($typeToken + 1)]['content'] !== ' ') {
                 $next = $phpcsFile->findNext(T_WHITESPACE, ($typeToken + 1), null, true);
                 if ($tokens[$next]['line'] !== $tokens[$typeToken]['line']) {
                     $found = 'newline';
@@ -113,19 +111,19 @@ class PropertyDeclarationSniff extends AbstractVariableSniff
 
         if ($propertyInfo['scope_specified'] === false) {
             $error = 'Visibility must be declared on property "%s"';
-            $data  = [$tokens[$stackPtr]['content']];
+            $data = [$tokens[$stackPtr]['content']];
             $phpcsFile->addError($error, $stackPtr, 'ScopeMissing', $data);
         }
 
         if ($propertyInfo['scope_specified'] === true && $propertyInfo['is_static'] === true) {
-            $scopePtr  = $phpcsFile->findPrevious(Tokens::$scopeModifiers, ($stackPtr - 1));
+            $scopePtr = $phpcsFile->findPrevious(Tokens::$scopeModifiers, ($stackPtr - 1));
             $staticPtr = $phpcsFile->findPrevious(T_STATIC, ($stackPtr - 1));
             if ($scopePtr < $staticPtr) {
                 return;
             }
 
             $error = 'The static declaration must come after the visibility declaration';
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'StaticBeforeVisibility');
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'StaticBeforeVisibility');
             if ($fix === true) {
                 $phpcsFile->fixer->beginChangeset();
 
@@ -143,9 +141,9 @@ class PropertyDeclarationSniff extends AbstractVariableSniff
                 $phpcsFile->fixer->endChangeset();
             }
         }//end if
+    }
 
-    }//end processMemberVar()
-
+    //end processMemberVar()
 
     /**
      * Processes normal variables.
@@ -160,9 +158,9 @@ class PropertyDeclarationSniff extends AbstractVariableSniff
         /*
             We don't care about normal variables.
         */
+    }
 
-    }//end processVariable()
-
+    //end processVariable()
 
     /**
      * Processes variables in double quoted strings.
@@ -177,8 +175,7 @@ class PropertyDeclarationSniff extends AbstractVariableSniff
         /*
             We don't care about normal variables.
         */
+    }
 
-    }//end processVariableInString()
-
-
+    //end processVariableInString()
 }//end class

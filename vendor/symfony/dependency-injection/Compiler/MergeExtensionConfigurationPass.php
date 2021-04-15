@@ -47,7 +47,7 @@ class MergeExtensionConfigurationPass implements CompilerPassInterface
         }
 
         foreach ($container->getExtensions() as $name => $extension) {
-            if (!$config = $container->getExtensionConfig($name)) {
+            if (! $config = $container->getExtensionConfig($name)) {
                 // this extension was not called
                 continue;
             }
@@ -119,7 +119,7 @@ class MergeExtensionConfigurationParameterBag extends EnvPlaceholderParameterBag
 
     public function freezeAfterProcessing(Extension $extension, ContainerBuilder $container)
     {
-        if (!$config = $extension->getProcessedConfigs()) {
+        if (! $config = $extension->getProcessedConfigs()) {
             // Extension::processConfiguration() wasn't called, we cannot know how configs were merged
             return;
         }
@@ -197,14 +197,14 @@ class MergeExtensionConfigurationContainerBuilder extends ContainerBuilder
      */
     public function resolveEnvPlaceholders($value, $format = null, array &$usedEnvs = null)
     {
-        if (true !== $format || !\is_string($value)) {
+        if (true !== $format || ! \is_string($value)) {
             return parent::resolveEnvPlaceholders($value, $format, $usedEnvs);
         }
 
         $bag = $this->getParameterBag();
         $value = $bag->resolveValue($value);
 
-        if (!$bag instanceof EnvPlaceholderParameterBag) {
+        if (! $bag instanceof EnvPlaceholderParameterBag) {
             return parent::resolveEnvPlaceholders($value, $format, $usedEnvs);
         }
 

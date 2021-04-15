@@ -55,7 +55,7 @@ class ExtensionFilter implements Filter
      *
      * @var array<string>
      */
-    protected $extensions = array();
+    protected $extensions = [];
 
     /**
      * Constructs a new file extension filter instance with the given list of
@@ -73,7 +73,7 @@ class ExtensionFilter implements Filter
      *
      * @param  string $relative The relative path to the specified root.
      * @param  string $absolute The absolute path to a source file.
-     * @return boolean
+     * @return bool
      */
     public function accept($relative, $absolute)
     {

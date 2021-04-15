@@ -40,7 +40,7 @@ class ServiceLocator implements ServiceProviderInterface
      */
     public function get($id)
     {
-        if (!$this->externalId) {
+        if (! $this->externalId) {
             return $this->doGet($id);
         }
 
@@ -96,7 +96,7 @@ class ServiceLocator implements ServiceProviderInterface
         $msg = [];
         $msg[] = sprintf('Service "%s" not found:', $id);
 
-        if (!$this->container) {
+        if (! $this->container) {
             $class = null;
         } elseif ($this->container->has($id) || isset($this->container->getRemovedIds()[$id])) {
             $msg[] = 'even though it exists in the app\'s container,';
@@ -118,7 +118,7 @@ class ServiceLocator implements ServiceProviderInterface
             $msg[] = sprintf('the current service locator %s', $this->formatAlternatives());
         }
 
-        if (!$class) {
+        if (! $class) {
             // no-op
         } elseif (is_subclass_of($class, ServiceSubscriberInterface::class)) {
             $msg[] = sprintf('Unless you need extra laziness, try using dependency injection instead. Otherwise, you need to declare it using "%s::getSubscribedServices()".', preg_replace('/([^\\\\]++\\\\)++/', '', $class));
@@ -138,7 +138,7 @@ class ServiceLocator implements ServiceProviderInterface
     {
         $format = '"%s"%s';
         if (null === $alternatives) {
-            if (!$alternatives = array_keys($this->factories)) {
+            if (! $alternatives = array_keys($this->factories)) {
                 return 'is empty...';
             }
             $format = sprintf('only knows about the %s service%s.', $format, 1 < \count($alternatives) ? 's' : '');

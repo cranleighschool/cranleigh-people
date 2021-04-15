@@ -73,7 +73,7 @@ class Runner
      *
      * @var array<string>
      */
-    private $extensions = array('php', 'php5');
+    private $extensions = ['php', 'php5'];
 
     /**
      * List of exclude directories. Default exclude dirs are <b>.svn</b> and
@@ -81,26 +81,26 @@ class Runner
      *
      * @var array<string>
      */
-    private $excludeDirectories = array('.git', '.svn', 'CVS');
+    private $excludeDirectories = ['.git', '.svn', 'CVS'];
 
     /**
      * List of exclude namespaces.
      *
      * @var array<string>
      */
-    private $excludeNamespaces = array();
+    private $excludeNamespaces = [];
 
     /**
      * List of source code directories and files.
      *
      * @var array<string>
      */
-    private $sourceArguments = array();
+    private $sourceArguments = [];
 
     /**
      * Should the parse ignore doc comment annotations?
      *
-     * @var boolean
+     * @var bool
      */
     private $withoutAnnotations = false;
 
@@ -109,14 +109,14 @@ class Runner
      *
      * @var array<string, string>
      */
-    private $loggerMap = array();
+    private $loggerMap = [];
 
     /**
      * List of cli options for loggers or analyzers.
      *
      * @var array<string, mixed>
      */
-    private $options = array();
+    private $options = [];
 
     /**
      * This of process listeners that will be hooked into PDepend's analyzing
@@ -124,14 +124,14 @@ class Runner
      *
      * @var \PDepend\ProcessListener[]
      */
-    private $processListeners = array();
+    private $processListeners = [];
 
     /**
      * List of error messages for all parsing errors.
      *
      * @var array<string>
      */
-    private $parseErrors = array();
+    private $parseErrors = [];
 
     /**
      * @var \PDepend\Report\ReportGeneratorFactory
@@ -247,7 +247,7 @@ class Runner
      * Starts the main PDepend process and returns <b>true</b> after a successful
      * execution.
      *
-     * @return integer
+     * @return int
      * @throws \RuntimeException An exception with a readable error message and
      * an exit code.
      */
@@ -263,13 +263,13 @@ class Runner
 
         if (count($this->excludeDirectories) > 0) {
             $exclude = $this->excludeDirectories;
-            $filter  = new ExcludePathFilter($exclude);
+            $filter = new ExcludePathFilter($exclude);
             $engine->addFileFilter($filter);
         }
 
         if (count($this->excludeNamespaces) > 0) {
             $exclude = $this->excludeNamespaces;
-            $filter  = new PackageArtifactFilter($exclude);
+            $filter = new PackageArtifactFilter($exclude);
             $engine->setCodeFilter($filter);
         }
 
@@ -327,11 +327,11 @@ class Runner
      * This method will return <b>true</b> when there were errors during the
      * parse process.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasParseErrors()
     {
-        return (count($this->parseErrors) > 0);
+        return count($this->parseErrors) > 0;
     }
 
     /**

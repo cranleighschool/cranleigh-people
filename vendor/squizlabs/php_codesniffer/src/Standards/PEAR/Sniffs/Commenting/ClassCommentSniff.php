@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ClassCommentSniff extends FileCommentSniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -28,9 +26,9 @@ class ClassCommentSniff extends FileCommentSniff
             T_INTERFACE,
             T_TRAIT,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -43,8 +41,8 @@ class ClassCommentSniff extends FileCommentSniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens    = $phpcsFile->getTokens();
-        $type      = strtolower($tokens[$stackPtr]['content']);
+        $tokens = $phpcsFile->getTokens();
+        $type = strtolower($tokens[$stackPtr]['content']);
         $errorData = [$type];
 
         $find = Tokens::$methodPrefixes;
@@ -71,6 +69,7 @@ class ClassCommentSniff extends FileCommentSniff
             $errorData[] = $phpcsFile->getDeclarationName($stackPtr);
             $phpcsFile->addError('Missing doc comment for %s %s', $stackPtr, 'Missing', $errorData);
             $phpcsFile->recordMetric($stackPtr, 'Class has doc comment', 'no');
+
             return;
         }
 
@@ -78,14 +77,15 @@ class ClassCommentSniff extends FileCommentSniff
 
         if ($tokens[$commentEnd]['code'] === T_COMMENT) {
             $phpcsFile->addError('You must use "/**" style comments for a %s comment', $stackPtr, 'WrongStyle', $errorData);
+
             return;
         }
 
         // Check each tag.
         $this->processTags($phpcsFile, $stackPtr, $tokens[$commentEnd]['comment_opener']);
+    }
 
-    }//end process()
-
+    //end process()
 
     /**
      * Process the version tag.
@@ -107,12 +107,11 @@ class ClassCommentSniff extends FileCommentSniff
             $content = $tokens[($tag + 2)]['content'];
             if ((strstr($content, 'Release:') === false)) {
                 $error = 'Invalid version "%s" in doc comment; consider "Release: <package_version>" instead';
-                $data  = [$content];
+                $data = [$content];
                 $phpcsFile->addWarning($error, $tag, 'InvalidVersion', $data);
             }
         }
+    }
 
-    }//end processVersion()
-
-
+    //end processVersion()
 }//end class

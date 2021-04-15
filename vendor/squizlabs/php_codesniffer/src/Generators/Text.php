@@ -13,8 +13,6 @@ namespace PHP_CodeSniffer\Generators;
 
 class Text extends Generator
 {
-
-
     /**
      * Process the documentation for a single sniff.
      *
@@ -31,13 +29,13 @@ class Text extends Generator
         foreach ($doc->childNodes as $node) {
             if ($node->nodeName === 'standard') {
                 $this->printTextBlock($node);
-            } else if ($node->nodeName === 'code_comparison') {
+            } elseif ($node->nodeName === 'code_comparison') {
                 $this->printCodeComparisonBlock($node);
             }
         }
+    }
 
-    }//end processSniff()
-
+    //end processSniff()
 
     /**
      * Prints the title area for a single sniff.
@@ -50,7 +48,7 @@ class Text extends Generator
      */
     protected function printTitle(\DOMNode $doc)
     {
-        $title    = $this->getTitle($doc);
+        $title = $this->getTitle($doc);
         $standard = $this->ruleset->name;
 
         echo PHP_EOL;
@@ -58,9 +56,9 @@ class Text extends Generator
         echo strtoupper(PHP_EOL."| $standard CODING STANDARD: $title |".PHP_EOL);
         echo str_repeat('-', (strlen("$standard CODING STANDARD: $title") + 4));
         echo PHP_EOL.PHP_EOL;
+    }
 
-    }//end printTitle()
-
+    //end printTitle()
 
     /**
      * Print a text block found in a standard.
@@ -76,7 +74,7 @@ class Text extends Generator
         $text = str_replace('</em>', '*', $text);
 
         $nodeLines = explode("\n", $text);
-        $lines     = [];
+        $lines = [];
 
         foreach ($nodeLines as $currentLine) {
             $currentLine = trim($currentLine);
@@ -87,7 +85,7 @@ class Text extends Generator
             }
 
             $tempLine = '';
-            $words    = explode(' ', $currentLine);
+            $words = explode(' ', $currentLine);
 
             foreach ($words as $word) {
                 $currentLength = strlen($tempLine.$word);
@@ -98,10 +96,10 @@ class Text extends Generator
 
                 if ($currentLength === 99 || $currentLength === 100) {
                     // We are already at the edge, so we are done.
-                    $lines[]  = $tempLine.$word;
+                    $lines[] = $tempLine.$word;
                     $tempLine = '';
                 } else {
-                    $lines[]  = rtrim($tempLine);
+                    $lines[] = rtrim($tempLine);
                     $tempLine = $word.' ';
                 }
             }//end foreach
@@ -112,9 +110,9 @@ class Text extends Generator
         }//end foreach
 
         echo implode(PHP_EOL, $lines).PHP_EOL.PHP_EOL;
+    }
 
-    }//end printTextBlock()
-
+    //end printTextBlock()
 
     /**
      * Print a code comparison block found in a standard.
@@ -126,12 +124,12 @@ class Text extends Generator
     protected function printCodeComparisonBlock(\DOMNode $node)
     {
         $codeBlocks = $node->getElementsByTagName('code');
-        $first      = trim($codeBlocks->item(0)->nodeValue);
+        $first = trim($codeBlocks->item(0)->nodeValue);
         $firstTitle = $codeBlocks->item(0)->getAttribute('title');
 
         $firstTitleLines = [];
-        $tempTitle       = '';
-        $words           = explode(' ', $firstTitle);
+        $tempTitle = '';
+        $words = explode(' ', $firstTitle);
 
         foreach ($words as $word) {
             if (strlen($tempTitle.$word) >= 45) {
@@ -139,14 +137,14 @@ class Text extends Generator
                     // Adding the extra space will push us to the edge
                     // so we are done.
                     $firstTitleLines[] = $tempTitle.$word;
-                    $tempTitle         = '';
-                } else if (strlen($tempTitle.$word) === 46) {
+                    $tempTitle = '';
+                } elseif (strlen($tempTitle.$word) === 46) {
                     // We are already at the edge, so we are done.
                     $firstTitleLines[] = $tempTitle.$word;
-                    $tempTitle         = '';
+                    $tempTitle = '';
                 } else {
                     $firstTitleLines[] = $tempTitle;
-                    $tempTitle         = $word.' ';
+                    $tempTitle = $word.' ';
                 }
             } else {
                 $tempTitle .= $word.' ';
@@ -157,16 +155,16 @@ class Text extends Generator
             $firstTitleLines[] = $tempTitle;
         }
 
-        $first      = str_replace('<em>', '', $first);
-        $first      = str_replace('</em>', '', $first);
+        $first = str_replace('<em>', '', $first);
+        $first = str_replace('</em>', '', $first);
         $firstLines = explode("\n", $first);
 
-        $second      = trim($codeBlocks->item(1)->nodeValue);
+        $second = trim($codeBlocks->item(1)->nodeValue);
         $secondTitle = $codeBlocks->item(1)->getAttribute('title');
 
         $secondTitleLines = [];
-        $tempTitle        = '';
-        $words            = explode(' ', $secondTitle);
+        $tempTitle = '';
+        $words = explode(' ', $secondTitle);
 
         foreach ($words as $word) {
             if (strlen($tempTitle.$word) >= 45) {
@@ -174,14 +172,14 @@ class Text extends Generator
                     // Adding the extra space will push us to the edge
                     // so we are done.
                     $secondTitleLines[] = $tempTitle.$word;
-                    $tempTitle          = '';
-                } else if (strlen($tempTitle.$word) === 46) {
+                    $tempTitle = '';
+                } elseif (strlen($tempTitle.$word) === 46) {
                     // We are already at the edge, so we are done.
                     $secondTitleLines[] = $tempTitle.$word;
-                    $tempTitle          = '';
+                    $tempTitle = '';
                 } else {
                     $secondTitleLines[] = $tempTitle;
-                    $tempTitle          = $word.' ';
+                    $tempTitle = $word.' ';
                 }
             } else {
                 $tempTitle .= $word.' ';
@@ -192,11 +190,11 @@ class Text extends Generator
             $secondTitleLines[] = $tempTitle;
         }
 
-        $second      = str_replace('<em>', '', $second);
-        $second      = str_replace('</em>', '', $second);
+        $second = str_replace('<em>', '', $second);
+        $second = str_replace('</em>', '', $second);
         $secondLines = explode("\n", $second);
 
-        $maxCodeLines  = max(count($firstLines), count($secondLines));
+        $maxCodeLines = max(count($firstLines), count($secondLines));
         $maxTitleLines = max(count($firstTitleLines), count($secondTitleLines));
 
         echo str_repeat('-', 41);
@@ -246,8 +244,7 @@ class Text extends Generator
         }//end for
 
         echo str_repeat('-', 100).PHP_EOL.PHP_EOL;
+    }
 
-    }//end printCodeComparisonBlock()
-
-
+    //end printCodeComparisonBlock()
 }//end class

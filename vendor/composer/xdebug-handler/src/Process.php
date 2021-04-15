@@ -21,7 +21,7 @@ namespace Composer\XdebugHandler;
 class Process
 {
     /**
-     * Returns an array of parameters, including a color option if required
+     * Returns an array of parameters, including a color option if required.
      *
      * A color option is needed because child process output is piped.
      *
@@ -32,9 +32,9 @@ class Process
      */
     public static function addColorOption(array $args, $colorOption)
     {
-        if (!$colorOption
+        if (! $colorOption
             || in_array($colorOption, $args)
-            || !preg_match('/^--([a-z]+$)|(^--[a-z]+=)/', $colorOption, $matches)) {
+            || ! preg_match('/^--([a-z]+$)|(^--[a-z]+=)/', $colorOption, $matches)) {
             return $args;
         }
 
@@ -42,6 +42,7 @@ class Process
             // Handle --color(s)= options
             if (false !== ($index = array_search($matches[2].'auto', $args))) {
                 $args[$index] = $colorOption;
+
                 return $args;
             } elseif (preg_grep('/^'.$matches[2].'/', $args)) {
                 return $args;
@@ -79,7 +80,7 @@ class Process
      */
     public static function escape($arg, $meta = true, $module = false)
     {
-        if (!defined('PHP_WINDOWS_VERSION_BUILD')) {
+        if (! defined('PHP_WINDOWS_VERSION_BUILD')) {
             return "'".str_replace("'", "'\\''", $arg)."'";
         }
 
@@ -90,9 +91,9 @@ class Process
         if ($meta) {
             $meta = $dquotes || preg_match('/%[^%]+%/', $arg);
 
-            if (!$meta) {
+            if (! $meta) {
                 $quote = $quote || strpbrk($arg, '^&|<>()') !== false;
-            } elseif ($module && !$dquotes && $quote) {
+            } elseif ($module && ! $dquotes && $quote) {
                 $meta = false;
             }
         }
@@ -109,7 +110,7 @@ class Process
     }
 
     /**
-     * Returns true if the output stream supports colors
+     * Returns true if the output stream supports colors.
      *
      * This is tricky on Windows, because Cygwin, Msys2 etc emulate pseudo
      * terminals via named pipes, so we can only check the environment.
@@ -146,7 +147,7 @@ class Process
     }
 
     /**
-     * Makes putenv environment changes available in $_SERVER and $_ENV
+     * Makes putenv environment changes available in $_SERVER and $_ENV.
      *
      * @param string $name
      * @param string|false $value A false value unsets the variable
@@ -157,7 +158,7 @@ class Process
     {
         $unset = false === $value;
 
-        if (!putenv($unset ? $name : $name.'='.$value)) {
+        if (! putenv($unset ? $name : $name.'='.$value)) {
             return false;
         }
 

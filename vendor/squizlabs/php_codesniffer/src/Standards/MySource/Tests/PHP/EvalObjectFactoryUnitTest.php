@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class EvalObjectFactoryUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -26,9 +24,9 @@ class EvalObjectFactoryUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [];
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -45,8 +43,7 @@ class EvalObjectFactoryUnitTest extends AbstractSniffUnitTest
             12 => 1,
             21 => 1,
         ];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

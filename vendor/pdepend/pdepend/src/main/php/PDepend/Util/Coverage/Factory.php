@@ -88,6 +88,7 @@ class Factory
             $xmlError = libxml_get_last_error();
             throw new \RuntimeException($xmlError ? trim($xmlError->message) : 'Unknown error');
         }
+
         return $sxml;
     }
 }

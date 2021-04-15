@@ -39,22 +39,22 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
-  */
+ */
 
 use PDepend\TextUI\Command;
 
 // PEAR/svn workaround
 if (strpos('@php_bin@', '@php_bin') === 0) {
-    set_include_path('.' . PATH_SEPARATOR . dirname(__FILE__) . '/../main/php');
+    set_include_path('.'.PATH_SEPARATOR.dirname(__FILE__).'/../main/php');
 }
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
 // Allow as much memory as possible by default
 if (extension_loaded('suhosin') && is_numeric(ini_get('suhosin.memory_limit'))) {
     $limit = ini_get('memory_limit');
     if (preg_match('(^(\d+)([BKMGT]))', $limit, $match)) {
-        $shift = array('B' => 0, 'K' => 10, 'M' => 20, 'G' => 30, 'T' => 40);
+        $shift = ['B' => 0, 'K' => 10, 'M' => 20, 'G' => 30, 'T' => 40];
         $limit = ($match[1] * (1 << $shift[$match[2]]));
     }
     if (ini_get('suhosin.memory_limit') > $limit && $limit > -1) {

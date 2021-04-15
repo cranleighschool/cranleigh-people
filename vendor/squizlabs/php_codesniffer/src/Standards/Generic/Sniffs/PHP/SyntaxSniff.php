@@ -17,14 +17,12 @@ use PHP_CodeSniffer\Util\Common;
 
 class SyntaxSniff implements Sniff
 {
-
     /**
      * The path to the PHP version we are checking with.
      *
      * @var string
      */
     private $phpPath = null;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -34,9 +32,9 @@ class SyntaxSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -54,19 +52,18 @@ class SyntaxSniff implements Sniff
         }
 
         $fileName = escapeshellarg($phpcsFile->getFilename());
-        $cmd      = Common::escapeshellcmd($this->phpPath)." -l -d display_errors=1 -d error_prepend_string='' $fileName 2>&1";
-        $output   = shell_exec($cmd);
-        $matches  = [];
+        $cmd = Common::escapeshellcmd($this->phpPath)." -l -d display_errors=1 -d error_prepend_string='' $fileName 2>&1";
+        $output = shell_exec($cmd);
+        $matches = [];
         if (preg_match('/^.*error:(.*) in .* on line ([0-9]+)/m', trim($output), $matches) === 1) {
             $error = trim($matches[1]);
-            $line  = (int) $matches[2];
+            $line = (int) $matches[2];
             $phpcsFile->addErrorOnLine("PHP syntax error: $error", $line, 'PHPSyntax');
         }
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens + 1;
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

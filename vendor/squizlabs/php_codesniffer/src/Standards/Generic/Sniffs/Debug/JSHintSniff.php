@@ -17,14 +17,12 @@ use PHP_CodeSniffer\Util\Common;
 
 class JSHintSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['JS'];
-
 
     /**
      * Returns the token types that this sniff is interested in.
@@ -34,9 +32,9 @@ class JSHintSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -50,18 +48,18 @@ class JSHintSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $rhinoPath  = Config::getExecutablePath('rhino');
+        $rhinoPath = Config::getExecutablePath('rhino');
         $jshintPath = Config::getExecutablePath('jshint');
         if ($rhinoPath === null && $jshintPath === null) {
             return;
         }
 
-        $fileName   = $phpcsFile->getFilename();
+        $fileName = $phpcsFile->getFilename();
         $jshintPath = Common::escapeshellcmd($jshintPath);
 
         if ($rhinoPath !== null) {
             $rhinoPath = Common::escapeshellcmd($rhinoPath);
-            $cmd       = "$rhinoPath \"$jshintPath\" ".escapeshellarg($fileName);
+            $cmd = "$rhinoPath \"$jshintPath\" ".escapeshellarg($fileName);
             exec($cmd, $output, $retval);
 
             $regex = '`^(?P<error>.+)\(.+:(?P<line>[0-9]+).*:[0-9]+\)$`';
@@ -74,22 +72,21 @@ class JSHintSniff implements Sniff
 
         if (is_array($output) === true) {
             foreach ($output as $finding) {
-                $matches    = [];
+                $matches = [];
                 $numMatches = preg_match($regex, $finding, $matches);
                 if ($numMatches === 0) {
                     continue;
                 }
 
-                $line    = (int) $matches['line'];
+                $line = (int) $matches['line'];
                 $message = 'jshint says: '.trim($matches['error']);
                 $phpcsFile->addWarningOnLine($message, $line, 'ExternalTool');
             }
         }
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens + 1;
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class LowerCaseConstantUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -25,7 +23,7 @@ class LowerCaseConstantUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile='LowerCaseConstantUnitTest.inc')
+    public function getErrorList($testFile = 'LowerCaseConstantUnitTest.inc')
     {
         switch ($testFile) {
         case 'LowerCaseConstantUnitTest.inc':
@@ -62,9 +60,9 @@ class LowerCaseConstantUnitTest extends AbstractSniffUnitTest
             return [];
             break;
         }//end switch
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -77,8 +75,7 @@ class LowerCaseConstantUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

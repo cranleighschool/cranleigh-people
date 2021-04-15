@@ -42,8 +42,6 @@
 
 namespace PDepend\Metrics;
 
-use PDepend\Source\AST\ASTArtifactList;
-
 /**
  * Base interface for all analyzer implementations.
  *
@@ -58,8 +56,8 @@ interface Analyzer
      * @param array<string, mixed> $options Global option array, every analyzer
      *                                      can extract the required options.
      */
-    public function __construct(array $options = array());
-    
+    public function __construct(array $options = []);
+
     /**
      * Adds a listener to this analyzer.
      *
@@ -67,7 +65,7 @@ interface Analyzer
      * @return void
      */
     public function addAnalyzeListener(AnalyzerListener $listener);
-    
+
     /**
      * Processes all {@link \PDepend\Source\AST\ASTNamespace} code nodes.
      *
@@ -81,17 +79,17 @@ interface Analyzer
      * pdepend framework, while an analyzer that does not perform any action
      * for any reason should return <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      * @since  0.9.10
      */
     public function isEnabled();
 
     /**
-     * Set global options
+     * Set global options.
      *
      * @param array<string, mixed> $options
      * @return void
      * @since 2.0.1
      */
-    public function setOptions(array $options = array());
+    public function setOptions(array $options = []);
 }

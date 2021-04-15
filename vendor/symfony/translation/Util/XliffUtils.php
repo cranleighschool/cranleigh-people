@@ -66,7 +66,7 @@ class XliffUtils
         }
         try {
             $isValid = @$dom->schemaValidateSource(self::getSchema($xliffVersion));
-            if (!$isValid) {
+            if (! $isValid) {
                 return self::getXmlErrors($internalErrors);
             }
         } finally {
@@ -110,7 +110,7 @@ class XliffUtils
 </xsd:schema>');
         }
 
-        return !@$dom->schemaValidateSource($schema);
+        return ! @$dom->schemaValidateSource($schema);
     }
 
     public static function getErrorsAsString(array $xmlErrors): string

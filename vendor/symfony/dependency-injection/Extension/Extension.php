@@ -89,15 +89,15 @@ abstract class Extension implements ExtensionInterface, ConfigurationExtensionIn
         $class = substr_replace($class, '\Configuration', strrpos($class, '\\'));
         $class = $container->getReflectionClass($class);
 
-        if (!$class) {
+        if (! $class) {
             return null;
         }
 
-        if (!$class->implementsInterface(ConfigurationInterface::class)) {
+        if (! $class->implementsInterface(ConfigurationInterface::class)) {
             throw new LogicException(sprintf('The extension configuration class "%s" must implement "%s".', $class->getName(), ConfigurationInterface::class));
         }
 
-        if (!($constructor = $class->getConstructor()) || !$constructor->getNumberOfRequiredParameters()) {
+        if (! ($constructor = $class->getConstructor()) || ! $constructor->getNumberOfRequiredParameters()) {
             return $class->newInstance();
         }
 
@@ -130,7 +130,7 @@ abstract class Extension implements ExtensionInterface, ConfigurationExtensionIn
      */
     protected function isConfigEnabled(ContainerBuilder $container, array $config)
     {
-        if (!\array_key_exists('enabled', $config)) {
+        if (! \array_key_exists('enabled', $config)) {
             throw new InvalidArgumentException("The config array has no 'enabled' key.");
         }
 

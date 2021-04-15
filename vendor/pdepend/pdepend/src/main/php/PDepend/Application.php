@@ -48,7 +48,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
- * PDepend Application
+ * PDepend Application.
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
@@ -71,7 +71,7 @@ class Application
      */
     public function setConfigurationFile($configurationFile)
     {
-        if (!file_exists($configurationFile)) {
+        if (! file_exists($configurationFile)) {
             throw new \InvalidArgumentException(
                 sprintf('The configuration file "%s" doesn\'t exist.', $configurationFile)
             );
@@ -137,13 +137,13 @@ class Application
      */
     private function createContainer()
     {
-        $extensions = array(new DependencyInjection\PdependExtension());
+        $extensions = [new DependencyInjection\PdependExtension()];
 
-        $container = new ContainerBuilder(new ParameterBag(array()));
-        $container->prependExtensionConfig('pdepend', array());
+        $container = new ContainerBuilder(new ParameterBag([]));
+        $container->prependExtensionConfig('pdepend', []);
         $container->addCompilerPass(new DependencyInjection\Compiler\ProcessListenerPass());
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../../resources'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../../resources'));
 
         foreach ($extensions as $extension) {
             $container->registerExtension($extension);
@@ -188,15 +188,15 @@ class Application
 
         $loggerServices = $container->findTaggedServiceIds($serviceTag);
 
-        $options = array();
+        $options = [];
 
         foreach ($loggerServices as $loggerServiceTags) {
             foreach ($loggerServiceTags as $loggerServiceTag) {
                 if (isset($loggerServiceTag['option']) && isset($loggerServiceTag['message'])) {
-                    $options[$loggerServiceTag['option']] = array(
+                    $options[$loggerServiceTag['option']] = [
                         'message' => $loggerServiceTag['message'],
-                        'value' => isset($loggerServiceTag['value']) ? $loggerServiceTag['value'] : 'file'
-                    );
+                        'value' => isset($loggerServiceTag['value']) ? $loggerServiceTag['value'] : 'file',
+                    ];
                 }
             }
         }

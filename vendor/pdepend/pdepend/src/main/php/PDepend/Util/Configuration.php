@@ -118,7 +118,7 @@ class Configuration
      * for the given <b>$name</b> exists.
      *
      * @param  string $name Name of the requested property.
-     * @return boolean
+     * @return bool
      * @since  0.10.0
      */
     public function __isset($name)

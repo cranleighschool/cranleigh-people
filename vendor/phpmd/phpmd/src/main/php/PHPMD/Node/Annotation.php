@@ -59,7 +59,7 @@ class Annotation
      * Checks if this annotation suppresses the given rule.
      *
      * @param \PHPMD\Rule $rule
-     * @return boolean
+     * @return bool
      */
     public function suppresses(Rule $rule)
     {
@@ -74,19 +74,19 @@ class Annotation
      * Checks if this annotation suppresses the given rule.
      *
      * @param \PHPMD\Rule $rule
-     * @return boolean
+     * @return bool
      */
     private function isSuppressed(Rule $rule)
     {
-        if (in_array($this->value, array('PHPMD', 'PMD'))) {
+        if (in_array($this->value, ['PHPMD', 'PMD'])) {
             return true;
         } elseif (preg_match(
-            '/^(PH)?PMD\.' . preg_replace('/^.*\/([^\/]*)$/', '$1', $rule->getName()) . '/',
+            '/^(PH)?PMD\.'.preg_replace('/^.*\/([^\/]*)$/', '$1', $rule->getName()).'/',
             $this->value
         )) {
             return true;
         }
 
-        return (stripos($rule->getName(), $this->value) !== false);
+        return stripos($rule->getName(), $this->value) !== false;
     }
 }

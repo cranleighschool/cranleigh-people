@@ -15,7 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class IndentationSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -26,10 +25,9 @@ class IndentationSniff implements Sniff
     /**
      * The number of spaces code should be indented.
      *
-     * @var integer
+     * @var int
      */
     public $indent = 4;
-
 
     /**
      * Returns the token types that this sniff is interested in.
@@ -39,9 +37,9 @@ class IndentationSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -56,8 +54,8 @@ class IndentationSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $numTokens    = (count($tokens) - 2);
-        $indentLevel  = 0;
+        $numTokens = (count($tokens) - 2);
+        $indentLevel = 0;
         $nestingLevel = 0;
         for ($i = 1; $i < $numTokens; $i++) {
             if ($tokens[$i]['code'] === T_COMMENT
@@ -108,7 +106,7 @@ class IndentationSniff implements Sniff
 
             // We started a new line, so check indent.
             if ($tokens[$i]['code'] === T_WHITESPACE) {
-                $content     = str_replace($phpcsFile->eolChar, '', $tokens[$i]['content']);
+                $content = str_replace($phpcsFile->eolChar, '', $tokens[$i]['content']);
                 $foundIndent = strlen($content);
             } else {
                 $foundIndent = 0;
@@ -120,14 +118,14 @@ class IndentationSniff implements Sniff
             ) {
                 if ($nestingLevel !== $indentLevel) {
                     $error = 'Blank lines are not allowed in class definitions';
-                    $fix   = $phpcsFile->addFixableError($error, $i, 'BlankLine');
+                    $fix = $phpcsFile->addFixableError($error, $i, 'BlankLine');
                     if ($fix === true) {
                         $phpcsFile->fixer->replaceToken($i, '');
                     }
                 }
-            } else if ($foundIndent !== $expectedIndent) {
+            } elseif ($foundIndent !== $expectedIndent) {
                 $error = 'Line indented incorrectly; expected %s spaces, found %s';
-                $data  = [
+                $data = [
                     $expectedIndent,
                     $foundIndent,
                 ];
@@ -143,8 +141,7 @@ class IndentationSniff implements Sniff
                 }
             }//end if
         }//end for
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

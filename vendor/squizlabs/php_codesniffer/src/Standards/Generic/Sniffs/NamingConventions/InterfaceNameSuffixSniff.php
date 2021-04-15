@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class InterfaceNameSuffixSniff implements Sniff
 {
-
-
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -23,9 +21,9 @@ class InterfaceNameSuffixSniff implements Sniff
     public function register()
     {
         return [T_INTERFACE];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -47,8 +45,7 @@ class InterfaceNameSuffixSniff implements Sniff
         if (strtolower($suffix) !== 'interface') {
             $phpcsFile->addError('Interface names must be suffixed with "Interface"; found "%s"', $stackPtr, 'Missing', [$interfaceName]);
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

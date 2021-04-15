@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Common;
 
 class VariableCommentSniff extends AbstractVariableSniff
 {
-
-
     /**
      * Called to process class member vars.
      *
@@ -47,11 +45,13 @@ class VariableCommentSniff extends AbstractVariableSniff
             && $tokens[$commentEnd]['code'] !== T_COMMENT)
         ) {
             $phpcsFile->addError('Missing member variable doc comment', $stackPtr, 'Missing');
+
             return;
         }
 
         if ($tokens[$commentEnd]['code'] === T_COMMENT) {
             $phpcsFile->addError('You must use "/**" style comments for a member variable comment', $stackPtr, 'WrongStyle');
+
             return;
         }
 
@@ -66,7 +66,7 @@ class VariableCommentSniff extends AbstractVariableSniff
                 } else {
                     $foundVar = $tag;
                 }
-            } else if ($tokens[$tag]['content'] === '@see') {
+            } elseif ($tokens[$tag]['content'] === '@see') {
                 // Make sure the tag isn't empty.
                 $string = $phpcsFile->findNext(T_DOC_COMMENT_STRING, $tag, $commentEnd);
                 if ($string === false || $tokens[$string]['line'] !== $tokens[$tag]['line']) {
@@ -75,7 +75,7 @@ class VariableCommentSniff extends AbstractVariableSniff
                 }
             } else {
                 $error = '%s tag is not allowed in member variable comment';
-                $data  = [$tokens[$tag]['content']];
+                $data = [$tokens[$tag]['content']];
                 $phpcsFile->addWarning($error, $tag, 'TagNotAllowed', $data);
             }//end if
         }//end foreach
@@ -84,6 +84,7 @@ class VariableCommentSniff extends AbstractVariableSniff
         if ($foundVar === null) {
             $error = 'Missing @var tag in member variable comment';
             $phpcsFile->addError($error, $commentEnd, 'MissingVar');
+
             return;
         }
 
@@ -98,10 +99,11 @@ class VariableCommentSniff extends AbstractVariableSniff
         if ($string === false || $tokens[$string]['line'] !== $tokens[$foundVar]['line']) {
             $error = 'Content missing for @var tag in member variable comment';
             $phpcsFile->addError($error, $foundVar, 'EmptyVar');
+
             return;
         }
 
-         // Support both a var type and a description.
+        // Support both a var type and a description.
         preg_match('`^((?:\|?(?:array\([^\)]*\)|[\\\\a-z0-9\[\]]+))*)( .*)?`i', $tokens[($foundVar + 2)]['content'], $varParts);
         if (isset($varParts[1]) === false) {
             return;
@@ -110,7 +112,7 @@ class VariableCommentSniff extends AbstractVariableSniff
         $varType = $varParts[1];
 
         // Check var type (can be multiple, separated by '|').
-        $typeNames      = explode('|', $varType);
+        $typeNames = explode('|', $varType);
         $suggestedNames = [];
         foreach ($typeNames as $i => $typeName) {
             $suggestedName = Common::suggestType($typeName);
@@ -122,11 +124,11 @@ class VariableCommentSniff extends AbstractVariableSniff
         $suggestedType = implode('|', $suggestedNames);
         if ($varType !== $suggestedType) {
             $error = 'Expected "%s" but found "%s" for @var tag in member variable comment';
-            $data  = [
+            $data = [
                 $suggestedType,
                 $varType,
             ];
-            $fix   = $phpcsFile->addFixableError($error, $foundVar, 'IncorrectVarType', $data);
+            $fix = $phpcsFile->addFixableError($error, $foundVar, 'IncorrectVarType', $data);
             if ($fix === true) {
                 $replacement = $suggestedType;
                 if (empty($varParts[2]) === false) {
@@ -137,9 +139,9 @@ class VariableCommentSniff extends AbstractVariableSniff
                 unset($replacement);
             }
         }
+    }
 
-    }//end processMemberVar()
-
+    //end processMemberVar()
 
     /**
      * Called to process a normal variable.
@@ -154,9 +156,9 @@ class VariableCommentSniff extends AbstractVariableSniff
      */
     protected function processVariable(File $phpcsFile, $stackPtr)
     {
+    }
 
-    }//end processVariable()
-
+    //end processVariable()
 
     /**
      * Called to process variables found in double quoted strings.
@@ -171,8 +173,7 @@ class VariableCommentSniff extends AbstractVariableSniff
      */
     protected function processVariableInString(File $phpcsFile, $stackPtr)
     {
+    }
 
-    }//end processVariableInString()
-
-
+    //end processVariableInString()
 }//end class

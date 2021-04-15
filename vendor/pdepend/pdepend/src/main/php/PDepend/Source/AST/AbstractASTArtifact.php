@@ -67,14 +67,14 @@ abstract class AbstractASTArtifact implements ASTArtifact
     /**
      * The line number where the item declaration starts.
      *
-     * @var integer
+     * @var int
      */
     protected $startLine = 0;
 
     /**
      * The line number where the item declaration ends.
      *
-     * @var integer
+     * @var int
      */
     protected $endLine = 0;
 
@@ -135,8 +135,6 @@ abstract class AbstractASTArtifact implements ASTArtifact
         $this->name = $name;
     }
 
-
-
     /**
      * Returns a id for this code node.
      *
@@ -147,6 +145,7 @@ abstract class AbstractASTArtifact implements ASTArtifact
         if ($this->id === null) {
             $this->id = md5(uniqid('', true));
         }
+
         return $this->id;
     }
 
@@ -210,7 +209,7 @@ abstract class AbstractASTArtifact implements ASTArtifact
     /**
      * Returns the line number where the class or interface declaration starts.
      *
-     * @return integer
+     * @return int
      */
     public function getStartLine()
     {
@@ -220,7 +219,7 @@ abstract class AbstractASTArtifact implements ASTArtifact
     /**
      * Returns the line number where the class or interface declaration ends.
      *
-     * @return integer
+     * @return int
      */
     public function getEndLine()
     {

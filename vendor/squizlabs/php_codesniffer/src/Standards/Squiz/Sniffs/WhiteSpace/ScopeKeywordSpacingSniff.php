@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ScopeKeywordSpacingSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,12 +22,13 @@ class ScopeKeywordSpacingSniff implements Sniff
      */
     public function register()
     {
-        $register   = Tokens::$scopeModifiers;
+        $register = Tokens::$scopeModifiers;
         $register[] = T_STATIC;
+
         return $register;
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -95,7 +94,7 @@ class ScopeKeywordSpacingSniff implements Sniff
         if (empty($tokens[$stackPtr]['nested_parenthesis']) === false) {
             // Check if this is PHP 8.0 constructor property promotion.
             // In that case, we can't have multi-property definitions.
-            $nestedParens    = $tokens[$stackPtr]['nested_parenthesis'];
+            $nestedParens = $tokens[$stackPtr]['nested_parenthesis'];
             $lastCloseParens = end($nestedParens);
             if (isset($tokens[$lastCloseParens]['parenthesis_owner']) === true
                 && $tokens[$tokens[$lastCloseParens]['parenthesis_owner']]['code'] === T_FUNCTION
@@ -136,7 +135,7 @@ class ScopeKeywordSpacingSniff implements Sniff
 
         if ($spacing !== 1) {
             $error = 'Scope keyword "%s" must be followed by a single space; found %s';
-            $data  = [
+            $data = [
                 $tokens[$stackPtr]['content'],
                 $spacing,
             ];
@@ -161,8 +160,7 @@ class ScopeKeywordSpacingSniff implements Sniff
                 }
             }//end if
         }//end if
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -65,8 +65,8 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
      * Will return <b>true</b> if the given <b>$tokenType</b> is a valid class
      * name part.
      *
-     * @param  integer $tokenType The type of a parsed token.
-     * @return boolean
+     * @param  int $tokenType The type of a parsed token.
+     * @return bool
      * @since  0.10.6
      */
     protected function isClassName($tokenType)
@@ -78,12 +78,13 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
             case Tokens::T_STRING:
                 return true;
         }
+
         return false;
     }
 
     /**
-     * @param integer $tokenType
-     * @return boolean
+     * @param int $tokenType
+     * @return bool
      */
     protected function isConstantName($tokenType)
     {
@@ -91,7 +92,7 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
     }
 
     /**
-     * @param integer $tokenType
+     * @param int $tokenType
      * @return bool
      */
     protected function isMethodName($tokenType)
@@ -103,8 +104,8 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
      * Tests if the give token is a valid function name in the supported PHP
      * version.
      *
-     * @param integer $tokenType
-     * @return boolean
+     * @param int $tokenType
+     * @return bool
      * @since 2.3
      */
     protected function isFunctionName($tokenType)
@@ -118,6 +119,7 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
             case Tokens::T_PARENT:
                 return true;
         }
+
         return false;
     }
 
@@ -125,8 +127,8 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
      * Tests if the given token type is a reserved keyword in the supported PHP
      * version.
      *
-     * @param integer $tokenType
-     * @return boolean
+     * @param int $tokenType
+     * @return bool
      */
     protected function isKeyword($tokenType)
     {
@@ -138,6 +140,7 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
             case Tokens::T_INTERFACE:
                 return true;
         }
+
         return false;
     }
 
@@ -145,8 +148,8 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
      * Tests if the given token type is a valid type hint in the supported
      * PHP version.
      *
-     * @param integer $tokenType
-     * @return boolean
+     * @param int $tokenType
+     * @return bool
      * @since 1.0.0
      */
     protected function isTypeHint($tokenType)
@@ -176,6 +179,7 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
                 $type = parent::parseTypeHint();
                 break;
         }
+
         return $type;
     }
 
@@ -183,7 +187,7 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
      * Tests if the next token is a valid array start delimiter in the supported
      * PHP version.
      *
-     * @return boolean
+     * @return bool
      * @since 1.0.0
      */
     protected function isArrayStartDelimiter()
@@ -201,7 +205,7 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
      * Parses a php array declaration.
      *
      * @param \PDepend\Source\AST\ASTArray $array
-     * @param boolean $static
+     * @param bool $static
      * @return \PDepend\Source\AST\ASTArray
      * @since 1.0.0
      */
@@ -247,7 +251,7 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
             );
         }
 
-        $token->image = $token->image . $token1->image;
+        $token->image = $token->image.$token1->image;
         $token->endLine = $token1->endLine;
         $token->endColumn = $token1->endColumn;
 
@@ -280,6 +284,7 @@ abstract class PHPParserVersion54 extends PHPParserVersion53
                 $node = parent::parsePostfixIdentifier();
                 break;
         }
+
         return $this->parseOptionalIndexExpression($node);
     }
 

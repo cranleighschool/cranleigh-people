@@ -12,7 +12,6 @@ use PHPMD\RuleViolation;
  */
 class AnsiRenderer extends AbstractRenderer
 {
-
     /**
      * @param \PHPMD\Report $report
      * @return void
@@ -73,8 +72,8 @@ class AnsiRenderer extends AbstractRenderer
             $violation->getFileName()
         );
         $this->getWriter()->write(
-            PHP_EOL . $fileHeader . PHP_EOL .
-            str_repeat('-', strlen($fileHeader)) . PHP_EOL
+            PHP_EOL.$fileHeader.PHP_EOL.
+            str_repeat('-', strlen($fileHeader)).PHP_EOL
         );
     }
 
@@ -86,7 +85,7 @@ class AnsiRenderer extends AbstractRenderer
     private function writeViolationLine(RuleViolation $violation, $padding)
     {
         $this->getWriter()->write(sprintf(
-            " %s | \e[31mVIOLATION\e[0m | %s" . PHP_EOL,
+            " %s | \e[31mVIOLATION\e[0m | %s".PHP_EOL,
             str_pad($violation->getBeginLine(), $padding, ' '),
             $violation->getDescription()
         ));
@@ -98,7 +97,7 @@ class AnsiRenderer extends AbstractRenderer
      */
     private function writeErrorsReport(Report $report)
     {
-        if (!$report->hasErrors()) {
+        if (! $report->hasErrors()) {
             return;
         }
 
@@ -110,12 +109,12 @@ class AnsiRenderer extends AbstractRenderer
             );
 
             $this->getWriter()->write(
-                PHP_EOL . $errorHeader . PHP_EOL .
-                str_repeat('-', strlen($errorHeader) - 9) . PHP_EOL
+                PHP_EOL.$errorHeader.PHP_EOL.
+                str_repeat('-', strlen($errorHeader) - 9).PHP_EOL
             );
 
             $this->getWriter()->write(sprintf(
-                '%s' . PHP_EOL,
+                '%s'.PHP_EOL,
                 $error->getMessage()
             ));
         }
@@ -129,7 +128,7 @@ class AnsiRenderer extends AbstractRenderer
     {
         $this->getWriter()->write(
             sprintf(
-                PHP_EOL . 'Found %s %s and %s %s in %sms' . PHP_EOL,
+                PHP_EOL.'Found %s %s and %s %s in %sms'.PHP_EOL,
                 count($report->getRuleViolations()),
                 count($report->getRuleViolations()) !== 1 ? 'violations' : 'violation',
                 iterator_count($report->getErrors()),
@@ -138,7 +137,7 @@ class AnsiRenderer extends AbstractRenderer
             )
         );
         if (count($report->getRuleViolations()) === 0 && iterator_count($report->getErrors()) === 0) {
-            $this->getWriter()->write(PHP_EOL . "\e[32mNo mess detected\e[0m" . PHP_EOL);
+            $this->getWriter()->write(PHP_EOL."\e[32mNo mess detected\e[0m".PHP_EOL);
         }
     }
 }

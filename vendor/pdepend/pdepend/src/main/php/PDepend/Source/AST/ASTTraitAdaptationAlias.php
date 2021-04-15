@@ -62,14 +62,14 @@ class ASTTraitAdaptationAlias extends ASTStatement
     /**
      * The new method modifier for the imported method.
      *
-     * @var integer
+     * @var int
      */
     protected $newModifier = -1;
 
     /**
      * Sets the new method modifier.
      *
-     * @param integer $newModifier The new method modifier.
+     * @param int $newModifier The new method modifier.
      *
      * @return void
      */
@@ -82,7 +82,7 @@ class ASTTraitAdaptationAlias extends ASTStatement
      * Returns the new method modifier or <b>-1</b> when this alias does not
      * specify a new method modifier.
      *
-     * @return integer
+     * @return int
      */
     public function getNewModifier()
     {
@@ -121,7 +121,7 @@ class ASTTraitAdaptationAlias extends ASTStatement
      */
     public function __sleep()
     {
-        return array_merge(array('newName', 'newModifier'), parent::__sleep());
+        return array_merge(['newName', 'newModifier'], parent::__sleep());
     }
 
     /**

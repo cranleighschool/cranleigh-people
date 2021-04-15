@@ -59,8 +59,8 @@ class NoLogOutputException extends \LogicException
     public function __construct(ReportGenerator $logger)
     {
         $className = get_class($logger);
-        $message   = "The log target is not configured for '{$className}'.";
-        
+        $message = "The log target is not configured for '{$className}'.";
+
         parent::__construct($message);
     }
 }

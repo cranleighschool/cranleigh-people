@@ -15,7 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class SpaceAfterNotSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -29,17 +28,16 @@ class SpaceAfterNotSniff implements Sniff
     /**
      * The number of spaces desired after the NOT operator.
      *
-     * @var integer
+     * @var int
      */
     public $spacing = 1;
 
     /**
      * Allow newlines instead of spaces.
      *
-     * @var boolean
+     * @var bool
      */
     public $ignoreNewlines = false;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -49,9 +47,9 @@ class SpaceAfterNotSniff implements Sniff
     public function register()
     {
         return [T_BOOLEAN_NOT];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -64,7 +62,7 @@ class SpaceAfterNotSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens        = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
         $this->spacing = (int) $this->spacing;
 
         $nextNonEmpty = $phpcsFile->findNext(Tokens::$emptyTokens, ($stackPtr + 1), null, true);
@@ -85,15 +83,16 @@ class SpaceAfterNotSniff implements Sniff
         $nextNonWhitespace = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
         if ($nextNonEmpty !== $nextNonWhitespace) {
             $error = 'Expected %s space(s) after NOT operator; comment found';
-            $data  = [$this->spacing];
+            $data = [$this->spacing];
             $phpcsFile->addError($error, $stackPtr, 'CommentFound', $data);
+
             return;
         }
 
         $found = 0;
         if ($tokens[$stackPtr]['line'] !== $tokens[$nextNonEmpty]['line']) {
             $found = 'newline';
-        } else if ($tokens[($stackPtr + 1)]['code'] === T_WHITESPACE) {
+        } elseif ($tokens[($stackPtr + 1)]['code'] === T_WHITESPACE) {
             $found = $tokens[($stackPtr + 1)]['length'];
         }
 
@@ -102,7 +101,7 @@ class SpaceAfterNotSniff implements Sniff
         }
 
         $error = 'Expected %s space(s) after NOT operator; %s found';
-        $data  = [
+        $data = [
             $this->spacing,
             $found,
         ];
@@ -118,7 +117,7 @@ class SpaceAfterNotSniff implements Sniff
 
                 if ($this->spacing > 0) {
                     $phpcsFile->fixer->replaceToken($start, $padding);
-                    ++$start;
+                    $start++;
                 }
 
                 for ($i = $start; $i < $nextNonWhitespace; $i++) {
@@ -128,8 +127,7 @@ class SpaceAfterNotSniff implements Sniff
                 $phpcsFile->fixer->endChangeset();
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

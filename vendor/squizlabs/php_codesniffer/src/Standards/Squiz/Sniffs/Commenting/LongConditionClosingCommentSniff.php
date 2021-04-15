@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class LongConditionClosingCommentSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -28,7 +27,7 @@ class LongConditionClosingCommentSniff implements Sniff
     /**
      * The openers that we are interested in.
      *
-     * @var integer[]
+     * @var int[]
      */
     private static $openers = [
         T_SWITCH,
@@ -45,7 +44,7 @@ class LongConditionClosingCommentSniff implements Sniff
      * The length that a code block must be before
      * requiring a closing comment.
      *
-     * @var integer
+     * @var int
      */
     public $lineLimit = 20;
 
@@ -58,7 +57,6 @@ class LongConditionClosingCommentSniff implements Sniff
      */
     public $commentFormat = '//end %s';
 
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -67,9 +65,9 @@ class LongConditionClosingCommentSniff implements Sniff
     public function register()
     {
         return [T_CLOSE_CURLY_BRACKET];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -90,8 +88,8 @@ class LongConditionClosingCommentSniff implements Sniff
         }
 
         $startCondition = $tokens[$tokens[$stackPtr]['scope_condition']];
-        $startBrace     = $tokens[$tokens[$stackPtr]['scope_opener']];
-        $endBrace       = $tokens[$stackPtr];
+        $startBrace = $tokens[$tokens[$stackPtr]['scope_opener']];
+        $endBrace = $tokens[$stackPtr];
 
         // We are only interested in some code blocks.
         if (in_array($startCondition['code'], self::$openers, true) === false) {
@@ -169,13 +167,13 @@ class LongConditionClosingCommentSniff implements Sniff
         $lineDifference = ($endBrace['line'] - $startBrace['line']);
 
         $expected = sprintf($this->commentFormat, $startCondition['content']);
-        $comment  = $phpcsFile->findNext([T_COMMENT], $stackPtr, null, false);
+        $comment = $phpcsFile->findNext([T_COMMENT], $stackPtr, null, false);
 
         if (($comment === false) || ($tokens[$comment]['line'] !== $endBrace['line'])) {
             if ($lineDifference >= $this->lineLimit) {
                 $error = 'End comment for long condition not found; expected "%s"';
-                $data  = [$expected];
-                $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'Missing', $data);
+                $data = [$expected];
+                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Missing', $data);
 
                 if ($fix === true) {
                     $next = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
@@ -192,14 +190,14 @@ class LongConditionClosingCommentSniff implements Sniff
 
         if (($comment - $stackPtr) !== 1) {
             $error = 'Space found before closing comment; expected "%s"';
-            $data  = [$expected];
+            $data = [$expected];
             $phpcsFile->addError($error, $stackPtr, 'SpacingBefore', $data);
         }
 
         if (trim($tokens[$comment]['content']) !== $expected) {
             $found = trim($tokens[$comment]['content']);
             $error = 'Incorrect closing comment; expected "%s" but found "%s"';
-            $data  = [
+            $data = [
                 $expected,
                 $found,
             ];
@@ -211,8 +209,7 @@ class LongConditionClosingCommentSniff implements Sniff
 
             return;
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

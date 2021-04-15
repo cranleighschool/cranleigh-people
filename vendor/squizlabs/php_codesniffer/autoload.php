@@ -19,7 +19,6 @@ namespace PHP_CodeSniffer;
 if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
     class Autoload
     {
-
         /**
          * The composer autoloader.
          *
@@ -49,7 +48,6 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
          * @var string[]
          */
         private static $searchPaths = [];
-
 
         /**
          * Loads a class.
@@ -90,12 +88,12 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
                 }
             }//end if
 
-            $ds   = DIRECTORY_SEPARATOR;
+            $ds = DIRECTORY_SEPARATOR;
             $path = false;
 
             if (substr($class, 0, 16) === 'PHP_CodeSniffer\\') {
                 if (substr($class, 0, 22) === 'PHP_CodeSniffer\Tests\\') {
-                    $isInstalled = !is_dir(__DIR__.$ds.'tests');
+                    $isInstalled = ! is_dir(__DIR__.$ds.'tests');
                     if ($isInstalled === false) {
                         $path = __DIR__.$ds.'tests';
                     } else {
@@ -132,13 +130,14 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
 
             if ($path !== false && is_file($path) === true) {
                 self::loadFile($path);
+
                 return true;
             }
 
             return false;
+        }
 
-        }//end load()
-
+        //end load()
 
         /**
          * Includes a file and tracks what class or interface was loaded as a result.
@@ -176,12 +175,13 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
 
             $className = self::determineLoadedClass($classesBeforeLoad, $classesAfterLoad);
 
-            self::$loadedClasses[$path]    = $className;
+            self::$loadedClasses[$path] = $className;
             self::$loadedFiles[$className] = $path;
+
             return self::$loadedClasses[$path];
+        }
 
-        }//end loadFile()
-
+        //end loadFile()
 
         /**
          * Determine which class was loaded based on the before and after lists of loaded classes.
@@ -240,9 +240,9 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
             }
 
             return $className;
+        }
 
-        }//end determineLoadedClass()
-
+        //end determineLoadedClass()
 
         /**
          * Adds a directory to search during autoloading.
@@ -252,12 +252,12 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
          *
          * @return void
          */
-        public static function addSearchPath($path, $nsPrefix='')
+        public static function addSearchPath($path, $nsPrefix = '')
         {
             self::$searchPaths[$path] = rtrim(trim((string) $nsPrefix), '\\');
+        }
 
-        }//end addSearchPath()
-
+        //end addSearchPath()
 
         /**
          * Retrieve the namespaces and paths registered by external standards.
@@ -267,9 +267,9 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
         public static function getSearchPaths()
         {
             return self::$searchPaths;
+        }
 
-        }//end getSearchPaths()
-
+        //end getSearchPaths()
 
         /**
          * Gets the class name for the given file path.
@@ -286,9 +286,9 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
             }
 
             return self::$loadedClasses[$path];
+        }
 
-        }//end getLoadedClassName()
-
+        //end getLoadedClassName()
 
         /**
          * Gets the file path for the given class name.
@@ -305,9 +305,9 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
             }
 
             return self::$loadedFiles[$class];
+        }
 
-        }//end getLoadedFileName()
-
+        //end getLoadedFileName()
 
         /**
          * Gets the mapping of file names to class names.
@@ -317,9 +317,9 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
         public static function getLoadedClasses()
         {
             return self::$loadedClasses;
+        }
 
-        }//end getLoadedClasses()
-
+        //end getLoadedClasses()
 
         /**
          * Gets the mapping of class names to file names.
@@ -329,10 +329,9 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
         public static function getLoadedFiles()
         {
             return self::$loadedFiles;
+        }
 
-        }//end getLoadedFiles()
-
-
+        //end getLoadedFiles()
     }//end class
 
     // Register the autoloader before any existing autoloaders to ensure

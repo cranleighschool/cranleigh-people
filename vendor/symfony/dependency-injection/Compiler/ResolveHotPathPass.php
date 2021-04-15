@@ -60,7 +60,7 @@ class ResolveHotPathPass extends AbstractRecursivePass
 
             $this->resolvedIds[$this->currentId] = true;
 
-            if (!$value->hasTag($this->tagName)) {
+            if (! $value->hasTag($this->tagName)) {
                 return $value;
             }
         }

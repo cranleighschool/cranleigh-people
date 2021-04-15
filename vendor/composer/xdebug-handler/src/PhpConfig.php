@@ -17,32 +17,33 @@ namespace Composer\XdebugHandler;
 class PhpConfig
 {
     /**
-     * Use the original PHP configuration
+     * Use the original PHP configuration.
      *
      * @return array PHP cli options
      */
     public function useOriginal()
     {
         $this->getDataAndReset();
-        return array();
+
+        return [];
     }
 
     /**
-     * Use standard restart settings
+     * Use standard restart settings.
      *
      * @return array PHP cli options
      */
     public function useStandard()
     {
         if ($data = $this->getDataAndReset()) {
-            return array('-n', '-c', $data['tmpIni']);
+            return ['-n', '-c', $data['tmpIni']];
         }
 
-        return array();
+        return [];
     }
 
     /**
-     * Use environment variables to persist settings
+     * Use environment variables to persist settings.
      *
      * @return array PHP cli options
      */
@@ -53,11 +54,11 @@ class PhpConfig
             Process::setEnv('PHP_INI_SCAN_DIR', '');
         }
 
-        return array();
+        return [];
     }
 
     /**
-     * Returns restart data if available and resets the environment
+     * Returns restart data if available and resets the environment.
      *
      * @return array|null
      */

@@ -30,6 +30,6 @@ class RuleClassFileNotFoundException extends \RuntimeException
      */
     public function __construct($className)
     {
-        parent::__construct('Cannot load source file for class: ' . $className);
+        parent::__construct('Cannot load source file for class: '.$className);
     }
 }

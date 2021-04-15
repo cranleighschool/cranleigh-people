@@ -56,12 +56,12 @@ class TooManyPublicMethods extends AbstractRule implements ClassAware
         }
         $this->addViolation(
             $node,
-            array(
+            [
                 $node->getType(),
                 $node->getName(),
                 $nom,
                 $threshold,
-            )
+            ]
         );
     }
 
@@ -69,14 +69,14 @@ class TooManyPublicMethods extends AbstractRule implements ClassAware
      * Counts public methods within the given class/interface node.
      *
      * @param \PHPMD\Node\AbstractTypeNode $node
-     * @return integer
+     * @return int
      */
     protected function countMethods(AbstractTypeNode $node)
     {
         $count = 0;
         foreach ($node->getMethods() as $method) {
             if ($method->getNode()->isPublic() && preg_match($this->ignoreRegexp, $method->getName()) === 0) {
-                ++$count;
+                $count++;
             }
         }
 

@@ -20,12 +20,12 @@ namespace PHPMD\Utility;
 use InvalidArgumentException;
 
 /**
- * Utility class to provide string checks and manipulations
+ * Utility class to provide string checks and manipulations.
  */
 class Strings
 {
     /**
-     * Returns the length of the given string, excluding at most one suffix
+     * Returns the length of the given string, excluding at most one suffix.
      *
      * @param string $stringName String to calculate the length for.
      * @param array $subtractSuffixes List of suffixes to exclude from the calculated length.
@@ -47,7 +47,7 @@ class Strings
     }
 
     /**
-     * Split a string with the given separator, trim whitespaces around the parts and remove any empty strings
+     * Split a string with the given separator, trim whitespaces around the parts and remove any empty strings.
      *
      * @param string $listAsString The string to split.
      * @param string $separator The separator to split the string with, similar to explode.

@@ -29,6 +29,6 @@ class RuleClassNotFoundException extends \RuntimeException
      */
     public function __construct($className)
     {
-        parent::__construct('Cannot find rule class: ' . $className);
+        parent::__construct('Cannot find rule class: '.$className);
     }
 }

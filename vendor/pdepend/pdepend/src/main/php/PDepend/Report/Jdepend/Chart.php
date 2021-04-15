@@ -50,9 +50,9 @@ use PDepend\Report\NoLogOutputException;
 use PDepend\Source\AST\AbstractASTArtifact;
 use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\ASTVisitor\AbstractASTVisitor;
-use PDepend\Util\Utf8Util;
 use PDepend\Util\FileUtil;
 use PDepend\Util\ImageConvert;
+use PDepend\Util\Utf8Util;
 
 /**
  * Generates a chart with the aggregated metrics.
@@ -103,7 +103,7 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
      */
     public function getAcceptedAnalyzers()
     {
-        return array('pdepend.analyzer.dependency');
+        return ['pdepend.analyzer.dependency'];
     }
 
     /**
@@ -122,7 +122,7 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
      * with return <b>true</b>, otherwise the return value is <b>false</b>.
      *
      * @param  \PDepend\Metrics\Analyzer $analyzer The analyzer to log.
-     * @return boolean
+     * @return bool
      */
     public function log(Analyzer $analyzer)
     {
@@ -131,6 +131,7 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
 
             return true;
         }
+
         return false;
     }
 
@@ -150,7 +151,7 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
         $bias = 0.1;
 
         $svg = new \DOMDocument('1.0', 'UTF-8');
-        $svg->loadXML(file_get_contents(dirname(__FILE__) . '/chart.svg'));
+        $svg->loadXML(file_get_contents(dirname(__FILE__).'/chart.svg'));
 
         $layer = $svg->getElementById('jdepend.layer');
 
@@ -197,8 +198,8 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
         $good->parentNode->removeChild($good);
         $legendTemplate->parentNode->removeChild($legendTemplate);
 
-        $temp  = FileUtil::getSysTempDir();
-        $temp .= '/' . uniqid('pdepend_') . '.svg';
+        $temp = FileUtil::getSysTempDir();
+        $temp .= '/'.uniqid('pdepend_').'.svg';
         $svg->save($temp);
 
         ImageConvert::convert($temp, $this->logFile);
@@ -212,9 +213,9 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
      */
     private function getItems()
     {
-        $items = array();
+        $items = [];
         foreach ($this->code as $namespace) {
-            if (!$namespace->isUserDefined()) {
+            if (! $namespace->isUserDefined()) {
                 continue;
             }
 
@@ -224,20 +225,20 @@ class Chart extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareG
                 continue;
             }
 
-            $items[] = array(
+            $items[] = [
                 'size'         =>  $metrics['cc'] + $metrics['ac'],
                 'abstraction'  =>  $metrics['a'],
                 'instability'  =>  $metrics['i'],
                 'distance'     =>  $metrics['d'],
-                'name'         =>  Utf8Util::ensureEncoding($namespace->getName())
-            );
+                'name'         =>  Utf8Util::ensureEncoding($namespace->getName()),
+            ];
         }
 
         // Sort items by size
         usort(
             $items,
             function ($a, $b) {
-                return ($a['size'] - $b['size']);
+                return $a['size'] - $b['size'];
             }
         );
 

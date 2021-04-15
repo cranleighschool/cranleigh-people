@@ -45,7 +45,7 @@ class PrototypeConfigurator extends AbstractServiceConfigurator
     public function __construct(ServicesConfigurator $parent, PhpFileLoader $loader, Definition $defaults, string $namespace, string $resource, bool $allowParent)
     {
         $definition = new Definition();
-        if (!$defaults->isPublic() || !$defaults->isPrivate()) {
+        if (! $defaults->isPublic() || ! $defaults->isPrivate()) {
             $definition->setPublic($defaults->isPublic());
         }
         $definition->setAutowired($defaults->isAutowired());

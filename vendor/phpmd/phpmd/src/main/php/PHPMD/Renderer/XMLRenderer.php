@@ -56,8 +56,8 @@ class XMLRenderer extends AbstractRenderer
     public function renderReport(Report $report)
     {
         $writer = $this->getWriter();
-        $writer->write('<pmd version="' . PHPMD::VERSION . '" ');
-        $writer->write('timestamp="' . date('c') . '">');
+        $writer->write('<pmd version="'.PHPMD::VERSION.'" ');
+        $writer->write('timestamp="'.date('c').'">');
         $writer->write(PHP_EOL);
 
         foreach ($report->getRuleViolations() as $violation) {
@@ -66,21 +66,21 @@ class XMLRenderer extends AbstractRenderer
             if ($this->fileName !== $fileName) {
                 // Not first file
                 if ($this->fileName !== null) {
-                    $writer->write('  </file>' . PHP_EOL);
+                    $writer->write('  </file>'.PHP_EOL);
                 }
                 // Store current file name
                 $this->fileName = $fileName;
 
-                $writer->write('  <file name="' . $fileName . '">' . PHP_EOL);
+                $writer->write('  <file name="'.$fileName.'">'.PHP_EOL);
             }
 
             $rule = $violation->getRule();
 
             $writer->write('    <violation');
-            $writer->write(' beginline="' . $violation->getBeginLine() . '"');
-            $writer->write(' endline="' . $violation->getEndLine() . '"');
-            $writer->write(' rule="' . $rule->getName() . '"');
-            $writer->write(' ruleset="' . $rule->getRuleSetName() . '"');
+            $writer->write(' beginline="'.$violation->getBeginLine().'"');
+            $writer->write(' endline="'.$violation->getEndLine().'"');
+            $writer->write(' rule="'.$rule->getName().'"');
+            $writer->write(' ruleset="'.$rule->getRuleSetName().'"');
 
             $this->maybeAdd('package', $violation->getNamespaceName());
             $this->maybeAdd('externalInfoUrl', $rule->getExternalInfoUrl());
@@ -89,15 +89,15 @@ class XMLRenderer extends AbstractRenderer
             $this->maybeAdd('method', $violation->getMethodName());
             //$this->_maybeAdd('variable', $violation->getVariableName());
 
-            $writer->write(' priority="' . $rule->getPriority() . '"');
-            $writer->write('>' . PHP_EOL);
-            $writer->write('      ' . htmlspecialchars($violation->getDescription()) . PHP_EOL);
-            $writer->write('    </violation>' . PHP_EOL);
+            $writer->write(' priority="'.$rule->getPriority().'"');
+            $writer->write('>'.PHP_EOL);
+            $writer->write('      '.htmlspecialchars($violation->getDescription()).PHP_EOL);
+            $writer->write('    </violation>'.PHP_EOL);
         }
 
         // Last file and at least one violation
         if ($this->fileName !== null) {
-            $writer->write('  </file>' . PHP_EOL);
+            $writer->write('  </file>'.PHP_EOL);
         }
 
         foreach ($report->getErrors() as $error) {
@@ -105,10 +105,10 @@ class XMLRenderer extends AbstractRenderer
             $writer->write($error->getFile());
             $writer->write('" msg="');
             $writer->write(htmlspecialchars($error->getMessage()));
-            $writer->write('" />' . PHP_EOL);
+            $writer->write('" />'.PHP_EOL);
         }
 
-        $writer->write('</pmd>' . PHP_EOL);
+        $writer->write('</pmd>'.PHP_EOL);
     }
 
     /**
@@ -124,6 +124,6 @@ class XMLRenderer extends AbstractRenderer
         if ($value === null || trim($value) === '') {
             return;
         }
-        $this->getWriter()->write(' ' . $attr . '="' . $value . '"');
+        $this->getWriter()->write(' '.$attr.'="'.$value.'"');
     }
 }

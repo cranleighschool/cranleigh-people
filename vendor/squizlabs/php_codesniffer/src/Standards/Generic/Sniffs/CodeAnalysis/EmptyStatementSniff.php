@@ -29,8 +29,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class EmptyStatementSniff implements Sniff
 {
-
-
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -52,9 +50,9 @@ class EmptyStatementSniff implements Sniff
             T_WHILE,
             T_MATCH,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -68,7 +66,7 @@ class EmptyStatementSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $token  = $tokens[$stackPtr];
+        $token = $tokens[$stackPtr];
 
         // Skip statements without a body.
         if (isset($token['scope_opener']) === false) {
@@ -87,11 +85,10 @@ class EmptyStatementSniff implements Sniff
         }
 
         // Get token identifier.
-        $name  = strtoupper($token['content']);
+        $name = strtoupper($token['content']);
         $error = 'Empty %s statement detected';
         $phpcsFile->addError($error, $stackPtr, 'Detected'.ucfirst(strtolower($name)), [$name]);
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -37,7 +37,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
      */
     public function __construct(TranslatorInterface $translator)
     {
-        if (!$translator instanceof TranslatorBagInterface || !$translator instanceof LocaleAwareInterface) {
+        if (! $translator instanceof TranslatorBagInterface || ! $translator instanceof LocaleAwareInterface) {
             throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', get_debug_type($translator)));
         }
 

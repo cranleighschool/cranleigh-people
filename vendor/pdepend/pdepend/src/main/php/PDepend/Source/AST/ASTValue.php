@@ -57,12 +57,12 @@ class ASTValue
     /**
      * Boolean flag that is <b>true</b> when a PHP-value was set.
      *
-     * @var boolean
+     * @var bool
      */
     private $valueAvailable = false;
 
     /**
-     * The parsed PHP-value,
+     * The parsed PHP-value,.
      *
      * @var mixed
      */
@@ -90,7 +90,7 @@ class ASTValue
     public function setValue($value)
     {
         if ($this->valueAvailable === false) {
-            $this->value          = $value;
+            $this->value = $value;
             $this->valueAvailable = true;
         }
     }
@@ -98,7 +98,7 @@ class ASTValue
     /**
      * This method will return <b>true</b> when the PHP-value is already set.
      *
-     * @return boolean
+     * @return bool
      */
     public function isValueAvailable()
     {

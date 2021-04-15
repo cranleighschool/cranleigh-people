@@ -110,7 +110,7 @@ class ResolveBindingsPass extends AbstractRecursivePass
             return parent::processValue($value, $isRoot);
         }
 
-        if (!$value instanceof Definition || !$bindings = $value->getBindings()) {
+        if (! $value instanceof Definition || ! $bindings = $value->getBindings()) {
             return parent::processValue($value, $isRoot);
         }
 
@@ -121,7 +121,7 @@ class ResolveBindingsPass extends AbstractRecursivePass
             if ($used) {
                 $this->usedBindings[$bindingId] = true;
                 unset($this->unusedBindings[$bindingId]);
-            } elseif (!isset($this->usedBindings[$bindingId])) {
+            } elseif (! isset($this->usedBindings[$bindingId])) {
                 $this->unusedBindings[$bindingId] = [$key, $this->currentId, $bindingType, $file];
             }
 
@@ -129,11 +129,11 @@ class ResolveBindingsPass extends AbstractRecursivePass
                 $bindingNames[substr($key, \strlen($m[0]))] = $binding;
             }
 
-            if (!isset($m[1])) {
+            if (! isset($m[1])) {
                 continue;
             }
 
-            if (null !== $bindingValue && !$bindingValue instanceof Reference && !$bindingValue instanceof Definition && !$bindingValue instanceof TaggedIteratorArgument && !$bindingValue instanceof ServiceLocatorArgument) {
+            if (null !== $bindingValue && ! $bindingValue instanceof Reference && ! $bindingValue instanceof Definition && ! $bindingValue instanceof TaggedIteratorArgument && ! $bindingValue instanceof ServiceLocatorArgument) {
                 throw new InvalidArgumentException(sprintf('Invalid value for binding key "%s" for service "%s": expected null, "%s", "%s", "%s" or ServiceLocatorArgument, "%s" given.', $key, $this->currentId, Reference::class, Definition::class, TaggedIteratorArgument::class, get_debug_type($bindingValue)));
             }
         }

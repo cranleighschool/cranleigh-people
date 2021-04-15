@@ -205,7 +205,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
         $catalogue = $this->getCatalogue($locale);
         $locale = $catalogue->getLocale();
-        while (!$catalogue->defines($id, $domain)) {
+        while (! $catalogue->defines($id, $domain)) {
             if ($cat = $catalogue->getFallbackCatalogue()) {
                 $catalogue = $cat;
                 $locale = $catalogue->getLocale();
@@ -236,7 +236,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
             $this->assertValidLocale($locale);
         }
 
-        if (!isset($this->catalogues[$locale])) {
+        if (! isset($this->catalogues[$locale])) {
             $this->loadCatalogue($locale);
         }
 
@@ -269,7 +269,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         try {
             $this->doLoadCatalogue($locale);
         } catch (NotFoundResourceException $e) {
-            if (!$this->computeFallbackLocales($locale)) {
+            if (! $this->computeFallbackLocales($locale)) {
                 throw $e;
             }
         }
@@ -368,7 +368,7 @@ EOF
 
         if (isset($this->resources[$locale])) {
             foreach ($this->resources[$locale] as $resource) {
-                if (!isset($this->loaders[$resource[0]])) {
+                if (! isset($this->loaders[$resource[0]])) {
                     if (\is_string($resource[1])) {
                         throw new RuntimeException(sprintf('No loader is registered for the "%s" format when loading the "%s" resource.', $resource[0], $resource[1]));
                     }
@@ -385,7 +385,7 @@ EOF
         $current = $this->catalogues[$locale];
 
         foreach ($this->computeFallbackLocales($locale) as $fallback) {
-            if (!isset($this->catalogues[$fallback])) {
+            if (! isset($this->catalogues[$fallback])) {
                 $this->initializeCatalogue($fallback);
             }
 
@@ -457,7 +457,7 @@ EOF
      */
     private function getConfigCacheFactory(): ConfigCacheFactoryInterface
     {
-        if (!$this->configCacheFactory) {
+        if (! $this->configCacheFactory) {
             $this->configCacheFactory = new ConfigCacheFactory($this->debug);
         }
 

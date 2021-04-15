@@ -19,21 +19,19 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class CyclomaticComplexitySniff implements Sniff
 {
-
     /**
      * A complexity higher than this value will throw a warning.
      *
-     * @var integer
+     * @var int
      */
     public $complexity = 10;
 
     /**
      * A complexity higher than this value will throw an error.
      *
-     * @var integer
+     * @var int
      */
     public $absoluteComplexity = 20;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -43,9 +41,9 @@ class CyclomaticComplexitySniff implements Sniff
     public function register()
     {
         return [T_FUNCTION];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -67,7 +65,7 @@ class CyclomaticComplexitySniff implements Sniff
 
         // Detect start and end of this function definition.
         $start = $tokens[$stackPtr]['scope_opener'];
-        $end   = $tokens[$stackPtr]['scope_closer'];
+        $end = $tokens[$stackPtr]['scope_closer'];
 
         // Predicate nodes for PHP.
         $find = [
@@ -93,21 +91,20 @@ class CyclomaticComplexitySniff implements Sniff
 
         if ($complexity > $this->absoluteComplexity) {
             $error = 'Function\'s cyclomatic complexity (%s) exceeds allowed maximum of %s';
-            $data  = [
+            $data = [
                 $complexity,
                 $this->absoluteComplexity,
             ];
             $phpcsFile->addError($error, $stackPtr, 'MaxExceeded', $data);
-        } else if ($complexity > $this->complexity) {
+        } elseif ($complexity > $this->complexity) {
             $warning = 'Function\'s cyclomatic complexity (%s) exceeds %s; consider refactoring the function';
-            $data    = [
+            $data = [
                 $complexity,
                 $this->complexity,
             ];
             $phpcsFile->addWarning($warning, $stackPtr, 'TooHigh', $data);
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

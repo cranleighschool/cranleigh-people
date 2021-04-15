@@ -21,14 +21,12 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class NoSilencedErrorsSniff implements Sniff
 {
-
     /**
      * If true, an error will be thrown; otherwise a warning.
      *
-     * @var boolean
+     * @var bool
      */
     public $error = false;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -38,9 +36,9 @@ class NoSilencedErrorsSniff implements Sniff
     public function register()
     {
         return [T_ASPERAND];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -54,7 +52,7 @@ class NoSilencedErrorsSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         // Prepare the "Found" string to display.
-        $contextLength  = 4;
+        $contextLength = 4;
         $endOfStatement = $phpcsFile->findEndOfStatement($stackPtr, [T_COMMA, T_COLON]);
         if (($endOfStatement - $stackPtr) < $contextLength) {
             $contextLength = ($endOfStatement - $stackPtr);
@@ -70,8 +68,7 @@ class NoSilencedErrorsSniff implements Sniff
             $error = 'Silencing errors is discouraged; found: %s';
             $phpcsFile->addWarning($error, $stackPtr, 'Discouraged', [$found]);
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

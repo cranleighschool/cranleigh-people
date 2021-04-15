@@ -78,7 +78,7 @@ abstract class PHPParserVersion71 extends PHPParserVersion70
      */
     protected function isListUnpacking($tokenType = null)
     {
-        return in_array($tokenType ?: $this->tokenizer->peek(), array(Tokens::T_LIST, Tokens::T_SQUARED_BRACKET_OPEN));
+        return in_array($tokenType ?: $this->tokenizer->peek(), [Tokens::T_LIST, Tokens::T_SQUARED_BRACKET_OPEN]);
     }
 
     /**
@@ -132,9 +132,9 @@ abstract class PHPParserVersion71 extends PHPParserVersion70
     }
 
     /**
-     * Override this in later PHPParserVersions as necessary
-     * @param integer $tokenType
-     * @param integer $modifiers
+     * Override this in later PHPParserVersions as necessary.
+     * @param int $tokenType
+     * @param int $modifiers
      * @return \PDepend\Source\AST\ASTConstantDefinition;
      * @throws UnexpectedTokenException
      */
@@ -150,12 +150,12 @@ abstract class PHPParserVersion71 extends PHPParserVersion70
 
         return parent::parseUnknownDeclaration($tokenType, $modifiers);
     }
-    
+
     /**
      * Tests if the given image is a PHP 7 type hint.
      *
      * @param string $image
-     * @return boolean
+     * @return bool
      */
     protected function isScalarOrCallableTypeHint($image)
     {
@@ -226,9 +226,9 @@ abstract class PHPParserVersion71 extends PHPParserVersion70
     }
 
     /**
-     * @param integer $tokenType
-     * @param integer $modifiers
-     * @return integer
+     * @param int $tokenType
+     * @param int $modifiers
+     * @return int
      */
     private function getModifiersForConstantDefinition($tokenType, $modifiers)
     {

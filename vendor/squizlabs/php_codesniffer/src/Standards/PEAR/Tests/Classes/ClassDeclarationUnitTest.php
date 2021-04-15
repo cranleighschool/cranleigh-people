@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class ClassDeclarationUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Get a list of CLI values to set before the file is tested.
      *
@@ -30,9 +28,9 @@ class ClassDeclarationUnitTest extends AbstractSniffUnitTest
         }
 
         $config->tabWidth = 4;
+    }
 
-    }//end setCliValues()
-
+    //end setCliValues()
 
     /**
      * Returns the lines where errors should occur.
@@ -44,7 +42,7 @@ class ClassDeclarationUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile='')
+    public function getErrorList($testFile = '')
     {
         switch ($testFile) {
         case 'ClassDeclarationUnitTest.1.inc':
@@ -66,9 +64,9 @@ class ClassDeclarationUnitTest extends AbstractSniffUnitTest
         default:
             return [];
         }//end switch
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -80,15 +78,14 @@ class ClassDeclarationUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getWarningList($testFile='')
+    public function getWarningList($testFile = '')
     {
         if ($testFile === 'ClassDeclarationUnitTest.2.inc') {
             return [11 => 1];
         }
 
         return[];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

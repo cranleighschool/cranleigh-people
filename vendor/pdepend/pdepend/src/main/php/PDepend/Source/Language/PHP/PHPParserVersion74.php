@@ -61,16 +61,16 @@ abstract class PHPParserVersion74 extends PHPParserVersion73
     {
         /**
          * Typed properties
-         * https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.typed-properties
+         * https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.typed-properties.
          */
-        if (in_array($tokenType, array(
+        if (in_array($tokenType, [
             Tokens::T_STRING,
             Tokens::T_ARRAY,
             Tokens::T_QUESTION_MARK,
             Tokens::T_BACKSLASH,
             Tokens::T_CALLABLE,
             Tokens::T_SELF,
-        ))) {
+        ])) {
             $type = $this->parseTypeHint();
             $declaration = $this->parseFieldDeclaration();
             $declaration->prependChild($type);
@@ -91,7 +91,7 @@ abstract class PHPParserVersion74 extends PHPParserVersion73
 
             $field = parent::parseMethodOrFieldDeclaration($modifiers);
 
-            if (!($field instanceof ASTFieldDeclaration)) {
+            if (! ($field instanceof ASTFieldDeclaration)) {
                 throw new UnexpectedTokenException($this->tokenizer->prevToken(), $this->tokenizer->getSourceFile());
             }
 

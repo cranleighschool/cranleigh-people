@@ -17,14 +17,12 @@ use PHP_CodeSniffer\Util\Common;
 
 class JavaScriptLintSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['JS'];
-
 
     /**
      * Returns the token types that this sniff is interested in.
@@ -34,9 +32,9 @@ class JavaScriptLintSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -73,17 +71,16 @@ class JavaScriptLintSniff implements Sniff
 
         if (is_array($output) === true) {
             foreach ($output as $finding) {
-                $split   = strpos($finding, ':');
-                $line    = substr($finding, 0, $split);
+                $split = strpos($finding, ':');
+                $line = substr($finding, 0, $split);
                 $message = substr($finding, ($split + 1));
                 $phpcsFile->addWarningOnLine(trim($message), $line, 'ExternalTool');
             }
         }
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens + 1;
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

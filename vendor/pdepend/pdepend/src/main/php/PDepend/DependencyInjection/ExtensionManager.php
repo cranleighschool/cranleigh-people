@@ -53,7 +53,7 @@ class ExtensionManager
     /**
      * @var array<\PDepend\DependencyInjection\Extension>
      */
-    private $extensions = array();
+    private $extensions = [];
 
     /**
      * Activate an extension based on a class name.
@@ -64,7 +64,7 @@ class ExtensionManager
      */
     public function activateExtension($className)
     {
-        if (!class_exists($className)) {
+        if (! class_exists($className)) {
             throw new \RuntimeException(
                 sprintf(
                     'Cannot find extension class %s" for PDepend. Maybe the plugin is not installed?',
@@ -75,7 +75,7 @@ class ExtensionManager
 
         $extension = new $className;
 
-        if (!($extension instanceof Extension)) {
+        if (! ($extension instanceof Extension)) {
             throw new \RuntimeException(
                 sprintf('Class "%s" is not a valid Extension', $className)
             );

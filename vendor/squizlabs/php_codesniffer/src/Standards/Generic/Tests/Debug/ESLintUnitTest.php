@@ -9,12 +9,11 @@
 
 namespace PHP_CodeSniffer\Standards\Generic\Tests\Debug;
 
-use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 use PHP_CodeSniffer\Config;
+use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class ESLintUnitTest extends AbstractSniffUnitTest
 {
-
     /**
      * Basic ESLint config to use for testing the sniff.
      *
@@ -32,7 +31,6 @@ class ESLintUnitTest extends AbstractSniffUnitTest
     }
 }';
 
-
     /**
      * Sets up this unit test.
      *
@@ -44,9 +42,9 @@ class ESLintUnitTest extends AbstractSniffUnitTest
 
         $cwd = getcwd();
         file_put_contents($cwd.'/.eslintrc.json', self::ESLINT_CONFIG);
+    }
 
-    }//end setUp()
-
+    //end setUp()
 
     /**
      * Remove artifact.
@@ -59,9 +57,9 @@ class ESLintUnitTest extends AbstractSniffUnitTest
 
         $cwd = getcwd();
         unlink($cwd.'/.eslintrc.json');
+    }
 
-    }//end tearDown()
-
+    //end tearDown()
 
     /**
      * Should this test be skipped for some reason.
@@ -76,9 +74,9 @@ class ESLintUnitTest extends AbstractSniffUnitTest
         }
 
         return false;
+    }
 
-    }//end shouldSkipTest()
-
+    //end shouldSkipTest()
 
     /**
      * Returns the lines where errors should occur.
@@ -91,9 +89,9 @@ class ESLintUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [1 => 2];
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -106,8 +104,7 @@ class ESLintUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

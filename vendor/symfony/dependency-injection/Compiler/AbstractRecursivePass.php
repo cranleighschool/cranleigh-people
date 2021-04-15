@@ -115,7 +115,7 @@ abstract class AbstractRecursivePass implements CompilerPassInterface
         }
 
         if (\is_string($factory = $definition->getFactory())) {
-            if (!\function_exists($factory)) {
+            if (! \function_exists($factory)) {
                 throw new RuntimeException(sprintf('Invalid service "%s": function "%s" does not exist.', $this->currentId, $factory));
             }
             $r = new \ReflectionFunction($factory);
@@ -146,17 +146,17 @@ abstract class AbstractRecursivePass implements CompilerPassInterface
         $class = $definition->getClass();
 
         try {
-            if (!$r = $this->container->getReflectionClass($class)) {
+            if (! $r = $this->container->getReflectionClass($class)) {
                 throw new RuntimeException(sprintf('Invalid service "%s": class "%s" does not exist.', $this->currentId, $class));
             }
         } catch (\ReflectionException $e) {
             throw new RuntimeException(sprintf('Invalid service "%s": ', $this->currentId).lcfirst($e->getMessage()));
         }
-        if (!$r = $r->getConstructor()) {
+        if (! $r = $r->getConstructor()) {
             if ($required) {
                 throw new RuntimeException(sprintf('Invalid service "%s": class%s has no constructor.', $this->currentId, sprintf($class !== $this->currentId ? ' "%s"' : '', $class)));
             }
-        } elseif (!$r->isPublic()) {
+        } elseif (! $r->isPublic()) {
             throw new RuntimeException(sprintf('Invalid service "%s": ', $this->currentId).sprintf($class !== $this->currentId ? 'constructor of class "%s"' : 'its constructor', $class).' must be public.');
         }
 
@@ -174,20 +174,20 @@ abstract class AbstractRecursivePass implements CompilerPassInterface
             return $this->getConstructor($definition, true);
         }
 
-        if (!$class = $definition->getClass()) {
+        if (! $class = $definition->getClass()) {
             throw new RuntimeException(sprintf('Invalid service "%s": the class is not set.', $this->currentId));
         }
 
-        if (!$r = $this->container->getReflectionClass($class)) {
+        if (! $r = $this->container->getReflectionClass($class)) {
             throw new RuntimeException(sprintf('Invalid service "%s": class "%s" does not exist.', $this->currentId, $class));
         }
 
-        if (!$r->hasMethod($method)) {
+        if (! $r->hasMethod($method)) {
             throw new RuntimeException(sprintf('Invalid service "%s": method "%s()" does not exist.', $this->currentId, $class !== $this->currentId ? $class.'::'.$method : $method));
         }
 
         $r = $r->getMethod($method);
-        if (!$r->isPublic()) {
+        if (! $r->isPublic()) {
             throw new RuntimeException(sprintf('Invalid service "%s": method "%s()" must be public.', $this->currentId, $class !== $this->currentId ? $class.'::'.$method : $method));
         }
 
@@ -197,7 +197,7 @@ abstract class AbstractRecursivePass implements CompilerPassInterface
     private function getExpressionLanguage(): ExpressionLanguage
     {
         if (null === $this->expressionLanguage) {
-            if (!class_exists(ExpressionLanguage::class)) {
+            if (! class_exists(ExpressionLanguage::class)) {
                 throw new LogicException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed.');
             }
 
@@ -208,7 +208,7 @@ abstract class AbstractRecursivePass implements CompilerPassInterface
                     $this->inExpression = true;
                     $arg = $this->processValue(new Reference($id));
                     $this->inExpression = false;
-                    if (!$arg instanceof Reference) {
+                    if (! $arg instanceof Reference) {
                         throw new RuntimeException(sprintf('"%s::processValue()" must return a Reference when processing an expression, "%s" returned for service("%s").', static::class, get_debug_type($arg), $id));
                     }
                     $arg = sprintf('"%s"', $arg);

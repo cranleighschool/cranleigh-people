@@ -15,21 +15,19 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ConcatenationSpacingSniff implements Sniff
 {
-
     /**
      * The number of spaces before and after a string concat.
      *
-     * @var integer
+     * @var int
      */
     public $spacing = 0;
 
     /**
      * Allow newlines instead of spaces.
      *
-     * @var boolean
+     * @var bool
      */
     public $ignoreNewlines = false;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -39,9 +37,9 @@ class ConcatenationSpacingSniff implements Sniff
     public function register()
     {
         return [T_STRING_CONCAT];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -61,7 +59,7 @@ class ConcatenationSpacingSniff implements Sniff
         }
 
         $ignoreBefore = false;
-        $prev         = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
+        $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if ($tokens[$prev]['code'] === T_END_HEREDOC || $tokens[$prev]['code'] === T_END_NOWDOC) {
             // Spacing before must be preserved due to the here/nowdoc closing tag.
             $ignoreBefore = true;
@@ -108,7 +106,7 @@ class ConcatenationSpacingSniff implements Sniff
 
         if ($this->spacing === 0) {
             $message = 'Concat operator must not be surrounded by spaces';
-            $data    = [];
+            $data = [];
         } else {
             if ($this->spacing > 1) {
                 $message = 'Concat operator must be surrounded by %s spaces';
@@ -135,7 +133,7 @@ class ConcatenationSpacingSniff implements Sniff
                     }
 
                     $phpcsFile->fixer->endChangeset();
-                } else if ($this->spacing > 0) {
+                } elseif ($this->spacing > 0) {
                     $phpcsFile->fixer->addContent(($stackPtr - 1), $padding);
                 }
             }
@@ -152,13 +150,12 @@ class ConcatenationSpacingSniff implements Sniff
                     }
 
                     $phpcsFile->fixer->endChangeset();
-                } else if ($this->spacing > 0) {
+                } elseif ($this->spacing > 0) {
                     $phpcsFile->fixer->addContent($stackPtr, $padding);
                 }
             }
         }//end if
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

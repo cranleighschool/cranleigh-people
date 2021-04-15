@@ -64,18 +64,18 @@ class ASTFormalParameter extends AbstractASTNode
     /**
      * Defined modifiers for this property node.
      *
-     * @var integer
+     * @var int
      */
     protected $modifiers = 0;
 
     /**
      * Checks if this parameter has a type.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasType()
     {
-        return (reset($this->nodes) instanceof ASTType);
+        return reset($this->nodes) instanceof ASTType;
     }
 
     /**
@@ -96,7 +96,7 @@ class ASTFormalParameter extends AbstractASTNode
      * This method will return <b>true</b> when the parameter is declared as a
      * variable argument list <b>...</b>.
      *
-     * @return boolean
+     * @return bool
      * @since 2.0.7
      */
     public function isVariableArgList()
@@ -108,7 +108,7 @@ class ASTFormalParameter extends AbstractASTNode
      * This method can be used to mark this parameter as passed by reference.
      *
      * @return void
-    @since 2.0.7
+     * @since 2.0.7
      */
     public function setVariableArgList()
     {
@@ -119,7 +119,7 @@ class ASTFormalParameter extends AbstractASTNode
      * This method will return <b>true</b> when the parameter is passed by
      * reference.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPassedByReference()
     {
@@ -153,7 +153,7 @@ class ASTFormalParameter extends AbstractASTNode
     /**
      * Returns the total number of the used property bag.
      *
-     * @return integer
+     * @return int
      * @since  0.10.4
      * @see    \PDepend\Source\AST\ASTNode#getMetadataSize()
      */
@@ -165,7 +165,7 @@ class ASTFormalParameter extends AbstractASTNode
     /**
      * Returns the declared modifiers for this type.
      *
-     * @return integer
+     * @return int
      * @since  0.9.4
      */
     public function getModifiers()
@@ -180,7 +180,7 @@ class ASTFormalParameter extends AbstractASTNode
      * This method will throw an exception when the value of given <b>$modifiers</b>
      * contains an invalid/unexpected modifier
      *
-     * @param  integer $modifiers
+     * @param  int $modifiers
      * @return void
      * @throws BadMethodCallException
      * @throws InvalidArgumentException
@@ -211,7 +211,7 @@ class ASTFormalParameter extends AbstractASTNode
      *
      * Can happen only on constructor promotion property.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPromoted()
     {
@@ -224,7 +224,7 @@ class ASTFormalParameter extends AbstractASTNode
      *
      * Can happen only on constructor promotion property.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
@@ -237,7 +237,7 @@ class ASTFormalParameter extends AbstractASTNode
      *
      * Can happen only on constructor promotion property.
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
@@ -250,7 +250,7 @@ class ASTFormalParameter extends AbstractASTNode
      *
      * Can happen only on constructor promotion property.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {

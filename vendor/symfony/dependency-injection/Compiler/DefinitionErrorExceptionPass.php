@@ -28,15 +28,15 @@ class DefinitionErrorExceptionPass extends AbstractRecursivePass
      */
     protected function processValue($value, bool $isRoot = false)
     {
-        if (!$value instanceof Definition || !$value->hasErrors()) {
+        if (! $value instanceof Definition || ! $value->hasErrors()) {
             return parent::processValue($value, $isRoot);
         }
 
-        if ($isRoot && !$value->isPublic()) {
+        if ($isRoot && ! $value->isPublic()) {
             $graph = $this->container->getCompiler()->getServiceReferenceGraph();
             $runtimeException = false;
             foreach ($graph->getNode($this->currentId)->getInEdges() as $edge) {
-                if (!$edge->getValue() instanceof Reference || ContainerInterface::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE !== $edge->getValue()->getInvalidBehavior()) {
+                if (! $edge->getValue() instanceof Reference || ContainerInterface::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE !== $edge->getValue()->getInvalidBehavior()) {
                     $runtimeException = false;
                     break;
                 }

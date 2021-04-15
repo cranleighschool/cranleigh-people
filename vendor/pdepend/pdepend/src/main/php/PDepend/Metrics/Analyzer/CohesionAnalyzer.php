@@ -45,7 +45,6 @@ namespace PDepend\Metrics\Analyzer;
 use PDepend\Metrics\AbstractAnalyzer;
 use PDepend\Metrics\AnalyzerNodeAware;
 use PDepend\Source\AST\ASTArtifact;
-use PDepend\Source\AST\ASTArtifactList;
 
 /**
  * This analyzer implements several metrics that describe cohesion of classes
@@ -59,14 +58,14 @@ class CohesionAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware
     /**
      * Metrics provided by the analyzer implementation.
      */
-    const M_LCOM4  = 'lcom4';
+    const M_LCOM4 = 'lcom4';
 
     /**
      * Collected cohesion metrics for classes.
      *
      * @var array<string, array<string, integer>>
      */
-    private $nodeMetrics = array();
+    private $nodeMetrics = [];
 
     /**
      * This method will return an <b>array</b> with all generated metric values
@@ -89,7 +88,8 @@ class CohesionAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware
         if (isset($this->nodeMetrics[$artifact->getId()])) {
             return $this->nodeMetrics[$artifact->getId()];
         }
-        return array();
+
+        return [];
     }
 
     /**

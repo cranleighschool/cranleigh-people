@@ -16,7 +16,6 @@ use PHP_CodeSniffer\Util\Common;
 
 class ESLintSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -31,7 +30,6 @@ class ESLintSniff implements Sniff
      */
     public $configFile = null;
 
-
     /**
      * Returns the token types that this sniff is interested in.
      *
@@ -40,9 +38,9 @@ class ESLintSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -84,13 +82,13 @@ class ESLintSniff implements Sniff
 
         if ($code <= 0) {
             // No errors, continue.
-            return ($phpcsFile->numTokens + 1);
+            return $phpcsFile->numTokens + 1;
         }
 
         $data = json_decode(implode("\n", $stdout));
         if (json_last_error() !== JSON_ERROR_NONE) {
             // Ignore any errors.
-            return ($phpcsFile->numTokens + 1);
+            return $phpcsFile->numTokens + 1;
         }
 
         // Data is a list of files, but we only pass a single one.
@@ -105,9 +103,8 @@ class ESLintSniff implements Sniff
         }
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens + 1;
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

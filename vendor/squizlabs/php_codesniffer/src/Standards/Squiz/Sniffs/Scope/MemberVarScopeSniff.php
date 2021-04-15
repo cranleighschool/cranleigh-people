@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\AbstractVariableSniff;
 
 class MemberVarScopeSniff extends AbstractVariableSniff
 {
-
-
     /**
      * Processes the function tokens within the class.
      *
@@ -26,7 +24,7 @@ class MemberVarScopeSniff extends AbstractVariableSniff
      */
     protected function processMemberVar(File $phpcsFile, $stackPtr)
     {
-        $tokens     = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
         $properties = $phpcsFile->getMemberProperties($stackPtr);
 
         if ($properties === [] || $properties['scope_specified'] !== false) {
@@ -34,11 +32,11 @@ class MemberVarScopeSniff extends AbstractVariableSniff
         }
 
         $error = 'Scope modifier not specified for member variable "%s"';
-        $data  = [$tokens[$stackPtr]['content']];
+        $data = [$tokens[$stackPtr]['content']];
         $phpcsFile->addError($error, $stackPtr, 'Missing', $data);
+    }
 
-    }//end processMemberVar()
-
+    //end processMemberVar()
 
     /**
      * Processes normal variables.
@@ -53,9 +51,9 @@ class MemberVarScopeSniff extends AbstractVariableSniff
         /*
             We don't care about normal variables.
         */
+    }
 
-    }//end processVariable()
-
+    //end processVariable()
 
     /**
      * Processes variables in double quoted strings.
@@ -70,8 +68,7 @@ class MemberVarScopeSniff extends AbstractVariableSniff
         /*
             We don't care about normal variables.
         */
+    }
 
-    }//end processVariableInString()
-
-
+    //end processVariableInString()
 }//end class

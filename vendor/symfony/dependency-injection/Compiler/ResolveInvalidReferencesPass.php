@@ -82,7 +82,7 @@ class ResolveInvalidReferencesPass implements CompilerPassInterface
                         $value[$k] = $processedValue;
                     }
                 } catch (RuntimeException $e) {
-                    if ($rootLevel < $level || ($rootLevel && !$level)) {
+                    if ($rootLevel < $level || ($rootLevel && ! $level)) {
                         unset($value[$k]);
                     } elseif ($rootLevel) {
                         throw $e;
@@ -110,7 +110,7 @@ class ResolveInvalidReferencesPass implements CompilerPassInterface
 
             $invalidBehavior = $value->getInvalidBehavior();
 
-            if (ContainerInterface::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE === $invalidBehavior && $value instanceof TypedReference && !$this->container->has($id)) {
+            if (ContainerInterface::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE === $invalidBehavior && $value instanceof TypedReference && ! $this->container->has($id)) {
                 $e = new ServiceNotFoundException($id, $this->currentId);
 
                 // since the error message varies by $id and $this->currentId, so should the id of the dummy errored definition

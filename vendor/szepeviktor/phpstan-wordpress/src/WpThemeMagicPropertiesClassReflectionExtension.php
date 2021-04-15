@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace PHPStan\WordPress;
 
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Reflection\Dummy\DummyPropertyReflection;
+use PHPStan\Reflection\PropertyReflection;
 
 class WpThemeMagicPropertiesClassReflectionExtension implements \PHPStan\Reflection\PropertiesClassReflectionExtension
 {
@@ -25,6 +25,7 @@ class WpThemeMagicPropertiesClassReflectionExtension implements \PHPStan\Reflect
         if ($classReflection->getName() !== 'WP_Theme') {
             return false;
         }
+
         return in_array($propertyName, $this->properties, true);
     }
 

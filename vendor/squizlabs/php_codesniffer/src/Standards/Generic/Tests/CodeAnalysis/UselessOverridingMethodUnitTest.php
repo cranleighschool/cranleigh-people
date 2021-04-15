@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class UselessOverridingMethodUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -26,9 +24,9 @@ class UselessOverridingMethodUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [];
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -44,8 +42,7 @@ class UselessOverridingMethodUnitTest extends AbstractSniffUnitTest
             4  => 1,
             16 => 1,
         ];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

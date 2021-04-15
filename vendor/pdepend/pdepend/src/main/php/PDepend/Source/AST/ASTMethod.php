@@ -62,7 +62,7 @@ class ASTMethod extends AbstractASTCallable
     /**
      * Defined modifiers for this property node.
      *
-     * @var integer
+     * @var int
      */
     protected $modifiers = 0;
 
@@ -70,7 +70,7 @@ class ASTMethod extends AbstractASTCallable
      * This method returns a OR combined integer of the declared modifiers for
      * this method.
      *
-     * @return integer
+     * @return int
      * @since  1.0.0
      */
     public function getModifiers()
@@ -85,7 +85,7 @@ class ASTMethod extends AbstractASTCallable
      * This method will throw an exception when the value of given <b>$modifiers</b>
      * contains an invalid/unexpected modifier
      *
-     * @param  integer $modifiers
+     * @param  int $modifiers
      * @return void
      * @throws \InvalidArgumentException If the given modifier contains unexpected values.
      * @since  0.9.4
@@ -109,70 +109,70 @@ class ASTMethod extends AbstractASTCallable
     /**
      * Returns <b>true</b> if this is an abstract method.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAbstract()
     {
-        return (($this->modifiers & State::IS_ABSTRACT) === State::IS_ABSTRACT);
+        return ($this->modifiers & State::IS_ABSTRACT) === State::IS_ABSTRACT;
     }
 
     /**
      * Returns <b>true</b> if this node is marked as public, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
-        return (($this->modifiers & State::IS_PUBLIC) === State::IS_PUBLIC);
+        return ($this->modifiers & State::IS_PUBLIC) === State::IS_PUBLIC;
     }
 
     /**
      * Returns <b>true</b> if this node is marked as protected, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
-        return (($this->modifiers & State::IS_PROTECTED) === State::IS_PROTECTED);
+        return ($this->modifiers & State::IS_PROTECTED) === State::IS_PROTECTED;
     }
 
     /**
      * Returns <b>true</b> if this node is marked as private, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
-        return (($this->modifiers & State::IS_PRIVATE) === State::IS_PRIVATE);
+        return ($this->modifiers & State::IS_PRIVATE) === State::IS_PRIVATE;
     }
 
     /**
      * Returns <b>true</b> when this node is declared as static, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
-        return (($this->modifiers & State::IS_STATIC) === State::IS_STATIC);
+        return ($this->modifiers & State::IS_STATIC) === State::IS_STATIC;
     }
 
     /**
      * Returns <b>true</b> when this node is declared as final, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isFinal()
     {
-        return (($this->modifiers & State::IS_FINAL) === State::IS_FINAL);
+        return ($this->modifiers & State::IS_FINAL) === State::IS_FINAL;
     }
 
     /**
-     * Returns the parent type object or <b>null</b>
+     * Returns the parent type object or <b>null</b>.
      *
      * @return \PDepend\Source\AST\AbstractASTType|null
      */
@@ -229,6 +229,6 @@ class ASTMethod extends AbstractASTCallable
      */
     public function __sleep()
     {
-        return array_merge(array('modifiers'), parent::__sleep());
+        return array_merge(['modifiers'], parent::__sleep());
     }
 }

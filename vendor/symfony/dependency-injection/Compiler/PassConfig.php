@@ -118,13 +118,13 @@ class PassConfig
     public function addPass(CompilerPassInterface $pass, string $type = self::TYPE_BEFORE_OPTIMIZATION, int $priority = 0)
     {
         $property = $type.'Passes';
-        if (!isset($this->$property)) {
+        if (! isset($this->$property)) {
             throw new InvalidArgumentException(sprintf('Invalid type "%s".', $type));
         }
 
         $passes = &$this->$property;
 
-        if (!isset($passes[$priority])) {
+        if (! isset($passes[$priority])) {
             $passes[$priority] = [];
         }
         $passes[$priority][] = $pass;

@@ -16,20 +16,19 @@ use PHP_CodeSniffer\Util\Common;
 
 class ClosureLinterSniff implements Sniff
 {
-
     /**
      * A list of error codes that should show errors.
      *
      * All other error codes will show warnings.
      *
-     * @var integer
+     * @var int
      */
     public $errorCodes = [];
 
     /**
      * A list of error codes to ignore.
      *
-     * @var integer
+     * @var int
      */
     public $ignoreCodes = [];
 
@@ -40,7 +39,6 @@ class ClosureLinterSniff implements Sniff
      */
     public $supportedTokenizers = ['JS'];
 
-
     /**
      * Returns the token types that this sniff is interested in.
      *
@@ -49,9 +47,9 @@ class ClosureLinterSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -73,7 +71,7 @@ class ClosureLinterSniff implements Sniff
         $fileName = $phpcsFile->getFilename();
 
         $lintPath = Common::escapeshellcmd($lintPath);
-        $cmd      = $lintPath.' --nosummary --notime --unix_mode '.escapeshellarg($fileName);
+        $cmd = $lintPath.' --nosummary --notime --unix_mode '.escapeshellarg($fileName);
         exec($cmd, $output, $retval);
 
         if (is_array($output) === false) {
@@ -81,7 +79,7 @@ class ClosureLinterSniff implements Sniff
         }
 
         foreach ($output as $finding) {
-            $matches    = [];
+            $matches = [];
             $numMatches = preg_match('/^(.*):([0-9]+):\(.*?([0-9]+)\)(.*)$/', $finding, $matches);
             if ($numMatches === 0) {
                 continue;
@@ -93,11 +91,11 @@ class ClosureLinterSniff implements Sniff
                 continue;
             }
 
-            $line  = (int) $matches[2];
+            $line = (int) $matches[2];
             $error = trim($matches[4]);
 
             $message = 'gjslint says: (%s) %s';
-            $data    = [
+            $data = [
                 $code,
                 $error,
             ];
@@ -109,9 +107,8 @@ class ClosureLinterSniff implements Sniff
         }//end foreach
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens + 1;
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -126,7 +126,7 @@ class XmlReferenceDumper
 
             // get attributes and elements
             foreach ($children as $child) {
-                if (!$child instanceof ArrayNode) {
+                if (! $child instanceof ArrayNode) {
                     // get attributes
 
                     // metadata
@@ -203,7 +203,7 @@ class XmlReferenceDumper
 
         // render start tag + attributes
         $rootIsVariablePrototype = isset($prototypeValue);
-        $rootIsEmptyTag = (0 === \count($rootChildren) && !$rootIsVariablePrototype);
+        $rootIsEmptyTag = (0 === \count($rootChildren) && ! $rootIsVariablePrototype);
         $rootOpenTag = '<'.$rootName;
         if (1 >= ($attributesCount = \count($rootAttributes))) {
             if (1 === $attributesCount) {
@@ -244,7 +244,7 @@ class XmlReferenceDumper
         }
 
         // render end tag
-        if (!$rootIsEmptyTag && !$rootIsVariablePrototype) {
+        if (! $rootIsEmptyTag && ! $rootIsVariablePrototype) {
             $this->writeLine('');
 
             $rootEndTag = '</'.$rootName.'>';

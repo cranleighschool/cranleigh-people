@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util;
 
 class CSS extends PHP
 {
-
-
     /**
      * Initialise the tokenizer.
      *
@@ -29,16 +27,16 @@ class CSS extends PHP
      * @return void
      * @throws \PHP_CodeSniffer\Exceptions\TokenizerException If the file appears to be minified.
      */
-    public function __construct($content, Config $config, $eolChar='\n')
+    public function __construct($content, Config $config, $eolChar = '\n')
     {
         if ($this->isMinifiedContent($content, $eolChar) === true) {
             throw new TokenizerException('File appears to be minified and cannot be processed');
         }
 
         parent::__construct($content, $config, $eolChar);
+    }
 
-    }//end __construct()
-
+    //end __construct()
 
     /**
      * Creates an array of tokens when given some CSS code.
@@ -59,7 +57,7 @@ class CSS extends PHP
         // the open and close tags we add are parsed correctly.
         $eolAdded = false;
         if (substr($string, (strlen($this->eolChar) * -1)) !== $this->eolChar) {
-            $string  .= $this->eolChar;
+            $string .= $this->eolChar;
             $eolAdded = true;
         }
 
@@ -67,15 +65,15 @@ class CSS extends PHP
         $string = str_replace('?>', '^PHPCS_CSS_T_CLOSE_TAG^', $string);
         $tokens = parent::tokenize('<?php '.$string.'?>');
 
-        $finalTokens    = [];
+        $finalTokens = [];
         $finalTokens[0] = [
             'code'    => T_OPEN_TAG,
             'type'    => 'T_OPEN_TAG',
             'content' => '',
         ];
 
-        $newStackPtr      = 1;
-        $numTokens        = count($tokens);
+        $newStackPtr = 1;
+        $numTokens = count($tokens);
         $multiLineComment = false;
         for ($stackPtr = 1; $stackPtr < $numTokens; $stackPtr++) {
             $token = $tokens[$stackPtr];
@@ -101,7 +99,7 @@ class CSS extends PHP
             $token['content'] = str_replace('^PHPCS_CSS_T_CLOSE_TAG^', '?>', $token['content']);
 
             if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                $type    = $token['type'];
+                $type = $token['type'];
                 $content = Util\Common::prepareForOutput($token['content']);
                 echo "\tProcess token $stackPtr: $type => $content".PHP_EOL;
             }
@@ -115,7 +113,7 @@ class CSS extends PHP
                         && $tokens[($stackPtr + 1)]['content'] === 'PHPCS_CSS_T_CLOSE_TAG'
                     ) {
                         // Add the end tag and ignore the * we put at the end.
-                        $content  .= '?>';
+                        $content .= '?>';
                         $stackPtr += 2;
                         break;
                     } else {
@@ -188,7 +186,7 @@ class CSS extends PHP
                 // leading zeros so the content doesn't look like an invalid int.
                 $leadingZero = false;
                 if ($content[0] === '0') {
-                    $content     = '1'.$content;
+                    $content = '1'.$content;
                     $leadingZero = true;
                 }
 
@@ -283,7 +281,7 @@ class CSS extends PHP
             $token = $finalTokens[$stackPtr];
 
             if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                $type    = $token['type'];
+                $type = $token['type'];
                 $content = Util\Common::prepareForOutput($token['content']);
                 echo "\tProcess token $stackPtr: $type => $content".PHP_EOL;
             }
@@ -305,7 +303,7 @@ class CSS extends PHP
                         }
                     }
 
-                    $inStyleDef    = false;
+                    $inStyleDef = false;
                     $asperandStart = false;
                 } else {
                     $inStyleDef = true;
@@ -325,7 +323,7 @@ class CSS extends PHP
                     }
                 }
 
-                $inStyleDef    = false;
+                $inStyleDef = false;
                 $asperandStart = false;
                 break;
             case T_MINUS:
@@ -351,7 +349,7 @@ class CSS extends PHP
                         $finalTokens[($stackPtr + 1)]['content'] = $newContent;
                         unset($finalTokens[$stackPtr]);
                     }
-                } else if ($finalTokens[($stackPtr + 1)]['code'] === T_LNUMBER) {
+                } elseif ($finalTokens[($stackPtr + 1)]['code'] === T_LNUMBER) {
                     // They can also be used to provide negative numbers.
                     if (PHP_CODESNIFFER_VERBOSITY > 1) {
                         echo "\t\t* token is part of a negative number; adding content to next token and ignoring *".PHP_EOL;
@@ -410,7 +408,7 @@ class CSS extends PHP
 
                     if (PHP_CODESNIFFER_VERBOSITY > 1) {
                         for ($i = ($stackPtr + 1); $i <= $y; $i++) {
-                            $type    = $finalTokens[$i]['type'];
+                            $type = $finalTokens[$i]['type'];
                             $content = Util\Common::prepareForOutput($finalTokens[$i]['content']);
                             echo "\tProcess token $i: $type => $content".PHP_EOL;
                         }
@@ -450,7 +448,7 @@ class CSS extends PHP
                             echo "\t\t=> token content changed to: $content".PHP_EOL;
                         }
                     }
-                } else if ($finalTokens[$stackPtr]['content'][0] === '-'
+                } elseif ($finalTokens[$stackPtr]['content'][0] === '-'
                     && $finalTokens[($stackPtr + 1)]['code'] === T_STRING
                 ) {
                     if (isset($finalTokens[($stackPtr - 1)]) === true
@@ -490,7 +488,7 @@ class CSS extends PHP
 
         // Reset the array keys to avoid gaps.
         $finalTokens = array_values($finalTokens);
-        $numTokens   = count($finalTokens);
+        $numTokens = count($finalTokens);
 
         // Blank out the content of the end tag.
         $finalTokens[($numTokens - 1)]['content'] = '';
@@ -506,7 +504,7 @@ class CSS extends PHP
             if ($finalTokens[($numTokens - 2)]['content'] === '') {
                 unset($finalTokens[($numTokens - 2)]);
                 $finalTokens = array_values($finalTokens);
-                $numTokens   = count($finalTokens);
+                $numTokens = count($finalTokens);
             }
         }
 
@@ -515,9 +513,9 @@ class CSS extends PHP
         }
 
         return $finalTokens;
+    }
 
-    }//end tokenize()
-
+    //end tokenize()
 
     /**
      * Performs additional processing after main tokenizing.
@@ -530,8 +528,7 @@ class CSS extends PHP
             We override this method because we don't want the PHP version to
             run during CSS processing because it is wasted processing time.
         */
+    }
 
-    }//end processAdditional()
-
-
+    //end processAdditional()
 }//end class

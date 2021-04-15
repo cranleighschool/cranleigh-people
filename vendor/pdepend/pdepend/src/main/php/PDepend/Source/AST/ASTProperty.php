@@ -88,7 +88,7 @@ class ASTProperty extends AbstractASTArtifact
         \PDepend\Source\AST\ASTFieldDeclaration $fieldDeclaration,
         \PDepend\Source\AST\ASTVariableDeclarator $variableDeclarator
     ) {
-        $this->fieldDeclaration   = $fieldDeclaration;
+        $this->fieldDeclaration = $fieldDeclaration;
         $this->variableDeclarator = $variableDeclarator;
 
         $this->id = spl_object_hash($this);
@@ -108,7 +108,7 @@ class ASTProperty extends AbstractASTArtifact
      * This method returns a OR combined integer of the declared modifiers for
      * this property.
      *
-     * @return integer
+     * @return int
      * @since  0.9.6
      */
     public function getModifiers()
@@ -120,7 +120,7 @@ class ASTProperty extends AbstractASTArtifact
      * Returns <b>true</b> if this node is marked as public, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
@@ -131,7 +131,7 @@ class ASTProperty extends AbstractASTArtifact
      * Returns <b>true</b> if this node is marked as protected, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
@@ -142,7 +142,7 @@ class ASTProperty extends AbstractASTArtifact
      * Returns <b>true</b> if this node is marked as private, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
@@ -153,7 +153,7 @@ class ASTProperty extends AbstractASTArtifact
      * Returns <b>true</b> when this node is declared as static, otherwise
      * the returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
@@ -164,7 +164,7 @@ class ASTProperty extends AbstractASTArtifact
      * This method will return <b>true</b> when this property doc comment
      * contains an array type hint, otherwise the it will return <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      * @since  0.9.6
      */
     public function isArray()
@@ -175,6 +175,7 @@ class ASTProperty extends AbstractASTArtifact
         if ($typeNode === null) {
             return false;
         }
+
         return $typeNode->isArray();
     }
 
@@ -182,7 +183,7 @@ class ASTProperty extends AbstractASTArtifact
      * This method will return <b>true</b> when this property doc comment
      * contains a primitive type hint, otherwise the it will return <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      * @since  0.9.6
      */
     public function isScalar()
@@ -193,6 +194,7 @@ class ASTProperty extends AbstractASTArtifact
         if ($typeNode === null) {
             return false;
         }
+
         return $typeNode->isScalar();
     }
 
@@ -211,6 +213,7 @@ class ASTProperty extends AbstractASTArtifact
         if ($reference === null) {
             return null;
         }
+
         return $reference->getType();
     }
 
@@ -227,7 +230,7 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * Returns the line number where the property declaration can be found.
      *
-     * @return integer
+     * @return int
      * @since  0.9.6
      */
     public function getStartLine()
@@ -238,7 +241,7 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * Returns the column number where the property declaration starts.
      *
-     * @return integer
+     * @return int
      * @since  0.9.8
      */
     public function getStartColumn()
@@ -249,7 +252,7 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * Returns the line number where the property declaration ends.
      *
-     * @return integer
+     * @return int
      * @since  0.9.6
      */
     public function getEndLine()
@@ -260,7 +263,7 @@ class ASTProperty extends AbstractASTArtifact
     /**
      * Returns the column number where the property declaration ends.
      *
-     * @return integer
+     * @return int
      * @since  0.9.8
      */
     public function getEndColumn()
@@ -295,7 +298,7 @@ class ASTProperty extends AbstractASTArtifact
      * This method will return <b>true</b> when the parameter declaration
      * contains a default value.
      *
-     * @return boolean
+     * @return bool
      * @since  0.9.6
      */
     public function isDefaultValueAvailable()
@@ -304,6 +307,7 @@ class ASTProperty extends AbstractASTArtifact
         if ($value === null) {
             return false;
         }
+
         return $value->isValueAvailable();
     }
 
@@ -320,6 +324,7 @@ class ASTProperty extends AbstractASTArtifact
         if ($value === null) {
             return null;
         }
+
         return $value->getValue();
     }
 
@@ -342,10 +347,10 @@ class ASTProperty extends AbstractASTArtifact
      */
     public function __toString()
     {
-        $static  = '';
+        $static = '';
 
         if ($this->isStatic() === true) {
-            $static  = ' static';
+            $static = ' static';
         }
 
         $visibility = ' public';

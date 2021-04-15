@@ -272,7 +272,7 @@ class Definition
             throw new OutOfBoundsException(sprintf('The index "%d" is not in the range [0, %d].', $index, \count($this->arguments) - 1));
         }
 
-        if (!\array_key_exists($index, $this->arguments)) {
+        if (! \array_key_exists($index, $this->arguments)) {
             throw new OutOfBoundsException(sprintf('The argument "%s" doesn\'t exist.', $index));
         }
 
@@ -317,7 +317,7 @@ class Definition
      */
     public function getArgument($index)
     {
-        if (!\array_key_exists($index, $this->arguments)) {
+        if (! \array_key_exists($index, $this->arguments)) {
             throw new OutOfBoundsException(sprintf('The argument "%s" doesn\'t exist.', $index));
         }
 
@@ -609,7 +609,7 @@ class Definition
     {
         trigger_deprecation('symfony/dependency-injection', '5.2', 'The "%s()" method is deprecated, use "setPublic()" instead.', __METHOD__);
 
-        return $this->setPublic(!$boolean);
+        return $this->setPublic(! $boolean);
     }
 
     /**
@@ -619,7 +619,7 @@ class Definition
      */
     public function isPrivate()
     {
-        return !$this->public;
+        return ! $this->public;
     }
 
     /**
@@ -656,7 +656,7 @@ class Definition
     {
         $this->synthetic = $boolean;
 
-        if (!isset($this->changes['public'])) {
+        if (! isset($this->changes['public'])) {
             $this->setPublic(true);
         }
 
@@ -719,7 +719,7 @@ class Definition
 
             $status = $args[0] ?? true;
 
-            if (!$status) {
+            if (! $status) {
                 trigger_deprecation('symfony/dependency-injection', '5.1', 'Passing a null message to un-deprecate a node is deprecated.');
             }
 
@@ -869,7 +869,7 @@ class Definition
                 unset($bindings[$key]);
                 $bindings[$key = $k] = $binding;
             }
-            if (!$binding instanceof BoundArgument) {
+            if (! $binding instanceof BoundArgument) {
                 $bindings[$key] = new BoundArgument($binding);
             }
         }
@@ -907,7 +907,7 @@ class Definition
         foreach ($this->errors as $i => $error) {
             if ($error instanceof \Closure) {
                 $this->errors[$i] = (string) $error();
-            } elseif (!\is_string($error)) {
+            } elseif (! \is_string($error)) {
                 $this->errors[$i] = (string) $error;
             }
         }

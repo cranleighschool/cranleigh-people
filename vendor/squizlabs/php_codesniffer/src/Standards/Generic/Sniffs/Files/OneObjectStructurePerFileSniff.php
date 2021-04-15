@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class OneObjectStructurePerFileSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -28,9 +26,9 @@ class OneObjectStructurePerFileSniff implements Sniff
             T_INTERFACE,
             T_TRAIT,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -48,8 +46,7 @@ class OneObjectStructurePerFileSniff implements Sniff
             $error = 'Only one object structure is allowed in a file';
             $phpcsFile->addError($error, $nextClass, 'MultipleFound');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

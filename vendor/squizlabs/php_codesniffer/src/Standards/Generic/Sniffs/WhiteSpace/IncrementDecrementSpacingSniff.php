@@ -15,7 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class IncrementDecrementSpacingSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -25,7 +24,6 @@ class IncrementDecrementSpacingSniff implements Sniff
         'PHP',
         'JS',
     ];
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -38,9 +36,9 @@ class IncrementDecrementSpacingSniff implements Sniff
             T_DEC,
             T_INC,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -68,15 +66,16 @@ class IncrementDecrementSpacingSniff implements Sniff
         ) {
             if ($nextNonEmpty === ($stackPtr + 1)) {
                 $phpcsFile->recordMetric($stackPtr, 'Spacing between in/decrementor and variable', 0);
+
                 return;
             }
 
-            $spaces            = 0;
-            $fixable           = true;
+            $spaces = 0;
+            $fixable = true;
             $nextNonWhitespace = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
             if ($nextNonWhitespace !== $nextNonEmpty) {
                 $fixable = false;
-                $spaces  = 'comment';
+                $spaces = 'comment';
             } else {
                 if ($tokens[$stackPtr]['line'] !== $tokens[$nextNonEmpty]['line']) {
                     $spaces = 'newline';
@@ -87,9 +86,9 @@ class IncrementDecrementSpacingSniff implements Sniff
 
             $phpcsFile->recordMetric($stackPtr, 'Spacing between in/decrementor and variable', $spaces);
 
-            $error     = 'Expected no spaces between the %s operator and %s; %s found';
+            $error = 'Expected no spaces between the %s operator and %s; %s found';
             $errorCode = 'SpaceAfter'.ucfirst($tokenName);
-            $data      = [
+            $data = [
                 $tokenName,
                 $tokens[$nextNonEmpty]['content'],
                 $spaces,
@@ -97,6 +96,7 @@ class IncrementDecrementSpacingSniff implements Sniff
 
             if ($fixable === false) {
                 $phpcsFile->addError($error, $stackPtr, $errorCode, $data);
+
                 return;
             }
 
@@ -121,15 +121,16 @@ class IncrementDecrementSpacingSniff implements Sniff
         ) {
             if ($prevNonEmpty === ($stackPtr - 1)) {
                 $phpcsFile->recordMetric($stackPtr, 'Spacing between in/decrementor and variable', 0);
+
                 return;
             }
 
-            $spaces            = 0;
-            $fixable           = true;
+            $spaces = 0;
+            $fixable = true;
             $prevNonWhitespace = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
             if ($prevNonWhitespace !== $prevNonEmpty) {
                 $fixable = false;
-                $spaces  = 'comment';
+                $spaces = 'comment';
             } else {
                 if ($tokens[$stackPtr]['line'] !== $tokens[$nextNonEmpty]['line']) {
                     $spaces = 'newline';
@@ -140,9 +141,9 @@ class IncrementDecrementSpacingSniff implements Sniff
 
             $phpcsFile->recordMetric($stackPtr, 'Spacing between in/decrementor and variable', $spaces);
 
-            $error     = 'Expected no spaces between %s and the %s operator; %s found';
+            $error = 'Expected no spaces between %s and the %s operator; %s found';
             $errorCode = 'SpaceAfter'.ucfirst($tokenName);
-            $data      = [
+            $data = [
                 $tokens[$prevNonEmpty]['content'],
                 $tokenName,
                 $spaces,
@@ -150,6 +151,7 @@ class IncrementDecrementSpacingSniff implements Sniff
 
             if ($fixable === false) {
                 $phpcsFile->addError($error, $stackPtr, $errorCode, $data);
+
                 return;
             }
 
@@ -163,8 +165,7 @@ class IncrementDecrementSpacingSniff implements Sniff
                 $phpcsFile->fixer->endChangeset();
             }
         }//end if
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

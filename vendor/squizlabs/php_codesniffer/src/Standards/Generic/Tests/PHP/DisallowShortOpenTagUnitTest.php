@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class DisallowShortOpenTagUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Get a list of all test files to check.
      *
@@ -34,9 +32,9 @@ class DisallowShortOpenTagUnitTest extends AbstractSniffUnitTest
         }
 
         return $testFiles;
+    }
 
-    }//end getTestFiles()
-
+    //end getTestFiles()
 
     /**
      * Returns the lines where errors should occur.
@@ -48,7 +46,7 @@ class DisallowShortOpenTagUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile='')
+    public function getErrorList($testFile = '')
     {
         switch ($testFile) {
         case 'DisallowShortOpenTagUnitTest.1.inc':
@@ -68,9 +66,9 @@ class DisallowShortOpenTagUnitTest extends AbstractSniffUnitTest
         default:
             return [];
         }//end switch
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -82,7 +80,7 @@ class DisallowShortOpenTagUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getWarningList($testFile='')
+    public function getWarningList($testFile = '')
     {
         switch ($testFile) {
         case 'DisallowShortOpenTagUnitTest.1.inc':
@@ -96,8 +94,7 @@ class DisallowShortOpenTagUnitTest extends AbstractSniffUnitTest
         default:
             return [];
         }//end switch
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

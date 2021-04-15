@@ -14,14 +14,12 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class MultiLineAssignmentSniff implements Sniff
 {
-
     /**
      * The number of spaces code should be indented.
      *
-     * @var integer
+     * @var int
      */
     public $indent = 4;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -31,9 +29,9 @@ class MultiLineAssignmentSniff implements Sniff
     public function register()
     {
         return [T_EQUAL];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -58,6 +56,7 @@ class MultiLineAssignmentSniff implements Sniff
         if ($tokens[$next]['line'] !== $tokens[$stackPtr]['line']) {
             $error = 'Multi-line assignments must have the equal sign on the second line';
             $phpcsFile->addError($error, $stackPtr, 'EqualSignLine');
+
             return;
         }
 
@@ -74,7 +73,7 @@ class MultiLineAssignmentSniff implements Sniff
 
         // Find the required indent based on the ident of the previous line.
         $assignmentIndent = 0;
-        $prevLine         = $tokens[$prev]['line'];
+        $prevLine = $tokens[$prev]['line'];
         for ($i = ($prev - 1); $i >= 0; $i--) {
             if ($tokens[$i]['line'] !== $prevLine) {
                 $i++;
@@ -90,17 +89,16 @@ class MultiLineAssignmentSniff implements Sniff
         $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1));
 
         $expectedIndent = ($assignmentIndent + $this->indent);
-        $foundIndent    = $tokens[$prev]['length'];
+        $foundIndent = $tokens[$prev]['length'];
         if ($foundIndent !== $expectedIndent) {
             $error = 'Multi-line assignment not indented correctly; expected %s spaces but found %s';
-            $data  = [
+            $data = [
                 $expectedIndent,
                 $foundIndent,
             ];
             $phpcsFile->addError($error, $stackPtr, 'Indent', $data);
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

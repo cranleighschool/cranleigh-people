@@ -38,25 +38,25 @@ class ResolveDecoratorStackPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds($this->tag) as $id => $tags) {
             $definition = $container->getDefinition($id);
 
-            if (!$definition instanceof ChildDefinition) {
+            if (! $definition instanceof ChildDefinition) {
                 throw new InvalidArgumentException(sprintf('Invalid service "%s": only definitions with a "parent" can have the "%s" tag.', $id, $this->tag));
             }
 
-            if (!$stack = $definition->getArguments()) {
+            if (! $stack = $definition->getArguments()) {
                 throw new InvalidArgumentException(sprintf('Invalid service "%s": the stack of decorators is empty.', $id));
             }
 
             $stacks[$id] = $stack;
         }
 
-        if (!$stacks) {
+        if (! $stacks) {
             return;
         }
 
         $resolvedDefinitions = [];
 
         foreach ($container->getDefinitions() as $id => $definition) {
-            if (!isset($stacks[$id])) {
+            if (! isset($stacks[$id])) {
                 $resolvedDefinitions[$id] = $definition;
                 continue;
             }
@@ -85,7 +85,7 @@ class ResolveDecoratorStackPass implements CompilerPassInterface
         $id = end($path);
         $prefix = '.'.$id.'.';
 
-        if (!isset($stacks[$id])) {
+        if (! isset($stacks[$id])) {
             return [$id => new ChildDefinition($id)];
         }
 

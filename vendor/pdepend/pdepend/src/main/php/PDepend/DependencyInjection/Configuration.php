@@ -47,7 +47,7 @@ use PDepend\Util\Workarounds;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * This is the class that validates and merges configuration
+ * This is the class that validates and merges configuration.
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
@@ -59,7 +59,7 @@ class Configuration implements ConfigurationInterface
     /**
      * @var array<Extension>
      */
-    private $extensions = array();
+    private $extensions = [];
 
     /**
      * @param array<Extension> $extensions
@@ -87,8 +87,8 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('cache')
             ->addDefaultsIfNotSet()
             ->children()
-            ->enumNode('driver')->defaultValue($defaultCacheDriver)->values(array('file', 'memory'))->end()
-            ->scalarNode('location')->info('This value is only used for the file cache.')->defaultValue($home . '/.pdepend')->end()
+            ->enumNode('driver')->defaultValue($defaultCacheDriver)->values(['file', 'memory'])->end()
+            ->scalarNode('location')->info('This value is only used for the file cache.')->defaultValue($home.'/.pdepend')->end()
             ->integerNode('ttl')->info('This value is only used for the file cache. Value in seconds.')->defaultValue(self::DEFAULT_TTL)->end()
             ->end()
             ->end()

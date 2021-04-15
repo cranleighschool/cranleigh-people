@@ -46,8 +46,8 @@ namespace PDepend\Source\Language\PHP;
 use PDepend\Source\AST\ASTArguments;
 use PDepend\Source\AST\ASTCallable;
 use PDepend\Source\AST\ASTConstant;
-use PDepend\Source\AST\ASTIdentifier;
 use PDepend\Source\AST\ASTFormalParameter;
+use PDepend\Source\AST\ASTIdentifier;
 use PDepend\Source\AST\ASTMethod;
 use PDepend\Source\AST\ASTNode;
 use PDepend\Source\AST\State;
@@ -68,9 +68,9 @@ abstract class PHPParserVersion80 extends PHPParserVersion74
      * Will return <b>true</b> if the given <b>$tokenType</b> is a valid class
      * name part.
      *
-     * @param integer $tokenType The type of a parsed token.
+     * @param int $tokenType The type of a parsed token.
      *
-     * @return boolean
+     * @return bool
      */
     protected function isClassName($tokenType)
     {
@@ -145,11 +145,11 @@ abstract class PHPParserVersion80 extends PHPParserVersion74
      */
     protected function parseFormalParameterOrPrefix(ASTCallable $callable)
     {
-        static $states = array(
+        static $states = [
             Tokens::T_PUBLIC    => State::IS_PUBLIC,
             Tokens::T_PROTECTED => State::IS_PROTECTED,
             Tokens::T_PRIVATE   => State::IS_PRIVATE,
-        );
+        ];
 
         $modifier = 0;
 
@@ -205,7 +205,7 @@ abstract class PHPParserVersion80 extends PHPParserVersion74
      */
     protected function parseFunctionPostfix(ASTNode $node)
     {
-        if (!($node instanceof ASTIdentifier) || $node->getImage() !== 'match') {
+        if (! ($node instanceof ASTIdentifier) || $node->getImage() !== 'match') {
             return parent::parseFunctionPostfix($node);
         }
 
@@ -254,7 +254,7 @@ abstract class PHPParserVersion80 extends PHPParserVersion74
      */
     protected function parseTypeHint()
     {
-        $types = array(parent::parseTypeHint());
+        $types = [parent::parseTypeHint()];
 
         while ($this->tokenizer->peek() === Tokens::T_BITWISE_OR) {
             $this->tokenizer->next();

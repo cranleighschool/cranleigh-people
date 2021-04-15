@@ -2,7 +2,6 @@
 /**
  * WordPress Coding Standard.
  *
- * @package WPCS\WordPressCodingStandards
  * @link    https://github.com/WordPress/WordPress-Coding-Standards
  * @license https://opensource.org/licenses/MIT MIT
  */
@@ -21,40 +20,39 @@ use WordPressCS\WordPress\AbstractClassRestrictionsSniff;
  *
  * @link    https://make.wordpress.org/core/handbook/best-practices/coding-standards/php/#database-queries
  *
- * @package WPCS\WordPressCodingStandards
  *
  * @since   0.10.0
  * @since   0.13.0 Class name changed: this class is now namespaced.
  */
-class RestrictedClassesSniff extends AbstractClassRestrictionsSniff {
+class RestrictedClassesSniff extends AbstractClassRestrictionsSniff
+{
+    /**
+     * Groups of classes to restrict.
+     *
+     * Example: groups => array(
+     *  'lambda' => array(
+     *      'type'    => 'error' | 'warning',
+     *      'message' => 'Avoid direct calls to the database.',
+     *      'classes' => array( 'PDO', '\Namespace\Classname' ),
+     *  )
+     * )
+     *
+     * @return array
+     */
+    public function getGroups()
+    {
+        return [
 
-	/**
-	 * Groups of classes to restrict.
-	 *
-	 * Example: groups => array(
-	 *  'lambda' => array(
-	 *      'type'    => 'error' | 'warning',
-	 *      'message' => 'Avoid direct calls to the database.',
-	 *      'classes' => array( 'PDO', '\Namespace\Classname' ),
-	 *  )
-	 * )
-	 *
-	 * @return array
-	 */
-	public function getGroups() {
-		return array(
+            'mysql' => [
+                'type'    => 'error',
+                'message' => 'Accessing the database directly should be avoided. Please use the $wpdb object and associated functions instead. Found: %s.',
+                'classes' => [
+                    'mysqli',
+                    'PDO',
+                    'PDOStatement',
+                ],
+            ],
 
-			'mysql' => array(
-				'type'    => 'error',
-				'message' => 'Accessing the database directly should be avoided. Please use the $wpdb object and associated functions instead. Found: %s.',
-				'classes' => array(
-					'mysqli',
-					'PDO',
-					'PDOStatement',
-				),
-			),
-
-		);
-	}
-
+        ];
+    }
 }

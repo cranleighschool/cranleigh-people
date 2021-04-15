@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class FileHeaderSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +23,9 @@ class FileHeaderSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff when one of its tokens is encountered.
@@ -88,7 +86,7 @@ class FileHeaderSniff implements Sniff
             }
 
             $openTag = $stackPtr;
-        } else if (count($possibleHeaders) > 1) {
+        } elseif (count($possibleHeaders) > 1) {
             // There are other PHP blocks before the file header.
             $error = 'The file header must be the first content in the file';
             $phpcsFile->addError($error, $openTag, 'HeaderPosition');
@@ -115,9 +113,9 @@ class FileHeaderSniff implements Sniff
         $this->processHeaderLines($phpcsFile, $possibleHeaders[$openTag]);
 
         return $phpcsFile->numTokens;
+    }
 
-    }//end process()
-
+    //end process()
 
     /**
      * Gather information about the statements inside a possible file header.
@@ -137,7 +135,7 @@ class FileHeaderSniff implements Sniff
             return [];
         }
 
-        $headerLines   = [];
+        $headerLines = [];
         $headerLines[] = [
             'type'  => 'tag',
             'start' => $stackPtr,
@@ -162,21 +160,21 @@ class FileHeaderSniff implements Sniff
             case T_DOC_COMMENT_OPEN_TAG:
                 if ($foundDocblock === true) {
                     // Found a second docblock, so start of code.
-                    break(2);
+                    break 2;
                 }
 
                 // Make sure this is not a code-level docblock.
                 $end = $tokens[$next]['comment_closer'];
                 for ($docToken = ($end + 1); $docToken < $phpcsFile->numTokens; $docToken++) {
                     if (isset(Tokens::$emptyTokens[$tokens[$docToken]['code']]) === true) {
-                        continue;
+                        break;
                     }
 
                     if ($tokens[$docToken]['code'] === T_ATTRIBUTE
                         && isset($tokens[$docToken]['attribute_closer']) === true
                     ) {
                         $docToken = $tokens[$docToken]['attribute_closer'];
-                        continue;
+                        break;
                     }
 
                     break;
@@ -218,7 +216,7 @@ class FileHeaderSniff implements Sniff
                     // If this statement is using bracketed syntax, it doesn't
                     // apply to the entire files and so is not part of header.
                     // The header has now ended and the main code block begins.
-                    break(2);
+                    break 2;
                 }
 
                 $end = $phpcsFile->findEndOfStatement($next);
@@ -232,7 +230,7 @@ class FileHeaderSniff implements Sniff
                 $next = $end;
                 break;
             case T_USE:
-                $type    = 'use';
+                $type = 'use';
                 $useType = $phpcsFile->findNext(Tokens::$emptyTokens, ($next + 1), null, true);
                 if ($useType !== false && $tokens[$useType]['code'] === T_STRING) {
                     $content = strtolower($tokens[$useType]['content']);
@@ -257,7 +255,7 @@ class FileHeaderSniff implements Sniff
                     $next = $phpcsFile->findNext(Tokens::$commentTokens, ($next + 1), null, true);
                     if ($next === false) {
                         // We reached the end of the file.
-                        break(2);
+                        break 2;
                     }
 
                     $next--;
@@ -265,16 +263,16 @@ class FileHeaderSniff implements Sniff
                 }
 
                 // We found the start of the main code block.
-                break(2);
+                break 2;
             }//end switch
 
             $next = $phpcsFile->findNext(T_WHITESPACE, ($next + 1), null, true);
         } while ($next !== false);
 
         return $headerLines;
+    }
 
-    }//end getHeaderLines()
-
+    //end getHeaderLines()
 
     /**
      * Check the spacing and grouping of the statements inside each header block.
@@ -301,11 +299,11 @@ class FileHeaderSniff implements Sniff
                 $next = $phpcsFile->findNext(T_WHITESPACE, ($line['end'] + 1), null, true);
                 if ($next !== false && $tokens[$next]['line'] !== ($tokens[$line['end']]['line'] + 2)) {
                     $error = 'Header blocks must be separated by a single blank line';
-                    $fix   = $phpcsFile->addFixableError($error, $line['end'], 'SpacingAfterBlock');
+                    $fix = $phpcsFile->addFixableError($error, $line['end'], 'SpacingAfterBlock');
                     if ($fix === true) {
                         if ($tokens[$next]['line'] === $tokens[$line['end']]['line']) {
                             $phpcsFile->fixer->addContentBefore($next, $phpcsFile->eolChar.$phpcsFile->eolChar);
-                        } else if ($tokens[$next]['line'] === ($tokens[$line['end']]['line'] + 1)) {
+                        } elseif ($tokens[$next]['line'] === ($tokens[$line['end']]['line'] + 1)) {
                             $phpcsFile->fixer->addNewline($line['end']);
                         } else {
                             $phpcsFile->fixer->beginChangeset();
@@ -326,21 +324,21 @@ class FileHeaderSniff implements Sniff
                 if (isset($headerLines[($i + 1)]) === true
                     && isset($found[$headerLines[($i + 1)]['type']]) === true
                 ) {
-                    $error  = 'Similar statements must be grouped together inside header blocks; ';
+                    $error = 'Similar statements must be grouped together inside header blocks; ';
                     $error .= 'the first "%s" statement was found on line %s';
-                    $data   = [
+                    $data = [
                         $headerLines[($i + 1)]['type'],
                         $tokens[$found[$headerLines[($i + 1)]['type']]['start']]['line'],
                     ];
                     $phpcsFile->addError($error, $headerLines[($i + 1)]['start'], 'IncorrectGrouping', $data);
                 }
-            } else if ($headerLines[($i + 1)]['type'] === $line['type']) {
+            } elseif ($headerLines[($i + 1)]['type'] === $line['type']) {
                 // Still in the same block, so make sure there is no
                 // blank line after this statement.
                 $next = $phpcsFile->findNext(T_WHITESPACE, ($line['end'] + 1), null, true);
                 if ($tokens[$next]['line'] > ($tokens[$line['end']]['line'] + 1)) {
                     $error = 'Header blocks must not contain blank lines';
-                    $fix   = $phpcsFile->addFixableError($error, $line['end'], 'SpacingInsideBlock');
+                    $fix = $phpcsFile->addFixableError($error, $line['end'], 'SpacingInsideBlock');
                     if ($fix === true) {
                         $phpcsFile->fixer->beginChangeset();
                         for ($i = ($line['end'] + 1); $i < $next; $i++) {
@@ -414,15 +412,14 @@ class FileHeaderSniff implements Sniff
                 } while ($orderedType !== false && key($blockOrder) !== $type);
 
                 $error = 'The %s must follow the %s in the file header';
-                $data  = [
+                $data = [
                     $blockOrder[$type],
                     $blockOrder[$prevValidType],
                 ];
                 $phpcsFile->addError($error, $found[$type]['start'], 'IncorrectOrder', $data);
             }//end if
         }//end foreach
+    }
 
-    }//end processHeaderLines()
-
-
+    //end processHeaderLines()
 }//end class

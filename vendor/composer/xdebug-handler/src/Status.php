@@ -36,7 +36,7 @@ class Status
     private $time;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $envAllowXdebug Prefixed _ALLOW_XDEBUG name
      * @param bool $debug Whether debug output is required
@@ -60,7 +60,7 @@ class Status
     }
 
     /**
-     * Calls a handler method to report a message
+     * Calls a handler method to report a message.
      *
      * @param string $op The handler constant
      * @param null|string $data Data required by the handler
@@ -68,12 +68,12 @@ class Status
     public function report($op, $data)
     {
         if ($this->logger || $this->debug) {
-            call_user_func(array($this, 'report'.$op), $data);
+            call_user_func([$this, 'report'.$op], $data);
         }
     }
 
     /**
-     * Outputs a status message
+     * Outputs a status message.
      *
      * @param string $text
      * @param string $level
@@ -111,7 +111,7 @@ class Status
 
         if ($this->loaded) {
             $text = sprintf('No restart (%s)', $this->getEnvAllow());
-            if (!getenv($this->envAllowXdebug)) {
+            if (! getenv($this->envAllowXdebug)) {
                 $text .= ' Allowed by application';
             }
             $this->output($text);
@@ -141,7 +141,7 @@ class Status
     }
 
     /**
-     * Returns the _ALLOW_XDEBUG environment variable as name=value
+     * Returns the _ALLOW_XDEBUG environment variable as name=value.
      *
      * @return string
      */
@@ -151,13 +151,14 @@ class Status
     }
 
     /**
-     * Returns the Xdebug status and version
+     * Returns the Xdebug status and version.
      *
      * @return string
      */
     private function getLoadedMessage()
     {
         $loaded = $this->loaded ? sprintf('loaded (%s)', $this->loaded) : 'not loaded';
+
         return 'The Xdebug extension is '.$loaded;
     }
 }

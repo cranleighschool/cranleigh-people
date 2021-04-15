@@ -70,11 +70,11 @@ class ClassExistenceResource implements SelfCheckingResourceInterface
         if (null !== $exists = &self::$existsCache[$this->resource]) {
             if ($loaded) {
                 $exists = [true, null];
-            } elseif (0 >= $timestamp && !$exists[0] && null !== $exists[1]) {
+            } elseif (0 >= $timestamp && ! $exists[0] && null !== $exists[1]) {
                 throw new \ReflectionException($exists[1]);
             }
         } elseif ([false, null] === $exists = [$loaded, null]) {
-            if (!self::$autoloadLevel++) {
+            if (! self::$autoloadLevel++) {
                 spl_autoload_register(__CLASS__.'::throwOnRequiredClass');
             }
             $autoloadedClass = self::$autoloadedClass;
@@ -98,7 +98,7 @@ class ClassExistenceResource implements SelfCheckingResourceInterface
                 throw $e;
             } finally {
                 self::$autoloadedClass = $autoloadedClass;
-                if (!--self::$autoloadLevel) {
+                if (! --self::$autoloadLevel) {
                     spl_autoload_unregister(__CLASS__.'::throwOnRequiredClass');
                 }
             }
@@ -108,7 +108,7 @@ class ClassExistenceResource implements SelfCheckingResourceInterface
             $this->exists = $exists;
         }
 
-        return $this->exists[0] xor !$exists[0];
+        return $this->exists[0] xor ! $exists[0];
     }
 
     /**
@@ -199,7 +199,7 @@ class ClassExistenceResource implements SelfCheckingResourceInterface
             throw $e;
         }
 
-        if (isset($callerFrame['function']) && !isset($callerFrame['class'])) {
+        if (isset($callerFrame['function']) && ! isset($callerFrame['class'])) {
             switch ($callerFrame['function']) {
                 case 'get_class_methods':
                 case 'get_class_vars':

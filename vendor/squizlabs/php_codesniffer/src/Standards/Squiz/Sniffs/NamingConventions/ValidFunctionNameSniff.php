@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Common;
 
 class ValidFunctionNameSniff extends PEARValidFunctionNameSniff
 {
-
-
     /**
      * Processes the tokens outside the scope.
      *
@@ -47,8 +45,7 @@ class ValidFunctionNameSniff extends PEARValidFunctionNameSniff
             $error = 'Function name "%s" is not in camel caps format';
             $phpcsFile->addError($error, $stackPtr, 'NotCamelCaps', $errorData);
         }
+    }
 
-    }//end processTokenOutsideScope()
-
-
+    //end processTokenOutsideScope()
 }//end class

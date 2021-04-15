@@ -219,7 +219,7 @@ class PrototypedArrayNode extends ArrayNode
         $normalized = [];
         foreach ($value as $k => $v) {
             if (null !== $this->keyAttribute && \is_array($v)) {
-                if (!isset($v[$this->keyAttribute]) && \is_int($k) && !$isAssoc) {
+                if (! isset($v[$this->keyAttribute]) && \is_int($k) && ! $isAssoc) {
                     $ex = new InvalidConfigurationException(sprintf('The attribute "%s" must be set for path "%s".', $this->keyAttribute, $this->getPath()));
                     $ex->setPath($this->getPath());
 
@@ -290,7 +290,7 @@ class PrototypedArrayNode extends ArrayNode
             return false;
         }
 
-        if (false === $leftSide || !$this->performDeepMerging) {
+        if (false === $leftSide || ! $this->performDeepMerging) {
             return $rightSide;
         }
 
@@ -302,8 +302,8 @@ class PrototypedArrayNode extends ArrayNode
             }
 
             // no conflict
-            if (!\array_key_exists($k, $leftSide)) {
-                if (!$this->allowNewKeys) {
+            if (! \array_key_exists($k, $leftSide)) {
+                if (! $this->allowNewKeys) {
                     $ex = new InvalidConfigurationException(sprintf('You are not allowed to define new elements for path "%s". Please define all elements for this path in one config file.', $this->getPath()));
                     $ex->setPath($this->getPath());
 

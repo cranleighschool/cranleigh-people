@@ -15,7 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class InlineControlStructureSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -29,10 +28,9 @@ class InlineControlStructureSniff implements Sniff
     /**
      * If true, an error will be thrown; otherwise a warning.
      *
-     * @var boolean
+     * @var bool
      */
     public $error = true;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -51,9 +49,9 @@ class InlineControlStructureSniff implements Sniff
             T_SWITCH,
             T_FOR,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -70,6 +68,7 @@ class InlineControlStructureSniff implements Sniff
 
         if (isset($tokens[$stackPtr]['scope_opener']) === true) {
             $phpcsFile->recordMetric($stackPtr, 'Control structure defined inline', 'no');
+
             return;
         }
 
@@ -92,6 +91,7 @@ class InlineControlStructureSniff implements Sniff
 
                 if ($tokens[$afterParensCloser]['code'] === T_SEMICOLON) {
                     $phpcsFile->recordMetric($stackPtr, 'Control structure defined inline', 'no');
+
                     return;
                 }
             }
@@ -101,7 +101,7 @@ class InlineControlStructureSniff implements Sniff
             // the WHILE. We can detect this by checking only a single semicolon
             // is present between them.
             if ($tokens[$stackPtr]['code'] === T_WHILE && $phpcsFile->tokenizerType === 'JS') {
-                $lastDo        = $phpcsFile->findPrevious(T_DO, ($stackPtr - 1));
+                $lastDo = $phpcsFile->findPrevious(T_DO, ($stackPtr - 1));
                 $lastSemicolon = $phpcsFile->findPrevious(T_SEMICOLON, ($stackPtr - 1));
                 if ($lastDo !== false && $lastSemicolon !== false && $lastDo < $lastSemicolon) {
                     $precedingSemicolon = $phpcsFile->findPrevious(T_SEMICOLON, ($lastSemicolon - 1));
@@ -150,7 +150,7 @@ class InlineControlStructureSniff implements Sniff
             // tag in short open tags and scan run with short_open_tag=Off.
             // Bow out completely as any further detection will be unreliable
             // and create incorrect fixes or cause fixer conflicts.
-            return ($phpcsFile->numTokens + 1);
+            return $phpcsFile->numTokens + 1;
         }
 
         unset($nextNonEmpty, $start);
@@ -204,12 +204,13 @@ class InlineControlStructureSniff implements Sniff
                 // The best way to fix nested inline scopes is middle-out.
                 // So skip this one. It will be detected and fixed on a future loop.
                 $phpcsFile->fixer->rollbackChangeset();
+
                 return;
             }
 
             if (isset($tokens[$end]['scope_opener']) === true) {
                 $type = $tokens[$end]['code'];
-                $end  = $tokens[$end]['scope_closer'];
+                $end = $tokens[$end]['scope_closer'];
                 if ($type === T_DO || $type === T_IF || $type === T_ELSEIF || $type === T_TRY) {
                     $next = $phpcsFile->findNext(Tokens::$emptyTokens, ($end + 1), null, true);
                     if ($next === false) {
@@ -236,7 +237,7 @@ class InlineControlStructureSniff implements Sniff
                     if ($type === T_TRY && $nextType === T_CATCH) {
                         $end = $tokens[$next]['scope_closer'];
                     }
-                } else if ($type === T_CLOSURE) {
+                } elseif ($type === T_CLOSURE) {
                     // There should be a semicolon after the closing brace.
                     $next = $phpcsFile->findNext(Tokens::$emptyTokens, ($end + 1), null, true);
                     if ($next !== false && $tokens[$next]['code'] === T_SEMICOLON) {
@@ -252,7 +253,7 @@ class InlineControlStructureSniff implements Sniff
             }//end if
 
             if (isset($tokens[$end]['parenthesis_closer']) === true) {
-                $end          = $tokens[$end]['parenthesis_closer'];
+                $end = $tokens[$end]['parenthesis_closer'];
                 $lastNonEmpty = $end;
                 continue;
             }
@@ -271,7 +272,7 @@ class InlineControlStructureSniff implements Sniff
             // Looks for completely empty statements.
             $next = $phpcsFile->findNext(T_WHITESPACE, ($closer + 1), ($end + 1), true);
         } else {
-            $next    = ($end + 1);
+            $next = ($end + 1);
             $endLine = $end;
         }
 
@@ -295,10 +296,10 @@ class InlineControlStructureSniff implements Sniff
             }
 
             if ($endLine !== $end) {
-                $endToken     = $endLine;
+                $endToken = $endLine;
                 $addedContent = '';
             } else {
-                $endToken     = $end;
+                $endToken = $end;
                 $addedContent = $phpcsFile->eolChar;
 
                 if ($tokens[$end]['code'] !== T_SEMICOLON
@@ -324,7 +325,7 @@ class InlineControlStructureSniff implements Sniff
 
                 if ($tokens[$first]['code'] === T_WHITESPACE) {
                     $indent = $tokens[$first]['content'];
-                } else if ($tokens[$first]['code'] === T_INLINE_HTML
+                } elseif ($tokens[$first]['code'] === T_INLINE_HTML
                     || $tokens[$first]['code'] === T_OPEN_TAG
                 ) {
                     $addedContent = '';
@@ -366,8 +367,7 @@ class InlineControlStructureSniff implements Sniff
         }//end if
 
         $phpcsFile->fixer->endChangeset();
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

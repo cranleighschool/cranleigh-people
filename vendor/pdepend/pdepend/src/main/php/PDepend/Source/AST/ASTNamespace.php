@@ -65,7 +65,7 @@ class ASTNamespace extends AbstractASTArtifact
      *
      * @var \PDepend\Source\AST\AbstractASTClassOrInterface[]
      */
-    protected $types = array();
+    protected $types = [];
 
     /**
      * List of all standalone {@link \PDepend\Source\AST\ASTFunction} objects
@@ -73,22 +73,22 @@ class ASTNamespace extends AbstractASTArtifact
      *
      * @var \PDepend\Source\AST\ASTFunction[]
      */
-    protected $functions = array();
+    protected $functions = [];
 
     /**
      * Does this namespace contain user defined functions, classes or interfaces?
      *
-     * @var boolean
+     * @var bool
      */
     private $userDefined = null;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $packageAnnotation = false;
 
     /**
-     * Constructs a new namespace for the given <b>$name</b>
+     * Constructs a new namespace for the given <b>$name</b>.
      *
      * @param string $name
      */
@@ -113,7 +113,7 @@ class ASTNamespace extends AbstractASTArtifact
      * <b>class/method</b> is user defined. Otherwise this method will return
      * <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      * @since  0.9.10
      */
     public function isUserDefined()
@@ -121,6 +121,7 @@ class ASTNamespace extends AbstractASTArtifact
         if ($this->userDefined === null) {
             $this->userDefined = $this->checkUserDefined();
         }
+
         return $this->userDefined;
     }
 
@@ -129,7 +130,7 @@ class ASTNamespace extends AbstractASTArtifact
      * <b>class/method</b> is user defined. Otherwise this method will return
      * <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      * @since  0.9.10
      */
     private function checkUserDefined()
@@ -139,7 +140,8 @@ class ASTNamespace extends AbstractASTArtifact
                 return true;
             }
         }
-        return (count($this->functions) > 0);
+
+        return count($this->functions) > 0;
     }
 
     /**
@@ -187,12 +189,13 @@ class ASTNamespace extends AbstractASTArtifact
      */
     private function getTypesOfType($className)
     {
-        $types = array();
+        $types = [];
         foreach ($this->types as $type) {
             if (get_class($type) === $className) {
                 $types[] = $type;
             }
         }
+
         return new ASTArtifactList($types);
     }
 
@@ -295,7 +298,7 @@ class ASTNamespace extends AbstractASTArtifact
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isPackageAnnotation()
     {
@@ -303,7 +306,7 @@ class ASTNamespace extends AbstractASTArtifact
     }
 
     /**
-     * @param boolean $packageAnnotation
+     * @param bool $packageAnnotation
      * @return void
      */
     public function setPackageAnnotation($packageAnnotation)

@@ -84,7 +84,7 @@ class ASTArguments extends AbstractASTNode
      */
     public function addChild(ASTNode $node)
     {
-        if (!$this->acceptsMoreArguments()) {
+        if (! $this->acceptsMoreArguments()) {
             throw new InvalidArgumentException('No more arguments allowed.');
         }
 

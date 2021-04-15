@@ -94,7 +94,7 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
     /**
      * Returns the start line for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getStartLine()
     {
@@ -104,7 +104,7 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
     /**
      * Returns the start column for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getStartColumn()
     {
@@ -114,7 +114,7 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
     /**
      * Returns the end line for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getEndLine()
     {
@@ -124,7 +124,7 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
     /**
      * Returns the end column for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getEndColumn()
     {
@@ -135,10 +135,10 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
      * For better performance we have moved the single setter methods for the
      * node columns and lines into this configure method.
      *
-     * @param integer $startLine
-     * @param integer $endLine
-     * @param integer $startColumn
-     * @param integer $endColumn
+     * @param int $startLine
+     * @param int $endLine
+     * @param int $startColumn
+     * @param int $endColumn
      * @return void
      * @since 0.9.10
      */
@@ -181,7 +181,7 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
      */
     public function getParentsOfType($parentType)
     {
-        $parents = array();
+        $parents = [];
 
         $parentNode = $this->parent;
         while (is_object($parentNode)) {
@@ -190,6 +190,7 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
             }
             $parentNode = $parentNode->getParent();
         }
+
         return $parents;
     }
 
@@ -209,7 +210,7 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
      * Will return <b>true</b> if this class was declared anonymous in an
      * allocation expression.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAnonymous()
     {
@@ -219,7 +220,7 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
     /**
      * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor
      * @param mixed $data
-     * @return integer
+     * @return int
      */
     public function accept(ASTVisitor $visitor, $data = null)
     {
@@ -236,7 +237,7 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
      */
     public function __sleep()
     {
-        return array_merge(array('metadata'), parent::__sleep());
+        return array_merge(['metadata'], parent::__sleep());
     }
 
     /**
@@ -261,8 +262,8 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
     /**
      * Returns an integer value that was stored under the given index.
      *
-     * @param integer $index
-     * @return integer
+     * @param int $index
+     * @return int
      * @since 0.10.4
      */
     protected function getMetadataInteger($index)
@@ -274,8 +275,8 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
      * Stores an integer value under the given index in the internally used data
      * string.
      *
-     * @param integer $index
-     * @param integer $value
+     * @param int $index
+     * @param int $value
      * @return void
      * @since 0.10.4
      */
@@ -287,13 +288,14 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
     /**
      * Returns the value that was stored under the given index.
      *
-     * @param integer $index
+     * @param int $index
      * @return mixed
      * @since 0.10.4
      */
     protected function getMetadata($index)
     {
         $metadata = explode(':', $this->metadata, $this->getMetadataSize());
+
         return $metadata[$index];
     }
 
@@ -301,14 +303,14 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
      * Stores the given value under the given index in an internal storage
      * container.
      *
-     * @param integer $index
+     * @param int $index
      * @param mixed $value
      * @return void
      * @since 0.10.4
      */
     protected function setMetadata($index, $value)
     {
-        $metadata         = explode(':', $this->metadata, $this->getMetadataSize());
+        $metadata = explode(':', $this->metadata, $this->getMetadataSize());
         $metadata[$index] = $value;
 
         $this->metadata = join(':', $metadata);
@@ -317,7 +319,7 @@ class ASTAnonymousClass extends ASTClass implements ASTNode
     /**
      * Returns the total number of the used property bag.
      *
-     * @return integer
+     * @return int
      * @since 0.10.4
      */
     protected function getMetadataSize()

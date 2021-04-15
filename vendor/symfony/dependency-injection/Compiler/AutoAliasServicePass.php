@@ -27,7 +27,7 @@ class AutoAliasServicePass implements CompilerPassInterface
     {
         foreach ($container->findTaggedServiceIds('auto_alias') as $serviceId => $tags) {
             foreach ($tags as $tag) {
-                if (!isset($tag['format'])) {
+                if (! isset($tag['format'])) {
                     throw new InvalidArgumentException(sprintf('Missing tag information "format" on auto_alias service "%s".', $serviceId));
                 }
 

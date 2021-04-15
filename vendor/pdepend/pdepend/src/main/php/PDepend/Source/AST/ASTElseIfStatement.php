@@ -56,14 +56,15 @@ class ASTElseIfStatement extends \PDepend\Source\AST\ASTStatement
      * Returns <b>true</b> when this <b>elseif</b>-statement is followed by an
      * <b>else</b>-statement.
      *
-     * @return boolean
+     * @return bool
      * @since  0.9.12
      */
     public function hasElse()
     {
         if (count($this->nodes) === 3) {
-            return (count($this->nodes) === 3);
+            return count($this->nodes) === 3;
         }
+
         return false;
     }
 

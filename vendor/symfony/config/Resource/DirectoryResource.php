@@ -34,7 +34,7 @@ class DirectoryResource implements SelfCheckingResourceInterface
         $this->resource = realpath($resource) ?: (file_exists($resource) ? $resource : false);
         $this->pattern = $pattern;
 
-        if (false === $this->resource || !is_dir($this->resource)) {
+        if (false === $this->resource || ! is_dir($this->resource)) {
             throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $resource));
         }
     }
@@ -68,7 +68,7 @@ class DirectoryResource implements SelfCheckingResourceInterface
      */
     public function isFresh(int $timestamp): bool
     {
-        if (!is_dir($this->resource)) {
+        if (! is_dir($this->resource)) {
             return false;
         }
 
@@ -78,7 +78,7 @@ class DirectoryResource implements SelfCheckingResourceInterface
 
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->resource), \RecursiveIteratorIterator::SELF_FIRST) as $file) {
             // if regex filtering is enabled only check matching files
-            if ($this->pattern && $file->isFile() && !preg_match($this->pattern, $file->getBasename())) {
+            if ($this->pattern && $file->isFile() && ! preg_match($this->pattern, $file->getBasename())) {
                 continue;
             }
 

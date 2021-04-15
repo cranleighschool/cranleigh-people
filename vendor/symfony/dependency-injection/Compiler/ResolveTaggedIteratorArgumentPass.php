@@ -27,7 +27,7 @@ class ResolveTaggedIteratorArgumentPass extends AbstractRecursivePass
      */
     protected function processValue($value, bool $isRoot = false)
     {
-        if (!$value instanceof TaggedIteratorArgument) {
+        if (! $value instanceof TaggedIteratorArgument) {
             return parent::processValue($value, $isRoot);
         }
 

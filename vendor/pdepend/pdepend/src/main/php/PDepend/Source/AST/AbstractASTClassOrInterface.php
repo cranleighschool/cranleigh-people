@@ -65,7 +65,7 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
      *
      * @var \PDepend\Source\AST\ASTClassOrInterfaceReference[]
      */
-    protected $interfaceReferences = array();
+    protected $interfaceReferences = [];
 
     /**
      * An <b>array</b> with all constants defined in this class or interface.
@@ -116,8 +116,8 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
      */
     public function getParentClasses()
     {
-        $parents = array();
-        $parent  = $this;
+        $parents = [];
+        $parent = $this;
 
         while ($parent = $parent->getParentClass()) {
             if (in_array($parent, $parents, true)) {
@@ -152,7 +152,7 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
      */
     public function setParentClassReference(ASTClassReference $classReference)
     {
-        $this->nodes[]              = $classReference;
+        $this->nodes[] = $classReference;
         $this->parentClassReference = $classReference;
     }
 
@@ -167,7 +167,7 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
         $stack = $this->getParentClasses();
         array_unshift($stack, $this);
 
-        $interfaces = array();
+        $interfaces = [];
 
         while (($top = array_pop($stack)) !== null) {
             foreach ($top->interfaceReferences as $interfaceReference) {
@@ -220,6 +220,7 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
         if ($this->constants === null) {
             $this->initConstants();
         }
+
         return $this->constants;
     }
 
@@ -229,7 +230,7 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
      *
      * @param string $name Name of the searched constant.
      *
-     * @return boolean
+     * @return bool
      * @since  0.9.6
      */
     public function hasConstant($name)
@@ -237,6 +238,7 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
         if ($this->constants === null) {
             $this->initConstants();
         }
+
         return array_key_exists($name, $this->constants);
     }
 
@@ -254,6 +256,7 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
         if ($this->hasConstant($name) === true) {
             return $this->constants[$name];
         }
+
         return false;
     }
 
@@ -265,7 +268,7 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
      */
     public function getAllMethods()
     {
-        $methods = array();
+        $methods = [];
         foreach ($this->getInterfaces() as $interface) {
             foreach ($interface->getAllMethods() as $method) {
                 $methods[strtolower($method->getName())] = $method;
@@ -308,14 +311,14 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
     /**
      * Returns <b>true</b> if this is an abstract class or an interface.
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function isAbstract();
 
     /**
      * Returns the declared modifiers for this type.
      *
-     * @return integer
+     * @return int
      */
     abstract public function getModifiers();
 
@@ -327,7 +330,7 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
      */
     private function initConstants()
     {
-        $this->constants = array();
+        $this->constants = [];
         if (($parentClass = $this->getParentClass()) !== null) {
             $this->constants = $parentClass->getConstants();
         }
@@ -365,7 +368,7 @@ abstract class AbstractASTClassOrInterface extends AbstractASTType
     public function __sleep()
     {
         return array_merge(
-            array('constants', 'interfaceReferences', 'parentClassReference'),
+            ['constants', 'interfaceReferences', 'parentClassReference'],
             parent::__sleep()
         );
     }

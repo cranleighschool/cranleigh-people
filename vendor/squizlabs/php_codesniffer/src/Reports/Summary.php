@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Util;
 
 class Summary implements Report
 {
-
-
     /**
      * Generate a partial report for a single processed file.
      *
@@ -30,7 +28,7 @@ class Summary implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
+    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
     {
         if (PHP_CODESNIFFER_VERBOSITY === 0
             && $report['errors'] === 0
@@ -41,10 +39,11 @@ class Summary implements Report
         }
 
         echo $report['filename'].'>>'.$report['errors'].'>>'.$report['warnings'].PHP_EOL;
+
         return true;
+    }
 
-    }//end generateFileReport()
-
+    //end generateFileReport()
 
     /**
      * Generates a summary of errors and warnings for each file processed.
@@ -68,10 +67,10 @@ class Summary implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources=false,
-        $width=80,
-        $interactive=false,
-        $toScreen=true
+        $showSources = false,
+        $width = 80,
+        $interactive = false,
+        $toScreen = true
     ) {
         $lines = explode(PHP_EOL, $cachedData);
         array_pop($lines);
@@ -81,10 +80,10 @@ class Summary implements Report
         }
 
         $reportFiles = [];
-        $maxLength   = 0;
+        $maxLength = 0;
 
         foreach ($lines as $line) {
-            $parts   = explode('>>', $line);
+            $parts = explode('>>', $line);
             $fileLen = strlen($parts[0]);
             $reportFiles[$parts[0]] = [
                 'errors'   => $parts[1],
@@ -108,7 +107,7 @@ class Summary implements Report
 
                 if (empty($pathPartsA) === false && empty($pathPartsB) === true) {
                     return 1;
-                } else if (empty($pathPartsA) === true && empty($pathPartsB) === false) {
+                } elseif (empty($pathPartsA) === true && empty($pathPartsB) === false) {
                     return -1;
                 } else {
                     return strcasecmp($partA, $partB);
@@ -127,7 +126,7 @@ class Summary implements Report
         foreach ($reportFiles as $file => $data) {
             $padding = ($width - 18 - $data['strlen']);
             if ($padding < 0) {
-                $file    = '...'.substr($file, (($padding * -1) + 3));
+                $file = '...'.substr($file, (($padding * -1) + 3));
                 $padding = 0;
             }
 
@@ -176,8 +175,7 @@ class Summary implements Report
         if ($toScreen === true && $interactive === false) {
             Util\Timing::printRunTime();
         }
+    }
 
-    }//end generate()
-
-
+    //end generate()
 }//end class

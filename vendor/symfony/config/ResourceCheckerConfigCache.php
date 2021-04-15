@@ -64,21 +64,21 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
      */
     public function isFresh()
     {
-        if (!is_file($this->file)) {
+        if (! is_file($this->file)) {
             return false;
         }
 
-        if ($this->resourceCheckers instanceof \Traversable && !$this->resourceCheckers instanceof \Countable) {
+        if ($this->resourceCheckers instanceof \Traversable && ! $this->resourceCheckers instanceof \Countable) {
             $this->resourceCheckers = iterator_to_array($this->resourceCheckers);
         }
 
-        if (!\count($this->resourceCheckers)) {
+        if (! \count($this->resourceCheckers)) {
             return true; // shortcut - if we don't have any checkers we don't need to bother with the meta file at all
         }
 
         $metadata = $this->getMetaFile();
 
-        if (!is_file($metadata)) {
+        if (! is_file($metadata)) {
             return false;
         }
 
@@ -93,7 +93,7 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
         foreach ($meta as $resource) {
             /* @var ResourceInterface $resource */
             foreach ($this->resourceCheckers as $checker) {
-                if (!$checker->supports($resource)) {
+                if (! $checker->supports($resource)) {
                     continue; // next checker
                 }
                 if ($checker->isFresh($resource, $time)) {

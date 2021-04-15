@@ -84,11 +84,11 @@ final class CheckTypeDeclarationsPass extends AbstractRecursivePass
             return $value;
         }
 
-        if (!$value instanceof Definition || $value->hasErrors() || $value->isDeprecated()) {
+        if (! $value instanceof Definition || $value->hasErrors() || $value->isDeprecated()) {
             return parent::processValue($value, $isRoot);
         }
 
-        if (!$this->autoload && !class_exists($class = $value->getClass(), false) && !interface_exists($class, false)) {
+        if (! $this->autoload && ! class_exists($class = $value->getClass(), false) && ! interface_exists($class, false)) {
             return parent::processValue($value, $isRoot);
         }
 
@@ -133,8 +133,8 @@ final class CheckTypeDeclarationsPass extends AbstractRecursivePass
 
         $envPlaceholderUniquePrefix = $this->container->getParameterBag() instanceof EnvPlaceholderParameterBag ? $this->container->getParameterBag()->getEnvPlaceholderUniquePrefix() : null;
 
-        for ($i = 0; $i < $checksCount; ++$i) {
-            if (!$reflectionParameters[$i]->hasType() || $reflectionParameters[$i]->isVariadic()) {
+        for ($i = 0; $i < $checksCount; $i++) {
+            if (! $reflectionParameters[$i]->hasType() || $reflectionParameters[$i]->isVariadic()) {
                 continue;
             }
 
@@ -169,14 +169,14 @@ final class CheckTypeDeclarationsPass extends AbstractRecursivePass
 
             throw new InvalidParameterTypeException($this->currentId, $e->getCode(), $parameter);
         }
-        if (!$reflectionType instanceof \ReflectionNamedType) {
+        if (! $reflectionType instanceof \ReflectionNamedType) {
             return;
         }
 
         $type = $reflectionType->getName();
 
         if ($value instanceof Reference) {
-            if (!$this->container->has($value = (string) $value)) {
+            if (! $this->container->has($value = (string) $value)) {
                 return;
             }
 
@@ -202,7 +202,7 @@ final class CheckTypeDeclarationsPass extends AbstractRecursivePass
 
             if (isset(self::BUILTIN_TYPES[strtolower($class)])) {
                 $class = strtolower($class);
-            } elseif (!$class || (!$this->autoload && !class_exists($class, false) && !interface_exists($class, false))) {
+            } elseif (! $class || (! $this->autoload && ! class_exists($class, false) && ! interface_exists($class, false))) {
                 return;
             }
         } elseif ($value instanceof Parameter) {
@@ -276,7 +276,7 @@ final class CheckTypeDeclarationsPass extends AbstractRecursivePass
             return;
         }
 
-        if ('object' === $type && !isset(self::BUILTIN_TYPES[$class])) {
+        if ('object' === $type && ! isset(self::BUILTIN_TYPES[$class])) {
             return;
         }
 

@@ -112,16 +112,16 @@ class Pyramid implements FileAwareGenerator
      *
      * @var array<string, array>
      */
-    private $thresholds = array(
-        'cyclo-loc'     =>  array(0.16, 0.20, 0.24),
-        'loc-nom'       =>  array(7, 10, 13),
-        'nom-noc'       =>  array(4, 7, 10),
-        'noc-nop'       =>  array(6, 17, 26),
-        'calls-nom'     =>  array(2.01, 2.62, 3.2),
-        'fanout-calls'  =>  array(0.56, 0.62, 0.68),
-        'andc'          =>  array(0.25, 0.41, 0.57),
-        'ahh'           =>  array(0.09, 0.21, 0.32)
-    );
+    private $thresholds = [
+        'cyclo-loc'     =>  [0.16, 0.20, 0.24],
+        'loc-nom'       =>  [7, 10, 13],
+        'nom-noc'       =>  [4, 7, 10],
+        'noc-nop'       =>  [6, 17, 26],
+        'calls-nom'     =>  [2.01, 2.62, 3.2],
+        'fanout-calls'  =>  [0.56, 0.62, 0.68],
+        'andc'          =>  [0.25, 0.41, 0.57],
+        'ahh'           =>  [0.09, 0.21, 0.32],
+    ];
 
     /**
      * Sets the output log file.
@@ -143,13 +143,13 @@ class Pyramid implements FileAwareGenerator
      */
     public function getAcceptedAnalyzers()
     {
-        return array(
+        return [
             'pdepend.analyzer.coupling',
             'pdepend.analyzer.cyclomatic_complexity',
             'pdepend.analyzer.inheritance',
             'pdepend.analyzer.node_count',
             'pdepend.analyzer.node_loc',
-        );
+        ];
     }
 
     /**
@@ -157,7 +157,7 @@ class Pyramid implements FileAwareGenerator
      * with return <b>true</b>, otherwise the return value is <b>false</b>.
      *
      * @param  \PDepend\Metrics\Analyzer $analyzer The analyzer to log.
-     * @return boolean
+     * @return bool
      */
     public function log(Analyzer $analyzer)
     {
@@ -174,6 +174,7 @@ class Pyramid implements FileAwareGenerator
         } else {
             return false;
         }
+
         return true;
     }
 
@@ -190,11 +191,11 @@ class Pyramid implements FileAwareGenerator
             throw new NoLogOutputException($this);
         }
 
-        $metrics     = $this->collectMetrics();
+        $metrics = $this->collectMetrics();
         $proportions = $this->computeProportions($metrics);
 
         $svg = new \DOMDocument('1.0', 'UTF-8');
-        $svg->loadXML(file_get_contents(dirname(__FILE__) . '/pyramid.svg'));
+        $svg->loadXML(file_get_contents(dirname(__FILE__).'/pyramid.svg'));
 
         $items = array_merge($metrics, $proportions);
         foreach ($items as $name => $value) {
@@ -216,8 +217,8 @@ class Pyramid implements FileAwareGenerator
             $rect->setAttribute('style', $style);
         }
 
-        $temp  = FileUtil::getSysTempDir();
-        $temp .= '/' . uniqid('pdepend_') . '.svg';
+        $temp = FileUtil::getSysTempDir();
+        $temp .= '/'.uniqid('pdepend_').'.svg';
         $svg->save($temp);
 
         ImageConvert::convert($temp, $this->logFile);
@@ -237,7 +238,7 @@ class Pyramid implements FileAwareGenerator
      */
     private function computeThreshold($name, $value)
     {
-        if (!isset($this->thresholds[$name])) {
+        if (! isset($this->thresholds[$name])) {
             return null;
         }
 
@@ -254,6 +255,7 @@ class Pyramid implements FileAwareGenerator
                 return 'low';
             }
         }
+
         return 'average';
     }
 
@@ -265,14 +267,14 @@ class Pyramid implements FileAwareGenerator
      */
     private function computeProportions(array $metrics)
     {
-        $orders = array(
-            array('cyclo', 'loc', 'nom', 'noc', 'nop'),
-            array('fanout', 'calls', 'nom')
-        );
+        $orders = [
+            ['cyclo', 'loc', 'nom', 'noc', 'nop'],
+            ['fanout', 'calls', 'nom'],
+        ];
 
-        $proportions = array();
+        $proportions = [];
         foreach ($orders as $names) {
-            for ($i = 1, $c = count($names); $i < $c; ++$i) {
+            for ($i = 1, $c = count($names); $i < $c; $i++) {
                 $value1 = $metrics[$names[$i]];
                 $value2 = $metrics[$names[$i - 1]];
 
@@ -312,13 +314,13 @@ class Pyramid implements FileAwareGenerator
             throw new \RuntimeException('Missing Node LOC analyzer.');
         }
 
-        $coupling    = $this->coupling->getProjectMetrics();
-        $cyclomatic  = $this->cyclomaticComplexity->getProjectMetrics();
+        $coupling = $this->coupling->getProjectMetrics();
+        $cyclomatic = $this->cyclomaticComplexity->getProjectMetrics();
         $inheritance = $this->inheritance->getProjectMetrics();
-        $nodeCount   = $this->nodeCount->getProjectMetrics();
-        $nodeLoc     = $this->nodeLoc->getProjectMetrics();
+        $nodeCount = $this->nodeCount->getProjectMetrics();
+        $nodeLoc = $this->nodeLoc->getProjectMetrics();
 
-        return array(
+        return [
             'cyclo'   =>  $cyclomatic['ccn2'],
             'loc'     =>  $nodeLoc['eloc'],
             'nom'     =>  ($nodeCount['nom'] + $nodeCount['nof']),
@@ -327,7 +329,7 @@ class Pyramid implements FileAwareGenerator
             'ahh'     =>  round($inheritance['ahh'], 3),
             'andc'    =>  round($inheritance['andc'], 3),
             'fanout'  =>  $coupling['fanout'],
-            'calls'   =>  $coupling['calls']
-        );
+            'calls'   =>  $coupling['calls'],
+        ];
     }
 }

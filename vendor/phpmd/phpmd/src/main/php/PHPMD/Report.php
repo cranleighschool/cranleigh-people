@@ -28,7 +28,7 @@ class Report
      *
      * @var array
      */
-    private $ruleViolations = array();
+    private $ruleViolations = [];
 
     /**
      * The start time for this report.
@@ -50,7 +50,7 @@ class Report
      * @var array
      * @since 1.2.1
      */
-    private $errors = array();
+    private $errors = [];
 
     /**
      * Adds a rule violation to this report.
@@ -61,13 +61,13 @@ class Report
     public function addRuleViolation(RuleViolation $violation)
     {
         $fileName = $violation->getFileName();
-        if (!isset($this->ruleViolations[$fileName])) {
-            $this->ruleViolations[$fileName] = array();
+        if (! isset($this->ruleViolations[$fileName])) {
+            $this->ruleViolations[$fileName] = [];
         }
 
         $beginLine = $violation->getBeginLine();
-        if (!isset($this->ruleViolations[$fileName][$beginLine])) {
-            $this->ruleViolations[$fileName][$beginLine] = array();
+        if (! isset($this->ruleViolations[$fileName][$beginLine])) {
+            $this->ruleViolations[$fileName][$beginLine] = [];
         }
 
         $this->ruleViolations[$fileName][$beginLine][] = $violation;
@@ -76,12 +76,12 @@ class Report
     /**
      * Returns <b>true</b> when this report does not contain any errors.
      *
-     * @return boolean
+     * @return bool
      * @since 0.2.5
      */
     public function isEmpty()
     {
-        return (count($this->ruleViolations) === 0);
+        return count($this->ruleViolations) === 0;
     }
 
     /**
@@ -94,7 +94,7 @@ class Report
         // First sort by file name
         ksort($this->ruleViolations);
 
-        $violations = array();
+        $violations = [];
         foreach ($this->ruleViolations as $violationInLine) {
             // Second sort is by line number
             ksort($violationInLine);
@@ -123,7 +123,7 @@ class Report
      * Returns <b>true</b> when the report contains at least one processing
      * error. Otherwise this method will return <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      * @since 1.2.1
      */
     public function hasErrors()

@@ -60,7 +60,7 @@ class Alias
     {
         trigger_deprecation('symfony/dependency-injection', '5.2', 'The "%s()" method is deprecated, use "setPublic()" instead.', __METHOD__);
 
-        return $this->setPublic(!$boolean);
+        return $this->setPublic(! $boolean);
     }
 
     /**
@@ -70,7 +70,7 @@ class Alias
      */
     public function isPrivate()
     {
-        return !$this->public;
+        return ! $this->public;
     }
 
     /**
@@ -94,7 +94,7 @@ class Alias
 
             $status = $args[0] ?? true;
 
-            if (!$status) {
+            if (! $status) {
                 trigger_deprecation('symfony/dependency-injection', '5.1', 'Passing a null message to un-deprecate a node is deprecated.');
             }
 

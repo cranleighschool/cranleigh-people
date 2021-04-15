@@ -77,12 +77,12 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      * @var   \PDepend\Source\AST\ASTClassOrInterfaceReference[]
      * @since 0.9.5
      */
-    protected $exceptionClassReferences = array();
+    protected $exceptionClassReferences = [];
 
     /**
      * Does this callable return a value by reference?
      *
-     * @var boolean
+     * @var bool
      */
     protected $returnsReference = false;
 
@@ -92,12 +92,12 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      * @var   \PDepend\Source\AST\ASTNode[]
      * @since 0.9.6
      */
-    protected $nodes = array();
+    protected $nodes = [];
 
     /**
      * The start line number of the method or function declaration.
      *
-     * @var   integer
+     * @var   int
      * @since 0.9.12
      */
     protected $startLine = 0;
@@ -105,7 +105,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
     /**
      * The end line number of the method or function declaration.
      *
-     * @var   integer
+     * @var   int
      * @since 0.9.12
      */
     protected $endLine = 0;
@@ -128,6 +128,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
     public function setCache(CacheDriver $cache)
     {
         $this->cache = $cache;
+
         return $this;
     }
 
@@ -137,7 +138,6 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      * @param \PDepend\Source\AST\ASTNode $node A parsed child node instance.
      *
      * @return void
-     * @access private
      * @since  0.9.6
      */
     public function addChild(ASTNode $node)
@@ -165,7 +165,6 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      * @param class-string<T> $targetType Searched class or interface type.
      *
      * @return T|null
-     * @access private
      * @since  0.9.6
      */
     public function getFirstChildOfType($targetType)
@@ -178,6 +177,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
                 return $child;
             }
         }
+
         return null;
     }
 
@@ -189,10 +189,9 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      * @param T[]             $results    The found children.
      *
      * @return T[]
-     * @access private
      * @since  0.9.6
      */
-    public function findChildrenOfType($targetType, array &$results = array())
+    public function findChildrenOfType($targetType, array &$results = [])
     {
         foreach ($this->nodes as $node) {
             if ($node instanceof $targetType) {
@@ -200,6 +199,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
             }
             $node->findChildrenOfType($targetType, $results);
         }
+
         return $results;
     }
 
@@ -225,7 +225,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
     public function setTokens(array $tokens)
     {
         $this->startLine = reset($tokens)->startLine;
-        $this->endLine   = end($tokens)->endLine;
+        $this->endLine = end($tokens)->endLine;
 
         $this->cache
             ->type('tokens')
@@ -235,7 +235,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
     /**
      * Returns the line number where the callable declaration starts.
      *
-     * @return integer
+     * @return int
      * @since  0.9.6
      */
     public function getStartLine()
@@ -246,7 +246,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
     /**
      * Returns the line number where the callable declaration ends.
      *
-     * @return integer
+     * @return int
      * @since  0.9.6
      */
     public function getEndLine()
@@ -285,6 +285,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
         if (($node = $this->getReturnType()) instanceof ASTClassOrInterfaceReference) {
             return $node->getType();
         }
+
         return null;
     }
 
@@ -292,7 +293,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      * Tests if this callable has a return class and return <b>true</b> if it is
      * configured.
      *
-     * @return boolean
+     * @return bool
      * @since 2.2.4
      */
     public function hasReturnClass()
@@ -303,6 +304,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
         if (($node = $this->getReturnType()) instanceof ASTClassOrInterfaceReference) {
             return true;
         }
+
         return false;
     }
 
@@ -316,6 +318,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
                 return $node;
             }
         }
+
         return null;
     }
 
@@ -373,6 +376,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
         if ($this->parameters === null) {
             $this->initParameters();
         }
+
         return $this->parameters;
     }
 
@@ -380,7 +384,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      * This method will return <b>true</b> when this method returns a value by
      * reference, otherwise the return value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      * @since  0.9.5
      */
     public function returnsReference()
@@ -409,7 +413,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      */
     public function getStaticVariables()
     {
-        $staticVariables = array();
+        $staticVariables = [];
 
         $declarations = $this->findChildrenOfType(
             'PDepend\\Source\\AST\\ASTStaticVariableDeclaration'
@@ -428,6 +432,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
                 $staticVariables[substr($image, 1)] = $value;
             }
         }
+
         return $staticVariables;
     }
 
@@ -436,7 +441,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      * restored from the cache and not currently parsed. Otherwise this method
      * will return <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      * @since  0.10.0
      */
     public function isCached()
@@ -452,7 +457,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      */
     private function initParameters()
     {
-        $parameters = array();
+        $parameters = [];
 
         $formalParameters = $this->getFirstChildOfType(
             'PDepend\\Source\\AST\\ASTFormalParameters'
@@ -491,7 +496,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      */
     public function __sleep()
     {
-        return array(
+        return [
             'cache',
             'id',
             'name',
@@ -501,8 +506,8 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
             'comment',
             'returnsReference',
             'returnClassReference',
-            'exceptionClassReferences'
-        );
+            'exceptionClassReferences',
+        ];
     }
 
     // @codeCoverageIgnoreStart
@@ -518,7 +523,7 @@ abstract class AbstractASTCallable extends AbstractASTArtifact implements ASTCal
      */
     public function free()
     {
-        trigger_error(__METHOD__ . '() is deprecated.', E_USER_DEPRECATED);
+        trigger_error(__METHOD__.'() is deprecated.', E_USER_DEPRECATED);
     }
 
     // @codeCoverageIgnoreEnd

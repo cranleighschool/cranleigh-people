@@ -46,7 +46,7 @@ class MergeBuilder
      */
     public function denyOverwrite(bool $deny = true)
     {
-        $this->allowOverwrite = !$deny;
+        $this->allowOverwrite = ! $deny;
 
         return $this;
     }

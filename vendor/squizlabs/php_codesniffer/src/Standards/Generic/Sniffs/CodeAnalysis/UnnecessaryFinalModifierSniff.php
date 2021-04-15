@@ -28,8 +28,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class UnnecessaryFinalModifierSniff implements Sniff
 {
-
-
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -38,9 +36,9 @@ class UnnecessaryFinalModifierSniff implements Sniff
     public function register()
     {
         return [T_CLASS];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -54,7 +52,7 @@ class UnnecessaryFinalModifierSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $token  = $tokens[$stackPtr];
+        $token = $tokens[$stackPtr];
 
         // Skip for-statements without body.
         if (isset($token['scope_opener']) === false) {
@@ -70,16 +68,15 @@ class UnnecessaryFinalModifierSniff implements Sniff
         }
 
         $next = ++$token['scope_opener'];
-        $end  = --$token['scope_closer'];
+        $end = --$token['scope_closer'];
 
-        for (; $next <= $end; ++$next) {
+        for (; $next <= $end; $next++) {
             if ($tokens[$next]['code'] === T_FINAL) {
                 $error = 'Unnecessary FINAL modifier in FINAL class';
                 $phpcsFile->addWarning($error, $next, 'Found');
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

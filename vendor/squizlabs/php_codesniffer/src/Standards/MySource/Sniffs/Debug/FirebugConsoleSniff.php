@@ -9,19 +9,17 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\Debug;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 class FirebugConsoleSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['JS'];
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -36,9 +34,9 @@ class FirebugConsoleSniff implements Sniff
             T_LABEL,
             T_OBJECT,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -57,8 +55,7 @@ class FirebugConsoleSniff implements Sniff
             $error = 'Variables, functions and labels must not be named "console"; name may conflict with Firebug internal variable';
             $phpcsFile->addError($error, $stackPtr, 'ConflictFound');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -16,7 +16,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class CamelCapsFunctionNameSniff extends AbstractScopeSniff
 {
-
     /**
      * A list of all PHP magic methods.
      *
@@ -74,10 +73,9 @@ class CamelCapsFunctionNameSniff extends AbstractScopeSniff
     /**
      * If TRUE, the string must not have two capital letters next to each other.
      *
-     * @var boolean
+     * @var bool
      */
     public $strict = true;
-
 
     /**
      * Constructs a Generic_Sniffs_NamingConventions_CamelCapsFunctionNameSniff.
@@ -85,9 +83,9 @@ class CamelCapsFunctionNameSniff extends AbstractScopeSniff
     public function __construct()
     {
         parent::__construct(Tokens::$ooScopeTokens, [T_FUNCTION], true);
+    }
 
-    }//end __construct()
-
+    //end __construct()
 
     /**
      * Processes the tokens within the scope.
@@ -125,7 +123,7 @@ class CamelCapsFunctionNameSniff extends AbstractScopeSniff
         $errorData = [$className.'::'.$methodName];
 
         $methodNameLc = strtolower($methodName);
-        $classNameLc  = strtolower($className);
+        $classNameLc = strtolower($className);
 
         // Is this a magic method. i.e., is prefixed with "__" ?
         if (preg_match('|^__[^_]|', $methodName) !== 0) {
@@ -157,7 +155,7 @@ class CamelCapsFunctionNameSniff extends AbstractScopeSniff
         if (Common::isCamelCaps($methodName, false, true, $this->strict) === false) {
             if ($methodProps['scope_specified'] === true) {
                 $error = '%s method name "%s" is not in camel caps format';
-                $data  = [
+                $data = [
                     ucfirst($methodProps['scope']),
                     $errorData[0],
                 ];
@@ -168,13 +166,14 @@ class CamelCapsFunctionNameSniff extends AbstractScopeSniff
             }
 
             $phpcsFile->recordMetric($stackPtr, 'CamelCase method name', 'no');
+
             return;
         } else {
             $phpcsFile->recordMetric($stackPtr, 'CamelCase method name', 'yes');
         }
+    }
 
-    }//end processTokenWithinScope()
-
+    //end processTokenWithinScope()
 
     /**
      * Processes the tokens outside the scope.
@@ -216,8 +215,7 @@ class CamelCapsFunctionNameSniff extends AbstractScopeSniff
         } else {
             $phpcsFile->recordMetric($stackPtr, 'CamelCase method name', 'yes');
         }
+    }
 
-    }//end processTokenOutsideScope()
-
-
+    //end processTokenOutsideScope()
 }//end class
