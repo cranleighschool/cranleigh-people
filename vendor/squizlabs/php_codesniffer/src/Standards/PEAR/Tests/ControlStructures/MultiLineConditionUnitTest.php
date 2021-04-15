@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class MultiLineConditionUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -25,7 +23,7 @@ class MultiLineConditionUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile='MultiLineConditionUnitTest.inc')
+    public function getErrorList($testFile = 'MultiLineConditionUnitTest.inc')
     {
         $errors = [
             21  => 1,
@@ -69,9 +67,9 @@ class MultiLineConditionUnitTest extends AbstractSniffUnitTest
         }
 
         return $errors;
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -84,8 +82,7 @@ class MultiLineConditionUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

@@ -57,7 +57,7 @@ class CloverReport implements Report
      *
      * @var array<string, array>
      */
-    private $fileLineCoverage = array();
+    private $fileLineCoverage = [];
 
     /**
      * Constructs a new clover report instance.
@@ -93,7 +93,7 @@ class CloverReport implements Report
     private function readFileCoverage(\SimpleXMLElement $sxml)
     {
         foreach ($sxml->file as $file) {
-            $lines = array();
+            $lines = [];
             foreach ($file->line as $line) {
                 $lines[(int) $line['num']] = (0 < (int) $line['count']);
             }
@@ -112,17 +112,17 @@ class CloverReport implements Report
         $lines = $this->getLines($artifact->getCompilationUnit()->getFileName());
 
         $startLine = $artifact->getStartLine();
-        $endLine   = $artifact->getEndLine();
+        $endLine = $artifact->getEndLine();
 
         $executable = 0;
-        $executed   = 0;
-        for ($i = $startLine; $i <= $endLine; ++$i) {
-            if (!isset($lines[$i])) {
+        $executed = 0;
+        for ($i = $startLine; $i <= $endLine; $i++) {
+            if (! isset($lines[$i])) {
                 continue;
             }
-            ++$executable;
+            $executable++;
             if ($lines[$i]) {
-                ++$executed;
+                $executed++;
             }
         }
 
@@ -132,7 +132,8 @@ class CloverReport implements Report
         if ($executed === 0) {
             return 0;
         }
-        return (($executed / $executable) * 100);
+
+        return ($executed / $executable) * 100;
     }
 
     /**
@@ -146,6 +147,7 @@ class CloverReport implements Report
         if (isset($this->fileLineCoverage[$fileName])) {
             return $this->fileLineCoverage[$fileName];
         }
-        return array();
+
+        return [];
     }
 }

@@ -57,7 +57,7 @@ class ASTType extends AbstractASTNode
     /**
      * This method will return <b>true</b> when the underlying type is an array.
      *
-     * @return boolean
+     * @return bool
      */
     public function isArray()
     {
@@ -68,7 +68,7 @@ class ASTType extends AbstractASTNode
      * This method will return <b>true</b> when the underlying data type is a
      * php primitive.
      *
-     * @return boolean
+     * @return bool
      */
     public function isScalar()
     {
@@ -78,7 +78,7 @@ class ASTType extends AbstractASTNode
     /**
      * This method will return <b>true</b> when this type use union pipe tos specify multiple types.
      *
-     * @return boolean
+     * @return bool
      */
     public function isUnion()
     {

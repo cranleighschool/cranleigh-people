@@ -25,7 +25,7 @@ trait ParentTrait
      */
     final public function parent(string $parent): self
     {
-        if (!$this->allowParent) {
+        if (! $this->allowParent) {
             throw new InvalidArgumentException(sprintf('A parent cannot be defined when either "_instanceof" or "_defaults" are also defined for service prototype "%s".', $this->id));
         }
 

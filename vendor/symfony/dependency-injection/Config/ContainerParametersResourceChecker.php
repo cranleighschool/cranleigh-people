@@ -42,7 +42,7 @@ class ContainerParametersResourceChecker implements ResourceCheckerInterface
     public function isFresh(ResourceInterface $resource, int $timestamp)
     {
         foreach ($resource->getParameters() as $key => $value) {
-            if (!$this->container->hasParameter($key) || $this->container->getParameter($key) !== $value) {
+            if (! $this->container->hasParameter($key) || $this->container->getParameter($key) !== $value) {
                 return false;
             }
         }

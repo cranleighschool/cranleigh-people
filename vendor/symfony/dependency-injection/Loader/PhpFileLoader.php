@@ -60,7 +60,7 @@ class PhpFileLoader extends FileLoader
      */
     public function supports($resource, string $type = null)
     {
-        if (!\is_string($resource)) {
+        if (! \is_string($resource)) {
             return false;
         }
 

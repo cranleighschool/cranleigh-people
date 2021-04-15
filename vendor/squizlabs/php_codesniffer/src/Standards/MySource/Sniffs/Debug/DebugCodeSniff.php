@@ -9,13 +9,11 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\Debug;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DebugCodeSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,9 +22,9 @@ class DebugCodeSniff implements Sniff
     public function register()
     {
         return [T_DOUBLE_COLON];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -44,12 +42,11 @@ class DebugCodeSniff implements Sniff
         $className = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
         if (strtolower($tokens[$className]['content']) === 'debug') {
             $method = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
-            $error  = 'Call to debug function Debug::%s() must be removed';
-            $data   = [$tokens[$method]['content']];
+            $error = 'Call to debug function Debug::%s() must be removed';
+            $data = [$tokens[$method]['content']];
             $phpcsFile->addError($error, $stackPtr, 'Found', $data);
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

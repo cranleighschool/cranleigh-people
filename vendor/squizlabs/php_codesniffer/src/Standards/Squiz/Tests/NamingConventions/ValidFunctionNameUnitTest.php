@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class ValidFunctionNameUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -37,9 +35,9 @@ class ValidFunctionNameUnitTest extends AbstractSniffUnitTest
             13 => 1,
             14 => 2,
         ];
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -52,8 +50,7 @@ class ValidFunctionNameUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

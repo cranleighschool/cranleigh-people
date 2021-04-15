@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon;
 
 use Carbon\Exceptions\InvalidCastException;
@@ -62,7 +63,7 @@ class CarbonTimeZone extends DateTimeZone
      */
     public function cast(string $className)
     {
-        if (!method_exists($className, 'instance')) {
+        if (! method_exists($className, 'instance')) {
             if (is_a($className, DateTimeZone::class, true)) {
                 return new $className($this->getName());
             }
@@ -95,7 +96,7 @@ class CarbonTimeZone extends DateTimeZone
             return new static();
         }
 
-        if (!$tz instanceof DateTimeZone) {
+        if (! $tz instanceof DateTimeZone) {
             $tz = static::getDateTimeZoneFromName($object);
         }
 

@@ -24,7 +24,7 @@ use PHPMD\Rule\FunctionAware;
 use PHPMD\Rule\MethodAware;
 
 /**
- * Checks that all classes are imported
+ * Checks that all classes are imported.
  *
  * This rule can be used to prevent use of fully qualified class names.
  */
@@ -33,10 +33,10 @@ class MissingImport extends AbstractRule implements MethodAware, FunctionAware
     /**
      * @var array Self reference class names.
      */
-    protected $selfReferences = array('self', 'static');
+    protected $selfReferences = ['self', 'static'];
 
     /**
-     * Checks for missing class imports and warns about it
+     * Checks for missing class imports and warns about it.
      *
      * @param AbstractNode $node The node to check upon.
      * @return void
@@ -44,7 +44,7 @@ class MissingImport extends AbstractRule implements MethodAware, FunctionAware
     public function apply(AbstractNode $node)
     {
         foreach ($node->findChildrenOfType('AllocationExpression') as $allocationNode) {
-            if (!$allocationNode) {
+            if (! $allocationNode) {
                 continue;
             }
 
@@ -57,13 +57,13 @@ class MissingImport extends AbstractRule implements MethodAware, FunctionAware
             $classNameLength = $classNode->getEndColumn() - $classNode->getStartColumn() + 1;
             $fqcnLength = strlen($classNode->getImage());
             if ($classNameLength === $fqcnLength) {
-                $this->addViolation($classNode, array($classNode->getBeginLine(), $classNode->getStartColumn()));
+                $this->addViolation($classNode, [$classNode->getBeginLine(), $classNode->getStartColumn()]);
             }
         }
     }
 
     /**
-     * Check whether a given class node is a self reference
+     * Check whether a given class node is a self reference.
      *
      * @param ASTNode $classNode A class node to check.
      * @return bool Whether the given class node is a self reference.

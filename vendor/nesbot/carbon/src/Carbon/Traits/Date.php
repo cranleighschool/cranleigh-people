@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use BadMethodCallException;
@@ -706,7 +707,7 @@ trait Date
             $message .= "$expect, ";
         }
 
-        if (!$date instanceof DateTime && !$date instanceof DateTimeInterface) {
+        if (! $date instanceof DateTime && ! $date instanceof DateTimeInterface) {
             throw new InvalidTypeException(
                 $message.'DateTime or DateTimeInterface, '.
                 (\is_object($date) ? \get_class($date) : \gettype($date)).' given'
@@ -724,7 +725,7 @@ trait Date
      */
     protected function resolveCarbon($date = null)
     {
-        if (!$date) {
+        if (! $date) {
             return $this->nowWithSameTz();
         }
 
@@ -763,7 +764,7 @@ trait Date
     ///////////////////////////////////////////////////////////////////
 
     /**
-     * Get a part of the Carbon object
+     * Get a part of the Carbon object.
      *
      * @param string $name
      *
@@ -777,7 +778,7 @@ trait Date
     }
 
     /**
-     * Get a part of the Carbon object
+     * Get a part of the Carbon object.
      *
      * @param string $name
      *
@@ -1019,7 +1020,7 @@ trait Date
     }
 
     /**
-     * Check if an attribute exists on the object
+     * Check if an attribute exists on the object.
      *
      * @param string $name
      *
@@ -1037,7 +1038,7 @@ trait Date
     }
 
     /**
-     * Set a part of the Carbon object
+     * Set a part of the Carbon object.
      *
      * @param string                  $name
      * @param string|int|DateTimeZone $value
@@ -1058,7 +1059,7 @@ trait Date
     }
 
     /**
-     * Set a part of the Carbon object
+     * Set a part of the Carbon object.
      *
      * @param string|array            $name
      * @param string|int|DateTimeZone $value
@@ -1200,7 +1201,7 @@ trait Date
 
         if (
             $this->getTranslationMessage("$standaloneKey.$subKey") &&
-            (!$context || ($regExp = $this->getTranslationMessage("${baseKey}_regexp")) && !preg_match($regExp, $context))
+            (! $context || ($regExp = $this->getTranslationMessage("${baseKey}_regexp")) && ! preg_match($regExp, $context))
         ) {
             $key = $standaloneKey;
         }
@@ -1594,7 +1595,7 @@ trait Date
     }
 
     /**
-     * Get the days of the week
+     * Get the days of the week.
      *
      * @return array
      */
@@ -1616,7 +1617,7 @@ trait Date
     }
 
     /**
-     * Get the first day of week
+     * Get the first day of week.
      *
      * @return int
      */
@@ -1647,7 +1648,7 @@ trait Date
     }
 
     /**
-     * Get the last day of week
+     * Get the last day of week.
      *
      * @return int
      */
@@ -1679,7 +1680,7 @@ trait Date
     }
 
     /**
-     * Get weekend days
+     * Get weekend days.
      *
      * @return array
      */
@@ -1729,7 +1730,7 @@ trait Date
      */
     public static function hasRelativeKeywords($time)
     {
-        if (!$time || strtotime($time) === false) {
+        if (! $time || strtotime($time) === false) {
             return false;
         }
 
@@ -2057,7 +2058,7 @@ trait Date
                 continue;
             }
 
-            if ($char === '[' && !$inEscaped) {
+            if ($char === '[' && ! $inEscaped) {
                 $inEscaped = true;
 
                 continue;
@@ -2213,7 +2214,7 @@ trait Date
                 continue;
             }
 
-            if (!isset($replacements[$char])) {
+            if (! isset($replacements[$char])) {
                 $replacement = preg_match('/^[A-Za-z]$/', $char) ? "\\$char" : $char;
                 $isoFormat .= $replacement;
                 $context .= $replacement;
@@ -2314,7 +2315,7 @@ trait Date
      */
     public static function __callStatic($method, $parameters)
     {
-        if (!static::hasMacro($method)) {
+        if (! static::hasMacro($method)) {
             foreach (static::getGenericMacros() as $callback) {
                 try {
                     return static::executeStaticCallable($callback, $method, ...$parameters);
@@ -2589,7 +2590,7 @@ trait Date
         return static::bindMacroContext($this, function () use (&$method, &$parameters) {
             $macro = $this->getLocalMacro($method);
 
-            if (!$macro) {
+            if (! $macro) {
                 foreach ([$this->localGenericMacros ?: [], static::getGenericMacros()] as $list) {
                     foreach ($list as $callback) {
                         try {

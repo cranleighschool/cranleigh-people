@@ -29,6 +29,6 @@ class RuleSetNotFoundException extends \RuntimeException
      */
     public function __construct($ruleSet)
     {
-        parent::__construct('Cannot find specified rule-set "' . $ruleSet . '".');
+        parent::__construct('Cannot find specified rule-set "'.$ruleSet.'".');
     }
 }

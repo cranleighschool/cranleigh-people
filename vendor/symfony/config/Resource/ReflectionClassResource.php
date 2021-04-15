@@ -133,7 +133,7 @@ class ReflectionClassResource implements SelfCheckingResourceInterface
             yield print_r($class->getConstants(), true);
         }
 
-        if (!$class->isInterface()) {
+        if (! $class->isInterface()) {
             $defaults = $class->getDefaultProperties();
 
             foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED) as $p) {
@@ -142,7 +142,7 @@ class ReflectionClassResource implements SelfCheckingResourceInterface
                 yield $p->isPublic() ? 'public' : 'protected';
                 yield $p->isStatic() ? 'static' : '';
                 yield '$'.$p->name;
-                yield print_r(isset($defaults[$p->name]) && !\is_object($defaults[$p->name]) ? $defaults[$p->name] : null, true);
+                yield print_r(isset($defaults[$p->name]) && ! \is_object($defaults[$p->name]) ? $defaults[$p->name] : null, true);
             }
         }
 
@@ -150,13 +150,13 @@ class ReflectionClassResource implements SelfCheckingResourceInterface
             $defaults = [];
             $parametersWithUndefinedConstants = [];
             foreach ($m->getParameters() as $p) {
-                if (!$p->isDefaultValueAvailable()) {
+                if (! $p->isDefaultValueAvailable()) {
                     $defaults[$p->name] = null;
 
                     continue;
                 }
 
-                if (!$p->isDefaultValueConstant() || \defined($p->getDefaultValueConstantName())) {
+                if (! $p->isDefaultValueConstant() || \defined($p->getDefaultValueConstantName())) {
                     $defaults[$p->name] = $p->getDefaultValue();
 
                     continue;
@@ -166,7 +166,7 @@ class ReflectionClassResource implements SelfCheckingResourceInterface
                 $parametersWithUndefinedConstants[$p->name] = true;
             }
 
-            if (!$parametersWithUndefinedConstants) {
+            if (! $parametersWithUndefinedConstants) {
                 yield preg_replace('/^  @@.*/m', '', $m);
             } else {
                 $t = $m->getReturnType();
@@ -184,7 +184,7 @@ class ReflectionClassResource implements SelfCheckingResourceInterface
                 ];
 
                 foreach ($m->getParameters() as $p) {
-                    if (!isset($parametersWithUndefinedConstants[$p->name])) {
+                    if (! isset($parametersWithUndefinedConstants[$p->name])) {
                         $stack[] = (string) $p;
                     } else {
                         $t = $p->getType();

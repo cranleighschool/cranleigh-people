@@ -66,7 +66,7 @@ abstract class AbstractASTVisitor implements ASTVisitor
      *
      * @var \PDepend\Source\ASTVisitor\ASTVisitListener[]
      */
-    private $listeners = array();
+    private $listeners = [];
 
     /**
      * Returns an iterator with all registered visit listeners.
@@ -250,7 +250,6 @@ abstract class AbstractASTVisitor implements ASTVisitor
         $this->fireEndProperty($property);
     }
 
-
     /**
      * Magic call method used to provide simplified visitor implementations.
      * With this method we can call <b>visit${NodeClassName}</b> on each node.
@@ -276,7 +275,7 @@ abstract class AbstractASTVisitor implements ASTVisitor
      */
     public function __call($method, $args)
     {
-        if (!isset($args[1])) {
+        if (! isset($args[1])) {
             throw new \RuntimeException("No node to visit provided for $method.");
         }
 
@@ -284,6 +283,7 @@ abstract class AbstractASTVisitor implements ASTVisitor
         foreach ($args[0]->getChildren() as $child) {
             $value = $child->accept($this, $value);
         }
+
         return $value;
     }
 

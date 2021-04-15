@@ -68,7 +68,7 @@ class MaintainabilityIndexAnalyzer extends AbstractCachingAnalyzer implements An
     /**
      * @var AbstractCachingAnalyzer[]
      */
-    private $analyzers = array();
+    private $analyzers = [];
 
     /**
      * Maintainability index is a combination of cyclomatic complexity,
@@ -77,7 +77,7 @@ class MaintainabilityIndexAnalyzer extends AbstractCachingAnalyzer implements An
      *
      * @param array<string, mixed> $options
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         parent::__construct($options);
 
@@ -105,7 +105,7 @@ class MaintainabilityIndexAnalyzer extends AbstractCachingAnalyzer implements An
             $this->fireStartAnalyzer();
 
             // Init node metrics
-            $this->metrics = array();
+            $this->metrics = [];
 
             foreach ($namespaces as $namespace) {
                 $namespace->accept($this);
@@ -130,7 +130,7 @@ class MaintainabilityIndexAnalyzer extends AbstractCachingAnalyzer implements An
             return $this->metrics[$artifact->getId()];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -196,6 +196,6 @@ class MaintainabilityIndexAnalyzer extends AbstractCachingAnalyzer implements An
 
         $maintainabilityIndex = 171 - 5.2 * log($halsteadVolume) - 0.23 * $cyclomaticComplexity - 16.2 * log($eloc);
         $maintainabilityIndex = min(100, max(0, $maintainabilityIndex * 100 / 171));
-        $this->metrics[$callable->getId()] = array(self::M_MAINTAINABILITY_INDEX => $maintainabilityIndex);
+        $this->metrics[$callable->getId()] = [self::M_MAINTAINABILITY_INDEX => $maintainabilityIndex];
     }
 }

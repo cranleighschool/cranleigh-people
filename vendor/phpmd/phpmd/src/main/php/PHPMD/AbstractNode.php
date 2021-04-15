@@ -26,7 +26,7 @@ use PHPMD\Node\ASTNode;
 abstract class AbstractNode
 {
     /**
-     * @var \PDepend\Source\AST\ASTArtifact|\PDepend\Source\AST\ASTNode $node
+     * @var \PDepend\Source\AST\ASTArtifact|\PDepend\Source\AST\ASTNode
      */
     private $node = null;
 
@@ -60,13 +60,13 @@ abstract class AbstractNode
     public function __call($name, array $args)
     {
         $node = $this->getNode();
-        if (!method_exists($node, $name)) {
+        if (! method_exists($node, $name)) {
             throw new \BadMethodCallException(
                 sprintf('Invalid method %s() called.', $name)
             );
         }
 
-        return call_user_func_array(array($node, $name), $args);
+        return call_user_func_array([$node, $name], $args);
     }
 
     /**
@@ -88,7 +88,7 @@ abstract class AbstractNode
     /**
      * Returns a child node at the given index.
      *
-     * @param integer $index The child offset.
+     * @param int $index The child offset.
      * @return \PHPMD\Node\ASTNode
      */
     public function getChild($index)
@@ -108,7 +108,7 @@ abstract class AbstractNode
      */
     public function getFirstChildOfType($type)
     {
-        $node = $this->node->getFirstChildOfType('PDepend\Source\AST\AST' . $type);
+        $node = $this->node->getFirstChildOfType('PDepend\Source\AST\AST'.$type);
 
         if ($node === null) {
             return null;
@@ -126,9 +126,9 @@ abstract class AbstractNode
      */
     public function findChildrenOfType($type)
     {
-        $children = $this->node->findChildrenOfType('PDepend\Source\AST\AST' . $type);
+        $children = $this->node->findChildrenOfType('PDepend\Source\AST\AST'.$type);
 
-        $nodes = array();
+        $nodes = [];
 
         foreach ($children as $child) {
             $nodes[] = new ASTNode($child, $this->getFileName());
@@ -141,13 +141,13 @@ abstract class AbstractNode
      * Tests if this node represents the the given type.
      *
      * @param string $type The expected node type.
-     * @return boolean
+     * @return bool
      */
     public function isInstanceOf($type)
     {
-        $class = 'PDepend\Source\AST\AST' . $type;
+        $class = 'PDepend\Source\AST\AST'.$type;
 
-        return ($this->node instanceof $class);
+        return $this->node instanceof $class;
     }
 
     /**
@@ -174,7 +174,7 @@ abstract class AbstractNode
     /**
      * Returns the begin line for this node in the php source code file.
      *
-     * @return integer
+     * @return int
      */
     public function getBeginLine()
     {
@@ -184,7 +184,7 @@ abstract class AbstractNode
     /**
      * Returns the end line for this node in the php source code file.
      *
-     * @return integer
+     * @return int
      */
     public function getEndLine()
     {
@@ -198,7 +198,7 @@ abstract class AbstractNode
      */
     public function getFileName()
     {
-        return (string)$this->node->getCompilationUnit()->getFileName();
+        return (string) $this->node->getCompilationUnit()->getFileName();
     }
 
     /**
@@ -257,7 +257,7 @@ abstract class AbstractNode
      * instance.
      *
      * @param \PHPMD\Rule $rule
-     * @return boolean
+     * @return bool
      */
     abstract public function hasSuppressWarningsAnnotationFor(Rule $rule);
 

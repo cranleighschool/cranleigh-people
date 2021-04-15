@@ -46,7 +46,7 @@ class XmlUtils
      */
     public static function parse(string $content, $schemaOrCallable = null)
     {
-        if (!\extension_loaded('dom')) {
+        if (! \extension_loaded('dom')) {
             throw new \LogicException('Extension DOM is required.');
         }
 
@@ -58,7 +58,7 @@ class XmlUtils
 
         $dom = new \DOMDocument();
         $dom->validateOnParse = true;
-        if (!$dom->loadXML($content, \LIBXML_NONET | (\defined('LIBXML_COMPACT') ? \LIBXML_COMPACT : 0))) {
+        if (! $dom->loadXML($content, \LIBXML_NONET | (\defined('LIBXML_COMPACT') ? \LIBXML_COMPACT : 0))) {
             if (\LIBXML_VERSION < 20900) {
                 libxml_disable_entity_loader($disableEntities);
             }
@@ -90,7 +90,7 @@ class XmlUtils
                 } catch (\Exception $e) {
                     $valid = false;
                 }
-            } elseif (!\is_array($schemaOrCallable) && is_file((string) $schemaOrCallable)) {
+            } elseif (! \is_array($schemaOrCallable) && is_file((string) $schemaOrCallable)) {
                 $schemaSource = file_get_contents((string) $schemaOrCallable);
                 $valid = @$dom->schemaValidateSource($schemaSource);
             } else {
@@ -99,7 +99,7 @@ class XmlUtils
                 throw new XmlParsingException('The schemaOrCallable argument has to be a valid path to XSD file or callable.');
             }
 
-            if (!$valid) {
+            if (! $valid) {
                 $messages = static::getXmlErrors($internalErrors);
                 if (empty($messages)) {
                     throw new InvalidXmlException('The XML is not valid.', 0, $e);
@@ -128,11 +128,11 @@ class XmlUtils
      */
     public static function loadFile(string $file, $schemaOrCallable = null)
     {
-        if (!is_file($file)) {
+        if (! is_file($file)) {
             throw new \InvalidArgumentException(sprintf('Resource "%s" is not a file.', $file));
         }
 
-        if (!is_readable($file)) {
+        if (! is_readable($file)) {
             throw new \InvalidArgumentException(sprintf('File "%s" is not readable.', $file));
         }
 
@@ -175,7 +175,7 @@ class XmlUtils
         $empty = true;
         $config = [];
         foreach ($element->attributes as $name => $node) {
-            if ($checkPrefix && !\in_array((string) $node->prefix, ['', $prefix], true)) {
+            if ($checkPrefix && ! \in_array((string) $node->prefix, ['', $prefix], true)) {
                 continue;
             }
             $config[$name] = static::phpize($node->value);
@@ -191,12 +191,12 @@ class XmlUtils
                 }
             } elseif ($checkPrefix && $prefix != (string) $node->prefix) {
                 continue;
-            } elseif (!$node instanceof \DOMComment) {
+            } elseif (! $node instanceof \DOMComment) {
                 $value = static::convertDomElementToArray($node, $checkPrefix);
 
                 $key = $node->localName;
                 if (isset($config[$key])) {
-                    if (!\is_array($config[$key]) || !\is_int(key($config[$key]))) {
+                    if (! \is_array($config[$key]) || ! \is_int(key($config[$key]))) {
                         $config[$key] = [$config[$key]];
                     }
                     $config[$key][] = $value;
@@ -217,7 +217,7 @@ class XmlUtils
             }
         }
 
-        return !$empty ? $config : null;
+        return ! $empty ? $config : null;
     }
 
     /**

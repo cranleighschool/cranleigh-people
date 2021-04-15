@@ -64,7 +64,7 @@ class IdBuilder
      *
      * @deprecated 3.0.0 This property will no longer be accessible on the public access level in next major version.
      */
-    public $offsetInFile = array();
+    public $offsetInFile = [];
 
     /**
      * Generates an identifier for the given file instance.
@@ -112,7 +112,7 @@ class IdBuilder
     protected function forOffsetItem(AbstractASTArtifact $artifact, $prefix)
     {
         $fileHash = $artifact->getCompilationUnit()->getId();
-        $itemHash = $this->hash($prefix . ':' . strtolower($artifact->getName()));
+        $itemHash = $this->hash($prefix.':'.strtolower($artifact->getName()));
 
         $offset = $this->getOffsetInFile($fileHash, $itemHash);
 
@@ -160,6 +160,7 @@ class IdBuilder
         } else {
             $this->offsetInFile[$file][$string] = 0;
         }
+
         return sprintf(
             '%02s',
             base_convert($this->offsetInFile[$file][$string], 10, 36)

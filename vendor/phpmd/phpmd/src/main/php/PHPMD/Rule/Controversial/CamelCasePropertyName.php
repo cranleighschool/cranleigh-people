@@ -48,12 +48,12 @@ class CamelCasePropertyName extends AbstractRule implements ClassAware
         foreach ($node->getProperties() as $property) {
             $propertyName = $property->getName();
 
-            if (!preg_match($pattern, $propertyName)) {
+            if (! preg_match($pattern, $propertyName)) {
                 $this->addViolation(
                     $node,
-                    array(
+                    [
                         $propertyName,
-                    )
+                    ]
                 );
             }
         }

@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ValidClassNameSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -28,9 +26,9 @@ class ValidClassNameSniff implements Sniff
             T_INTERFACE,
             T_TRAIT,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -46,7 +44,7 @@ class ValidClassNameSniff implements Sniff
         $tokens = $phpcsFile->getTokens();
 
         $className = $phpcsFile->findNext(T_STRING, $stackPtr);
-        $name      = trim($tokens[$className]['content']);
+        $name = trim($tokens[$className]['content']);
         $errorData = [ucfirst($tokens[$stackPtr]['content'])];
 
         // Make sure the first letter is a capital.
@@ -58,8 +56,8 @@ class ValidClassNameSniff implements Sniff
         // Check that each new word starts with a capital as well, but don't
         // check the first word, as it is checked above.
         $validName = true;
-        $nameBits  = explode('_', $name);
-        $firstBit  = array_shift($nameBits);
+        $nameBits = explode('_', $name);
+        $firstBit = array_shift($nameBits);
         foreach ($nameBits as $bit) {
             if ($bit === '' || $bit[0] !== strtoupper($bit[0])) {
                 $validName = false;
@@ -84,14 +82,13 @@ class ValidClassNameSniff implements Sniff
                 }
 
                 $newName = rtrim($newName, '_');
-                $error   = '%s name is not valid; consider %s instead';
-                $data    = $errorData;
-                $data[]  = $newName;
+                $error = '%s name is not valid; consider %s instead';
+                $data = $errorData;
+                $data[] = $newName;
                 $phpcsFile->addError($error, $stackPtr, 'Invalid', $data);
             }
         }//end if
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

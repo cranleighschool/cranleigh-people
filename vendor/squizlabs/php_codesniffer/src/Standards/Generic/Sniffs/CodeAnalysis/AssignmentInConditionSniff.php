@@ -19,7 +19,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class AssignmentInConditionSniff implements Sniff
 {
-
     /**
      * Assignment tokens to trigger on.
      *
@@ -36,7 +35,6 @@ class AssignmentInConditionSniff implements Sniff
      */
     protected $conditionStartTokens = [];
 
-
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -48,7 +46,7 @@ class AssignmentInConditionSniff implements Sniff
         unset($this->assignmentTokens[T_DOUBLE_ARROW]);
 
         $starters = Tokens::$booleanOperators;
-        $starters[T_SEMICOLON]        = T_SEMICOLON;
+        $starters[T_SEMICOLON] = T_SEMICOLON;
         $starters[T_OPEN_PARENTHESIS] = T_OPEN_PARENTHESIS;
 
         $this->conditionStartTokens = $starters;
@@ -62,9 +60,9 @@ class AssignmentInConditionSniff implements Sniff
             T_WHILE,
             T_MATCH,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -78,7 +76,7 @@ class AssignmentInConditionSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $token  = $tokens[$stackPtr];
+        $token = $tokens[$stackPtr];
 
         // Find the condition opener/closer.
         if ($token['code'] === T_FOR) {
@@ -100,7 +98,7 @@ class AssignmentInConditionSniff implements Sniff
 
             $closer = $semicolon;
             unset($semicolon);
-        } else if ($token['code'] === T_CASE) {
+        } elseif ($token['code'] === T_CASE) {
             if (isset($token['scope_opener']) === false) {
                 return;
             }
@@ -125,8 +123,8 @@ class AssignmentInConditionSniff implements Sniff
             }
 
             // Examine whether the left side is a variable.
-            $hasVariable       = false;
-            $conditionStart    = $startPos;
+            $hasVariable = false;
+            $conditionStart = $startPos;
             $altConditionStart = $phpcsFile->findPrevious($this->conditionStartTokens, ($hasAssignment - 1), $startPos);
             if ($altConditionStart !== false) {
                 $conditionStart = $altConditionStart;
@@ -164,8 +162,7 @@ class AssignmentInConditionSniff implements Sniff
 
             $startPos = $hasAssignment;
         } while ($startPos < $closer);
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

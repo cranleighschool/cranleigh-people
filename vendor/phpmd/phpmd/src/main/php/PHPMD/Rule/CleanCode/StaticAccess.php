@@ -46,7 +46,7 @@ class StaticAccess extends AbstractRule implements MethodAware, FunctionAware
         $nodes = $node->findChildrenOfType('MemberPrimaryPrefix');
 
         foreach ($nodes as $methodCall) {
-            if (!$this->isStaticMethodCall($methodCall)) {
+            if (! $this->isStaticMethodCall($methodCall)) {
                 continue;
             }
 
@@ -55,7 +55,7 @@ class StaticAccess extends AbstractRule implements MethodAware, FunctionAware
                 continue;
             }
 
-            $this->addViolation($methodCall, array($className, $node->getName()));
+            $this->addViolation($methodCall, [$className, $node->getName()]);
         }
     }
 
@@ -68,8 +68,8 @@ class StaticAccess extends AbstractRule implements MethodAware, FunctionAware
     {
         return $methodCall->getChild(0)->getNode() instanceof ASTClassOrInterfaceReference &&
             $methodCall->getChild(1)->getNode() instanceof ASTMethodPostfix &&
-            !$this->isCallingParent($methodCall) &&
-            !$this->isCallingSelf($methodCall);
+            ! $this->isCallingParent($methodCall) &&
+            ! $this->isCallingSelf($methodCall);
     }
 
     protected function isCallingParent(AbstractNode $methodCall)
@@ -83,7 +83,7 @@ class StaticAccess extends AbstractRule implements MethodAware, FunctionAware
     }
 
     /**
-     * Gets array of exceptions from property
+     * Gets array of exceptions from property.
      *
      * @return array
      */

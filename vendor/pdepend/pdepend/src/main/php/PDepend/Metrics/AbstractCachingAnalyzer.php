@@ -57,7 +57,7 @@ use PDepend\Util\Cache\CacheDriver;
 abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements AnalyzerCacheAware
 {
     /**
-     * Collected node metrics
+     * Collected node metrics.
      *
      * @var array<string, mixed>
      */
@@ -68,7 +68,7 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
      *
      * @var array<string, mixed>
      */
-    private $metricsCached = array();
+    private $metricsCached = [];
 
     /**
      * Injected cache driver.
@@ -104,15 +104,17 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
      * value will be <b>FALSE</b>.
      *
      * @param  \PDepend\Source\AST\AbstractASTArtifact $node
-     * @return boolean
+     * @return bool
      */
     protected function restoreFromCache(AbstractASTArtifact $node)
     {
         $id = $node->getId();
         if ($node->isCached() && isset($this->metricsCached[$id])) {
             $this->metrics[$id] = $this->metricsCached[$id];
+
             return true;
         }
+
         return false;
     }
 
@@ -140,6 +142,6 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
             ->type('metrics')
             ->store(get_class($this), $this->metrics);
 
-        $this->metricsCached = array();
+        $this->metricsCached = [];
     }
 }

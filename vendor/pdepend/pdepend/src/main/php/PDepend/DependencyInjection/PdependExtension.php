@@ -49,7 +49,7 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
- * PDepend DependencyInjection Extension for Symfony DIC
+ * PDepend DependencyInjection Extension for Symfony DIC.
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
@@ -66,12 +66,12 @@ class PdependExtension extends SymfonyExtension
         $extensionManager = new ExtensionManager();
 
         foreach ($configs as $config) {
-            if (!isset($config['extensions'])) {
+            if (! isset($config['extensions'])) {
                 continue;
             }
 
             foreach ($config['extensions'] as $config) {
-                if (!isset($config['class'])) {
+                if (! isset($config['class'])) {
                     continue;
                 }
 
@@ -82,13 +82,13 @@ class PdependExtension extends SymfonyExtension
         $configuration = new Configuration($extensionManager->getActivatedExtensions());
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../../../resources'));
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../../../resources'));
         $loader->load('services.xml');
 
         foreach ($extensionManager->getActivatedExtensions() as $extension) {
             $extensionConfig = $config['extensions'][$extension->getName()];
 
-            $tempContainer = new ContainerBuilder(new ParameterBag(array()));
+            $tempContainer = new ContainerBuilder(new ParameterBag([]));
             $tempContainer->addObjectResource($extension);
 
             // load extension into temporary container
@@ -101,7 +101,7 @@ class PdependExtension extends SymfonyExtension
         $settings = $this->createSettings($config);
 
         $configurationDefinition = $container->findDefinition('pdepend.configuration');
-        $configurationDefinition->setArguments(array($settings));
+        $configurationDefinition->setArguments([$settings]);
     }
 
     /**
@@ -112,16 +112,16 @@ class PdependExtension extends SymfonyExtension
     {
         $settings = new \stdClass();
 
-        $settings->cache           = new \stdClass();
+        $settings->cache = new \stdClass();
         $settings->cache->driver = $config['cache']['driver'];
         $settings->cache->location = $config['cache']['location'];
         $settings->cache->ttl = $config['cache']['ttl'];
 
-        $settings->imageConvert             = new \stdClass();
-        $settings->imageConvert->fontSize   = $config['image_convert']['font_size'];
+        $settings->imageConvert = new \stdClass();
+        $settings->imageConvert->fontSize = $config['image_convert']['font_size'];
         $settings->imageConvert->fontFamily = $config['image_convert']['font_family'];
 
-        $settings->parser          = new \stdClass();
+        $settings->parser = new \stdClass();
         $settings->parser->nesting = $config['parser']['nesting'];
 
         return $settings;

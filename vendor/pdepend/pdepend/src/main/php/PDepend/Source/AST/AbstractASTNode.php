@@ -57,7 +57,7 @@ abstract class AbstractASTNode implements ASTNode
      *
      * @var \PDepend\Source\AST\ASTNode[]
      */
-    protected $nodes = array();
+    protected $nodes = [];
 
     /**
      * The parent node of this node or <b>null</b> when this node is the root
@@ -120,7 +120,7 @@ abstract class AbstractASTNode implements ASTNode
     /**
      * Returns the start line for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getStartLine()
     {
@@ -130,7 +130,7 @@ abstract class AbstractASTNode implements ASTNode
     /**
      * Returns the start column for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getStartColumn()
     {
@@ -140,7 +140,7 @@ abstract class AbstractASTNode implements ASTNode
     /**
      * Returns the end line for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getEndLine()
     {
@@ -150,7 +150,7 @@ abstract class AbstractASTNode implements ASTNode
     /**
      * Returns the end column for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getEndColumn()
     {
@@ -161,10 +161,10 @@ abstract class AbstractASTNode implements ASTNode
      * For better performance we have moved the single setter methods for the
      * node columns and lines into this configure method.
      *
-     * @param integer $startLine
-     * @param integer $endLine
-     * @param integer $startColumn
-     * @param integer $endColumn
+     * @param int $startLine
+     * @param int $endLine
+     * @param int $startColumn
+     * @param int $endColumn
      * @return void
      * @since 0.9.10
      */
@@ -183,8 +183,8 @@ abstract class AbstractASTNode implements ASTNode
     /**
      * Returns an integer value that was stored under the given index.
      *
-     * @param integer $index
-     * @return integer
+     * @param int $index
+     * @return int
      * @since 0.10.4
      */
     protected function getMetadataInteger($index)
@@ -196,8 +196,8 @@ abstract class AbstractASTNode implements ASTNode
      * Stores an integer value under the given index in the internally used data
      * string.
      *
-     * @param integer $index
-     * @param integer $value
+     * @param int $index
+     * @param int $value
      * @return void
      * @since 0.10.4
      */
@@ -209,8 +209,8 @@ abstract class AbstractASTNode implements ASTNode
     /**
      * Returns a boolean value that was stored under the given index.
      *
-     * @param integer $index
-     * @return boolean
+     * @param int $index
+     * @return bool
      * @since 0.10.4
      */
     protected function getMetadataBoolean($index)
@@ -222,8 +222,8 @@ abstract class AbstractASTNode implements ASTNode
      * Stores a boolean value under the given index in the internally used data
      * string.
      *
-     * @param integer $index
-     * @param boolean $value
+     * @param int $index
+     * @param bool $value
      * @return void
      * @since 0.10.4
      */
@@ -235,13 +235,14 @@ abstract class AbstractASTNode implements ASTNode
     /**
      * Returns the value that was stored under the given index.
      *
-     * @param integer $index
+     * @param int $index
      * @return string
      * @since 0.10.4
      */
     protected function getMetadata($index)
     {
         $metadata = explode(':', $this->metadata, $this->getMetadataSize());
+
         return $metadata[$index];
     }
 
@@ -249,14 +250,14 @@ abstract class AbstractASTNode implements ASTNode
      * Stores the given value under the given index in an internal storage
      * container.
      *
-     * @param integer $index
+     * @param int $index
      * @param mixed $value
      * @return void
      * @since 0.10.4
      */
     protected function setMetadata($index, $value)
     {
-        $metadata         = explode(':', $this->metadata, $this->getMetadataSize());
+        $metadata = explode(':', $this->metadata, $this->getMetadataSize());
         $metadata[$index] = $value;
 
         $this->metadata = join(':', $metadata);
@@ -265,7 +266,7 @@ abstract class AbstractASTNode implements ASTNode
     /**
      * Returns the total number of the used property bag.
      *
-     * @return integer
+     * @return int
      * @since 0.10.4
      */
     protected function getMetadataSize()
@@ -276,7 +277,7 @@ abstract class AbstractASTNode implements ASTNode
     /**
      * Returns the node instance for the given index or throws an exception.
      *
-     * @param integer $index
+     * @param int $index
      * @return \PDepend\Source\AST\ASTNode
      * @throws \OutOfBoundsException When no node exists at the given index.
      */
@@ -323,6 +324,7 @@ abstract class AbstractASTNode implements ASTNode
                 return $child;
             }
         }
+
         return null;
     }
 
@@ -337,7 +339,7 @@ abstract class AbstractASTNode implements ASTNode
      *        is only for internal usage.
      * @return T[]
      */
-    public function findChildrenOfType($targetType, array &$results = array())
+    public function findChildrenOfType($targetType, array &$results = [])
     {
         foreach ($this->nodes as $node) {
             if ($node instanceof $targetType) {
@@ -345,6 +347,7 @@ abstract class AbstractASTNode implements ASTNode
             }
             $node->findChildrenOfType($targetType, $results);
         }
+
         return $results;
     }
 
@@ -392,7 +395,7 @@ abstract class AbstractASTNode implements ASTNode
      */
     public function getParentsOfType($parentType)
     {
-        $parents = array();
+        $parents = [];
 
         $parentNode = $this->parent;
         while (is_object($parentNode)) {
@@ -401,6 +404,7 @@ abstract class AbstractASTNode implements ASTNode
             }
             $parentNode = $parentNode->getParent();
         }
+
         return $parents;
     }
 
@@ -448,11 +452,11 @@ abstract class AbstractASTNode implements ASTNode
      */
     public function __sleep()
     {
-        return array(
+        return [
             'comment',
             'metadata',
-            'nodes'
-        );
+            'nodes',
+        ];
     }
 
     /**

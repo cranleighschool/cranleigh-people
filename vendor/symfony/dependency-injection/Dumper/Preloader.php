@@ -18,7 +18,7 @@ final class Preloader
 {
     public static function append(string $file, array $list): void
     {
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             throw new \LogicException(sprintf('File "%s" does not exist.', $file));
         }
 
@@ -56,7 +56,7 @@ final class Preloader
             while ($prev !== $classes) {
                 $prev = $classes;
                 foreach ($classes as $c) {
-                    if (!isset($preloaded[$c])) {
+                    if (! isset($preloaded[$c])) {
                         self::doPreload($c, $preloaded);
                     }
                 }
@@ -113,12 +113,12 @@ final class Preloader
 
     private static function preloadType(?\ReflectionType $t, array &$preloaded): void
     {
-        if (!$t) {
+        if (! $t) {
             return;
         }
 
         foreach ($t instanceof \ReflectionUnionType ? $t->getTypes() : [$t] as $t) {
-            if (!$t->isBuiltin()) {
+            if (! $t->isBuiltin()) {
                 self::doPreload($t instanceof \ReflectionNamedType ? $t->getName() : $t, $preloaded);
             }
         }

@@ -69,7 +69,7 @@ abstract class PHPParserVersion56 extends PHPParserVersion55
      */
     protected function parseStaticValueVersionSpecific(ASTValue $value)
     {
-        $expressions = array();
+        $expressions = [];
 
         while (($tokenType = $this->tokenizer->peek()) != Tokenizer::T_EOF) {
             switch ($tokenType) {
@@ -92,7 +92,7 @@ abstract class PHPParserVersion56 extends PHPParserVersion55
                 case Tokens::T_NAMESPACE:
                     $expressions[] = $this->parseVariableOrConstantOrPrimaryPrefix();
                     break;
-                case ($this->isArrayStartDelimiter()):
+                case $this->isArrayStartDelimiter():
                     $expressions[] = $this->doParseArray(true);
                     break;
                 case Tokens::T_NULL:
@@ -296,6 +296,7 @@ abstract class PHPParserVersion56 extends PHPParserVersion55
         if ($expression = $this->parseExpressionVersion56()) {
             return $expression;
         }
+
         return parent::parseOptionalExpressionForVersion();
     }
 
@@ -355,7 +356,7 @@ abstract class PHPParserVersion56 extends PHPParserVersion55
                 $expr = $this->parseConstantArgument($expr, $arguments);
             }
 
-            if (!$expr || !$this->addChildToList($arguments, $expr)) {
+            if (! $expr || ! $this->addChildToList($arguments, $expr)) {
                 break;
             }
         }
@@ -390,11 +391,11 @@ abstract class PHPParserVersion56 extends PHPParserVersion55
     protected function isFollowedByStaticValueOrStaticArray()
     {
         // If we can't anticipate, we should assume it can be a dynamic value
-        if (!($this->tokenizer instanceof FullTokenizer)) {
+        if (! ($this->tokenizer instanceof FullTokenizer)) {
             return false;
         }
 
-        for($i = 0; $type = $this->tokenizer->peekAt($i); $i++) {
+        for ($i = 0; $type = $this->tokenizer->peekAt($i); $i++) {
             switch ($type) {
                 case Tokens::T_COMMENT:
                 case Tokens::T_DOC_COMMENT:

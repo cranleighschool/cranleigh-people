@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class SemicolonSpacingUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -36,9 +34,9 @@ class SemicolonSpacingUnitTest extends AbstractSniffUnitTest
             45 => 1,
             48 => 1,
         ];
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -51,8 +49,7 @@ class SemicolonSpacingUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

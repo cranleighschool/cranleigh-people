@@ -55,14 +55,14 @@ class ASTSwitchLabel extends AbstractASTNode
     /**
      * Is this switch label the default label?
      *
-     * @var boolean
+     * @var bool
      */
     protected $default = false;
 
     /**
      * Returns <b>true</b> when this node is the default label.
      *
-     * @return boolean
+     * @return bool
      */
     public function isDefault()
     {
@@ -104,6 +104,6 @@ class ASTSwitchLabel extends AbstractASTNode
      */
     public function __sleep()
     {
-        return array_merge(array('default'), parent::__sleep());
+        return array_merge(['default'], parent::__sleep());
     }
 }

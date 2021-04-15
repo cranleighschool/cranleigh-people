@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Util;
 
 class Code implements Report
 {
-
-
     /**
      * Generate a partial report for a single processed file.
      *
@@ -30,7 +28,7 @@ class Code implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
+    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
     {
         if ($report['errors'] === 0 && $report['warnings'] === 0) {
             // Nothing to print.
@@ -40,13 +38,13 @@ class Code implements Report
         // How many lines to show about and below the error line.
         $surroundingLines = 2;
 
-        $file   = $report['filename'];
+        $file = $report['filename'];
         $tokens = $phpcsFile->getTokens();
         if (empty($tokens) === true) {
             if (PHP_CODESNIFFER_VERBOSITY === 1) {
                 $startTime = microtime(true);
                 echo 'CODE report is parsing '.basename($file).' ';
-            } else if (PHP_CODESNIFFER_VERBOSITY > 1) {
+            } elseif (PHP_CODESNIFFER_VERBOSITY > 1) {
                 echo "CODE report is forcing parse of $file".PHP_EOL;
             }
 
@@ -75,8 +73,8 @@ class Code implements Report
 
         // Create an array that maps lines to the first token on the line.
         $lineTokens = [];
-        $lastLine   = 0;
-        $stackPtr   = 0;
+        $lastLine = 0;
+        $stackPtr = 0;
         foreach ($tokens as $stackPtr => $token) {
             if ($token['line'] !== $lastLine) {
                 if ($lastLine > 0) {
@@ -98,10 +96,10 @@ class Code implements Report
 
         // Determine the longest code line we will be showing.
         $maxSnippetLength = 0;
-        $eolLen           = strlen($phpcsFile->eolChar);
+        $eolLen = strlen($phpcsFile->eolChar);
         foreach ($report['messages'] as $line => $lineErrors) {
             $startLine = max(($line - $surroundingLines), 1);
-            $endLine   = min(($line + $surroundingLines), $lastLine);
+            $endLine = min(($line + $surroundingLines), $lastLine);
 
             $maxLineNumLength = strlen($endLine);
 
@@ -110,7 +108,7 @@ class Code implements Report
                     continue;
                 }
 
-                $lineLength       = ($tokens[($lineTokens[$i]['start'] - 1)]['column'] + $tokens[($lineTokens[$i]['start'] - 1)]['length'] - $eolLen);
+                $lineLength = ($tokens[($lineTokens[$i]['start'] - 1)]['column'] + $tokens[($lineTokens[$i]['start'] - 1)]['length'] - $eolLen);
                 $maxSnippetLength = max($lineLength, $maxSnippetLength);
             }
         }
@@ -139,7 +137,7 @@ class Code implements Report
             $typeLength = 5;
         }
 
-        $errorPadding  = str_repeat(' ', ($maxLineNumLength + 7));
+        $errorPadding = str_repeat(' ', ($maxLineNumLength + 7));
         $errorPadding .= str_repeat(' ', $typeLength);
         $errorPadding .= ' ';
         if ($report['fixable'] > 0) {
@@ -157,8 +155,8 @@ class Code implements Report
 
         // Figure out the max report width we need and can use.
         $fileLength = strlen($file);
-        $maxWidth   = max(($fileLength + 6), ($maxErrorLength + $errorPaddingLength));
-        $width      = max(min($width, $maxWidth), $maxSnippetLength);
+        $maxWidth = max(($fileLength + 6), ($maxErrorLength + $errorPaddingLength));
+        $width = max(min($width, $maxWidth), $maxSnippetLength);
         if ($width < 70) {
             $width = 70;
         }
@@ -195,7 +193,7 @@ class Code implements Report
 
         foreach ($report['messages'] as $line => $lineErrors) {
             $startLine = max(($line - $surroundingLines), 1);
-            $endLine   = min(($line + $surroundingLines), $lastLine);
+            $endLine = min(($line + $surroundingLines), $lastLine);
 
             $snippet = '';
             if (isset($lineTokens[$startLine]) === true) {
@@ -223,7 +221,7 @@ class Code implements Report
                     }
 
                     if (strpos($tokenContent, "\t") !== false) {
-                        $token            = $tokens[$i];
+                        $token = $tokens[$i];
                         $token['content'] = $tokenContent;
                         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
                             $tab = "\000";
@@ -315,9 +313,9 @@ class Code implements Report
         }
 
         return true;
+    }
 
-    }//end generateFileReport()
-
+    //end generateFileReport()
 
     /**
      * Prints all errors and warnings for each file processed.
@@ -341,10 +339,10 @@ class Code implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources=false,
-        $width=80,
-        $interactive=false,
-        $toScreen=true
+        $showSources = false,
+        $width = 80,
+        $interactive = false,
+        $toScreen = true
     ) {
         if ($cachedData === '') {
             return;
@@ -355,8 +353,7 @@ class Code implements Report
         if ($toScreen === true && $interactive === false) {
             Util\Timing::printRunTime();
         }
+    }
 
-    }//end generate()
-
-
+    //end generate()
 }//end class

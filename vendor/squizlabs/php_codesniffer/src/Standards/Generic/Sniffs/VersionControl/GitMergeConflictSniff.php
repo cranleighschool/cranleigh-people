@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class GitMergeConflictSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -26,7 +25,6 @@ class GitMergeConflictSniff implements Sniff
         'CSS',
     ];
 
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -35,9 +33,9 @@ class GitMergeConflictSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -51,7 +49,7 @@ class GitMergeConflictSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $error  = 'Merge conflict boundary found; type: %s';
+        $error = 'Merge conflict boundary found; type: %s';
 
         $checkTokens = [
             T_SL                      => true,
@@ -127,7 +125,7 @@ class GitMergeConflictSniff implements Sniff
                     if (substr($tokens[$i]['content'], 0, 12) === '<<<<<<< HEAD') {
                         $phpcsFile->addError($error, $i, 'OpenerFound', ['opener']);
                         break;
-                    } else if (substr($tokens[$i]['content'], 0, 8) === '>>>>>>> ') {
+                    } elseif (substr($tokens[$i]['content'], 0, 8) === '>>>>>>> ') {
                         $phpcsFile->addError($error, $i, 'CloserFound', ['closer']);
                         break;
                     }
@@ -194,7 +192,7 @@ class GitMergeConflictSniff implements Sniff
                     if (substr($tokens[$i]['content'], 0, 12) === '<<<<<<< HEAD') {
                         $phpcsFile->addError($error, $i, 'OpenerFound');
                         break;
-                    } else if (substr($tokens[$i]['content'], 0, 8) === '>>>>>>> ') {
+                    } elseif (substr($tokens[$i]['content'], 0, 8) === '>>>>>>> ') {
                         $phpcsFile->addError($error, $i, 'CloserFound', ['closer']);
                         break;
                     }
@@ -217,9 +215,8 @@ class GitMergeConflictSniff implements Sniff
         }//end for
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens + 1;
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

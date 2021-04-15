@@ -66,7 +66,7 @@ class AnalyzerIterator extends \FilterIterator
     /**
      * Returns <b>true</b> when the current analyzer instance is enabled.
      *
-     * @return boolean
+     * @return bool
      */
     public function accept()
     {

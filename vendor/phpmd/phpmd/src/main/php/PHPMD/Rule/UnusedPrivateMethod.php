@@ -41,7 +41,7 @@ class UnusedPrivateMethod extends AbstractRule implements ClassAware
     {
         /** @var ClassNode $node */
         foreach ($this->collectUnusedPrivateMethods($class) as $node) {
-            $this->addViolation($node, array($node->getImage()));
+            $this->addViolation($node, [$node->getImage()]);
         }
     }
 
@@ -67,7 +67,7 @@ class UnusedPrivateMethod extends AbstractRule implements ClassAware
      */
     protected function collectPrivateMethods(ClassNode $class)
     {
-        $methods = array();
+        $methods = [];
 
         foreach ($class->getMethods() as $method) {
             if ($this->acceptMethod($class, $method)) {
@@ -84,18 +84,17 @@ class UnusedPrivateMethod extends AbstractRule implements ClassAware
      *
      * @param ClassNode $class
      * @param MethodNode $method
-     * @return boolean
+     * @return bool
      */
     protected function acceptMethod(ClassNode $class, MethodNode $method)
     {
-        return (
+        return
             $method->isPrivate() &&
             false === $method->hasSuppressWarningsAnnotationFor($this) &&
             strcasecmp($method->getImage(), $class->getImage()) !== 0 &&
             strcasecmp($method->getImage(), '__construct') !== 0 &&
             strcasecmp($method->getImage(), '__destruct') !== 0 &&
-            strcasecmp($method->getImage(), '__clone') !== 0
-        );
+            strcasecmp($method->getImage(), '__clone') !== 0;
     }
 
     /**
@@ -123,18 +122,17 @@ class UnusedPrivateMethod extends AbstractRule implements ClassAware
      *
      * @param ClassNode $class
      * @param ASTNode $postfix
-     * @return boolean
+     * @return bool
      */
     protected function isClassScope(ClassNode $class, ASTNode $postfix)
     {
         $owner = $postfix->getParent()->getChild(0);
 
-        return (
+        return
             $owner->isInstanceOf('MethodPostfix') ||
             $owner->isInstanceOf('SelfReference') ||
             $owner->isInstanceOf('StaticReference') ||
             strcasecmp($owner->getImage(), '$this') === 0 ||
-            strcasecmp($owner->getImage(), $class->getImage()) === 0
-        );
+            strcasecmp($owner->getImage(), $class->getImage()) === 0;
     }
 }

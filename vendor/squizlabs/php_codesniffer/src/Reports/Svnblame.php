@@ -13,14 +13,12 @@ use PHP_CodeSniffer\Exceptions\DeepExitException;
 
 class Svnblame extends VersionControl
 {
-
     /**
-     * The name of the report we want in the output
+     * The name of the report we want in the output.
      *
      * @var string
      */
     protected $reportName = 'SVN';
-
 
     /**
      * Extract the author from a blame line.
@@ -39,9 +37,9 @@ class Svnblame extends VersionControl
         }
 
         return $blameParts[2];
+    }
 
-    }//end getAuthor()
-
+    //end getAuthor()
 
     /**
      * Gets the blame output.
@@ -54,7 +52,7 @@ class Svnblame extends VersionControl
     protected function getBlameContent($filename)
     {
         $command = 'svn blame "'.$filename.'" 2>&1';
-        $handle  = popen($command, 'r');
+        $handle = popen($command, 'r');
         if ($handle === false) {
             $error = 'ERROR: Could not execute "'.$command.'"'.PHP_EOL.PHP_EOL;
             throw new DeepExitException($error, 3);
@@ -66,8 +64,7 @@ class Svnblame extends VersionControl
         $blames = explode("\n", $rawContent);
 
         return $blames;
+    }
 
-    }//end getBlameContent()
-
-
+    //end getBlameContent()
 }//end class

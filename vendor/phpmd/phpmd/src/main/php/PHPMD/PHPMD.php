@@ -18,7 +18,7 @@
 namespace PHPMD;
 
 /**
- * This is the main facade of the PHP PMD application
+ * This is the main facade of the PHP PMD application.
  */
 class PHPMD
 {
@@ -32,14 +32,14 @@ class PHPMD
      *
      * @var array(string)
      */
-    private $fileExtensions = array('php', 'php3', 'php4', 'php5', 'inc');
+    private $fileExtensions = ['php', 'php3', 'php4', 'php5', 'inc'];
 
     /**
      * List of exclude directory patterns.
      *
      * @var array(string)
      */
-    private $ignorePatterns = array('.git', '.svn', 'CVS', '.bzr', '.hg', 'SCCS');
+    private $ignorePatterns = ['.git', '.svn', 'CVS', '.bzr', '.hg', 'SCCS'];
 
     /**
      * The input source file or directory.
@@ -52,7 +52,7 @@ class PHPMD
      * This property will be set to <b>true</b> when an error or a violation
      * was found in the processed source code.
      *
-     * @var boolean
+     * @var bool
      * @since 0.2.5
      */
     private $violations = false;
@@ -63,13 +63,13 @@ class PHPMD
      * @var array
      * @since 1.2.0
      */
-    private $options = array();
+    private $options = [];
 
     /**
      * This method will return <b>true</b> when the processed source code
      * contains violations.
      *
-     * @return boolean
+     * @return bool
      * @since 0.2.5
      */
     public function hasViolations()
@@ -204,6 +204,6 @@ class PHPMD
             $renderer->end();
         }
 
-        $this->violations = !$report->isEmpty();
+        $this->violations = ! $report->isEmpty();
     }
 }

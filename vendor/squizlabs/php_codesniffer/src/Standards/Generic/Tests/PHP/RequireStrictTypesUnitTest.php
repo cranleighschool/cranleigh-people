@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class RequireStrictTypesUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -25,7 +23,7 @@ class RequireStrictTypesUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile='')
+    public function getErrorList($testFile = '')
     {
         switch ($testFile) {
         case 'RequireStrictTypesUnitTest.1.inc':
@@ -34,9 +32,9 @@ class RequireStrictTypesUnitTest extends AbstractSniffUnitTest
         }
 
         return [1 => 1];
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -49,8 +47,7 @@ class RequireStrictTypesUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

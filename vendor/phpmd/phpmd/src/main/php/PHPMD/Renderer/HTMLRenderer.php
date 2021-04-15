@@ -37,29 +37,29 @@ class HTMLRenderer extends AbstractRenderer
 
     const CATEGORY_RULE = 'category_rule';
 
-    protected static $priorityTitles = array(
+    protected static $priorityTitles = [
         1 => 'Top (1)',
         2 => 'High (2)',
         3 => 'Moderate (3)',
         4 => 'Low (4)',
         5 => 'Lowest (5)',
-    );
+    ];
 
     // Used in self::colorize() method.
-    protected static $descHighlightRules = array(
-        'method' => array( // Method names.
+    protected static $descHighlightRules = [
+        'method' => [ // Method names.
             'regex' => 'method\s+(((["\']).*["\'])|(\S+))',
             'css-class' => 'hlt-method',
-        ),
-        'quoted' => array( // Quoted strings.
+        ],
+        'quoted' => [ // Quoted strings.
             'regex' => '(["\'][^\'"]+["\'])',
             'css-class' => 'hlt-quoted',
-        ),
-        'variable' => array( // Variables.
+        ],
+        'variable' => [ // Variables.
             'regex' => '(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)',
             'css-class' => 'hlt-variable',
-        ),
-    );
+        ],
+    ];
 
     protected static $compiledHighlightRegex = null;
 
@@ -73,7 +73,7 @@ class HTMLRenderer extends AbstractRenderer
     {
         $writer = $this->getWriter();
 
-        $mainColor = "#2f838a";
+        $mainColor = '#2f838a';
 
         // Avoid inlining styles.
         $style = "
@@ -294,7 +294,7 @@ class HTMLRenderer extends AbstractRenderer
             </style>";
 
         $style = self::reduceWhitespace($style);
-        $writer->write("<html><head>{$style}<title>PHPMD Report</title></head><body>" . PHP_EOL);
+        $writer->write("<html><head>{$style}<title>PHPMD Report</title></head><body>".PHP_EOL);
 
         $header = sprintf("
             <header>
@@ -304,7 +304,7 @@ class HTMLRenderer extends AbstractRenderer
                 on <em>PHP %s</em>
                 on <em>%s</em>
             </header>
-        ", date('Y-m-d H:i'), "https://phpmd.org", \PHP_VERSION, gethostname());
+        ", date('Y-m-d H:i'), 'https://phpmd.org', \PHP_VERSION, gethostname());
 
         $writer->write($header);
     }
@@ -327,12 +327,12 @@ class HTMLRenderer extends AbstractRenderer
         $w->write(sprintf('<h3>%d problems found</h3>', $count));
 
         // If no problems were found, don't bother with rendering anything else.
-        if (!$count) {
+        if (! $count) {
             return;
         }
 
         // Render summary tables.
-        $w->write("<h2>Summary</h2>");
+        $w->write('<h2>Summary</h2>');
         $categorized = self::sumUpViolations($violations);
         $this->writeTable('By priority', 'Priority', $categorized[self::CATEGORY_PRIORITY]);
         $this->writeTable('By namespace', 'PHP Namespace', $categorized[self::CATEGORY_NAMESPACE]);
@@ -354,7 +354,7 @@ class HTMLRenderer extends AbstractRenderer
 
         foreach ($violations as $violation) {
             // This is going to be used as ID in HTML (deep anchoring).
-            $htmlId = "p-" . $index++;
+            $htmlId = 'p-'.$index++;
 
             // Get excerpt of the code from validated file.
             $excerptHtml = null;
@@ -372,7 +372,7 @@ class HTMLRenderer extends AbstractRenderer
 
             $descHtml = self::colorize(htmlentities($violation->getDescription()));
             $filePath = $violation->getFileName();
-            $fileHtml = "<a href='file://$filePath' target='_blank'>" . self::highlightFile($filePath) . "</a>";
+            $fileHtml = "<a href='file://$filePath' target='_blank'>".self::highlightFile($filePath).'</a>';
 
             // Create an external link to rule's help, if there's any provided.
             $linkHtml = null;
@@ -425,8 +425,8 @@ class HTMLRenderer extends AbstractRenderer
      */
     protected static function getLineExcerpt($file, $lineNumber, $extra = 0)
     {
-        if (!is_readable($file)) {
-            return array();
+        if (! is_readable($file)) {
+            return [];
         }
 
         $file = new \SplFileObject($file);
@@ -434,12 +434,12 @@ class HTMLRenderer extends AbstractRenderer
         // We have to subtract 1 to extract correct lines via SplFileObject.
         $line = max($lineNumber - 1 - $extra, 0);
 
-        $result = array();
+        $result = [];
 
-        if (!$file->eof()) {
+        if (! $file->eof()) {
             $file->seek($line);
             for ($i = 0; $i <= ($extra * 2); $i++) {
-                $result[++$line] = trim((string)$file->current(), "\n");
+                $result[++$line] = trim((string) $file->current(), "\n");
                 $file->next();
             }
         }
@@ -456,13 +456,13 @@ class HTMLRenderer extends AbstractRenderer
     protected static function colorize($message)
     {
         // Compile final regex, if not done already.
-        if (!self::$compiledHighlightRegex) {
+        if (! self::$compiledHighlightRegex) {
             $prepared = self::$descHighlightRules;
             array_walk($prepared, function (&$v, $k) {
                 $v = "(?<{$k}>{$v['regex']})";
             });
 
-            self::$compiledHighlightRegex = "#(" . implode('|', $prepared) . ")#";
+            self::$compiledHighlightRegex = '#('.implode('|', $prepared).')#';
         }
 
         $rules = self::$descHighlightRules;
@@ -484,10 +484,10 @@ class HTMLRenderer extends AbstractRenderer
      */
     protected static function highlightFile($path)
     {
-        $file = substr(strrchr($path, "/"), 1);
+        $file = substr(strrchr($path, '/'), 1);
         $dir = str_replace($file, null, $path);
 
-        return $dir . "<span class='path-basename'>" . $file . '</span>';
+        return $dir."<span class='path-basename'>".$file.'</span>';
     }
 
     /**
@@ -497,7 +497,7 @@ class HTMLRenderer extends AbstractRenderer
      */
     protected function writeTable($title, $itemsTitle, $items)
     {
-        if (!$items) {
+        if (! $items) {
             return;
         }
 
@@ -538,12 +538,12 @@ class HTMLRenderer extends AbstractRenderer
      */
     protected static function sumUpViolations($violations)
     {
-        $result = array(
-            self::CATEGORY_PRIORITY => array(),
-            self::CATEGORY_NAMESPACE => array(),
-            self::CATEGORY_RULESET => array(),
-            self::CATEGORY_RULE => array(),
-        );
+        $result = [
+            self::CATEGORY_PRIORITY => [],
+            self::CATEGORY_NAMESPACE => [],
+            self::CATEGORY_RULESET => [],
+            self::CATEGORY_RULE => [],
+        ];
 
         foreach ($violations as $v) {
             // We use "ref" reference to make things somewhat easier to read.
@@ -583,6 +583,6 @@ class HTMLRenderer extends AbstractRenderer
      */
     protected static function reduceWhitespace($input, $eol = true)
     {
-        return preg_replace("#\s+#", " ", $input) . ($eol ? PHP_EOL : null);
+        return preg_replace("#\s+#", ' ', $input).($eol ? PHP_EOL : null);
     }
 }

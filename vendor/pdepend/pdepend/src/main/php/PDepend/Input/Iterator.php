@@ -76,20 +76,21 @@ class Iterator extends \FilterIterator
     {
         parent::__construct($iterator);
 
-        $this->filter   = $filter;
+        $this->filter = $filter;
         $this->rootPath = $rootPath;
     }
 
     /**
      * Returns <b>true</b> if the file name ends with '.php'.
      *
-     * @return boolean
+     * @return bool
      */
     public function accept()
     {
         if ($this->getInnerIterator()->current()->isDir()) {
             return false;
         }
+
         return $this->filter->accept($this->getLocalPath(), $this->getFullPath());
     }
 
@@ -116,6 +117,7 @@ class Iterator extends \FilterIterator
         if ($this->rootPath && 0 === strpos($this->getFullPath(), $this->rootPath)) {
             return substr($this->getFullPath(), strlen($this->rootPath));
         }
+
         return $this->getFullPath();
     }
 }

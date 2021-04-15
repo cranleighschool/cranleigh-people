@@ -31,7 +31,7 @@ class ResolveChildDefinitionsPass extends AbstractRecursivePass
 
     protected function processValue($value, bool $isRoot = false)
     {
-        if (!$value instanceof Definition) {
+        if (! $value instanceof Definition) {
             return parent::processValue($value, $isRoot);
         }
         if ($isRoot) {
@@ -72,7 +72,7 @@ class ResolveChildDefinitionsPass extends AbstractRecursivePass
 
     private function doResolveDefinition(ChildDefinition $definition): Definition
     {
-        if (!$this->container->has($parent = $definition->getParent())) {
+        if (! $this->container->has($parent = $definition->getParent())) {
             throw new RuntimeException(sprintf('Parent definition "%s" does not exist.', $parent));
         }
 

@@ -56,14 +56,14 @@ abstract class FileLoader extends BaseFileLoader
 
         if ($ignoreNotFound = 'not_found' === $ignoreErrors) {
             $args[2] = false;
-        } elseif (!\is_bool($ignoreErrors)) {
+        } elseif (! \is_bool($ignoreErrors)) {
             throw new \TypeError(sprintf('Invalid argument $ignoreErrors provided to "%s::import()": boolean or "not_found" expected, "%s" given.', static::class, get_debug_type($ignoreErrors)));
         }
 
         try {
             parent::import(...$args);
         } catch (LoaderLoadException $e) {
-            if (!$ignoreNotFound || !($prev = $e->getPrevious()) instanceof FileLocatorFileNotFoundException) {
+            if (! $ignoreNotFound || ! ($prev = $e->getPrevious()) instanceof FileLocatorFileNotFoundException) {
                 throw $e;
             }
 
@@ -92,7 +92,7 @@ abstract class FileLoader extends BaseFileLoader
         if ('\\' !== substr($namespace, -1)) {
             throw new InvalidArgumentException(sprintf('Namespace prefix must end with a "\\": "%s".', $namespace));
         }
-        if (!preg_match('/^(?:[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+\\\\)++$/', $namespace)) {
+        if (! preg_match('/^(?:[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+\\\\)++$/', $namespace)) {
             throw new InvalidArgumentException(sprintf('Namespace is not a valid PSR-4 prefix: "%s".', $namespace));
         }
 
@@ -124,7 +124,7 @@ abstract class FileLoader extends BaseFileLoader
     public function registerAliasesForSinglyImplementedInterfaces()
     {
         foreach ($this->interfaces as $interface) {
-            if (!empty($this->singlyImplemented[$interface]) && !$this->container->has($interface)) {
+            if (! empty($this->singlyImplemented[$interface]) && ! $this->container->has($interface)) {
                 $this->container->setAlias($interface, $this->singlyImplemented[$interface]);
             }
         }
@@ -142,7 +142,7 @@ abstract class FileLoader extends BaseFileLoader
         $this->container->removeBindings($id);
 
         if ($this->isLoadingInstanceof) {
-            if (!$definition instanceof ChildDefinition) {
+            if (! $definition instanceof ChildDefinition) {
                 throw new InvalidArgumentException(sprintf('Invalid type definition "%s": ChildDefinition expected, "%s" given.', $id, get_debug_type($definition)));
             }
             $this->instanceof[$id] = $definition;
@@ -186,12 +186,12 @@ abstract class FileLoader extends BaseFileLoader
                 continue;
             }
 
-            if (!preg_match($extRegexp, $path, $m) || !$info->isReadable()) {
+            if (! preg_match($extRegexp, $path, $m) || ! $info->isReadable()) {
                 continue;
             }
             $class = $namespace.ltrim(str_replace('/', '\\', substr($path, $prefixLen, -\strlen($m[0]))), '\\');
 
-            if (!preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+)*+$/', $class)) {
+            if (! preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+)*+$/', $class)) {
                 continue;
             }
 
@@ -202,7 +202,7 @@ abstract class FileLoader extends BaseFileLoader
                 continue;
             }
             // check to make sure the expected class exists
-            if (!$r) {
+            if (! $r) {
                 throw new InvalidArgumentException(sprintf('Expected to find class "%s" in file "%s" while importing services from resource "%s", but it was not found! Check the namespace prefix used with the resource.', $class, $path, $pattern));
             }
 

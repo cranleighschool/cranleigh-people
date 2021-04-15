@@ -75,11 +75,11 @@ class ASTMemberPrimaryPrefix extends AbstractASTNode
      * Returns <b>true</b> when this member primary prefix represents a static
      * property or method access.
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
-        return ($this->getImage() === '::');
+        return $this->getImage() === '::';
     }
 
     /**

@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class ArbitraryParenthesesSpacingUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -60,9 +58,9 @@ class ArbitraryParenthesesSpacingUnitTest extends AbstractSniffUnitTest
             164 => 1,
             165 => 1,
         ];
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -78,8 +76,7 @@ class ArbitraryParenthesesSpacingUnitTest extends AbstractSniffUnitTest
             55 => 1,
             56 => 1,
         ];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

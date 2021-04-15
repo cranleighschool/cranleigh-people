@@ -64,8 +64,8 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Metrics provided by the analyzer implementation.
      */
-    const M_CRAP_INDEX = 'crap',
-          M_COVERAGE = 'cov';
+    const M_CRAP_INDEX = 'crap';
+    const M_COVERAGE = 'cov';
 
     /**
      * The report option name.
@@ -88,7 +88,6 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     private $report = null;
 
     /**
-     *
      * @var \PDepend\Metrics\Analyzer
      */
     private $ccnAnalyzer = null;
@@ -96,7 +95,7 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     /**
      * Returns <b>true</b> when this analyzer is enabled.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEnabled()
     {
@@ -115,7 +114,8 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
         if (isset($this->metrics[$artifact->getId()])) {
             return $this->metrics[$artifact->getId()];
         }
-        return array();
+
+        return [];
     }
 
     /**
@@ -126,7 +126,7 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
      */
     public function getRequiredAnalyzers()
     {
-        return array('PDepend\\Metrics\\Analyzer\\CyclomaticComplexityAnalyzer');
+        return ['PDepend\\Metrics\\Analyzer\\CyclomaticComplexityAnalyzer'];
     }
 
     /**
@@ -161,8 +161,8 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
      */
     private function doAnalyze($namespaces)
     {
-        $this->metrics = array();
-        
+        $this->metrics = [];
+
         $this->ccnAnalyzer->analyze($namespaces);
 
         $this->fireStartAnalyzer();
@@ -206,10 +206,10 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
      */
     private function visitCallable(AbstractASTCallable $callable)
     {
-        $this->metrics[$callable->getId()] = array(
+        $this->metrics[$callable->getId()] = [
             self::M_CRAP_INDEX => $this->calculateCrapIndex($callable),
-            self::M_COVERAGE   => $this->calculateCoverage($callable)
-        );
+            self::M_COVERAGE   => $this->calculateCoverage($callable),
+        ];
     }
 
     /**
@@ -223,13 +223,14 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
         $report = $this->createOrReturnCoverageReport();
 
         $complexity = $this->ccnAnalyzer->getCcn2($callable);
-        $coverage   = $report->getCoverage($callable);
+        $coverage = $report->getCoverage($callable);
 
         if ($coverage == 0) {
             return pow($complexity, 2) + $complexity;
         } elseif ($coverage > 99.5) {
             return $complexity;
         }
+
         return pow($complexity, 2) * pow(1 - $coverage / 100, 3) + $complexity;
     }
 
@@ -255,6 +256,7 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
         if ($this->report === null) {
             $this->report = $this->createCoverageReport();
         }
+
         return $this->report;
     }
 
@@ -266,6 +268,7 @@ class CrapIndexAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, A
     private function createCoverageReport()
     {
         $factory = new \PDepend\Util\Coverage\Factory();
+
         return $factory->create($this->options['coverage-report']);
     }
 }

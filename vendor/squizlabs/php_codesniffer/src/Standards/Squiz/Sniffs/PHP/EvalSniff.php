@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class EvalSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,9 +22,9 @@ class EvalSniff implements Sniff
     public function register()
     {
         return [T_EVAL];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -41,8 +39,7 @@ class EvalSniff implements Sniff
     {
         $error = 'Use of eval() is discouraged';
         $phpcsFile->addWarning($error, $stackPtr, 'Discouraged');
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -41,14 +41,14 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
 
         try {
             foreach ($container->getDefinitions() as $id => $definition) {
-                if ($definition->isPublic() && !$definition->isPrivate() && !isset($this->resolvedIds[$id])) {
+                if ($definition->isPublic() && ! $definition->isPrivate() && ! isset($this->resolvedIds[$id])) {
                     $this->resolvedIds[$id] = true;
                     $this->processValue($definition, true);
                 }
             }
 
             foreach ($container->getAliases() as $alias) {
-                if ($alias->isPublic() && !$alias->isPrivate() && !isset($this->resolvedIds[$id = (string) $alias]) && $container->hasDefinition($id)) {
+                if ($alias->isPublic() && ! $alias->isPrivate() && ! isset($this->resolvedIds[$id = (string) $alias]) && $container->hasDefinition($id)) {
                     $this->resolvedIds[$id] = true;
                     $this->processValue($container->getDefinition($id), true);
                 }
@@ -61,7 +61,7 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
         foreach ($container->getDefinitions() as $definition) {
             if ($definition->hasTag(self::DO_PRELOAD_TAG)) {
                 $definition->clearTag(self::DO_PRELOAD_TAG);
-            } elseif (!$definition->isDeprecated() && !$definition->hasErrors()) {
+            } elseif (! $definition->isDeprecated() && ! $definition->hasErrors()) {
                 $definition->addTag($this->tagName);
             }
         }
@@ -75,7 +75,7 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
         if ($value instanceof Reference && ContainerBuilder::IGNORE_ON_UNINITIALIZED_REFERENCE !== $value->getInvalidBehavior() && $this->container->hasDefinition($id = (string) $value)) {
             $definition = $this->container->getDefinition($id);
 
-            if (!isset($this->resolvedIds[$id]) && (!$definition->isPublic() || $definition->isPrivate())) {
+            if (! isset($this->resolvedIds[$id]) && (! $definition->isPublic() || $definition->isPrivate())) {
                 $this->resolvedIds[$id] = true;
                 $this->processValue($definition, true);
             }
@@ -83,7 +83,7 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
             return $value;
         }
 
-        if (!$value instanceof Definition) {
+        if (! $value instanceof Definition) {
             return parent::processValue($value, $isRoot);
         }
 

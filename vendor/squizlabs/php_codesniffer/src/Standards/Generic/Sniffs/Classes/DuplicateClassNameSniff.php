@@ -14,14 +14,12 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DuplicateClassNameSniff implements Sniff
 {
-
     /**
      * List of classes that have been found during checking.
      *
      * @var array
      */
     protected $foundClasses = [];
-
 
     /**
      * Registers the tokens that this sniff wants to listen for.
@@ -31,9 +29,9 @@ class DuplicateClassNameSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -48,7 +46,7 @@ class DuplicateClassNameSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $namespace  = '';
+        $namespace = '';
         $findTokens = [
             T_CLASS,
             T_INTERFACE,
@@ -79,21 +77,21 @@ class DuplicateClassNameSniff implements Sniff
                 );
 
                 $namespace = trim($phpcsFile->getTokensAsString(($stackPtr + 1), ($nsEnd - $stackPtr - 1)));
-                $stackPtr  = $nsEnd;
+                $stackPtr = $nsEnd;
             } else {
                 $nameToken = $phpcsFile->findNext(T_STRING, $stackPtr);
-                $name      = $tokens[$nameToken]['content'];
+                $name = $tokens[$nameToken]['content'];
                 if ($namespace !== '') {
                     $name = $namespace.'\\'.$name;
                 }
 
                 $compareName = strtolower($name);
                 if (isset($this->foundClasses[$compareName]) === true) {
-                    $type  = strtolower($tokens[$stackPtr]['content']);
-                    $file  = $this->foundClasses[$compareName]['file'];
-                    $line  = $this->foundClasses[$compareName]['line'];
+                    $type = strtolower($tokens[$stackPtr]['content']);
+                    $file = $this->foundClasses[$compareName]['file'];
+                    $line = $this->foundClasses[$compareName]['line'];
                     $error = 'Duplicate %s name "%s" found; first defined in %s on line %s';
-                    $data  = [
+                    $data = [
                         $type,
                         $name,
                         $file,
@@ -110,8 +108,7 @@ class DuplicateClassNameSniff implements Sniff
 
             $stackPtr = $phpcsFile->findNext($findTokens, ($stackPtr + 1));
         }//end while
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

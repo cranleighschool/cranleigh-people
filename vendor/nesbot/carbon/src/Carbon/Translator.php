@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon;
 
 use Closure;
@@ -66,7 +67,7 @@ class Translator extends Translation\Translator
     {
         $locale = $locale ?: 'en';
 
-        if (!isset(static::$singletons[$locale])) {
+        if (! isset(static::$singletons[$locale])) {
             static::$singletons[$locale] = new static($locale ?: 'en');
         }
 
@@ -227,7 +228,7 @@ class Translator extends Translation\Translator
 
     /**
      * Returns the list of internally available locales and already loaded custom locales.
-     * (It will ignore custom translator dynamic loading.)
+     * (It will ignore custom translator dynamic loading.).
      *
      * @param string $prefix prefix required to filter result
      *
@@ -305,7 +306,7 @@ class Translator extends Translation\Translator
     }
 
     /**
-     * Set the current translator locale and indicate if the source locale file exists
+     * Set the current translator locale and indicate if the source locale file exists.
      *
      * @param string $locale locale ex. en
      *
@@ -387,7 +388,7 @@ class Translator extends Translation\Translator
         $score = 0;
 
         foreach ($referenceChunks as $index => $chunk) {
-            if (!isset($chunks[$index])) {
+            if (! isset($chunks[$index])) {
                 $score++;
 
                 continue;

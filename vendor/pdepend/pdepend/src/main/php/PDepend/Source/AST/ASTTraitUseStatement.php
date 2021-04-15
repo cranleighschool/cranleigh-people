@@ -67,7 +67,7 @@ class ASTTraitUseStatement extends ASTStatement
     public function getAllMethods()
     {
         if ($this->allMethods === null) {
-            $this->allMethods = array();
+            $this->allMethods = [];
 
             foreach ($this->nodes as $node) {
                 if ($node instanceof ASTTraitReference) {
@@ -86,11 +86,11 @@ class ASTTraitUseStatement extends ASTStatement
      * this method will be <b>false</b>.
      *
      * @param  \PDepend\Source\AST\ASTMethod $method
-     * @return boolean
+     * @return bool
      */
     public function hasExcludeFor(ASTMethod $method)
     {
-        $methodName   = strtolower($method->getName());
+        $methodName = strtolower($method->getName());
         $methodParent = $method->getParent();
 
         $precedences = $this->findChildrenOfType('PDepend\\Source\\AST\\ASTTraitAdaptationPrecedence');
@@ -102,7 +102,7 @@ class ASTTraitUseStatement extends ASTStatement
 
             $children = $precedence->getChildren();
 
-            for ($i = 1, $count = count($children); $i < $count; ++$i) {
+            for ($i = 1, $count = count($children); $i < $count; $i++) {
                 if ($methodParent === $children[$i]->getType()) {
                     return true;
                 }
@@ -114,7 +114,7 @@ class ASTTraitUseStatement extends ASTStatement
 
     /**
      * Collects all directly defined methods or method aliases for the given
-     * {@link \PDepend\Source\AST\ASTTraitReference}
+     * {@link \PDepend\Source\AST\ASTTraitReference}.
      *
      * @param \PDepend\Source\AST\ASTTraitReference $reference Context trait reference.
      *
@@ -141,7 +141,7 @@ class ASTTraitUseStatement extends ASTStatement
     {
         $name = strtolower($method->getName());
 
-        $newNames = array();
+        $newNames = [];
         foreach ($this->getAliases() as $alias) {
             $name2 = strtolower($alias->getImage());
             if ($name2 !== $name) {
@@ -186,7 +186,8 @@ class ASTTraitUseStatement extends ASTStatement
         if (count($newNames) > 0) {
             return $newNames;
         }
-        return array($method);
+
+        return [$method];
     }
 
     /**

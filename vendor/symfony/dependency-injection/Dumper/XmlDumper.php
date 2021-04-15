@@ -64,7 +64,7 @@ class XmlDumper extends Dumper
     private function addParameters(\DOMElement $parent)
     {
         $data = $this->container->getParameterBag()->all();
-        if (!$data) {
+        if (! $data) {
             return;
         }
 
@@ -105,7 +105,7 @@ class XmlDumper extends Dumper
 
             $service->setAttribute('class', $class);
         }
-        if (!$definition->isShared()) {
+        if (! $definition->isShared()) {
             $service->setAttribute('shared', 'false');
         }
         if ($definition->isPublic()) {
@@ -137,7 +137,7 @@ class XmlDumper extends Dumper
         foreach ($definition->getTags() as $name => $tags) {
             foreach ($tags as $attributes) {
                 $tag = $this->document->createElement('tag');
-                if (!\array_key_exists('name', $attributes)) {
+                if (! \array_key_exists('name', $attributes)) {
                     $tag->setAttribute('name', $name);
                 } else {
                     $tag->appendChild($this->document->createTextNode($name));
@@ -247,7 +247,7 @@ class XmlDumper extends Dumper
     private function addServices(\DOMElement $parent)
     {
         $definitions = $this->container->getDefinitions();
-        if (!$definitions) {
+        if (! $definitions) {
             return;
         }
 
@@ -319,7 +319,7 @@ class XmlDumper extends Dumper
                 $element->setAttribute('type', 'expression');
                 $text = $this->document->createTextNode(self::phpToXml((string) $value));
                 $element->appendChild($text);
-            } elseif (\is_string($value) && !preg_match('/^[^\x00-\x08\x0B\x0E-\x1A\x1C-\x1F\x7F]*+$/u', $value)) {
+            } elseif (\is_string($value) && ! preg_match('/^[^\x00-\x08\x0B\x0E-\x1A\x1C-\x1F\x7F]*+$/u', $value)) {
                 $element->setAttribute('type', 'binary');
                 $text = $this->document->createTextNode(self::phpToXml(base64_encode($value)));
                 $element->appendChild($text);

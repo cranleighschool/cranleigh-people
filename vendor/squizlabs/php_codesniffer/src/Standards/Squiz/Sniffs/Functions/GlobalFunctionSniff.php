@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class GlobalFunctionSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,9 +22,9 @@ class GlobalFunctionSniff implements Sniff
     public function register()
     {
         return [T_FUNCTION];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -50,12 +48,11 @@ class GlobalFunctionSniff implements Sniff
             // Special exception for __autoload as it needs to be global.
             if ($functionName !== '__autoload') {
                 $error = 'Consider putting global function "%s" in a static class';
-                $data  = [$functionName];
+                $data = [$functionName];
                 $phpcsFile->addWarning($error, $stackPtr, 'Found', $data);
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Util\Timing;
 
 class Info implements Report
 {
-
-
     /**
      * Generate a partial report for a single processed file.
      *
@@ -30,7 +28,7 @@ class Info implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
+    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
     {
         $metrics = $phpcsFile->getMetrics();
         foreach ($metrics as $metric => $data) {
@@ -40,9 +38,9 @@ class Info implements Report
         }
 
         return true;
+    }
 
-    }//end generateFileReport()
-
+    //end generateFileReport()
 
     /**
      * Prints the source of all errors and warnings.
@@ -66,10 +64,10 @@ class Info implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources=false,
-        $width=80,
-        $interactive=false,
-        $toScreen=true
+        $showSources = false,
+        $width = 80,
+        $interactive = false,
+        $toScreen = true
     ) {
         $lines = explode(PHP_EOL, $cachedData);
         array_pop($lines);
@@ -80,10 +78,10 @@ class Info implements Report
 
         $metrics = [];
         foreach ($lines as $line) {
-            $parts  = explode('>>', $line);
+            $parts = explode('>>', $line);
             $metric = $parts[0];
-            $value  = $parts[1];
-            $count  = $parts[2];
+            $value = $parts[1];
+            $count = $parts[2];
             if (isset($metrics[$metric]) === false) {
                 $metrics[$metric] = [];
             }
@@ -111,14 +109,14 @@ class Info implements Report
                 $valueWidth = 0;
                 foreach ($values as $value => $count) {
                     $totalCount += $count;
-                    $valueWidth  = max($valueWidth, strlen($value));
+                    $valueWidth = max($valueWidth, strlen($value));
                 }
 
                 // Length of the total string, plus however many
                 // thousands separators there are.
                 $countWidth = strlen($totalCount);
                 $thousandSeparatorCount = floor($countWidth / 3);
-                $countWidth            += $thousandSeparatorCount;
+                $countWidth += $thousandSeparatorCount;
 
                 // Account for 'total' line.
                 $valueWidth = max(5, $valueWidth);
@@ -129,15 +127,15 @@ class Info implements Report
                 arsort($values);
 
                 $percentPrefixWidth = 0;
-                $percentWidth       = 6;
+                $percentWidth = 6;
                 foreach ($values as $value => $count) {
-                    $percent       = round(($count / $totalCount * 100), 2);
+                    $percent = round(($count / $totalCount * 100), 2);
                     $percentPrefix = '';
                     if ($percent === 0.00) {
-                        $percent            = 0.01;
-                        $percentPrefix      = '<';
+                        $percent = 0.01;
+                        $percentPrefix = '<';
                         $percentPrefixWidth = 2;
-                        $percentWidth       = 4;
+                        $percentWidth = 4;
                     }
 
                     printf(
@@ -165,8 +163,7 @@ class Info implements Report
         if ($toScreen === true && $interactive === false) {
             Timing::printRunTime();
         }
+    }
 
-    }//end generate()
-
-
+    //end generate()
 }//end class

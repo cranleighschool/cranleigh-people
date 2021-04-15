@@ -22,16 +22,16 @@ use PHPMD\RuleSetFactory;
 use PHPMD\Writer\StreamWriter;
 
 /**
- * This class provides a command line interface for PHPMD
+ * This class provides a command line interface for PHPMD.
  */
 class Command
 {
     /**
      * Exit codes used by the phpmd command line tool.
      */
-    const EXIT_SUCCESS = 0,
-        EXIT_EXCEPTION = 1,
-        EXIT_VIOLATION = 2;
+    const EXIT_SUCCESS = 0;
+    const EXIT_EXCEPTION = 1;
+    const EXIT_VIOLATION = 2;
 
     /**
      * This method creates a PHPMD instance and configures this object based
@@ -47,12 +47,12 @@ class Command
      *
      * @param \PHPMD\TextUI\CommandLineOptions $opts
      * @param \PHPMD\RuleSetFactory $ruleSetFactory
-     * @return integer
+     * @return int
      */
     public function run(CommandLineOptions $opts, RuleSetFactory $ruleSetFactory)
     {
         if ($opts->hasVersion()) {
-            fwrite(STDOUT, sprintf('PHPMD %s', $this->getVersion()) . PHP_EOL);
+            fwrite(STDOUT, sprintf('PHPMD %s', $this->getVersion()).PHP_EOL);
 
             return self::EXIT_SUCCESS;
         }
@@ -64,7 +64,7 @@ class Command
         $renderer = $opts->createRenderer();
         $renderer->setWriter(new StreamWriter($stream));
 
-        $renderers = array($renderer);
+        $renderers = [$renderer];
 
         foreach ($opts->getReportFiles() as $reportFormat => $reportFile) {
             $reportRenderer = $opts->createRenderer($reportFormat);
@@ -83,9 +83,9 @@ class Command
         $phpmd = new PHPMD();
         $phpmd->setOptions(
             array_filter(
-                array(
+                [
                     'coverage' => $opts->getCoverageReport(),
-                )
+                ]
             )
         );
 
@@ -106,7 +106,7 @@ class Command
             $ruleSetFactory
         );
 
-        if ($phpmd->hasViolations() && !$opts->ignoreViolationsOnExit()) {
+        if ($phpmd->hasViolations() && ! $opts->ignoreViolationsOnExit()) {
             return self::EXIT_VIOLATION;
         }
 
@@ -120,7 +120,7 @@ class Command
      */
     private function getVersion()
     {
-        $build = __DIR__ . '/../../../../../build.properties';
+        $build = __DIR__.'/../../../../../build.properties';
 
         $version = '@package_version@';
         if (file_exists($build)) {
@@ -136,7 +136,7 @@ class Command
      * value can be used as exit code.
      *
      * @param string[] $args The raw command line arguments array.
-     * @return integer
+     * @return int
      */
     public static function main(array $args)
     {
@@ -147,7 +147,7 @@ class Command
 
             $exitCode = $command->run($options, $ruleSetFactory);
         } catch (\Exception $e) {
-            fwrite(STDERR, $e->getMessage() . PHP_EOL);
+            fwrite(STDERR, $e->getMessage().PHP_EOL);
             $exitCode = self::EXIT_EXCEPTION;
         }
 

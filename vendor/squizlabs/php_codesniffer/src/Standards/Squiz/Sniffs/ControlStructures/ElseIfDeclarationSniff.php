@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ElseIfDeclarationSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,9 +22,9 @@ class ElseIfDeclarationSniff implements Sniff
     public function register()
     {
         return [T_ELSEIF];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -40,12 +38,11 @@ class ElseIfDeclarationSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $error = 'Usage of ELSEIF not allowed; use ELSE IF instead';
-        $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NotAllowed');
+        $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NotAllowed');
         if ($fix === true) {
             $phpcsFile->fixer->replaceToken($stackPtr, 'else if');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ImportStatementSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +23,9 @@ class ImportStatementSniff implements Sniff
     public function register()
     {
         return [T_USE];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -65,13 +63,12 @@ class ImportStatementSniff implements Sniff
         }
 
         $error = 'Import statements must not begin with a leading backslash';
-        $fix   = $phpcsFile->addFixableError($error, $next, 'LeadingSlash');
+        $fix = $phpcsFile->addFixableError($error, $next, 'LeadingSlash');
 
         if ($fix === true) {
             $phpcsFile->fixer->replaceToken($next, '');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

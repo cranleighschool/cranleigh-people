@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ObjectInstantiationSniff implements Sniff
 {
-
-
     /**
      * Registers the token types that this sniff wishes to listen to.
      *
@@ -25,9 +23,9 @@ class ObjectInstantiationSniff implements Sniff
     public function register()
     {
         return [T_NEW];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Process the tokens that this sniff is listening for.
@@ -42,7 +40,7 @@ class ObjectInstantiationSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $allowedTokens   = Tokens::$emptyTokens;
+        $allowedTokens = Tokens::$emptyTokens;
         $allowedTokens[] = T_BITWISE_AND;
 
         $prev = $phpcsFile->findPrevious($allowedTokens, ($stackPtr - 1), null, true);
@@ -62,8 +60,7 @@ class ObjectInstantiationSniff implements Sniff
             $error = 'New objects must be assigned to a variable';
             $phpcsFile->addError($error, $stackPtr, 'NotAssigned');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

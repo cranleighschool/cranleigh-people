@@ -56,12 +56,12 @@ class ASTIfStatement extends ASTStatement
      * Returns <b>true</b> when this <b>if</b>-statement is followed by an
      * <b>else</b>-statement.
      *
-     * @return boolean
+     * @return bool
      * @since  0.9.12
      */
     public function hasElse()
     {
-        return (count($this->nodes) === 3);
+        return count($this->nodes) === 3;
     }
 
     /**

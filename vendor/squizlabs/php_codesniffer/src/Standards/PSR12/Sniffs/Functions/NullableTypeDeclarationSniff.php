@@ -1,6 +1,6 @@
 <?php
 /**
- * Verifies that nullable typehints are lacking superfluous whitespace, e.g. ?int
+ * Verifies that nullable typehints are lacking superfluous whitespace, e.g. ?int.
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2018 Squiz Pty Ltd (ABN 77 084 670 600)
@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class NullableTypeDeclarationSniff implements Sniff
 {
-
     /**
      * An array of valid tokens after `T_NULLABLE` occurrences.
      *
@@ -29,7 +28,6 @@ class NullableTypeDeclarationSniff implements Sniff
         T_STATIC       => true,
     ];
 
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -38,9 +36,9 @@ class NullableTypeDeclarationSniff implements Sniff
     public function register()
     {
         return [T_NULLABLE];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -59,9 +57,9 @@ class NullableTypeDeclarationSniff implements Sniff
             return;
         }
 
-        $tokens           = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
         $nextNonEmptyCode = $tokens[$nextNonEmptyPtr]['code'];
-        $validTokenFound  = isset($this->validTokens[$nextNonEmptyCode]);
+        $validTokenFound = isset($this->validTokens[$nextNonEmptyCode]);
 
         if ($validTokenFound === true && $nextNonEmptyPtr === ($stackPtr + 1)) {
             // Valid structure.
@@ -84,8 +82,7 @@ class NullableTypeDeclarationSniff implements Sniff
 
         // Non-whitespace tokens found; trigger error but don't fix.
         $phpcsFile->addError($error, $stackPtr, 'UnexpectedCharactersFound');
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

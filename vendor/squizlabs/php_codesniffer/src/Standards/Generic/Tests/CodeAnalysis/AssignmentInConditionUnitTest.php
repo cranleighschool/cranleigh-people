@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class AssignmentInConditionUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -26,9 +24,9 @@ class AssignmentInConditionUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [];
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -76,8 +74,7 @@ class AssignmentInConditionUnitTest extends AbstractSniffUnitTest
             92 => 1,
             95 => 1,
         ];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

@@ -69,11 +69,11 @@ class PackageArtifactFilter implements ArtifactFilter
      */
     public function __construct(array $namespaces)
     {
-        $patterns = array();
+        $patterns = [];
         foreach ($namespaces as $namespace) {
             $patterns[] = str_replace('\*', '\S*', preg_quote($namespace));
         }
-        $this->pattern = '#^(' . join('|', $patterns) . ')$#D';
+        $this->pattern = '#^('.join('|', $patterns).')$#D';
     }
 
     /**
@@ -81,7 +81,7 @@ class PackageArtifactFilter implements ArtifactFilter
      * otherwise this method will return <b>false</b>.
      *
      * @param  \PDepend\Source\AST\ASTArtifact $node
-     * @return boolean
+     * @return bool
      */
     public function accept(ASTArtifact $node)
     {
@@ -97,6 +97,6 @@ class PackageArtifactFilter implements ArtifactFilter
             $namespace = $node->getName();
         }
 
-        return (preg_match($this->pattern, $namespace) === 0);
+        return preg_match($this->pattern, $namespace) === 0;
     }
 }

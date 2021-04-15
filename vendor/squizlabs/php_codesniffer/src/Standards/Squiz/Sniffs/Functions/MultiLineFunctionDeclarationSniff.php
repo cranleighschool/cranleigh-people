@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class MultiLineFunctionDeclarationSniff extends PEARFunctionDeclarationSniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -24,7 +23,6 @@ class MultiLineFunctionDeclarationSniff extends PEARFunctionDeclarationSniff
         'PHP',
         'JS',
     ];
-
 
     /**
      * Determine if this is a multi-line function declaration.
@@ -70,7 +68,7 @@ class MultiLineFunctionDeclarationSniff extends PEARFunctionDeclarationSniff
                 // multi-line function declaration.
                 $next = $phpcsFile->findNext(Tokens::$emptyTokens, ($end + 1), $closeBracket, true);
                 if ($next === false) {
-                    continue(2);
+                    continue 2;
                 }
 
                 if ($tokens[$next]['line'] !== $tokens[$end]['line']) {
@@ -89,9 +87,9 @@ class MultiLineFunctionDeclarationSniff extends PEARFunctionDeclarationSniff
         }//end foreach
 
         return false;
+    }
 
-    }//end isMultiLineDeclaration()
-
+    //end isMultiLineDeclaration()
 
     /**
      * Processes single-line declarations.
@@ -137,9 +135,9 @@ class MultiLineFunctionDeclarationSniff extends PEARFunctionDeclarationSniff
                 }
             }
         }//end if
+    }
 
-    }//end processSingleLineDeclaration()
-
+    //end processSingleLineDeclaration()
 
     /**
      * Processes multi-line declarations.
@@ -171,9 +169,9 @@ class MultiLineFunctionDeclarationSniff extends PEARFunctionDeclarationSniff
 
         $openBracket = $phpcsFile->findNext(T_OPEN_PARENTHESIS, ($use + 1), null);
         $this->processBracket($phpcsFile, $openBracket, $tokens, 'use');
+    }
 
-    }//end processMultiLineDeclaration()
-
+    //end processMultiLineDeclaration()
 
     /**
      * Processes the contents of a single set of brackets.
@@ -188,7 +186,7 @@ class MultiLineFunctionDeclarationSniff extends PEARFunctionDeclarationSniff
      *
      * @return void
      */
-    public function processBracket($phpcsFile, $openBracket, $tokens, $type='function')
+    public function processBracket($phpcsFile, $openBracket, $tokens, $type = 'function')
     {
         $errorPrefix = '';
         if ($type === 'use') {
@@ -202,7 +200,7 @@ class MultiLineFunctionDeclarationSniff extends PEARFunctionDeclarationSniff
             $next = $phpcsFile->findNext(Tokens::$emptyTokens, ($openBracket + 1), null, true);
             if ($tokens[$next]['line'] !== ($tokens[$openBracket]['line'] + 1)) {
                 $error = 'The first parameter of a multi-line '.$type.' declaration must be on the line after the opening bracket';
-                $fix   = $phpcsFile->addFixableError($error, $next, $errorPrefix.'FirstParamSpacing');
+                $fix = $phpcsFile->addFixableError($error, $next, $errorPrefix.'FirstParamSpacing');
                 if ($fix === true) {
                     if ($tokens[$next]['line'] === $tokens[$openBracket]['line']) {
                         $phpcsFile->fixer->addNewline($openBracket);
@@ -245,14 +243,13 @@ class MultiLineFunctionDeclarationSniff extends PEARFunctionDeclarationSniff
             $next = $phpcsFile->findNext(Tokens::$emptyTokens, ($i + 1), null, true);
             if ($tokens[$next]['line'] === $tokens[$i]['line']) {
                 $error = 'Multi-line '.$type.' declarations must define one parameter per line';
-                $fix   = $phpcsFile->addFixableError($error, $next, $errorPrefix.'OneParamPerLine');
+                $fix = $phpcsFile->addFixableError($error, $next, $errorPrefix.'OneParamPerLine');
                 if ($fix === true) {
                     $phpcsFile->fixer->addNewline($i);
                 }
             }
         }//end for
+    }
 
-    }//end processBracket()
-
-
+    //end processBracket()
 }//end class

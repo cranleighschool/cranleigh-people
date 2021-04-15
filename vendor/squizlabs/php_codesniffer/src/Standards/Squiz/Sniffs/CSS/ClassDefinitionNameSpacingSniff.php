@@ -15,14 +15,12 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ClassDefinitionNameSpacingSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['CSS'];
-
 
     /**
      * Returns the token types that this sniff is interested in.
@@ -32,9 +30,9 @@ class ClassDefinitionNameSpacingSniff implements Sniff
     public function register()
     {
         return [T_OPEN_CURLY_BRACKET];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -62,7 +60,7 @@ class ClassDefinitionNameSpacingSniff implements Sniff
 
         // Find the first blank line before this opening brace, unless we get
         // to another style definition, comment or the start of the file.
-        $endTokens  = [
+        $endTokens = [
             T_OPEN_CURLY_BRACKET  => T_OPEN_CURLY_BRACKET,
             T_CLOSE_CURLY_BRACKET => T_CLOSE_CURLY_BRACKET,
             T_OPEN_TAG            => T_OPEN_TAG,
@@ -72,7 +70,7 @@ class ClassDefinitionNameSpacingSniff implements Sniff
         $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
 
         $foundContent = false;
-        $currentLine  = $tokens[$prev]['line'];
+        $currentLine = $tokens[$prev]['line'];
         for ($i = ($stackPtr - 1); $i >= 0; $i--) {
             if (isset($endTokens[$tokens[$i]['code']]) === true) {
                 break;
@@ -102,10 +100,9 @@ class ClassDefinitionNameSpacingSniff implements Sniff
             }
 
             $foundContent = false;
-            $currentLine  = $tokens[$i]['line'];
+            $currentLine = $tokens[$i]['line'];
         }//end for
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

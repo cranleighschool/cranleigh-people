@@ -34,7 +34,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      *
      * @var \PHPMD\Node\ASTNode[]
      */
-    protected $fields = array();
+    protected $fields = [];
 
     /**
      * This method checks that all private class properties are at least accessed
@@ -47,7 +47,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
     {
         /** @var ClassNode $field */
         foreach ($this->collectUnusedPrivateFields($node) as $field) {
-            $this->addViolation($field, array($field->getImage()));
+            $this->addViolation($field, [$field->getImage()]);
         }
     }
 
@@ -60,7 +60,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      */
     protected function collectUnusedPrivateFields(ClassNode $class)
     {
-        $this->fields = array();
+        $this->fields = [];
 
         $this->collectPrivateFields($class);
         $this->removeUsedFields($class);
@@ -136,7 +136,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
         }
 
         if ($this->isValidPropertyNode($child)) {
-            unset($this->fields[$image . $child->getImage()]);
+            unset($this->fields[$image.$child->getImage()]);
         }
     }
 
@@ -144,7 +144,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      * Checks if the given node is a valid property node.
      *
      * @param \PHPMD\Node\ASTNode $node
-     * @return boolean
+     * @return bool
      * @since 0.2.6
      */
     protected function isValidPropertyNode(ASTNode $node = null)
@@ -154,7 +154,7 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
         }
 
         $parent = $node->getParent();
-        while (!$parent->isInstanceOf('PropertyPostfix')) {
+        while (! $parent->isInstanceOf('PropertyPostfix')) {
             if ($parent->isInstanceOf('CompoundVariable')) {
                 return false;
             }
@@ -173,18 +173,17 @@ class UnusedPrivateField extends AbstractRule implements ClassAware
      *
      * @param \PHPMD\Node\ClassNode $class
      * @param \PHPMD\Node\ASTNode $postfix
-     * @return boolean
+     * @return bool
      */
     protected function isInScopeOfClass(ClassNode $class, ASTNode $postfix)
     {
         $owner = $this->getOwner($postfix);
 
-        return (
+        return
             $owner->isInstanceOf('SelfReference') ||
             $owner->isInstanceOf('StaticReference') ||
             strcasecmp($owner->getImage(), '$this') === 0 ||
-            strcasecmp($owner->getImage(), $class->getImage()) === 0
-        );
+            strcasecmp($owner->getImage(), $class->getImage()) === 0;
     }
 
     /**

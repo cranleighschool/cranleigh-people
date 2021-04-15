@@ -90,11 +90,11 @@ abstract class AbstractOperation implements OperationInterface
      */
     public function getMessages(string $domain)
     {
-        if (!\in_array($domain, $this->getDomains())) {
+        if (! \in_array($domain, $this->getDomains())) {
             throw new InvalidArgumentException(sprintf('Invalid domain: "%s".', $domain));
         }
 
-        if (!isset($this->messages[$domain]['all'])) {
+        if (! isset($this->messages[$domain]['all'])) {
             $this->processDomain($domain);
         }
 
@@ -106,11 +106,11 @@ abstract class AbstractOperation implements OperationInterface
      */
     public function getNewMessages(string $domain)
     {
-        if (!\in_array($domain, $this->getDomains())) {
+        if (! \in_array($domain, $this->getDomains())) {
             throw new InvalidArgumentException(sprintf('Invalid domain: "%s".', $domain));
         }
 
-        if (!isset($this->messages[$domain]['new'])) {
+        if (! isset($this->messages[$domain]['new'])) {
             $this->processDomain($domain);
         }
 
@@ -122,11 +122,11 @@ abstract class AbstractOperation implements OperationInterface
      */
     public function getObsoleteMessages(string $domain)
     {
-        if (!\in_array($domain, $this->getDomains())) {
+        if (! \in_array($domain, $this->getDomains())) {
             throw new InvalidArgumentException(sprintf('Invalid domain: "%s".', $domain));
         }
 
-        if (!isset($this->messages[$domain]['obsolete'])) {
+        if (! isset($this->messages[$domain]['obsolete'])) {
             $this->processDomain($domain);
         }
 
@@ -139,7 +139,7 @@ abstract class AbstractOperation implements OperationInterface
     public function getResult()
     {
         foreach ($this->getDomains() as $domain) {
-            if (!isset($this->messages[$domain])) {
+            if (! isset($this->messages[$domain])) {
                 $this->processDomain($domain);
             }
         }

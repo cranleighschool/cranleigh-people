@@ -104,7 +104,7 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
 
     public function getIterator(): \Traversable
     {
-        if (!file_exists($this->prefix) || (!$this->recursive && '' === $this->pattern)) {
+        if (! file_exists($this->prefix) || (! $this->recursive && '' === $this->pattern)) {
             return;
         }
         $prefix = str_replace('\\', '/', $this->prefix);
@@ -113,7 +113,7 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
         if (0 !== strpos($this->prefix, 'phar://') && false === strpos($this->pattern, '/**/')) {
             if ($this->globBrace || false === strpos($this->pattern, '{')) {
                 $paths = glob($this->prefix.$this->pattern, \GLOB_NOSORT | $this->globBrace);
-            } elseif (false === strpos($this->pattern, '\\') || !preg_match('/\\\\[,{}]/', $this->pattern)) {
+            } elseif (false === strpos($this->pattern, '\\') || ! preg_match('/\\\\[,{}]/', $this->pattern)) {
                 foreach ($this->expandGlob($this->pattern) as $p) {
                     $paths[] = glob($this->prefix.$p, \GLOB_NOSORT);
                 }
@@ -136,21 +136,21 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
                 if (is_file($path)) {
                     yield $path => new \SplFileInfo($path);
                 }
-                if (!is_dir($path)) {
+                if (! is_dir($path)) {
                     continue;
                 }
                 if ($this->forExclusion) {
                     yield $path => new \SplFileInfo($path);
                     continue;
                 }
-                if (!$this->recursive || isset($this->excludedPrefixes[str_replace('\\', '/', $path)])) {
+                if (! $this->recursive || isset($this->excludedPrefixes[str_replace('\\', '/', $path)])) {
                     continue;
                 }
                 $files = iterator_to_array(new \RecursiveIteratorIterator(
                     new \RecursiveCallbackFilterIterator(
                         new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS),
                         function (\SplFileInfo $file, $path) {
-                            return !isset($this->excludedPrefixes[str_replace('\\', '/', $path)]) && '.' !== $file->getBasename()[0];
+                            return ! isset($this->excludedPrefixes[str_replace('\\', '/', $path)]) && '.' !== $file->getBasename()[0];
                         }
                     ),
                     \RecursiveIteratorIterator::LEAVES_ONLY
@@ -167,7 +167,7 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
             return;
         }
 
-        if (!class_exists(Finder::class)) {
+        if (! class_exists(Finder::class)) {
             throw new \LogicException(sprintf('Extended glob pattern "%s" cannot be used as the Finder component is not installed.', $this->pattern));
         }
 
@@ -180,7 +180,7 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
         $prefixLen = \strlen($this->prefix);
         foreach ($finder->followLinks()->sortByName()->in($this->prefix) as $path => $info) {
             $normalizedPath = str_replace('\\', '/', $path);
-            if (!preg_match($regex, substr($normalizedPath, $prefixLen)) || !$info->isFile()) {
+            if (! preg_match($regex, substr($normalizedPath, $prefixLen)) || ! $info->isFile()) {
                 continue;
             }
             if ($this->excludedPrefixes) {

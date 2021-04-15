@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util;
 
 class LowerCaseKeywordSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -98,9 +96,9 @@ class LowerCaseKeywordSniff implements Sniff
             T_YIELD,
             T_YIELD_FROM,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -113,7 +111,7 @@ class LowerCaseKeywordSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens  = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
         $keyword = $tokens[$stackPtr]['content'];
         if (strtolower($keyword) !== $keyword) {
             if ($keyword === strtoupper($keyword)) {
@@ -125,7 +123,7 @@ class LowerCaseKeywordSniff implements Sniff
             $messageKeyword = Util\Common::prepareForOutput($keyword);
 
             $error = 'PHP keywords must be lowercase; expected "%s" but found "%s"';
-            $data  = [
+            $data = [
                 strtolower($messageKeyword),
                 $messageKeyword,
             ];
@@ -137,8 +135,7 @@ class LowerCaseKeywordSniff implements Sniff
         } else {
             $phpcsFile->recordMetric($stackPtr, 'PHP keyword case', 'lower');
         }//end if
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

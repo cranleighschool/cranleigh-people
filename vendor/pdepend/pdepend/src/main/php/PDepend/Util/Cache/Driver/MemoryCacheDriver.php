@@ -68,7 +68,7 @@ class MemoryCacheDriver implements CacheDriver
      *
      * @var array<string, array<integer, mixed>>
      */
-    protected $cache = array();
+    protected $cache = [];
 
     /**
      * Current cache entry type.
@@ -89,14 +89,14 @@ class MemoryCacheDriver implements CacheDriver
      *
      * @var array<string, array<integer, mixed>>
      */
-    protected static $staticCache = array();
+    protected static $staticCache = [];
 
     /**
      * Instantiates a new in memory cache instance.
      */
     public function __construct()
     {
-        $this->staticId = sha1(uniqid((string)rand(0, PHP_INT_MAX)));
+        $this->staticId = sha1(uniqid((string) rand(0, PHP_INT_MAX)));
     }
 
     /**
@@ -113,6 +113,7 @@ class MemoryCacheDriver implements CacheDriver
     public function type($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -130,7 +131,7 @@ class MemoryCacheDriver implements CacheDriver
      */
     public function store($key, $data, $hash = null)
     {
-        $this->cache[$this->getCacheKey($key)] = array($hash, $data);
+        $this->cache[$this->getCacheKey($key)] = [$hash, $data];
     }
 
     /**
@@ -150,6 +151,7 @@ class MemoryCacheDriver implements CacheDriver
         if (isset($this->cache[$cacheKey]) && $this->cache[$cacheKey][0] === $hash) {
             return $this->cache[$cacheKey][1];
         }
+
         return null;
     }
 
@@ -181,7 +183,7 @@ class MemoryCacheDriver implements CacheDriver
      */
     protected function getCacheKey($key)
     {
-        $type       = $this->type;
+        $type = $this->type;
         $this->type = self::ENTRY_TYPE;
 
         return "{$key}.{$type}";
@@ -197,7 +199,7 @@ class MemoryCacheDriver implements CacheDriver
     {
         self::$staticCache[$this->staticId] = $this->cache;
 
-        return array('staticId');
+        return ['staticId'];
     }
 
     /**

@@ -15,7 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ControlStructureSpacingSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -25,7 +24,6 @@ class ControlStructureSpacingSniff implements Sniff
         'PHP',
         'JS',
     ];
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -48,9 +46,9 @@ class ControlStructureSpacingSniff implements Sniff
             T_FINALLY,
             T_MATCH,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -81,8 +79,8 @@ class ControlStructureSpacingSniff implements Sniff
                 }
 
                 $error = 'Expected 0 spaces after opening bracket; %s found';
-                $data  = [$gap];
-                $fix   = $phpcsFile->addFixableError($error, ($parenOpener + 1), 'SpacingAfterOpenBrace', $data);
+                $data = [$gap];
+                $fix = $phpcsFile->addFixableError($error, ($parenOpener + 1), 'SpacingAfterOpenBrace', $data);
                 if ($fix === true) {
                     $phpcsFile->fixer->replaceToken(($parenOpener + 1), '');
                 }
@@ -93,10 +91,10 @@ class ControlStructureSpacingSniff implements Sniff
             if ($tokens[$parenOpener]['line'] === $tokens[$parenCloser]['line']
                 && $tokens[($parenCloser - 1)]['code'] === T_WHITESPACE
             ) {
-                $gap   = $tokens[($parenCloser - 1)]['length'];
+                $gap = $tokens[($parenCloser - 1)]['length'];
                 $error = 'Expected 0 spaces before closing bracket; %s found';
-                $data  = [$gap];
-                $fix   = $phpcsFile->addFixableError($error, ($parenCloser - 1), 'SpaceBeforeCloseBrace', $data);
+                $data = [$gap];
+                $fix = $phpcsFile->addFixableError($error, ($parenCloser - 1), 'SpaceBeforeCloseBrace', $data);
                 if ($fix === true) {
                     $phpcsFile->fixer->replaceToken(($parenCloser - 1), '');
                 }
@@ -155,7 +153,7 @@ class ControlStructureSpacingSniff implements Sniff
             $phpcsFile->recordMetric($stackPtr, 'Blank lines at start of control structure', $gap);
 
             $error = 'Blank line found at start of control structure';
-            $fix   = $phpcsFile->addFixableError($error, $scopeOpener, 'SpacingAfterOpen');
+            $fix = $phpcsFile->addFixableError($error, $scopeOpener, 'SpacingAfterOpen');
 
             if ($fix === true) {
                 $phpcsFile->fixer->beginChangeset();
@@ -210,7 +208,7 @@ class ControlStructureSpacingSniff implements Sniff
                 $phpcsFile->recordMetric($stackPtr, 'Blank lines at end of control structure', $gap);
 
                 $error = 'Blank line found at end of control structure';
-                $fix   = $phpcsFile->addFixableError($error, $errorToken, 'SpacingBeforeClose');
+                $fix = $phpcsFile->addFixableError($error, $errorToken, 'SpacingBeforeClose');
 
                 if ($fix === true) {
                     $phpcsFile->fixer->beginChangeset();
@@ -311,7 +309,7 @@ class ControlStructureSpacingSniff implements Sniff
 
             if ($tokens[$trailingContent]['line'] !== ($tokens[$scopeCloser]['line'] + 1)) {
                 $error = 'Blank line found after control structure';
-                $fix   = $phpcsFile->addFixableError($error, $scopeCloser, 'LineAfterClose');
+                $fix = $phpcsFile->addFixableError($error, $scopeCloser, 'LineAfterClose');
 
                 if ($fix === true) {
                     $phpcsFile->fixer->beginChangeset();
@@ -325,14 +323,14 @@ class ControlStructureSpacingSniff implements Sniff
                     $phpcsFile->fixer->endChangeset();
                 }
             }
-        } else if ($tokens[$trailingContent]['code'] !== T_ELSE
+        } elseif ($tokens[$trailingContent]['code'] !== T_ELSE
             && $tokens[$trailingContent]['code'] !== T_ELSEIF
             && $tokens[$trailingContent]['code'] !== T_CATCH
             && $tokens[$trailingContent]['code'] !== T_FINALLY
             && $tokens[$trailingContent]['line'] === ($tokens[$scopeCloser]['line'] + 1)
         ) {
             $error = 'No blank line found after control structure';
-            $fix   = $phpcsFile->addFixableError($error, $scopeCloser, 'NoLineAfterClose');
+            $fix = $phpcsFile->addFixableError($error, $scopeCloser, 'NoLineAfterClose');
             if ($fix === true) {
                 $trailingContent = $phpcsFile->findNext(
                     T_WHITESPACE,
@@ -351,8 +349,7 @@ class ControlStructureSpacingSniff implements Sniff
                 }
             }
         }//end if
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

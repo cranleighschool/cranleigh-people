@@ -65,7 +65,7 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
     /**
      * Number of processed items.
      *
-     * @var integer
+     * @var int
      */
     private $count = 0;
 
@@ -194,7 +194,7 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
     /**
      * Prints a single dot for the current step.
      *
-     * @param  integer $size
+     * @param  int $size
      * @return void
      */
     protected function step($size = 1)
@@ -205,13 +205,13 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
         if ($this->count > 0 && $this->count % ($size * 60) === 0) {
             printf("% 6s\n", $this->count);
         }
-        ++$this->count;
+        $this->count++;
     }
 
     /**
      * Closes the current dot line.
      *
-     * @param  integer $size
+     * @param  int $size
      * @return void
      */
     protected function finish($size = 1)

@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ShorthandSizeSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -37,7 +36,6 @@ class ShorthandSizeSniff implements Sniff
         '-ms-transform-origin'     => '-ms-transform-origin',
     ];
 
-
     /**
      * Returns the token types that this sniff is interested in.
      *
@@ -46,9 +44,9 @@ class ShorthandSizeSniff implements Sniff
     public function register()
     {
         return [T_STYLE];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -89,8 +87,8 @@ class ShorthandSizeSniff implements Sniff
 
         // Check if this style value is a set of numbers with optional prefixes.
         $content = preg_replace('/\s+/', ' ', $content);
-        $values  = [];
-        $num     = preg_match_all(
+        $values = [];
+        $num = preg_match_all(
             '/(?:[0-9]+)(?:[a-zA-Z]{2}\s+|%\s+|\s+)/',
             $content.' ',
             $values,
@@ -114,9 +112,9 @@ class ShorthandSizeSniff implements Sniff
 
         if ($num === 3) {
             $expected = trim($content.' '.$values[1][0]);
-            $error    = 'Shorthand syntax not allowed here; use %s instead';
-            $data     = [$expected];
-            $fix      = $phpcsFile->addFixableError($error, $stackPtr, 'NotAllowed', $data);
+            $error = 'Shorthand syntax not allowed here; use %s instead';
+            $data = [$expected];
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NotAllowed', $data);
 
             if ($fix === true) {
                 $phpcsFile->fixer->beginChangeset();
@@ -141,7 +139,7 @@ class ShorthandSizeSniff implements Sniff
                 // Both values are different, so it is already shorthand.
                 return;
             }
-        } else if ($values[0][0] !== $values[2][0] || $values[1][0] !== $values[3][0]) {
+        } elseif ($values[0][0] !== $values[2][0] || $values[1][0] !== $values[3][0]) {
             // Can't shorthand this.
             return;
         }
@@ -154,7 +152,7 @@ class ShorthandSizeSniff implements Sniff
         }
 
         $error = 'Size definitions must use shorthand if available; expected "%s" but found "%s"';
-        $data  = [
+        $data = [
             $expected,
             $content,
         ];
@@ -174,8 +172,7 @@ class ShorthandSizeSniff implements Sniff
 
             $phpcsFile->fixer->endChangeset();
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

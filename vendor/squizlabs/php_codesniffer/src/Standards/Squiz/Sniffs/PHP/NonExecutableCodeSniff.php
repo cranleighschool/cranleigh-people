@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class NonExecutableCodeSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -32,9 +30,9 @@ class NonExecutableCodeSniff implements Sniff
             T_EXIT,
             T_GOTO,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -61,7 +59,7 @@ class NonExecutableCodeSniff implements Sniff
             if ($tokens[$i]['code'] === T_CLOSE_PARENTHESIS) {
                 $i = $tokens[$i]['parenthesis_opener'];
                 continue;
-            } else if (isset(Tokens::$emptyTokens[$tokens[$i]['code']]) === true) {
+            } elseif (isset(Tokens::$emptyTokens[$tokens[$i]['code']]) === true) {
                 continue;
             }
 
@@ -87,6 +85,7 @@ class NonExecutableCodeSniff implements Sniff
                     if ($tokens[$owner]['code'] === T_FUNCTION) {
                         $warning = 'Empty return statement not required here';
                         $phpcsFile->addWarning($warning, $stackPtr, 'ReturnNotRequired');
+
                         return;
                     }
                 }
@@ -99,7 +98,7 @@ class NonExecutableCodeSniff implements Sniff
                 // This token closes the scope of a CASE or DEFAULT statement
                 // so any code between this statement and the next CASE, DEFAULT or
                 // end of SWITCH token will not be executable.
-                $end  = $phpcsFile->findEndOfStatement($stackPtr);
+                $end = $phpcsFile->findEndOfStatement($stackPtr);
                 $next = $phpcsFile->findNext(
                     [
                         T_CASE,
@@ -119,9 +118,9 @@ class NonExecutableCodeSniff implements Sniff
 
                         $line = $tokens[$i]['line'];
                         if ($line > $lastLine) {
-                            $type    = substr($tokens[$stackPtr]['type'], 2);
+                            $type = substr($tokens[$stackPtr]['type'], 2);
                             $warning = 'Code after the %s statement on line %s cannot be executed';
-                            $data    = [
+                            $data = [
                                 $type,
                                 $tokens[$stackPtr]['line'],
                             ];
@@ -141,7 +140,7 @@ class NonExecutableCodeSniff implements Sniff
         // we should ignore this token.
         $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if (isset($tokens[$prev]['parenthesis_owner']) === true) {
-            $owner  = $tokens[$prev]['parenthesis_owner'];
+            $owner = $tokens[$prev]['parenthesis_owner'];
             $ignore = [
                 T_IF     => true,
                 T_ELSE   => true,
@@ -260,9 +259,9 @@ class NonExecutableCodeSniff implements Sniff
 
             $line = $tokens[$i]['line'];
             if ($line > $lastLine) {
-                $type    = substr($tokens[$stackPtr]['type'], 2);
+                $type = substr($tokens[$stackPtr]['type'], 2);
                 $warning = 'Code after the %s statement on line %s cannot be executed';
-                $data    = [
+                $data = [
                     $type,
                     $tokens[$stackPtr]['line'],
                 ];
@@ -270,8 +269,7 @@ class NonExecutableCodeSniff implements Sniff
                 $lastLine = $line;
             }
         }//end for
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

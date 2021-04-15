@@ -25,7 +25,7 @@ use PHPMD\AbstractWriter;
 class StreamWriter extends AbstractWriter
 {
     /**
-     * The stream resource handle
+     * The stream resource handle.
      *
      * @var resource
      */
@@ -49,7 +49,7 @@ class StreamWriter extends AbstractWriter
             mkdir($dirName, 0777, true);
         }
         if (file_exists($dirName) === false) {
-            $message = 'Cannot find output directory "' . $dirName . '".';
+            $message = 'Cannot find output directory "'.$dirName.'".';
             throw new \RuntimeException($message);
         }
 

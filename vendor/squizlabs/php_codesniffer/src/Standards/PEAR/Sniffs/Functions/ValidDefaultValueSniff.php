@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ValidDefaultValueSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -28,9 +26,9 @@ class ValidDefaultValueSniff implements Sniff
             T_CLOSURE,
             T_FN,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -68,11 +66,11 @@ class ValidDefaultValueSniff implements Sniff
             if ($defaultFound === true) {
                 $error = 'Arguments with default values must be at the end of the argument list';
                 $phpcsFile->addError($error, $param['token'], 'NotAtEnd');
+
                 return;
             }
         }//end foreach
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

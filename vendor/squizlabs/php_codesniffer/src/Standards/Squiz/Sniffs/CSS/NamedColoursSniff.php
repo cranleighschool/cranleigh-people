@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class NamedColoursSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -49,7 +48,6 @@ class NamedColoursSniff implements Sniff
         'yellow'  => 'yellow',
     ];
 
-
     /**
      * Returns the token types that this sniff is interested in.
      *
@@ -58,9 +56,9 @@ class NamedColoursSniff implements Sniff
     public function register()
     {
         return [T_STRING];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -86,8 +84,7 @@ class NamedColoursSniff implements Sniff
             $error = 'Named colours are forbidden; use hex, rgb, or rgba values instead';
             $phpcsFile->addError($error, $stackPtr, 'Forbidden');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

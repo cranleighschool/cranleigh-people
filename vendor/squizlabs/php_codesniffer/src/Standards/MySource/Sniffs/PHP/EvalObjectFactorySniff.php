@@ -9,14 +9,12 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\PHP;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 class EvalObjectFactorySniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +23,9 @@ class EvalObjectFactorySniff implements Sniff
     public function register()
     {
         return [T_EVAL];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -47,16 +45,16 @@ class EvalObjectFactorySniff implements Sniff
             to determine if the "new" keyword is being used.
         */
 
-        $openBracket  = $phpcsFile->findNext(T_OPEN_PARENTHESIS, ($stackPtr + 1));
+        $openBracket = $phpcsFile->findNext(T_OPEN_PARENTHESIS, ($stackPtr + 1));
         $closeBracket = $tokens[$openBracket]['parenthesis_closer'];
 
         $strings = [];
-        $vars    = [];
+        $vars = [];
 
         for ($i = ($openBracket + 1); $i < $closeBracket; $i++) {
             if (isset(Tokens::$stringTokens[$tokens[$i]['code']]) === true) {
                 $strings[$i] = $tokens[$i]['content'];
-            } else if ($tokens[$i]['code'] === T_VARIABLE) {
+            } elseif ($tokens[$i]['code'] === T_VARIABLE) {
                 $vars[$i] = $tokens[$i]['content'];
             }
         }
@@ -107,8 +105,7 @@ class EvalObjectFactorySniff implements Sniff
                 $phpcsFile->addWarning($error, $stackPtr, 'Found');
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

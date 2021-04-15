@@ -13,7 +13,7 @@
  * Authors:
  * - Ghorban M. Tavakoly Pablo Saratxaga & Ghorban M. Tavakoly pablo@walon.org & gmt314@yahoo.com
  * - SuperManPHP
- * - Maksat Meredow (isadma)
+ * - Maksat Meredow (isadma).
  */
 $transformDiff = function ($input) {
     return strtr($input, [

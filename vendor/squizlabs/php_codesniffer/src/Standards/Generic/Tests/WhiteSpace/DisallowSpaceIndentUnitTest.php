@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class DisallowSpaceIndentUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Get a list of CLI values to set before the file is tested.
      *
@@ -30,9 +28,9 @@ class DisallowSpaceIndentUnitTest extends AbstractSniffUnitTest
         }
 
         $config->tabWidth = 4;
+    }
 
-    }//end setCliValues()
-
+    //end setCliValues()
 
     /**
      * Returns the lines where errors should occur.
@@ -44,7 +42,7 @@ class DisallowSpaceIndentUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile='DisallowSpaceIndentUnitTest.1.inc')
+    public function getErrorList($testFile = 'DisallowSpaceIndentUnitTest.1.inc')
     {
         switch ($testFile) {
         case 'DisallowSpaceIndentUnitTest.1.inc':
@@ -96,9 +94,9 @@ class DisallowSpaceIndentUnitTest extends AbstractSniffUnitTest
             return [];
             break;
         }//end switch
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -111,8 +109,7 @@ class DisallowSpaceIndentUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

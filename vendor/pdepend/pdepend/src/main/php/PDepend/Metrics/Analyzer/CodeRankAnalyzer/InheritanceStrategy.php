@@ -61,7 +61,7 @@ class InheritanceStrategy extends AbstractASTVisitor implements CodeRankStrategy
      *
      * @var array<string, array>
      */
-    private $nodes = array();
+    private $nodes = [];
 
     /**
      * Returns the collected nodes.
@@ -124,7 +124,7 @@ class InheritanceStrategy extends AbstractASTVisitor implements CodeRankStrategy
 
             // No self references
             if ($namespace !== $depPkg) {
-                $this->nodes[$namespace->getId()]['in'][]     = $depPkg->getId();
+                $this->nodes[$namespace->getId()]['in'][] = $depPkg->getId();
                 $this->nodes[$depPkg->getId()]['out'][] = $namespace->getId();
             }
         }
@@ -138,13 +138,13 @@ class InheritanceStrategy extends AbstractASTVisitor implements CodeRankStrategy
      */
     protected function initNode(AbstractASTArtifact $node)
     {
-        if (!isset($this->nodes[$node->getId()])) {
-            $this->nodes[$node->getId()] = array(
-                'in'    =>  array(),
-                'out'   =>  array(),
+        if (! isset($this->nodes[$node->getId()])) {
+            $this->nodes[$node->getId()] = [
+                'in'    =>  [],
+                'out'   =>  [],
                 'name'  =>  $node->getName(),
-                'type'  =>  get_class($node)
-            );
+                'type'  =>  get_class($node),
+            ];
         }
     }
 }

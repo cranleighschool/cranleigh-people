@@ -66,7 +66,7 @@ class ASTConstantDefinition extends AbstractASTNode
      * This method returns a OR combined integer of the declared modifiers for
      * this property.
      *
-     * @return integer
+     * @return int
      */
     public function getModifiers()
     {
@@ -80,7 +80,7 @@ class ASTConstantDefinition extends AbstractASTNode
      * This method will throw an exception when the value of given <b>$modifiers</b>
      * contains an invalid/unexpected modifier
      *
-     * @param integer $modifiers The declared modifiers for this node.
+     * @param int $modifiers The declared modifiers for this node.
      *
      * @return void
      * @throws \InvalidArgumentException If the given modifier contains unexpected values.
@@ -93,7 +93,7 @@ class ASTConstantDefinition extends AbstractASTNode
 
         if (($expected & $modifiers) !== 0) {
             throw new \InvalidArgumentException(
-                'Invalid field modifiers given, allowed modifiers are ' .
+                'Invalid field modifiers given, allowed modifiers are '.
                 'IS_PUBLIC, IS_PROTECTED and IS_PRIVATE.'
             );
         }
@@ -105,33 +105,33 @@ class ASTConstantDefinition extends AbstractASTNode
      * Returns <b>true</b> if this node is marked as public, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
-        return (($this->getModifiers() & State::IS_PUBLIC) === State::IS_PUBLIC);
+        return ($this->getModifiers() & State::IS_PUBLIC) === State::IS_PUBLIC;
     }
 
     /**
      * Returns <b>true</b> if this node is marked as protected, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
-        return (($this->getModifiers() & State::IS_PROTECTED) === State::IS_PROTECTED);
+        return ($this->getModifiers() & State::IS_PROTECTED) === State::IS_PROTECTED;
     }
 
     /**
      * Returns <b>true</b> if this node is marked as private, otherwise the
      * returned value will be <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
-        return (($this->getModifiers() & State::IS_PRIVATE) === State::IS_PRIVATE);
+        return ($this->getModifiers() & State::IS_PRIVATE) === State::IS_PRIVATE;
     }
 
     /**
@@ -148,11 +148,10 @@ class ASTConstantDefinition extends AbstractASTNode
         return $visitor->visitConstantDefinition($this, $data);
     }
 
-
     /**
      * Returns the total number of the used property bag.
      *
-     * @return integer
+     * @return int
      * @since  0.10.4
      * @see    \PDepend\Source\AST\ASTNode#getMetadataSize()
      */

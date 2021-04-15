@@ -17,7 +17,6 @@ use PHP_CodeSniffer\Util\Common;
 
 class Reporter
 {
-
     /**
      * The config data for the run.
      *
@@ -28,35 +27,35 @@ class Reporter
     /**
      * Total number of files that contain errors or warnings.
      *
-     * @var integer
+     * @var int
      */
     public $totalFiles = 0;
 
     /**
      * Total number of errors found during the run.
      *
-     * @var integer
+     * @var int
      */
     public $totalErrors = 0;
 
     /**
      * Total number of warnings found during the run.
      *
-     * @var integer
+     * @var int
      */
     public $totalWarnings = 0;
 
     /**
      * Total number of errors/warnings that can be fixed.
      *
-     * @var integer
+     * @var int
      */
     public $totalFixable = 0;
 
     /**
      * Total number of errors/warnings that were fixed.
      *
-     * @var integer
+     * @var int
      */
     public $totalFixed = 0;
 
@@ -80,7 +79,6 @@ class Reporter
      * @var array
      */
     private $tmpFiles = [];
-
 
     /**
      * Initialise the reporter.
@@ -114,16 +112,16 @@ class Reporter
                 }
 
                 $reportClassName = Autoload::loadFile($filename);
-            } else if (class_exists('PHP_CodeSniffer\Reports\\'.ucfirst($type)) === true) {
+            } elseif (class_exists('PHP_CodeSniffer\Reports\\'.ucfirst($type)) === true) {
                 // PHPCS native report.
                 $reportClassName = 'PHP_CodeSniffer\Reports\\'.ucfirst($type);
-            } else if (class_exists($type) === true) {
+            } elseif (class_exists($type) === true) {
                 // FQN of a custom report.
                 $reportClassName = $type;
             } else {
                 // OK, so not a FQN, try and find the report using the registered namespaces.
                 $registeredNamespaces = Autoload::getSearchPaths();
-                $trimmedType          = ltrim($type, '\\');
+                $trimmedType = ltrim($type, '\\');
 
                 foreach ($registeredNamespaces as $nsPrefix) {
                     if ($nsPrefix === '') {
@@ -162,9 +160,9 @@ class Reporter
                 file_put_contents($output, '');
             }
         }//end foreach
+    }
 
-    }//end __construct()
-
+    //end __construct()
 
     /**
      * Generates and prints final versions of all reports.
@@ -186,9 +184,9 @@ class Reporter
         }
 
         return $toScreen;
+    }
 
-    }//end printReports()
-
+    //end printReports()
 
     /**
      * Generates and prints a single final report.
@@ -200,7 +198,7 @@ class Reporter
     public function printReport($report)
     {
         $reportClass = $this->reports[$report]['class'];
-        $reportFile  = $this->reports[$report]['output'];
+        $reportFile = $this->reports[$report]['output'];
 
         if ($reportFile !== null) {
             $filename = $reportFile;
@@ -252,9 +250,9 @@ class Reporter
                 unset($this->tmpFiles[$report]);
             }
         }
+    }
 
-    }//end printReport()
-
+    //end printReport()
 
     /**
      * Caches the result of a single processed file for all reports.
@@ -275,7 +273,7 @@ class Reporter
             return;
         }
 
-        $reportData  = $this->prepareFileReport($phpcsFile);
+        $reportData = $this->prepareFileReport($phpcsFile);
         $errorsShown = false;
 
         foreach ($this->reports as $type => $report) {
@@ -308,21 +306,21 @@ class Reporter
 
         if ($errorsShown === true || PHP_CODESNIFFER_CBF === true) {
             $this->totalFiles++;
-            $this->totalErrors   += $reportData['errors'];
+            $this->totalErrors += $reportData['errors'];
             $this->totalWarnings += $reportData['warnings'];
 
             // When PHPCBF is running, we need to use the fixable error values
             // after the report has run and fixed what it can.
             if (PHP_CODESNIFFER_CBF === true) {
                 $this->totalFixable += $phpcsFile->getFixableCount();
-                $this->totalFixed   += $phpcsFile->getFixedCount();
+                $this->totalFixed += $phpcsFile->getFixedCount();
             } else {
                 $this->totalFixable += $reportData['fixable'];
             }
         }
+    }
 
-    }//end cacheFileReport()
-
+    //end cacheFileReport()
 
     /**
      * Generate summary information to be used during report generation.
@@ -347,7 +345,7 @@ class Reporter
         }
 
         if ($this->config->recordErrors === false) {
-            $message  = 'Errors are not being recorded but this report requires error messages. ';
+            $message = 'Errors are not being recorded but this report requires error messages. ';
             $message .= 'This report will not show the correct information.';
             $report['messages'][1][1] = [
                 [
@@ -358,6 +356,7 @@ class Reporter
                     'type'     => 'ERROR',
                 ],
             ];
+
             return $report;
         }
 
@@ -415,9 +414,9 @@ class Reporter
 
         ksort($errors);
         $report['messages'] = $errors;
+
         return $report;
+    }
 
-    }//end prepareFileReport()
-
-
+    //end prepareFileReport()
 }//end class

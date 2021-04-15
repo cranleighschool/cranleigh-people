@@ -23,7 +23,6 @@ use PHP_CodeSniffer\Util\Standards;
 
 class Runner
 {
-
     /**
      * The config data for the run.
      *
@@ -44,7 +43,6 @@ class Runner
      * @var \PHP_CodeSniffer\Reporter
      */
     public $reporter = null;
-
 
     /**
      * Run the PHPCS script.
@@ -87,8 +85,8 @@ class Runner
                 $standards = $this->config->standards;
                 foreach ($standards as $standard) {
                     $this->config->standards = [$standard];
-                    $ruleset   = new Ruleset($this->config);
-                    $class     = 'PHP_CodeSniffer\Generators\\'.$this->config->generator;
+                    $ruleset = new Ruleset($this->config);
+                    $class = 'PHP_CodeSniffer\Generators\\'.$this->config->generator;
                     $generator = new $class($ruleset);
                     $generator->generate();
                 }
@@ -100,8 +98,8 @@ class Runner
             // so we hard-code the full report here and when outputting.
             // We also ensure parallel processing is off because we need to do one file at a time.
             if ($this->config->interactive === true) {
-                $this->config->reports      = ['full' => null];
-                $this->config->parallel     = 1;
+                $this->config->reports = ['full' => null];
+                $this->config->parallel = 1;
                 $this->config->showProgress = false;
             }
 
@@ -129,22 +127,23 @@ class Runner
             }
         } catch (DeepExitException $e) {
             echo $e->getMessage();
+
             return $e->getCode();
         }//end try
 
         if ($numErrors === 0) {
             // No errors found.
             return 0;
-        } else if ($this->reporter->totalFixable === 0) {
+        } elseif ($this->reporter->totalFixable === 0) {
             // Errors found, but none of them can be fixed by PHPCBF.
             return 1;
         } else {
             // Errors found, and some can be fixed by PHPCBF.
             return 2;
         }
+    }
 
-    }//end runPHPCS()
-
+    //end runPHPCS()
 
     /**
      * Run the PHPCBF script.
@@ -183,14 +182,14 @@ class Runner
             }
 
             // Override some of the command line settings that might break the fixes.
-            $this->config->generator    = null;
-            $this->config->explain      = false;
-            $this->config->interactive  = false;
-            $this->config->cache        = false;
-            $this->config->showSources  = false;
+            $this->config->generator = null;
+            $this->config->explain = false;
+            $this->config->interactive = false;
+            $this->config->cache = false;
+            $this->config->showSources = false;
             $this->config->recordErrors = false;
-            $this->config->reportFile   = null;
-            $this->config->reports      = ['cbf' => null];
+            $this->config->reportFile = null;
+            $this->config->reports = ['cbf' => null];
 
             // If a standard tries to set command line arguments itself, some
             // may be blocked because PHPCBF is running, so stop the script
@@ -204,6 +203,7 @@ class Runner
             Util\Timing::printRunTime();
         } catch (DeepExitException $e) {
             echo $e->getMessage();
+
             return $e->getCode();
         }//end try
 
@@ -225,9 +225,9 @@ class Runner
 
         // PHPCBF fixed some fixable errors, but others failed to fix.
         return 2;
+    }
 
-    }//end runPHPCBF()
-
+    //end runPHPCBF()
 
     /**
      * Exits if the minimum requirements of PHP_CodeSniffer are not met.
@@ -248,7 +248,7 @@ class Runner
             'xmlwriter',
             'SimpleXML',
         ];
-        $missingExtensions  = [];
+        $missingExtensions = [];
 
         foreach ($requiredExtensions as $extension) {
             if (extension_loaded($extension) === false) {
@@ -257,15 +257,15 @@ class Runner
         }
 
         if (empty($missingExtensions) === false) {
-            $last      = array_pop($requiredExtensions);
-            $required  = implode(', ', $requiredExtensions);
+            $last = array_pop($requiredExtensions);
+            $required = implode(', ', $requiredExtensions);
             $required .= ' and '.$last;
 
             if (count($missingExtensions) === 1) {
                 $missing = $missingExtensions[0];
             } else {
-                $last     = array_pop($missingExtensions);
-                $missing  = implode(', ', $missingExtensions);
+                $last = array_pop($missingExtensions);
+                $missing = implode(', ', $missingExtensions);
                 $missing .= ' and '.$last;
             }
 
@@ -273,9 +273,9 @@ class Runner
             $error = sprintf($error, $required, $missing);
             throw new DeepExitException($error, 3);
         }
+    }
 
-    }//end checkRequirements()
-
+    //end checkRequirements()
 
     /**
      * Init the rulesets and other high-level settings.
@@ -331,13 +331,13 @@ class Runner
         try {
             $this->ruleset = new Ruleset($this->config);
         } catch (RuntimeException $e) {
-            $error  = 'ERROR: '.$e->getMessage().PHP_EOL.PHP_EOL;
+            $error = 'ERROR: '.$e->getMessage().PHP_EOL.PHP_EOL;
             $error .= $this->config->printShortUsage(true);
             throw new DeepExitException($error, 3);
         }
+    }
 
-    }//end init()
-
+    //end init()
 
     /**
      * Performs the run.
@@ -365,12 +365,12 @@ class Runner
                 fclose($handle);
             }
 
-            $todo  = new FileList($this->config, $this->ruleset);
+            $todo = new FileList($this->config, $this->ruleset);
             $dummy = new DummyFile($fileContents, $this->ruleset, $this->config);
             $todo->addFile($dummy->path, $dummy);
         } else {
             if (empty($this->config->files) === true) {
-                $error  = 'ERROR: You must supply at least one file or directory to process.'.PHP_EOL.PHP_EOL;
+                $error = 'ERROR: You must supply at least one file or directory to process.'.PHP_EOL.PHP_EOL;
                 $error .= $this->config->printShortUsage(true);
                 throw new DeepExitException($error, 3);
             }
@@ -414,7 +414,7 @@ class Runner
             $this->config->parallel = 1;
         }
 
-        $lastDir  = '';
+        $lastDir = '';
         $numFiles = count($todo);
 
         if ($this->config->parallel === 1) {
@@ -432,7 +432,7 @@ class Runner
                     }
 
                     $this->processFile($file);
-                } else if (PHP_CODESNIFFER_VERBOSITY > 0) {
+                } elseif (PHP_CODESNIFFER_VERBOSITY > 0) {
                     echo 'Skipping '.basename($file->path).PHP_EOL;
                 }
 
@@ -441,7 +441,7 @@ class Runner
             }
         } else {
             // Batching and forking.
-            $childProcs  = [];
+            $childProcs = [];
             $numPerBatch = ceil($numFiles / $this->config->parallel);
 
             for ($batch = 0; $batch < $this->config->parallel; $batch++) {
@@ -459,7 +459,7 @@ class Runner
                 $pid = pcntl_fork();
                 if ($pid === -1) {
                     throw new RuntimeException('Failed to create child process');
-                } else if ($pid !== 0) {
+                } elseif ($pid !== 0) {
                     $childProcs[] = [
                         'pid' => $pid,
                         'out' => $childOutFilename,
@@ -473,11 +473,11 @@ class Runner
 
                     // Reset the reporter to make sure only figures from this
                     // file batch are recorded.
-                    $this->reporter->totalFiles    = 0;
-                    $this->reporter->totalErrors   = 0;
+                    $this->reporter->totalFiles = 0;
+                    $this->reporter->totalErrors = 0;
                     $this->reporter->totalWarnings = 0;
-                    $this->reporter->totalFixable  = 0;
-                    $this->reporter->totalFixed    = 0;
+                    $this->reporter->totalFixable = 0;
+                    $this->reporter->totalFixed = 0;
 
                     // Process the files.
                     $pathsProcessed = [];
@@ -518,7 +518,7 @@ class Runner
                         'totalFixed'    => $this->reporter->totalFixed,
                     ];
 
-                    $output  = '<'.'?php'."\n".' $childOutput = ';
+                    $output = '<'.'?php'."\n".' $childOutput = ';
                     $output .= var_export($childOutput, true);
                     $output .= ";\n\$debugOutput = ";
                     $output .= var_export($debugOutput, true);
@@ -559,7 +559,7 @@ class Runner
         }
 
         $ignoreWarnings = Config::getConfigData('ignore_warnings_on_exit');
-        $ignoreErrors   = Config::getConfigData('ignore_errors_on_exit');
+        $ignoreErrors = Config::getConfigData('ignore_errors_on_exit');
 
         $return = ($this->reporter->totalErrors + $this->reporter->totalWarnings);
         if ($ignoreErrors !== null) {
@@ -577,9 +577,9 @@ class Runner
         }
 
         return $return;
+    }
 
-    }//end run()
-
+    //end run()
 
     /**
      * Converts all PHP errors into exceptions.
@@ -604,9 +604,9 @@ class Runner
         }
 
         throw new RuntimeException("$message in $file on line $line");
+    }
 
-    }//end handleErrors()
-
+    //end handleErrors()
 
     /**
      * Processes a single file, including checking and fixing.
@@ -643,7 +643,7 @@ class Runner
                     $errors = $file->getFixableCount();
                     echo " ($errors fixable violations)".PHP_EOL;
                 } else {
-                    $errors   = $file->getErrorCount();
+                    $errors = $file->getErrorCount();
                     $warnings = $file->getWarningCount();
                     echo " ($errors errors, $warnings warnings)".PHP_EOL;
                 }
@@ -678,7 +678,7 @@ class Runner
 
                 switch ($input) {
                 case 's':
-                    break(2);
+                    break 2;
                 case 'q':
                     throw new DeepExitException('', 0);
                 default:
@@ -696,9 +696,9 @@ class Runner
 
         // Clean up the file to save (a lot of) memory.
         $file->cleanUp();
+    }
 
-    }//end processFile()
-
+    //end processFile()
 
     /**
      * Waits for child processes to complete and cleans up after them.
@@ -738,11 +738,11 @@ class Runner
                             continue;
                         }
 
-                        $this->reporter->totalFiles    += $childOutput['totalFiles'];
-                        $this->reporter->totalErrors   += $childOutput['totalErrors'];
+                        $this->reporter->totalFiles += $childOutput['totalFiles'];
+                        $this->reporter->totalErrors += $childOutput['totalErrors'];
                         $this->reporter->totalWarnings += $childOutput['totalWarnings'];
-                        $this->reporter->totalFixable  += $childOutput['totalFixable'];
-                        $this->reporter->totalFixed    += $childOutput['totalFixed'];
+                        $this->reporter->totalFixable += $childOutput['totalFixable'];
+                        $this->reporter->totalFixed += $childOutput['totalFixed'];
 
                         if (isset($debugOutput) === true) {
                             echo $debugOutput;
@@ -769,9 +769,9 @@ class Runner
         }//end while
 
         return $success;
+    }
 
-    }//end processChildProcs()
-
+    //end processChildProcs()
 
     /**
      * Print progress information for a single processed file.
@@ -795,10 +795,10 @@ class Runner
         if ($file->ignored === true) {
             echo 'S';
         } else {
-            $errors   = $file->getErrorCount();
+            $errors = $file->getErrorCount();
             $warnings = $file->getWarningCount();
-            $fixable  = $file->getFixableCount();
-            $fixed    = $file->getFixedCount();
+            $fixable = $file->getFixableCount();
+            $fixed = $file->getFixedCount();
 
             if (PHP_CODESNIFFER_CBF === true) {
                 // Files with fixed errors or warnings are F (green).
@@ -814,7 +814,7 @@ class Runner
                     if ($this->config->colors === true) {
                         echo "\033[0m";
                     }
-                } else if ($fixed > 0) {
+                } elseif ($fixed > 0) {
                     if ($this->config->colors === true) {
                         echo "\033[32m";
                     }
@@ -847,7 +847,7 @@ class Runner
                     if ($this->config->colors === true) {
                         echo "\033[0m";
                     }
-                } else if ($warnings > 0) {
+                } elseif ($warnings > 0) {
                     if ($this->config->colors === true) {
                         if ($fixable > 0) {
                             echo "\033[32m";
@@ -882,8 +882,7 @@ class Runner
         }
 
         echo str_repeat(' ', $padding)." $numProcessed / $numFiles ($percent%)".PHP_EOL;
+    }
 
-    }//end printProgress()
-
-
+    //end printProgress()
 }//end class

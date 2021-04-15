@@ -62,35 +62,35 @@ interface ASTNode
     /**
      * Returns the start line for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getStartLine();
 
     /**
      * Returns the start column for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getStartColumn();
 
     /**
      * Returns the end line for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getEndLine();
 
     /**
      * Returns the end column for this ast node.
      *
-     * @return integer
+     * @return int
      */
     public function getEndColumn();
 
     /**
      * Returns the node instance for the given index or throws an exception.
      *
-     * @param integer $index
+     * @param int $index
      * @return \PDepend\Source\AST\ASTNode
      * @throws \OutOfBoundsException When no node exists at the given index.
      */
@@ -125,7 +125,7 @@ interface ASTNode
      *        is only for internal usage.
      * @return T[]
      */
-    public function findChildrenOfType($targetType, array &$results = array());
+    public function findChildrenOfType($targetType, array &$results = []);
 
     /**
      * Returns the parent node of this node or <b>null</b> when this node is
@@ -173,10 +173,10 @@ interface ASTNode
      * For better performance we have moved the single setter methods for the
      * node columns and lines into this configure method.
      *
-     * @param integer $startLine
-     * @param integer $endLine
-     * @param integer $startColumn
-     * @param integer $endColumn
+     * @param int $startLine
+     * @param int $endLine
+     * @param int $startColumn
+     * @param int $endColumn
      * @return void
      * @since 0.9.10
      */

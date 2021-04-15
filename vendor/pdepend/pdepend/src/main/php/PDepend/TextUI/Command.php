@@ -66,18 +66,18 @@ class Command
     const INPUT_ERROR = 1743;
 
     /**
-     * The recieved cli options
+     * The recieved cli options.
      *
      * @var array<string, mixed>
      */
-    private $options = array();
+    private $options = [];
 
     /**
-     * The directories/files to be analyzed
+     * The directories/files to be analyzed.
      *
      * @var array<integer, string>
      */
-    private $source = array();
+    private $source = [];
 
     /**
      * The used text ui runner.
@@ -94,7 +94,7 @@ class Command
     /**
      * Performs the main cli process and returns the exit code.
      *
-     * @return integer
+     * @return int
      */
     public function run()
     {
@@ -103,25 +103,30 @@ class Command
         try {
             if ($this->parseArguments() === false) {
                 $this->printHelp();
+
                 return self::CLI_ERROR;
             }
         } catch (\Exception $e) {
             echo $e->getMessage(), PHP_EOL, PHP_EOL;
 
             $this->printHelp();
+
             return self::CLI_ERROR;
         }
 
         if (isset($this->options['--help'])) {
             $this->printHelp();
+
             return Runner::SUCCESS_EXIT;
         }
         if (isset($this->options['--usage'])) {
             $this->printUsage();
+
             return Runner::SUCCESS_EXIT;
         }
         if (isset($this->options['--version'])) {
             $this->printVersion();
+
             return Runner::SUCCESS_EXIT;
         }
 
@@ -131,17 +136,17 @@ class Command
             $configurationFile = $this->options['--configuration'];
 
             if (false === file_exists($configurationFile)) {
-                $configurationFile = getcwd() . '/' . $configurationFile;
+                $configurationFile = getcwd().'/'.$configurationFile;
             }
             if (false === file_exists($configurationFile)) {
                 $configurationFile = $this->options['--configuration'];
             }
 
             unset($this->options['--configuration']);
-        } elseif (file_exists(getcwd() . '/pdepend.xml')) {
-            $configurationFile = getcwd() . '/pdepend.xml';
-        } elseif (file_exists(getcwd() . '/pdepend.xml.dist')) {
-            $configurationFile = getcwd() . '/pdepend.xml.dist';
+        } elseif (file_exists(getcwd().'/pdepend.xml')) {
+            $configurationFile = getcwd().'/pdepend.xml';
+        } elseif (file_exists(getcwd().'/pdepend.xml.dist')) {
+            $configurationFile = getcwd().'/pdepend.xml.dist';
         }
 
         if ($configurationFile) {
@@ -151,6 +156,7 @@ class Command
                 echo $e->getMessage(), PHP_EOL, PHP_EOL;
 
                 $this->printHelp();
+
                 return self::CLI_ERROR;
             }
         }
@@ -181,6 +187,7 @@ class Command
 
                 if (isset($analyzerOptions[$option]['value']) && is_bool($value)) {
                     echo 'Option ', $option, ' requires a value.', PHP_EOL;
+
                     return self::INPUT_ERROR;
                 } elseif ($analyzerOptions[$option]['value'] === 'file'
                     && file_exists($value) === false
@@ -228,6 +235,7 @@ class Command
         if (count($options) > 0) {
             $this->printHelp();
             echo "Unknown option '", key($options), "' given.", PHP_EOL;
+
             return self::CLI_ERROR;
         }
 
@@ -277,12 +285,12 @@ class Command
     /**
      * Parses the cli arguments.
      *
-     * @return boolean
+     * @return bool
      */
     protected function parseArguments()
     {
-        if (!isset($_SERVER['argv'])) {
-            if (false === (boolean) ini_get('register_argc_argv')) {
+        if (! isset($_SERVER['argv'])) {
+            if (false === (bool) ini_get('register_argc_argv')) {
                 // @codeCoverageIgnoreStart
                 echo 'Please enable register_argc_argv in your php.ini.';
             } else {
@@ -290,6 +298,7 @@ class Command
                 echo 'Unknown error, no $argv array available.';
             }
             echo PHP_EOL, PHP_EOL;
+
             return false;
         }
 
@@ -307,20 +316,20 @@ class Command
             $this->source = explode(',', array_pop($argv));
         }
 
-        for ($i = 0, $c = count($argv); $i < $c; ++$i) {
+        for ($i = 0, $c = count($argv); $i < $c; $i++) {
             // Is it an ini_set option?
             if ($argv[$i] === '-d' && isset($argv[$i + 1])) {
                 if (strpos($argv[++$i], '=') === false) {
                     ini_set($argv[$i], 'on');
                 } else {
-                    list($key, $value) = explode('=', $argv[$i]);
+                    [$key, $value] = explode('=', $argv[$i]);
 
                     ini_set($key, $value);
                 }
             } elseif (strpos($argv[$i], '=') === false) {
                 $this->options[$argv[$i]] = true;
             } else {
-                list($key, $value) = explode('=', $argv[$i]);
+                [$key, $value] = explode('=', $argv[$i]);
 
                 $this->options[$key] = $value;
             }
@@ -330,7 +339,7 @@ class Command
     }
 
     /**
-     * Assign CLI arguments to current runner instance
+     * Assign CLI arguments to current runner instance.
      *
      * @return void
      */
@@ -372,7 +381,7 @@ class Command
 
         // Check for the bad documentation option
         if (isset($this->options['--bad-documentation'])) {
-            echo "Option --bad-documentation is ambiguous.", PHP_EOL;
+            echo 'Option --bad-documentation is ambiguous.', PHP_EOL;
 
             unset($this->options['--bad-documentation']);
         }
@@ -396,7 +405,7 @@ class Command
      */
     protected function printVersion()
     {
-        $build = __DIR__ . '/../../../../../build.properties';
+        $build = __DIR__.'/../../../../../build.properties';
 
         if (file_exists($build)) {
             $data = @parse_ini_file($build);
@@ -498,12 +507,12 @@ class Command
      * Prints all available log options and returns the length of the longest
      * option.
      *
-     * @return integer
+     * @return int
      */
     protected function printLogOptions()
     {
         $maxLength = 0;
-        $options   = array();
+        $options = [];
         $logOptions = $this->application->getAvailableLoggerOptions();
         foreach ($logOptions as $option => $info) {
             // Build log option identifier
@@ -537,9 +546,9 @@ class Command
     /**
      * Prints the analyzer options.
      *
-     * @param integer $length Length of the longest option.
+     * @param int $length Length of the longest option.
      *
-     * @return integer
+     * @return int
      */
     protected function printAnalyzerOptions($length)
     {
@@ -553,7 +562,7 @@ class Command
 
         foreach ($options as $option => $info) {
             if (isset($info['value'])) {
-                $option .= '=<' . $info['value'] . '>';
+                $option .= '=<'.$info['value'].'>';
             } else {
                 $option .= '=<value>';
             }
@@ -570,7 +579,7 @@ class Command
      *
      * @param string  $option  The option identifier.
      * @param string  $message The option help message.
-     * @param integer $length  The length of the longest option.
+     * @param int $length  The length of the longest option.
      *
      * @return void
      */
@@ -600,17 +609,17 @@ class Command
      * Optionally outputs the dbus option when the required extension
      * is loaded.
      *
-     * @param integer $length Padding length for the option.
+     * @param int $length Padding length for the option.
      *
      * @return void
      */
     private function printDbusOption($length)
     {
-        if (extension_loaded("dbus") === false) {
+        if (extension_loaded('dbus') === false) {
             return;
         }
 
-        $option  = '--notify-me';
+        $option = '--notify-me';
         $message = 'Show a notification after analysis.';
 
         $this->printOption($option, $message, $length);
@@ -619,16 +628,17 @@ class Command
     /**
      * Main method that starts the command line runner.
      *
-     * @return integer The exit code.
+     * @return int The exit code.
      */
     public static function main()
     {
         $command = new Command();
+
         return $command->run();
     }
 
     /**
-     * @param integer $startTime
+     * @param int $startTime
      * @return void
      */
     private function printStatistics($startTime)

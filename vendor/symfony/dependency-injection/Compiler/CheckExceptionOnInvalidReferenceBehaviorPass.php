@@ -45,7 +45,7 @@ class CheckExceptionOnInvalidReferenceBehaviorPass extends AbstractRecursivePass
 
     protected function processValue($value, bool $isRoot = false)
     {
-        if (!$value instanceof Reference) {
+        if (! $value instanceof Reference) {
             return parent::processValue($value, $isRoot);
         }
         if (ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE < $value->getInvalidBehavior() || $this->container->has($id = (string) $value)) {
@@ -71,7 +71,7 @@ class CheckExceptionOnInvalidReferenceBehaviorPass extends AbstractRecursivePass
 
         if ('.' === $currentId[0] && $graph->hasNode($currentId)) {
             foreach ($graph->getNode($currentId)->getInEdges() as $edge) {
-                if (!$edge->getValue() instanceof Reference || ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE < $edge->getValue()->getInvalidBehavior()) {
+                if (! $edge->getValue() instanceof Reference || ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE < $edge->getValue()->getInvalidBehavior()) {
                     continue;
                 }
                 $sourceId = $edge->getSourceNode()->getId();

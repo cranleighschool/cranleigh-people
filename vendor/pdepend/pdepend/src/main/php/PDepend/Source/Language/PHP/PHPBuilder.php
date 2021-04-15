@@ -112,44 +112,44 @@ class PHPBuilder implements Builder
     protected $defaultCompilationUnit = null;
 
     /**
-     * All generated {@link \PDepend\Source\AST\ASTTrait} objects
+     * All generated {@link \PDepend\Source\AST\ASTTrait} objects.
      *
      * @var array<string, array<string, array<int, \PDepend\Source\AST\ASTTrait>>>
      */
-    private $traits = array();
+    private $traits = [];
 
     /**
-     * All generated {@link \PDepend\Source\AST\ASTClass} objects
+     * All generated {@link \PDepend\Source\AST\ASTClass} objects.
      *
      * @var array<string, array<string, array<int, \PDepend\Source\AST\ASTClass>>>
      */
-    private $classes = array();
+    private $classes = [];
 
     /**
      * All generated {@link \PDepend\Source\AST\ASTInterface} instances.
      *
      * @var array<string, array<string, array<int, \PDepend\Source\AST\ASTInterface>>>
      */
-    private $interfaces = array();
+    private $interfaces = [];
 
     /**
-     * All generated {@link \PDepend\Source\AST\ASTNamespace} objects
+     * All generated {@link \PDepend\Source\AST\ASTNamespace} objects.
      *
      * @var \PDepend\Source\AST\ASTNamespace[]
      */
-    private $namespaces = array();
+    private $namespaces = [];
 
     /**
      * Internal status flag used to check that a build request is internal.
      *
-     * @var boolean
+     * @var bool
      */
     private $internal = false;
 
     /**
      * Internal used flag that marks the parsing process as frozen.
      *
-     * @var boolean
+     * @var bool
      */
     private $frozen = false;
 
@@ -158,21 +158,21 @@ class PHPBuilder implements Builder
      *
      * @var array<string, array<string, array<int, \PDepend\Source\AST\ASTTrait>>>
      */
-    private $frozenTraits = array();
+    private $frozenTraits = [];
 
     /**
      * Cache of all classes created during the regular parsing process.
      *
      * @var array<string, array<string, array<int, \PDepend\Source\AST\ASTClass>>>
      */
-    private $frozenClasses = array();
+    private $frozenClasses = [];
 
     /**
      * Cache of all interfaces created during the regular parsing process.
      *
      * @var array<string, array<string, array<int, \PDepend\Source\AST\ASTInterface>>>
      */
-    private $frozenInterfaces = array();
+    private $frozenInterfaces = [];
 
     /**
      * Constructs a new builder instance.
@@ -197,6 +197,7 @@ class PHPBuilder implements Builder
     public function setCache(CacheDriver $cache)
     {
         $this->cache = $cache;
+
         return $this;
     }
 
@@ -214,8 +215,8 @@ class PHPBuilder implements Builder
 
         // Debug method creation
         Log::debug(
-            'Creating: \PDepend\Source\AST\ASTClassOrInterfaceReference(' .
-            $qualifiedName .
+            'Creating: \PDepend\Source\AST\ASTClassOrInterfaceReference('.
+            $qualifiedName.
             ')'
         );
 
@@ -260,6 +261,7 @@ class PHPBuilder implements Builder
         if ($classOrInterface !== null) {
             return $classOrInterface;
         }
+
         return $this->buildClassInternal($qualifiedName);
     }
 
@@ -298,6 +300,7 @@ class PHPBuilder implements Builder
         if ($trait === null) {
             $trait = $this->buildTraitInternal($qualifiedName);
         }
+
         return $trait;
     }
 
@@ -314,7 +317,7 @@ class PHPBuilder implements Builder
         $this->checkBuilderState();
 
         Log::debug(
-            'Creating: \PDepend\Source\AST\ASTTraitReference(' . $qualifiedName . ')'
+            'Creating: \PDepend\Source\AST\ASTTraitReference('.$qualifiedName.')'
         );
 
         return new \PDepend\Source\AST\ASTTraitReference($this->context, $qualifiedName);
@@ -402,7 +405,7 @@ class PHPBuilder implements Builder
 
         // Debug method creation
         Log::debug(
-            'Creating: \PDepend\Source\AST\ASTClassReference(' . $qualifiedName . ')'
+            'Creating: \PDepend\Source\AST\ASTClassReference('.$qualifiedName.')'
         );
 
         return new ASTClassReference($this->context, $qualifiedName);
@@ -468,6 +471,7 @@ class PHPBuilder implements Builder
         if ($interface === null) {
             $interface = $this->buildInterfaceInternal($qualifiedName);
         }
+
         return $interface;
     }
 
@@ -499,14 +503,15 @@ class PHPBuilder implements Builder
      */
     public function buildNamespace($name)
     {
-        if (!isset($this->namespaces[$name])) {
+        if (! isset($this->namespaces[$name])) {
             // Debug package creation
             Log::debug(
-                'Creating: \\PDepend\\Source\\AST\\ASTNamespace(' . $name . ')'
+                'Creating: \\PDepend\\Source\\AST\\ASTNamespace('.$name.')'
             );
 
             $this->namespaces[$name] = new ASTNamespace($name);
         }
+
         return $this->namespaces[$name];
     }
 
@@ -542,7 +547,7 @@ class PHPBuilder implements Builder
     public function buildAstSelfReference(AbstractASTClassOrInterface $type)
     {
         Log::debug(
-            'Creating: \PDepend\Source\AST\ASTSelfReference(' . $type->getName() . ')'
+            'Creating: \PDepend\Source\AST\ASTSelfReference('.$type->getName().')'
         );
 
         return new \PDepend\Source\AST\ASTSelfReference($this->context, $type);
@@ -873,7 +878,6 @@ class PHPBuilder implements Builder
         return $this->buildAstNodeInstance('\\PDepend\\Source\\AST\\ASTArrayElement');
     }
 
-
     /**
      * Builds a new instanceof expression node.
      *
@@ -1033,7 +1037,7 @@ class PHPBuilder implements Builder
     }
 
     /**
-     * Builds a new trait adaptation scope
+     * Builds a new trait adaptation scope.
      *
      * @return \PDepend\Source\AST\ASTTraitAdaptation
      * @since  1.0.0
@@ -1932,6 +1936,7 @@ class PHPBuilder implements Builder
         if ($this->preparedNamespaces === null) {
             $this->preparedNamespaces = $this->getPreparedNamespaces();
         }
+
         return new ASTArtifactList($this->preparedNamespaces);
     }
 
@@ -1953,6 +1958,7 @@ class PHPBuilder implements Builder
         ) {
             unset($namespaces[self::DEFAULT_NAMESPACE]);
         }
+
         return $namespaces;
     }
 
@@ -2019,6 +2025,7 @@ class PHPBuilder implements Builder
         if ($trait === null) {
             $trait = $this->findType($this->traits, $qualifiedName);
         }
+
         return $trait;
     }
 
@@ -2094,6 +2101,7 @@ class PHPBuilder implements Builder
                 $qualifiedName
             );
         }
+
         return $interface;
     }
 
@@ -2160,6 +2168,7 @@ class PHPBuilder implements Builder
         if ($class === null) {
             $class = $this->findType($this->classes, $qualifiedName);
         }
+
         return $class;
     }
 
@@ -2178,7 +2187,7 @@ class PHPBuilder implements Builder
     {
         $classOrInterfaceName = $this->extractTypeName($qualifiedName);
         $caseInsensitiveName = strtolower($classOrInterfaceName);
-        if (!isset($instances[$caseInsensitiveName])) {
+        if (! isset($instances[$caseInsensitiveName])) {
             return null;
         }
 
@@ -2192,12 +2201,12 @@ class PHPBuilder implements Builder
             return reset($instances[$caseInsensitiveName][$namespaceName]) ?: null;
         }
 
-        if (!$this->isDefault($namespaceName)) {
+        if (! $this->isDefault($namespaceName)) {
             return null;
         }
 
         $classesOrInterfaces = reset($instances[$caseInsensitiveName]);
-        if (!$classesOrInterfaces) {
+        if (! $classesOrInterfaces) {
             return null;
         }
 
@@ -2219,13 +2228,13 @@ class PHPBuilder implements Builder
 
         $this->frozen = true;
 
-        $this->frozenTraits     = $this->copyTypesWithPackage($this->traits);
-        $this->frozenClasses    = $this->copyTypesWithPackage($this->classes);
+        $this->frozenTraits = $this->copyTypesWithPackage($this->traits);
+        $this->frozenClasses = $this->copyTypesWithPackage($this->classes);
         $this->frozenInterfaces = $this->copyTypesWithPackage($this->interfaces);
 
-        $this->traits     = array();
-        $this->classes    = array();
-        $this->interfaces = array();
+        $this->traits = [];
+        $this->classes = [];
+        $this->interfaces = [];
     }
 
     /**
@@ -2241,7 +2250,7 @@ class PHPBuilder implements Builder
      */
     private function copyTypesWithPackage(array $originalTypes)
     {
-        $copiedTypes = array();
+        $copiedTypes = [];
         foreach ($originalTypes as $typeName => $namespaces) {
             foreach ($namespaces as $namespaceName => $types) {
                 foreach ($types as $index => $type) {
@@ -2251,6 +2260,7 @@ class PHPBuilder implements Builder
                 }
             }
         }
+
         return $copiedTypes;
     }
 
@@ -2327,8 +2337,8 @@ class PHPBuilder implements Builder
     protected function storeTrait($traitName, $namespaceName, ASTTrait $trait)
     {
         $traitName = strtolower($traitName);
-        if (!isset($this->traits[$traitName][$namespaceName])) {
-            $this->traits[$traitName][$namespaceName] = array();
+        if (! isset($this->traits[$traitName][$namespaceName])) {
+            $this->traits[$traitName][$namespaceName] = [];
         }
         $this->traits[$traitName][$namespaceName][$trait->getId()] = $trait;
 
@@ -2348,8 +2358,8 @@ class PHPBuilder implements Builder
     protected function storeClass($className, $namespaceName, ASTClass $class)
     {
         $className = strtolower($className);
-        if (!isset($this->classes[$className][$namespaceName])) {
-            $this->classes[$className][$namespaceName] = array();
+        if (! isset($this->classes[$className][$namespaceName])) {
+            $this->classes[$className][$namespaceName] = [];
         }
         $this->classes[$className][$namespaceName][$class->getId()] = $class;
 
@@ -2369,8 +2379,8 @@ class PHPBuilder implements Builder
     protected function storeInterface($interfaceName, $namespaceName, ASTInterface $interface)
     {
         $interfaceName = strtolower($interfaceName);
-        if (!isset($this->interfaces[$interfaceName][$namespaceName])) {
-            $this->interfaces[$interfaceName][$namespaceName] = array();
+        if (! isset($this->interfaces[$interfaceName][$namespaceName])) {
+            $this->interfaces[$interfaceName][$namespaceName] = [];
         }
         $this->interfaces[$interfaceName][$namespaceName][$interface->getId()]
             = $interface;
@@ -2382,7 +2392,7 @@ class PHPBuilder implements Builder
     /**
      * Checks that the parser is not frozen or a request is flagged as internal.
      *
-     * @param  boolean $internal The new internal flag value.
+     * @param  bool $internal The new internal flag value.
      * @return void
      * @throws \BadMethodCallException
      * @since  0.9.5
@@ -2397,16 +2407,15 @@ class PHPBuilder implements Builder
         $this->internal = $internal;
     }
 
-
     /**
      * Returns <b>true</b> if the given package is the default package.
      *
      * @param  string $namespaceName The package name.
-     * @return boolean
+     * @return bool
      */
     protected function isDefault($namespaceName)
     {
-        return ($namespaceName === self::DEFAULT_NAMESPACE);
+        return $namespaceName === self::DEFAULT_NAMESPACE;
     }
 
     /**
@@ -2428,6 +2437,7 @@ class PHPBuilder implements Builder
         if (($pos = strrpos($qualifiedName, '\\')) !== false) {
             return substr($qualifiedName, $pos + 1);
         }
+
         return $qualifiedName;
     }
 
@@ -2460,6 +2470,7 @@ class PHPBuilder implements Builder
         } elseif (Type::isInternalType($qualifiedName)) {
             return Type::getTypePackage($qualifiedName);
         }
+
         return self::DEFAULT_NAMESPACE;
     }
 

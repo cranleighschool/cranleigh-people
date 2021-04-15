@@ -82,7 +82,7 @@ abstract class FileLoader extends Loader
 
             $ret = [];
             $isSubpath = 0 !== $i && false !== strpos(substr($resource, 0, $i), '/');
-            foreach ($this->glob($resource, false, $_, $ignoreErrors || !$isSubpath, false, $excluded) as $path => $info) {
+            foreach ($this->glob($resource, false, $_, $ignoreErrors || ! $isSubpath, false, $excluded) as $path => $info) {
                 if (null !== $res = $this->doImport($path, 'glob' === $type ? null : $type, $ignoreErrors, $sourceResource)) {
                     $ret[] = $res;
                 }
@@ -116,7 +116,7 @@ abstract class FileLoader extends Loader
         try {
             $prefix = $this->locator->locate($prefix, $this->currentDir, true);
         } catch (FileLocatorFileNotFoundException $e) {
-            if (!$ignoreErrors) {
+            if (! $ignoreErrors) {
                 throw $e;
             }
 
@@ -142,7 +142,7 @@ abstract class FileLoader extends Loader
             }
 
             $resources = \is_array($resource) ? $resource : [$resource];
-            for ($i = 0; $i < $resourcesCount = \count($resources); ++$i) {
+            for ($i = 0; $i < $resourcesCount = \count($resources); $i++) {
                 if (isset(self::$loading[$resources[$i]])) {
                     if ($i == $resourcesCount - 1) {
                         throw new FileLoaderImportCircularReferenceException(array_keys(self::$loading));
@@ -164,7 +164,7 @@ abstract class FileLoader extends Loader
         } catch (FileLoaderImportCircularReferenceException $e) {
             throw $e;
         } catch (\Exception $e) {
-            if (!$ignoreErrors) {
+            if (! $ignoreErrors) {
                 // prevent embedded imports from nesting multiple exceptions
                 if ($e instanceof LoaderLoadException) {
                     throw $e;

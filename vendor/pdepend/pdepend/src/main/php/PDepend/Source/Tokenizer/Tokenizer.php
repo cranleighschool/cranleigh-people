@@ -80,7 +80,7 @@ interface Tokenizer
      * Returns the next token or {@link \PDepend\Source\Tokenizer\Tokenizer::T_EOF} if
      * there is no next token.
      *
-     * @return \PDepend\Source\Tokenizer\Token|integer
+     * @return \PDepend\Source\Tokenizer\Token|int
      */
     public function next();
 
@@ -104,15 +104,15 @@ interface Tokenizer
      * Returns the next token type or {@link \PDepend\Source\Tokenizer\Tokenizer::T_EOF} if
      * there is no next token.
      *
-     * @return integer
+     * @return int
      */
     public function peek();
-    
+
     /**
      * Returns the type of next token, after the current token. This method
      * ignores all comments between the current and the next token.
      *
-     * @return integer
+     * @return int
      * @since  0.9.12
      */
     public function peekNext();
@@ -121,7 +121,7 @@ interface Tokenizer
      * Returns the previous token type or {@link \PDepend\Source\Tokenizer\Tokenizer::T_BOF}
      * if there is no previous token.
      *
-     * @return integer
+     * @return int
      */
     public function prev();
 }

@@ -66,7 +66,7 @@ abstract class BaseNode implements NodeInterface
      */
     public static function setPlaceholder(string $placeholder, array $values): void
     {
-        if (!$values) {
+        if (! $values) {
             throw new \InvalidArgumentException('At least one value must be provided.');
         }
 
@@ -212,7 +212,7 @@ abstract class BaseNode implements NodeInterface
         if (\func_num_args() < 2) {
             trigger_deprecation('symfony/config', '5.1', 'The signature of method "%s()" requires 3 arguments: "string $package, string $version, string $message", not defining them is deprecated.', __METHOD__);
 
-            if (!isset($args[0])) {
+            if (! isset($args[0])) {
                 trigger_deprecation('symfony/config', '5.1', 'Passing a null message to un-deprecate a node is deprecated.');
 
                 $this->deprecation = [];
@@ -336,7 +336,7 @@ abstract class BaseNode implements NodeInterface
      */
     final public function merge($leftSide, $rightSide)
     {
-        if (!$this->allowOverwrite) {
+        if (! $this->allowOverwrite) {
             throw new ForbiddenOverwriteException(sprintf('Configuration path "%s" cannot be overwritten. You have to define all options for this path, and any of its sub-paths in one configuration section.', $this->getPath()));
         }
 
@@ -555,7 +555,7 @@ abstract class BaseNode implements NodeInterface
 
     private function doValidateType($value): void
     {
-        if (null !== $this->handlingPlaceholder && !$this->allowPlaceholders()) {
+        if (null !== $this->handlingPlaceholder && ! $this->allowPlaceholders()) {
             $e = new InvalidTypeException(sprintf('A dynamic value is not compatible with a "%s" node type at path "%s".', static::class, $this->getPath()));
             $e->setPath($this->getPath());
 

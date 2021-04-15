@@ -60,13 +60,13 @@ class FileCacheGarbageCollector
     private $cacheDir;
 
     /**
-     * @var integer
+     * @var int
      */
     private $expirationTimestamp;
 
     /**
      * @param string $cacheDir
-     * @param integer $ttl
+     * @param int $ttl
      */
     public function __construct($cacheDir, $ttl = self::DEFAULT_TTL)
     {
@@ -78,7 +78,7 @@ class FileCacheGarbageCollector
      * Removes all outdated cache files and returns the number of garbage
      * collected files.
      *
-     * @return integer
+     * @return int
      */
     public function garbageCollect()
     {
@@ -110,7 +110,7 @@ class FileCacheGarbageCollector
      * Checks if the given file can be removed.
      *
      * @param \SplFileInfo $file
-     * @return boolean
+     * @return bool
      */
     private function isCollectibleFile(\SplFileInfo $file)
     {

@@ -57,7 +57,7 @@ class NullArtifactFilter implements ArtifactFilter
      * otherwise this method will return <b>false</b>.
      *
      * @param  \PDepend\Source\AST\ASTArtifact $node
-     * @return boolean
+     * @return bool
      */
     public function accept(ASTArtifact $node)
     {

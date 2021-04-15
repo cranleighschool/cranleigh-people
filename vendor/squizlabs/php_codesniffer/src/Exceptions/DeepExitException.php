@@ -14,5 +14,4 @@ namespace PHP_CodeSniffer\Exceptions;
 
 class DeepExitException extends \Exception
 {
-
 }//end class

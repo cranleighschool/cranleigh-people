@@ -23,8 +23,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ClassCommentSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -33,9 +31,9 @@ class ClassCommentSniff implements Sniff
     public function register()
     {
         return [T_CLASS];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -49,7 +47,7 @@ class ClassCommentSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $find   = Tokens::$methodPrefixes;
+        $find = Tokens::$methodPrefixes;
         $find[T_WHITESPACE] = T_WHITESPACE;
 
         $previousContent = null;
@@ -78,6 +76,7 @@ class ClassCommentSniff implements Sniff
             $class = $phpcsFile->getDeclarationName($stackPtr);
             $phpcsFile->addError('Missing doc comment for class %s', $stackPtr, 'Missing', [$class]);
             $phpcsFile->recordMetric($stackPtr, 'Class has doc comment', 'no');
+
             return;
         }
 
@@ -85,6 +84,7 @@ class ClassCommentSniff implements Sniff
 
         if ($tokens[$commentEnd]['code'] === T_COMMENT) {
             $phpcsFile->addError('You must use "/**" style comments for a class comment', $stackPtr, 'WrongStyle');
+
             return;
         }
 
@@ -96,11 +96,10 @@ class ClassCommentSniff implements Sniff
         $commentStart = $tokens[$commentEnd]['comment_opener'];
         foreach ($tokens[$commentStart]['comment_tags'] as $tag) {
             $error = '%s tag is not allowed in class comment';
-            $data  = [$tokens[$tag]['content']];
+            $data = [$tokens[$tag]['content']];
             $phpcsFile->addWarning($error, $tag, 'TagNotAllowed', $data);
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class LowercaseDeclarationSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -36,9 +34,9 @@ class LowercaseDeclarationSniff implements Sniff
             T_CATCH,
             T_MATCH,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -53,11 +51,11 @@ class LowercaseDeclarationSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $content   = $tokens[$stackPtr]['content'];
+        $content = $tokens[$stackPtr]['content'];
         $contentLc = strtolower($content);
         if ($content !== $contentLc) {
             $error = '%s keyword must be lowercase; expected "%s" but found "%s"';
-            $data  = [
+            $data = [
                 strtoupper($content),
                 $contentLc,
                 $content,
@@ -68,8 +66,7 @@ class LowercaseDeclarationSniff implements Sniff
                 $phpcsFile->fixer->replaceToken($stackPtr, $contentLc);
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

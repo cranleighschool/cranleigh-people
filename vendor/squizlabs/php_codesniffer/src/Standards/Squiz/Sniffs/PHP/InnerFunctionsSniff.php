@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class InnerFunctionsSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,9 +22,9 @@ class InnerFunctionsSniff implements Sniff
     public function register()
     {
         return [T_FUNCTION];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -61,8 +59,7 @@ class InnerFunctionsSniff implements Sniff
 
         $error = 'The use of inner functions is forbidden';
         $phpcsFile->addError($error, $stackPtr, 'NotAllowed');
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

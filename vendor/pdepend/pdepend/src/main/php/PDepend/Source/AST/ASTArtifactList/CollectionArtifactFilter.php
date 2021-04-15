@@ -72,13 +72,12 @@ final class CollectionArtifactFilter implements ArtifactFilter
         if (self::$instance === null) {
             self::$instance = new CollectionArtifactFilter();
         }
+
         return self::$instance;
     }
 
     /**
      * Constructs a new static filter.
-     *
-     * @access private
      */
     public function __construct()
     {
@@ -108,13 +107,14 @@ final class CollectionArtifactFilter implements ArtifactFilter
      * otherwise this method will return <b>false</b>.
      *
      * @param  \PDepend\Source\AST\ASTArtifact $node
-     * @return boolean
+     * @return bool
      */
     public function accept(ASTArtifact $node)
     {
         if ($this->filter === null) {
             return true;
         }
+
         return $this->filter->accept($node);
     }
 }

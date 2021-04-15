@@ -38,7 +38,7 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
-  */
+ */
 
 namespace PDepend;
 
@@ -105,14 +105,14 @@ class Engine
      *
      * @var array<string>
      */
-    private $directories = array();
+    private $directories = [];
 
     /**
      * List of source code file names.
      *
      * @var array<string>
      */
-    private $files = array();
+    private $files = [];
 
     /**
      * The used code node builder.
@@ -133,7 +133,7 @@ class Engine
      *
      * @var \PDepend\Report\ReportGenerator[]
      */
-    private $generators = array();
+    private $generators = [];
 
     /**
      * A composite filter for input files.
@@ -152,7 +152,7 @@ class Engine
     /**
      * Should the parse ignore doc comment annotations?
      *
-     * @var boolean
+     * @var bool
      */
     private $withoutAnnotations = false;
 
@@ -161,14 +161,14 @@ class Engine
      *
      * @var \PDepend\ProcessListener[]
      */
-    private $listeners = array();
+    private $listeners = [];
 
     /**
      * List of analyzer options.
      *
      * @var array<string, mixed>
      */
-    private $options = array();
+    private $options = [];
 
     /**
      * List of all {@link \PDepend\Source\Parser\ParserException} that were caught during
@@ -176,7 +176,7 @@ class Engine
      *
      * @var \PDepend\Source\Parser\ParserException[]
      */
-    private $parseExceptions = array();
+    private $parseExceptions = [];
 
     /**
      * The configured cache factory.
@@ -222,7 +222,7 @@ class Engine
     {
         $dir = realpath($directory);
 
-        if ($dir === false || !is_dir($dir)) {
+        if ($dir === false || ! is_dir($dir)) {
             throw new \InvalidArgumentException("Invalid directory '{$directory}' added.");
         }
 
@@ -238,7 +238,7 @@ class Engine
     public function addFile($file)
     {
         if ($file === '-') {
-            $file = $this->phpStreamPrefix . 'stdin';
+            $file = $this->phpStreamPrefix.'stdin';
         }
 
         if ($this->isPhpStream($file)) {
@@ -247,7 +247,7 @@ class Engine
             return;
         }
 
-        if (!is_file($file)) {
+        if (! is_file($file)) {
             throw new \InvalidArgumentException(sprintf('The given file "%s" does not exist.', $file));
         }
 
@@ -294,7 +294,7 @@ class Engine
      * @param  array<string, mixed> $options The analyzer options.
      * @return void
      */
-    public function setOptions(array $options = array())
+    public function setOptions(array $options = [])
     {
         $this->options = $options;
     }
@@ -359,13 +359,13 @@ class Engine
 
         $this->fireEndLogProcess();
 
-        return ($this->namespaces = $namespaces);
+        return $this->namespaces = $namespaces;
     }
 
     /**
      * Returns the number of analyzed php classes and interfaces.
      *
-     * @return integer
+     * @return int
      */
     public function countClasses()
     {
@@ -378,6 +378,7 @@ class Engine
         foreach ($this->namespaces as $namespace) {
             $classes += count($namespace->getTypes());
         }
+
         return $classes;
     }
 
@@ -395,7 +396,7 @@ class Engine
     /**
      *  Returns the number of analyzed namespaces.
      *
-     * @return integer
+     * @return int
      */
     public function countNamespaces()
     {
@@ -407,9 +408,10 @@ class Engine
         $count = 0;
         foreach ($this->namespaces as $namespace) {
             if ($namespace->isUserDefined()) {
-                ++$count;
+                $count++;
             }
         }
+
         return $count;
     }
 
@@ -447,6 +449,7 @@ class Engine
             $msg = 'getNamespaces() doesn\'t work before the source was analyzed.';
             throw new \RuntimeException($msg);
         }
+
         return $this->namespaces;
     }
 
@@ -560,7 +563,7 @@ class Engine
     private function performParseProcess()
     {
         // Reset list of thrown exceptions
-        $this->parseExceptions = array();
+        $this->parseExceptions = [];
 
         $tokenizer = new PHPTokenizerInternal();
 
@@ -649,7 +652,7 @@ class Engine
         foreach ($this->files as $file) {
             $fileIterator->append(
                 $this->isPhpStream($file)
-                    ? new ArrayIterator(array(new SplFileObject($file)))
+                    ? new ArrayIterator([new SplFileObject($file)])
                     : new Iterator(new GlobIterator($file), $this->fileFilter)
             );
         }
@@ -659,7 +662,7 @@ class Engine
                 new Iterator(
                     new \RecursiveIteratorIterator(
                         new \RecursiveDirectoryIterator(
-                            $directory . '/',
+                            $directory.'/',
                             \RecursiveDirectoryIterator::FOLLOW_SYMLINKS
                         )
                     ),
@@ -672,7 +675,7 @@ class Engine
         // TODO: It's important to validate this behavior, imho there is something
         //       wrong in the iterator code used above.
         // Strange: why is the iterator not unique and why does this loop fix it?
-        $files = array();
+        $files = [];
         foreach ($fileIterator as $file) {
             if (is_string($file)) {
                 $files[$file] = $file;
@@ -683,7 +686,7 @@ class Engine
         }
 
         foreach ($files as $key => $file) {
-            if (!$this->fileFilter->accept($file, $file)) {
+            if (! $this->fileFilter->accept($file, $file)) {
                 unset($files[$key]);
             }
         }
@@ -702,7 +705,7 @@ class Engine
     {
         $analyzers = $this->analyzerFactory->createRequiredForGenerators($this->generators);
 
-        $cacheKey = md5(serialize($this->files) . serialize($this->directories));
+        $cacheKey = md5(serialize($this->files).serialize($this->directories));
         $cache = $this->cacheFactory->create($cacheKey);
 
         foreach ($analyzers as $analyzer) {
