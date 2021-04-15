@@ -1,0 +1,44 @@
+name: WP SemVer
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  myJob:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch to calculate changelog
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+
+      - run: npm install
+
+      - name: Calculate version
+        id: tag_version
+        uses: miguelfito/github-bump-and-tag-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch
+          create_annotated_tag: true
+          tag_prefix: v
+          dry_run: true
+      - name: WP Version SemVer Update
+        uses: fredbradley/gh-action-wordpress-version-update@v1.0.3
+        with:
+          version: ${{ steps.tag_version.outputs.new_version }}
+          file_path: 'cranleigh-people.php'
+
+      - name: Auto Commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          tagging_message: ${{ steps.tag_version.outputs.new_tag }}
+          file_pattern: style.css
+          commit_message: Apply version bump change
+          push_options: --force
