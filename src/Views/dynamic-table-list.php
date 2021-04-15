@@ -1,4 +1,4 @@
-<table class="table <?php 
+<table class="table <?php
     echo $a['class']; ?>">
 	<?php
         foreach ($users as $person => $dull) {
