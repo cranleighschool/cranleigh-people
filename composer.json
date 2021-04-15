@@ -1,21 +1,36 @@
 {
-    "name": "fredbradley/cranleigh-people",
-    "description": "Cranleigh People Wordpress Plugin for Cranleigh School",
-    "require": {
-        "yahnis-elsts/plugin-update-checker": "^4.2",
-	  	"rilwis/meta-box": "4.*",
-        "fredbradley/cranleigh-slacker": "^1.0",
-        "nesbot/carbon": "^2.21"
-    },
-    "authors": [
-        {
-            "name": "Fred Bradley",
-            "email": "hello@fredbradley.co.uk"
-        }
-    ],
-  	"autoload": {
-		"psr-4": {
-	  		"CranleighSchool\\CranleighPeople\\": "src"
-		}
-  	}
+  "name": "fredbradley/cranleigh-people",
+  "description": "Cranleigh People Wordpress Plugin for Cranleigh School",
+  "require": {
+	"yahnis-elsts/plugin-update-checker": "^4.2",
+	"rilwis/meta-box": "4.*",
+	"fredbradley/cranleigh-slacker": "^1.0",
+	"nesbot/carbon": "^2.21"
+  },
+  "scripts": {
+	"phpcs": "vendor/bin/phpcs src/ cranleigh-people.php",
+	"phpcbf": "vendor/bin/phpcbf src/ cranleigh-people.php",
+	"phpstan": "vendor/bin/phpstan analyse --memory-limit=2G",
+	"phpmd": "vendor/bin/phpmd . html phpmd.xml > test.html",
+	"post-autoload-dump": [
+	  "vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs"
+	]
+  },
+  "require-dev": {
+	"squizlabs/php_codesniffer": "^3.5",
+	"wp-coding-standards/wpcs": "^2.3",
+	"szepeviktor/phpstan-wordpress": "^0.7.5",
+	"phpmd/phpmd": "^2.9"
+  },
+  "authors": [
+	{
+	  "name": "Fred Bradley",
+	  "email": "hello@fredbradley.co.uk"
+	}
+  ],
+  "autoload": {
+	"psr-4": {
+	  "CranleighSchool\\CranleighPeople\\": "src"
+	}
+  }
 }
