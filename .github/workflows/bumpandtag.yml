@@ -39,6 +39,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           tagging_message: ${{ steps.tag_version.outputs.new_tag }}
-          file_pattern: style.css
+          file_pattern: cranleigh-people.php
           commit_message: Apply version bump change
           push_options: --force
