@@ -1,11 +1,11 @@
 <?php
 
-    /**
-     * Created by PhpStorm.
-     * User: fredbradley
-     * Date: 30/08/2017
-     * Time: 14:42.
-     */
+/**
+ * Created by PhpStorm.
+ * User: fredbradley
+ * Date: 30/08/2017
+ * Time: 14:42.
+ */
 
 namespace CranleighSchool\CranleighPeople;
 
