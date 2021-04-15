@@ -85,7 +85,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * The files start line. This property must always have the value <em>1</em>.
      *
-     * @var   integer
+     * @var   int
      * @since 0.10.0
      */
     protected $startLine = 0;
@@ -93,7 +93,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
     /**
      * The files end line.
      *
-     * @var   integer
+     * @var   int
      * @since 0.10.0
      */
     protected $endLine = 0;
@@ -104,12 +104,12 @@ class ASTCompilationUnit extends AbstractASTArtifact
      * @var   \PDepend\Source\AST\AbstractASTArtifact[]
      * @since 0.10.0
      */
-    protected $childNodes = array();
+    protected $childNodes = [];
 
     /**
      * Was this file instance restored from the cache?
      *
-     * @var   boolean
+     * @var   bool
      * @since 0.10.0
      */
     protected $cached = false;
@@ -187,6 +187,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
     public function setCache(CacheDriver $cache)
     {
         $this->cache = $cache;
+
         return $this;
     }
 
@@ -198,6 +199,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
     public function getSource()
     {
         $this->readSource();
+
         return $this->source;
     }
 
@@ -244,7 +246,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
      * this value must always be <em>1</em>, while it can be <em>0</em> for a
      * not existing dummy file.
      *
-     * @return integer
+     * @return int
      * @since  0.10.0
      */
     public function getStartLine()
@@ -252,6 +254,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
         if ($this->startLine === 0) {
             $this->readSource();
         }
+
         return $this->startLine;
     }
 
@@ -260,7 +263,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
      * this value must always be greater <em>0</em>, while it can be <em>0</em>
      * for a not existing dummy file.
      *
-     * @return integer
+     * @return int
      * @since  0.10.0
      */
     public function getEndLine()
@@ -268,6 +271,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
         if ($this->endLine === 0) {
             $this->readSource();
         }
+
         return $this->endLine;
     }
 
@@ -276,7 +280,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
      * from the cache and not currently parsed. Otherwise this method will return
      * <b>false</b>.
      *
-     * @return boolean
+     * @return bool
      * @since  0.10.0
      */
     public function isCached()
@@ -305,15 +309,15 @@ class ASTCompilationUnit extends AbstractASTArtifact
      */
     public function __sleep()
     {
-        return array(
+        return [
             'cache',
             'childNodes',
             'comment',
             'endLine',
             'fileName',
             'startLine',
-            'id'
-        );
+            'id',
+        ];
     }
 
     /**
@@ -342,7 +346,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
      */
     public function __toString()
     {
-        return ($this->fileName === null ? '' : $this->fileName);
+        return $this->fileName === null ? '' : $this->fileName;
     }
 
     /**
@@ -355,13 +359,13 @@ class ASTCompilationUnit extends AbstractASTArtifact
         if ($this->source === null && (file_exists($this->fileName) || strpos($this->fileName, 'php://') === 0)) {
             $source = file_get_contents($this->fileName);
 
-            $this->source = str_replace(array("\r\n", "\r"), "\n", $source);
+            $this->source = str_replace(["\r\n", "\r"], "\n", $source);
 
             $this->startLine = 1;
-            $this->endLine   = substr_count($this->source, "\n") + 1;
+            $this->endLine = substr_count($this->source, "\n") + 1;
         }
     }
-    
+
     // Deprecated methods
     // @codeCoverageIgnoreStart
 
@@ -377,7 +381,7 @@ class ASTCompilationUnit extends AbstractASTArtifact
      */
     public function free()
     {
-        fwrite(STDERR, __METHOD__ . ' is deprecated since version 0.10.0' . PHP_EOL);
+        fwrite(STDERR, __METHOD__.' is deprecated since version 0.10.0'.PHP_EOL);
     }
 
     // @codeCoverageIgnoreEnd

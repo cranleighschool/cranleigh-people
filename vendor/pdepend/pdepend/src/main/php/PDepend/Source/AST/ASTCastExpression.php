@@ -95,74 +95,73 @@ class ASTCastExpression extends \PDepend\Source\AST\ASTUnaryExpression
     /**
      * Returns <b>true</b> when this node represents an array cast-expression.
      *
-     * @return boolean
+     * @return bool
      */
     public function isArray()
     {
-        return ($this->getImage() === '(array)');
+        return $this->getImage() === '(array)';
     }
 
     /**
      * Returns <b>true</b> when this node represents an object cast-expression.
      *
-     * @return boolean
+     * @return bool
      */
     public function isObject()
     {
-        return ($this->getImage() === '(object)');
+        return $this->getImage() === '(object)';
     }
 
     /**
      * Returns <b>true</b> when this node represents a boolean cast-expression.
      *
-     * @return boolean
+     * @return bool
      */
     public function isBoolean()
     {
-        return ($this->getImage() === '(bool)' || $this->getImage() === '(boolean)');
+        return $this->getImage() === '(bool)' || $this->getImage() === '(boolean)';
     }
 
     /**
      * Returns <b>true</b> when this node represents an integer cast-expression.
      *
-     * @return boolean
+     * @return bool
      */
     public function isInteger()
     {
-        return ($this->getImage() === '(int)' || $this->getImage() === '(integer)');
+        return $this->getImage() === '(int)' || $this->getImage() === '(integer)';
     }
 
     /**
      * Returns <b>true</b> when this node represents a float cast-expression.
      *
-     * @return boolean
+     * @return bool
      */
     public function isFloat()
     {
-        return ($this->getImage() === '(real)'
+        return $this->getImage() === '(real)'
             || $this->getImage() === '(float)'
-            || $this->getImage() === '(double)'
-        );
+            || $this->getImage() === '(double)';
     }
 
     /**
      * Returns <b>true</b> when this node represents a string cast-expression.
      *
-     * @return boolean
+     * @return bool
      */
     public function isString()
     {
-        return (strcmp('(string)', $this->getImage()) === 0);
+        return strcmp('(string)', $this->getImage()) === 0;
     }
 
     /**
      * Returns <b>true</b> when this node represents an unset cast-expression.
      *
-     * @return boolean
+     * @return bool
      */
     public function isUnset()
     {
-        return ($this->getImage() === '(unset)');
+        return $this->getImage() === '(unset)';
     }
 
     /**

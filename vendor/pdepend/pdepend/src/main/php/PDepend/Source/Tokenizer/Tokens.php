@@ -851,24 +851,24 @@ interface Tokens
     const T_FINALLY = 160;
 
     /**
-     * Token that represents the '...' token
+     * Token that represents the '...' token.
      *
      * @since 2.0.7
      */
     const T_ELLIPSIS = 161;
 
     /**
-     * Token that represents the '<=>' spaceship operator
+     * Token that represents the '<=>' spaceship operator.
      */
     const T_SPACESHIP = 162;
 
     /**
-     * Token that represents the '??' null coalescing operator
+     * Token that represents the '??' null coalescing operator.
      */
     const T_COALESCE = 163;
 
     /**
-     * Token that represents the '**' null coalescing operator
+     * Token that represents the '**' null coalescing operator.
      */
     const T_POW = 164;
 
@@ -878,12 +878,12 @@ interface Tokens
     const T_FN = 165;
 
     /**
-     * Token that represents the '??=' null coalescing assignment operator
+     * Token that represents the '??=' null coalescing assignment operator.
      */
     const T_COALESCE_EQUAL = 166;
 
     /**
-     * Token that represents the '?->' nullsafe object operator
+     * Token that represents the '?->' nullsafe object operator.
      */
     const T_NULLSAFE_OBJECT_OPERATOR = 387;
 

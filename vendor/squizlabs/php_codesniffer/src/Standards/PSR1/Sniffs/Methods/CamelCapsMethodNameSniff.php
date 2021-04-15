@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Common;
 
 class CamelCapsMethodNameSniff extends GenericCamelCapsFunctionNameSniff
 {
-
-
     /**
      * Processes the tokens within the scope.
      *
@@ -56,8 +54,8 @@ class CamelCapsMethodNameSniff extends GenericCamelCapsFunctionNameSniff
         }
 
         $testName = ltrim($methodName, '_');
-        if ($testName !== '' &&  Common::isCamelCaps($testName, false, true, false) === false) {
-            $error     = 'Method name "%s" is not in camel caps format';
+        if ($testName !== '' && Common::isCamelCaps($testName, false, true, false) === false) {
+            $error = 'Method name "%s" is not in camel caps format';
             $className = $phpcsFile->getDeclarationName($currScope);
             if (isset($className) === false) {
                 $className = '[Anonymous Class]';
@@ -69,9 +67,9 @@ class CamelCapsMethodNameSniff extends GenericCamelCapsFunctionNameSniff
         } else {
             $phpcsFile->recordMetric($stackPtr, 'CamelCase method name', 'yes');
         }
+    }
 
-    }//end processTokenWithinScope()
-
+    //end processTokenWithinScope()
 
     /**
      * Processes the tokens outside the scope.
@@ -84,8 +82,7 @@ class CamelCapsMethodNameSniff extends GenericCamelCapsFunctionNameSniff
      */
     protected function processTokenOutsideScope(File $phpcsFile, $stackPtr)
     {
+    }
 
-    }//end processTokenOutsideScope()
-
-
+    //end processTokenOutsideScope()
 }//end class

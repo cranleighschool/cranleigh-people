@@ -48,7 +48,6 @@ use PDepend\Metrics\AnalyzerFilterAware;
 use PDepend\Metrics\AnalyzerNodeAware;
 use PDepend\Source\AST\AbstractASTType;
 use PDepend\Source\AST\ASTArtifact;
-use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\ASTClass;
 use PDepend\Source\AST\ASTInterface;
 use PDepend\Source\AST\ASTMethod;
@@ -69,16 +68,16 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
     /**
      * Metrics provided by the analyzer implementation.
      */
-    const M_IMPLEMENTED_INTERFACES       = 'impl',
-          M_CLASS_INTERFACE_SIZE         = 'cis',
-          M_CLASS_SIZE                   = 'csz',
-          M_NUMBER_OF_PUBLIC_METHODS     = 'npm',
-          M_PROPERTIES                   = 'vars',
-          M_PROPERTIES_INHERIT           = 'varsi',
-          M_PROPERTIES_NON_PRIVATE       = 'varsnp',
-          M_WEIGHTED_METHODS             = 'wmc',
-          M_WEIGHTED_METHODS_INHERIT     = 'wmci',
-          M_WEIGHTED_METHODS_NON_PRIVATE = 'wmcnp';
+    const M_IMPLEMENTED_INTERFACES = 'impl';
+    const M_CLASS_INTERFACE_SIZE = 'cis';
+    const M_CLASS_SIZE = 'csz';
+    const M_NUMBER_OF_PUBLIC_METHODS = 'npm';
+    const M_PROPERTIES = 'vars';
+    const M_PROPERTIES_INHERIT = 'varsi';
+    const M_PROPERTIES_NON_PRIVATE = 'varsnp';
+    const M_WEIGHTED_METHODS = 'wmc';
+    const M_WEIGHTED_METHODS_INHERIT = 'wmci';
+    const M_WEIGHTED_METHODS_NON_PRIVATE = 'wmcnp';
 
     /**
      * Hash with all calculated node metrics.
@@ -128,7 +127,7 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
             $this->cyclomaticAnalyzer->analyze($namespaces);
 
             // Init node metrics
-            $this->nodeMetrics = array();
+            $this->nodeMetrics = [];
 
             // Visit all nodes
             foreach ($namespaces as $namespace) {
@@ -147,7 +146,7 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
      */
     public function getRequiredAnalyzers()
     {
-        return array('PDepend\\Metrics\\Analyzer\\CyclomaticComplexityAnalyzer');
+        return ['PDepend\\Metrics\\Analyzer\\CyclomaticComplexityAnalyzer'];
     }
 
     /**
@@ -175,10 +174,11 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
      */
     public function getNodeMetrics(ASTArtifact $artifact)
     {
-        $metrics = array();
+        $metrics = [];
         if (isset($this->nodeMetrics[$artifact->getId()])) {
             $metrics = $this->nodeMetrics[$artifact->getId()];
         }
+
         return $metrics;
     }
 
@@ -192,11 +192,11 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
     {
         $this->fireStartClass($class);
 
-        $impl  = count($class->getInterfaces());
+        $impl = count($class->getInterfaces());
         $varsi = $this->calculateVarsi($class);
-        $wmci  = $this->calculateWmciForClass($class);
+        $wmci = $this->calculateWmciForClass($class);
 
-        $this->nodeMetrics[$class->getId()] = array(
+        $this->nodeMetrics[$class->getId()] = [
             self::M_IMPLEMENTED_INTERFACES       => $impl,
             self::M_CLASS_INTERFACE_SIZE         => 0,
             self::M_CLASS_SIZE                   => 0,
@@ -206,8 +206,8 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
             self::M_PROPERTIES_NON_PRIVATE       => 0,
             self::M_WEIGHTED_METHODS             => 0,
             self::M_WEIGHTED_METHODS_INHERIT     => $wmci,
-            self::M_WEIGHTED_METHODS_NON_PRIVATE => 0
-        );
+            self::M_WEIGHTED_METHODS_NON_PRIVATE => 0,
+        ];
 
         foreach ($class->getProperties() as $property) {
             $property->accept($this);
@@ -243,7 +243,7 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
 
         $wmci = $this->calculateWmciForTrait($trait);
 
-        $this->nodeMetrics[$trait->getId()] = array(
+        $this->nodeMetrics[$trait->getId()] = [
             self::M_IMPLEMENTED_INTERFACES       => 0,
             self::M_CLASS_INTERFACE_SIZE         => 0,
             self::M_CLASS_SIZE                   => 0,
@@ -253,8 +253,8 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
             self::M_PROPERTIES_NON_PRIVATE       => 0,
             self::M_WEIGHTED_METHODS             => 0,
             self::M_WEIGHTED_METHODS_INHERIT     => $wmci,
-            self::M_WEIGHTED_METHODS_NON_PRIVATE => 0
-        );
+            self::M_WEIGHTED_METHODS_NON_PRIVATE => 0,
+        ];
 
         foreach ($trait->getProperties() as $property) {
             $property->accept($this);
@@ -283,15 +283,15 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
         // Increment Weighted Methods Per Class(WMC) value
         $this->nodeMetrics[$id][self::M_WEIGHTED_METHODS] += $ccn;
         // Increment Class Size(CSZ) value
-        ++$this->nodeMetrics[$id][self::M_CLASS_SIZE];
+        $this->nodeMetrics[$id][self::M_CLASS_SIZE]++;
 
         // Increment Non Private values
         if ($method->isPublic()) {
-            ++$this->nodeMetrics[$id][self::M_NUMBER_OF_PUBLIC_METHODS];
+            $this->nodeMetrics[$id][self::M_NUMBER_OF_PUBLIC_METHODS]++;
             // Increment Non Private WMC value
             $this->nodeMetrics[$id][self::M_WEIGHTED_METHODS_NON_PRIVATE] += $ccn;
             // Increment Class Interface Size(CIS) value
-            ++$this->nodeMetrics[$id][self::M_CLASS_INTERFACE_SIZE];
+            $this->nodeMetrics[$id][self::M_CLASS_INTERFACE_SIZE]++;
         }
 
         $this->fireEndMethod($method);
@@ -310,16 +310,16 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
         $id = $property->getDeclaringClass()->getId();
 
         // Increment VARS value
-        ++$this->nodeMetrics[$id][self::M_PROPERTIES];
+        $this->nodeMetrics[$id][self::M_PROPERTIES]++;
         // Increment Class Size(CSZ) value
-        ++$this->nodeMetrics[$id][self::M_CLASS_SIZE];
+        $this->nodeMetrics[$id][self::M_CLASS_SIZE]++;
 
         // Increment Non Private values
         if ($property->isPublic()) {
             // Increment Non Private VARS value
-            ++$this->nodeMetrics[$id][self::M_PROPERTIES_NON_PRIVATE];
+            $this->nodeMetrics[$id][self::M_PROPERTIES_NON_PRIVATE]++;
             // Increment Class Interface Size(CIS) value
-            ++$this->nodeMetrics[$id][self::M_CLASS_INTERFACE_SIZE];
+            $this->nodeMetrics[$id][self::M_CLASS_INTERFACE_SIZE]++;
         }
 
         $this->fireEndProperty($property);
@@ -330,12 +330,12 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
      * counts protected and public properties of parent classes.
      *
      * @param  \PDepend\Source\AST\ASTClass $class The context class instance.
-     * @return integer
+     * @return int
      */
     private function calculateVarsi(ASTClass $class)
     {
         // List of properties, this method only counts not overwritten properties
-        $properties = array();
+        $properties = [];
         // Collect all properties of the context class
         foreach ($class->getProperties() as $prop) {
             $properties[$prop->getName()] = true;
@@ -343,11 +343,12 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
 
         foreach ($class->getParentClasses() as $parent) {
             foreach ($parent->getProperties() as $prop) {
-                if (!$prop->isPrivate() && !isset($properties[$prop->getName()])) {
+                if (! $prop->isPrivate() && ! isset($properties[$prop->getName()])) {
                     $properties[$prop->getName()] = true;
                 }
             }
         }
+
         return count($properties);
     }
 
@@ -356,7 +357,7 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
      * protected and public methods of parent classes.
      *
      * @param  \PDepend\Source\AST\ASTClass $class The context class instance.
-     * @return integer
+     * @return int
      */
     private function calculateWmciForClass(ASTClass $class)
     {
@@ -381,7 +382,7 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
      * Calculates the Weight Method Per Class metric for a trait.
      *
      * @param  \PDepend\Source\AST\ASTTrait $trait
-     * @return integer
+     * @return int
      * @since  1.0.6
      */
     private function calculateWmciForTrait(ASTTrait $trait)
@@ -393,12 +394,12 @@ class ClassLevelAnalyzer extends AbstractAnalyzer implements AggregateAnalyzer, 
      * Calculates the Weight Method Per Class metric.
      *
      * @param  \PDepend\Source\AST\AbstractASTType $type
-     * @return integer[]
+     * @return int[]
      * @since  1.0.6
      */
     private function calculateWmci(AbstractASTType $type)
     {
-        $ccn = array();
+        $ccn = [];
 
         foreach ($type->getMethods() as $method) {
             $ccn[$method->getName()] = $this->cyclomaticAnalyzer->getCcn2($method);

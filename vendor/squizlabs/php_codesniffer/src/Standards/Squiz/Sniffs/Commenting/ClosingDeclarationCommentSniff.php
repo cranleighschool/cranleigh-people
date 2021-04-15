@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ClosingDeclarationCommentSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -28,9 +26,9 @@ class ClosingDeclarationCommentSniff implements Sniff
             T_CLASS,
             T_INTERFACE,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -62,12 +60,13 @@ class ClosingDeclarationCommentSniff implements Sniff
             if (isset($tokens[$stackPtr]['scope_closer']) === false) {
                 $error = 'Possible parse error: non-abstract method defined as abstract';
                 $phpcsFile->addWarning($error, $stackPtr, 'Abstract');
+
                 return;
             }
 
             $decName = $phpcsFile->getDeclarationName($stackPtr);
             $comment = '//end '.$decName.'()';
-        } else if ($tokens[$stackPtr]['code'] === T_CLASS) {
+        } elseif ($tokens[$stackPtr]['code'] === T_CLASS) {
             $comment = '//end class';
         } else {
             $comment = '//end interface';
@@ -75,8 +74,9 @@ class ClosingDeclarationCommentSniff implements Sniff
 
         if (isset($tokens[$stackPtr]['scope_closer']) === false) {
             $error = 'Possible parse error: %s missing opening or closing brace';
-            $data  = [$tokens[$stackPtr]['content']];
+            $data = [$tokens[$stackPtr]['content']];
             $phpcsFile->addWarning($error, $stackPtr, 'MissingBrace', $data);
+
             return;
         }
 
@@ -122,8 +122,7 @@ class ClosingDeclarationCommentSniff implements Sniff
 
             return;
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

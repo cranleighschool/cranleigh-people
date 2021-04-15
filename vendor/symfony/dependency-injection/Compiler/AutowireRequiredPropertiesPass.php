@@ -34,20 +34,20 @@ class AutowireRequiredPropertiesPass extends AbstractRecursivePass
         }
         $value = parent::processValue($value, $isRoot);
 
-        if (!$value instanceof Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
+        if (! $value instanceof Definition || ! $value->isAutowired() || $value->isAbstract() || ! $value->getClass()) {
             return $value;
         }
-        if (!$reflectionClass = $this->container->getReflectionClass($value->getClass(), false)) {
+        if (! $reflectionClass = $this->container->getReflectionClass($value->getClass(), false)) {
             return $value;
         }
 
         $properties = $value->getProperties();
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
-            if (!($type = $reflectionProperty->getType()) instanceof \ReflectionNamedType) {
+            if (! ($type = $reflectionProperty->getType()) instanceof \ReflectionNamedType) {
                 continue;
             }
-            if ((\PHP_VERSION_ID < 80000 || !$reflectionProperty->getAttributes(Required::class))
-                && ((false === $doc = $reflectionProperty->getDocComment()) || false === stripos($doc, '@required') || !preg_match('#(?:^/\*\*|\n\s*+\*)\s*+@required(?:\s|\*/$)#i', $doc))
+            if ((\PHP_VERSION_ID < 80000 || ! $reflectionProperty->getAttributes(Required::class))
+                && ((false === $doc = $reflectionProperty->getDocComment()) || false === stripos($doc, '@required') || ! preg_match('#(?:^/\*\*|\n\s*+\*)\s*+@required(?:\s|\*/$)#i', $doc))
             ) {
                 continue;
             }

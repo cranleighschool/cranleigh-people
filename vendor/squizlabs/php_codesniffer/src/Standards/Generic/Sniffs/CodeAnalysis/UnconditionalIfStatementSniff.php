@@ -32,8 +32,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class UnconditionalIfStatementSniff implements Sniff
 {
-
-
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -45,9 +43,9 @@ class UnconditionalIfStatementSniff implements Sniff
             T_IF,
             T_ELSEIF,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -61,7 +59,7 @@ class UnconditionalIfStatementSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $token  = $tokens[$stackPtr];
+        $token = $tokens[$stackPtr];
 
         // Skip if statement without body.
         if (isset($token['parenthesis_opener']) === false) {
@@ -69,15 +67,15 @@ class UnconditionalIfStatementSniff implements Sniff
         }
 
         $next = ++$token['parenthesis_opener'];
-        $end  = --$token['parenthesis_closer'];
+        $end = --$token['parenthesis_closer'];
 
         $goodCondition = false;
-        for (; $next <= $end; ++$next) {
+        for (; $next <= $end; $next++) {
             $code = $tokens[$next]['code'];
 
             if (isset(Tokens::$emptyTokens[$code]) === true) {
                 continue;
-            } else if ($code !== T_TRUE && $code !== T_FALSE) {
+            } elseif ($code !== T_TRUE && $code !== T_FALSE) {
                 $goodCondition = true;
             }
         }
@@ -86,8 +84,7 @@ class UnconditionalIfStatementSniff implements Sniff
             $error = 'Avoid IF statements that are always true or false';
             $phpcsFile->addWarning($error, $stackPtr, 'Found');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

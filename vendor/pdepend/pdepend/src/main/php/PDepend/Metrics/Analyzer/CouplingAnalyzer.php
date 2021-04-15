@@ -48,7 +48,6 @@ use PDepend\Metrics\AnalyzerProjectAware;
 use PDepend\Source\AST\AbstractASTCallable;
 use PDepend\Source\AST\AbstractASTType;
 use PDepend\Source\AST\ASTArtifact;
-use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\ASTClass;
 use PDepend\Source\AST\ASTFunction;
 use PDepend\Source\AST\ASTInterface;
@@ -84,16 +83,16 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
     /**
      * Metrics provided by the analyzer implementation.
      */
-    const M_CALLS  = 'calls',
-          M_FANOUT = 'fanout',
-          M_CA     = 'ca',
-          M_CBO    = 'cbo',
-          M_CE     = 'ce';
+    const M_CALLS = 'calls';
+    const M_FANOUT = 'fanout';
+    const M_CA = 'ca';
+    const M_CBO = 'cbo';
+    const M_CE = 'ce';
 
     /**
      * Has this analyzer already processed the source under test?
      *
-     * @var   boolean
+     * @var   bool
      * @since 0.10.2
      */
     private $uninitialized = true;
@@ -101,14 +100,14 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
     /**
      * The number of method or function calls.
      *
-     * @var integer
+     * @var int
      */
     private $calls = 0;
 
     /**
      * Number of fanouts.
      *
-     * @var integer
+     * @var int
      */
     private $fanout = 0;
 
@@ -119,7 +118,7 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
      * @var   array<string, array>
      * @since 0.10.2
      */
-    private $dependencyMap = array();
+    private $dependencyMap = [];
 
     /**
      * This array holds a mapping between node identifiers and an array with
@@ -128,7 +127,7 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
      * @var   array<string, array>
      * @since 0.10.2
      */
-    private $nodeMetrics = array();
+    private $nodeMetrics = [];
 
     /**
      * Provides the project summary as an <b>array</b>.
@@ -144,10 +143,10 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
      */
     public function getProjectMetrics()
     {
-        return array(
+        return [
             self::M_CALLS   =>  $this->calls,
-            self::M_FANOUT  =>  $this->fanout
-        );
+            self::M_FANOUT  =>  $this->fanout,
+        ];
     }
 
     /**
@@ -171,7 +170,8 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
         if (isset($this->nodeMetrics[$artifact->getId()])) {
             return $this->nodeMetrics[$artifact->getId()];
         }
-        return array();
+
+        return [];
     }
 
     /**
@@ -218,10 +218,10 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
      */
     private function reset()
     {
-        $this->calls         = 0;
-        $this->fanout        = 0;
-        $this->nodeMetrics   = array();
-        $this->dependencyMap = array();
+        $this->calls = 0;
+        $this->fanout = 0;
+        $this->nodeMetrics = [];
+        $this->dependencyMap = [];
     }
 
     /**
@@ -237,16 +237,16 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
             $afferentCoupling = count($metrics['ca']);
             $efferentCoupling = count($metrics['ce']);
 
-            $this->nodeMetrics[$id] = array(
+            $this->nodeMetrics[$id] = [
                 self::M_CA   =>  $afferentCoupling,
                 self::M_CBO  =>  $efferentCoupling,
-                self::M_CE   =>  $efferentCoupling
-            );
+                self::M_CE   =>  $efferentCoupling,
+            ];
 
             $this->fanout += $efferentCoupling;
         }
 
-        $this->dependencyMap = array();
+        $this->dependencyMap = [];
     }
 
     /**
@@ -259,21 +259,21 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
     {
         $this->fireStartFunction($function);
 
-        $fanouts = array();
+        $fanouts = [];
         if (($type = $function->getReturnClass()) !== null) {
             $fanouts[] = $type;
-            ++$this->fanout;
+            $this->fanout++;
         }
         foreach ($function->getExceptionClasses() as $type) {
             if (in_array($type, $fanouts, true) === false) {
                 $fanouts[] = $type;
-                ++$this->fanout;
+                $this->fanout++;
             }
         }
         foreach ($function->getDependencies() as $type) {
             if (in_array($type, $fanouts, true) === false) {
                 $fanouts[] = $type;
-                ++$this->fanout;
+                $this->fanout++;
             }
         }
 
@@ -415,14 +415,14 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
             return;
         }
 
-        $this->dependencyMap[$type->getId()] = array(
-            'ce' => array(),
-            'ca' => array()
-        );
+        $this->dependencyMap[$type->getId()] = [
+            'ce' => [],
+            'ca' => [],
+        ];
     }
 
     /**
-     * Counts all calls within the given <b>$callable</b>
+     * Counts all calls within the given <b>$callable</b>.
      *
      * @param  \PDepend\Source\AST\AbstractASTCallable $callable
      * @return void
@@ -431,7 +431,7 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
     {
         $invocations = $callable->findChildrenOfType('PDepend\\Source\\AST\\ASTInvocation');
 
-        $invoked = array();
+        $invoked = [];
 
         foreach ($invocations as $invocation) {
             $parents = $invocation->getParentsOfType('PDepend\\Source\\AST\\ASTMemberPrimaryPrefix');
@@ -440,10 +440,10 @@ class CouplingAnalyzer extends AbstractAnalyzer implements AnalyzerNodeAware, An
             foreach ($parents as $parent) {
                 $child = $parent->getChild(0);
                 if ($child !== $invocation) {
-                    $image .= $child->getImage() . '.';
+                    $image .= $child->getImage().'.';
                 }
             }
-            $image .= $invocation->getImage() . '()';
+            $image .= $invocation->getImage().'()';
 
             $invoked[$image] = $image;
         }

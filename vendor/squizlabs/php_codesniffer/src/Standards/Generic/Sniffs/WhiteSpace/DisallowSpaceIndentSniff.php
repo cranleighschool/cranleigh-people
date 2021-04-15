@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DisallowSpaceIndentSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -29,10 +28,9 @@ class DisallowSpaceIndentSniff implements Sniff
     /**
      * The --tab-width CLI value that is being used.
      *
-     * @var integer
+     * @var int
      */
     private $tabWidth = null;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -42,9 +40,9 @@ class DisallowSpaceIndentSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -66,7 +64,7 @@ class DisallowSpaceIndentSniff implements Sniff
                 $this->tabWidth = 4;
             } else {
                 $this->tabWidth = $phpcsFile->config->tabWidth;
-                $tabsReplaced   = true;
+                $tabsReplaced = true;
             }
         }
 
@@ -116,18 +114,18 @@ class DisallowSpaceIndentSniff implements Sniff
                     $content = $matches[1];
 
                     // Tabs are not replaced in content, so the "length" is wrong.
-                    $matches[1]         = str_replace("\t", str_repeat(' ', $this->tabWidth), $matches[1]);
+                    $matches[1] = str_replace("\t", str_repeat(' ', $this->tabWidth), $matches[1]);
                     $expectedIndentSize = strlen($matches[1]);
                 }
 
                 if (isset($matches[2]) === true) {
                     $nonWhitespace = $matches[2];
                 }
-            } else if (isset($tokens[($i + 1)]) === true
+            } elseif (isset($tokens[($i + 1)]) === true
                 && $tokens[$i]['line'] < $tokens[($i + 1)]['line']
             ) {
                 // There is no content after this whitespace except for a newline.
-                $content       = rtrim($content, "\r\n");
+                $content = rtrim($content, "\r\n");
                 $nonWhitespace = $phpcsFile->eolChar;
 
                 // Don't record metrics for empty lines.
@@ -135,7 +133,7 @@ class DisallowSpaceIndentSniff implements Sniff
             }//end if
 
             $foundSpaces = substr_count($content, ' ');
-            $foundTabs   = substr_count($content, "\t");
+            $foundTabs = substr_count($content, "\t");
 
             if ($foundSpaces === 0 && $foundTabs === 0) {
                 // Empty line.
@@ -166,7 +164,7 @@ class DisallowSpaceIndentSniff implements Sniff
             $tabAfterSpaces = strpos($content, "\t", strpos($content, ' '));
 
             // Calculate the expected tabs and spaces.
-            $expectedTabs   = (int) floor($expectedIndentSize / $this->tabWidth);
+            $expectedTabs = (int) floor($expectedIndentSize / $this->tabWidth);
             $expectedSpaces = ($expectedIndentSize % $this->tabWidth);
 
             if ($foundTabs === 0) {
@@ -194,24 +192,23 @@ class DisallowSpaceIndentSniff implements Sniff
                         // end of the whitespace.
                         continue;
                     }
-                } else if ($recordMetrics === true) {
+                } elseif ($recordMetrics === true) {
                     $phpcsFile->recordMetric($i, 'Line indent', 'mixed');
                 }
             }//end if
 
             $error = 'Tabs must be used to indent lines; spaces are not allowed';
-            $fix   = $phpcsFile->addFixableError($error, $i, 'SpacesUsed');
+            $fix = $phpcsFile->addFixableError($error, $i, 'SpacesUsed');
             if ($fix === true) {
-                $padding  = str_repeat("\t", $expectedTabs);
+                $padding = str_repeat("\t", $expectedTabs);
                 $padding .= str_repeat(' ', $expectedSpaces);
                 $phpcsFile->fixer->replaceToken($i, $padding.$nonWhitespace);
             }
         }//end for
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens + 1;
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

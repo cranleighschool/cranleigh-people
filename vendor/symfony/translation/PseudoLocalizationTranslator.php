@@ -72,7 +72,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
         $this->brackets = $options['brackets'] ?? true;
 
         $this->parseHTML = $options['parse_html'] ?? false;
-        if ($this->parseHTML && !$this->accents && 1.0 === $this->expansionFactor) {
+        if ($this->parseHTML && ! $this->accents && 1.0 === $this->expansionFactor) {
             $this->parseHTML = false;
         }
 
@@ -92,7 +92,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
                 $visibleText .= $text;
             }
 
-            if (!$localizable) {
+            if (! $localizable) {
                 $trans .= $text;
 
                 continue;
@@ -110,7 +110,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
 
     private function getParts(string $originalTrans): array
     {
-        if (!$this->parseHTML) {
+        if (! $this->parseHTML) {
             return [[true, true, $originalTrans]];
         }
 
@@ -132,7 +132,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
         $parts = [];
 
         foreach ($node->childNodes as $childNode) {
-            if (!$childNode instanceof \DOMElement) {
+            if (! $childNode instanceof \DOMElement) {
                 $parts[] = [true, true, $childNode->nodeValue];
 
                 continue;
@@ -292,15 +292,15 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
                 continue;
             }
 
-            if (!isset($words[$wordLength])) {
+            if (! isset($words[$wordLength])) {
                 $words[$wordLength] = 0;
             }
 
-            ++$words[$wordLength];
-            ++$wordsCount;
+            $words[$wordLength]++;
+            $wordsCount++;
         }
 
-        if (!$words) {
+        if (! $words) {
             $trans .= 1 === $missingLength ? self::EXPANSION_CHARACTER : ' '.str_repeat(self::EXPANSION_CHARACTER, $missingLength - 1);
 
             return;
@@ -332,7 +332,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
                 $wordsCount -= $words[$longestWordLength];
                 unset($words[$longestWordLength]);
 
-                if (!$words) {
+                if (! $words) {
                     $trans .= 1 === $missingLength ? self::EXPANSION_CHARACTER : ' '.str_repeat(self::EXPANSION_CHARACTER, $missingLength - 1);
 
                     return;
@@ -345,7 +345,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
 
     private function addBrackets(string &$trans): void
     {
-        if (!$this->brackets) {
+        if (! $this->brackets) {
             return;
         }
 

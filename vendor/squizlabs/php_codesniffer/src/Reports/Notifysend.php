@@ -22,11 +22,10 @@ use PHP_CodeSniffer\Util\Common;
 
 class Notifysend implements Report
 {
-
     /**
      * Notification timeout in milliseconds.
      *
-     * @var integer
+     * @var int
      */
     protected $timeout = 3000;
 
@@ -40,7 +39,7 @@ class Notifysend implements Report
     /**
      * Show "ok, all fine" messages.
      *
-     * @var boolean
+     * @var bool
      */
     protected $showOk = true;
 
@@ -50,7 +49,6 @@ class Notifysend implements Report
      * @var string
      */
     protected $version = null;
-
 
     /**
      * Load configuration data.
@@ -77,9 +75,9 @@ class Notifysend implements Report
             '',
             exec($this->path.' --version')
         );
+    }
 
-    }//end __construct()
-
+    //end __construct()
 
     /**
      * Generate a partial report for a single processed file.
@@ -95,16 +93,16 @@ class Notifysend implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
+    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
     {
         echo $report['filename'].PHP_EOL;
 
         // We want this file counted in the total number
         // of checked files even if it has no errors.
         return true;
+    }
 
-    }//end generateFileReport()
-
+    //end generateFileReport()
 
     /**
      * Generates a summary of errors and warnings for each file processed.
@@ -128,10 +126,10 @@ class Notifysend implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources=false,
-        $width=80,
-        $interactive=false,
-        $toScreen=true
+        $showSources = false,
+        $width = 80,
+        $interactive = false,
+        $toScreen = true
     ) {
         $checkedFiles = explode(PHP_EOL, trim($cachedData));
 
@@ -143,9 +141,9 @@ class Notifysend implements Report
         } else {
             $this->notifyErrors($msg);
         }
+    }
 
-    }//end generate()
-
+    //end generate()
 
     /**
      * Generate the error message to show to the user.
@@ -181,9 +179,9 @@ class Notifysend implements Report
         }
 
         return $msg;
+    }
 
-    }//end generateMessage()
-
+    //end generateMessage()
 
     /**
      * Tell the user that all is fine and no error/warning has been found.
@@ -192,14 +190,14 @@ class Notifysend implements Report
      */
     protected function notifyAllFine()
     {
-        $cmd  = $this->getBasicCommand();
+        $cmd = $this->getBasicCommand();
         $cmd .= ' -i info';
         $cmd .= ' "PHP CodeSniffer: Ok"';
         $cmd .= ' "All fine"';
         exec($cmd);
+    }
 
-    }//end notifyAllFine()
-
+    //end notifyAllFine()
 
     /**
      * Tell the user that errors/warnings have been found.
@@ -210,14 +208,14 @@ class Notifysend implements Report
      */
     protected function notifyErrors($msg)
     {
-        $cmd  = $this->getBasicCommand();
+        $cmd = $this->getBasicCommand();
         $cmd .= ' -i error';
         $cmd .= ' "PHP CodeSniffer: Error"';
         $cmd .= ' '.escapeshellarg(trim($msg));
         exec($cmd);
+    }
 
-    }//end notifyErrors()
-
+    //end notifyErrors()
 
     /**
      * Generate and return the basic notify-send command string to execute.
@@ -226,7 +224,7 @@ class Notifysend implements Report
      */
     protected function getBasicCommand()
     {
-        $cmd  = $this->path;
+        $cmd = $this->path;
         $cmd .= ' --category dev.validate';
         $cmd .= ' -h int:transient:1';
         $cmd .= ' -t '.(int) $this->timeout;
@@ -235,8 +233,7 @@ class Notifysend implements Report
         }
 
         return $cmd;
+    }
 
-    }//end getBasicCommand()
-
-
+    //end getBasicCommand()
 }//end class

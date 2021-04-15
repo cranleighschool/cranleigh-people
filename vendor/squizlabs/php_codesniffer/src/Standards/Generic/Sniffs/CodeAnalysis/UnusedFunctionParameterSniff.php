@@ -22,14 +22,12 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class UnusedFunctionParameterSniff implements Sniff
 {
-
     /**
      * The list of class type hints which will be ignored.
      *
      * @var array
      */
     public $ignoreTypeHints = [];
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -43,9 +41,9 @@ class UnusedFunctionParameterSniff implements Sniff
             T_CLOSURE,
             T_FN,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -59,28 +57,28 @@ class UnusedFunctionParameterSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $token  = $tokens[$stackPtr];
+        $token = $tokens[$stackPtr];
 
         // Skip broken function declarations.
         if (isset($token['scope_opener']) === false || isset($token['parenthesis_opener']) === false) {
             return;
         }
 
-        $errorCode  = 'Found';
+        $errorCode = 'Found';
         $implements = false;
-        $extends    = false;
-        $classPtr   = $phpcsFile->getCondition($stackPtr, T_CLASS);
+        $extends = false;
+        $classPtr = $phpcsFile->getCondition($stackPtr, T_CLASS);
         if ($classPtr !== false) {
             $implements = $phpcsFile->findImplementedInterfaceNames($classPtr);
-            $extends    = $phpcsFile->findExtendedClassName($classPtr);
+            $extends = $phpcsFile->findExtendedClassName($classPtr);
             if ($extends !== false) {
                 $errorCode .= 'InExtendedClass';
-            } else if ($implements !== false) {
+            } elseif ($implements !== false) {
                 $errorCode .= 'InImplementedInterface';
             }
         }
 
-        $params       = [];
+        $params = [];
         $methodParams = $phpcsFile->getMethodParameters($stackPtr);
 
         // Skip when no parameters found.
@@ -99,17 +97,17 @@ class UnusedFunctionParameterSniff implements Sniff
         }
 
         $next = ++$token['scope_opener'];
-        $end  = --$token['scope_closer'];
+        $end = --$token['scope_closer'];
 
         // Check the end token for arrow functions as
         // they can end at a content token due to not having
         // a clearly defined closing token.
         if ($token['code'] === T_FN) {
-            ++$end;
+            $end++;
         }
 
         $foundContent = false;
-        $validTokens  = [
+        $validTokens = [
             T_HEREDOC              => T_HEREDOC,
             T_NOWDOC               => T_NOWDOC,
             T_END_HEREDOC          => T_END_HEREDOC,
@@ -118,9 +116,9 @@ class UnusedFunctionParameterSniff implements Sniff
         ];
         $validTokens += Tokens::$emptyTokens;
 
-        for (; $next <= $end; ++$next) {
+        for (; $next <= $end; $next++) {
             $token = $tokens[$next];
-            $code  = $token['code'];
+            $code = $token['code'];
 
             // Ignorable tokens.
             if (isset(Tokens::$emptyTokens[$code]) === true) {
@@ -157,7 +155,7 @@ class UnusedFunctionParameterSniff implements Sniff
 
             if ($code === T_VARIABLE && isset($params[$token['content']]) === true) {
                 unset($params[$token['content']]);
-            } else if ($code === T_DOLLAR) {
+            } elseif ($code === T_DOLLAR) {
                 $nextToken = $phpcsFile->findNext(T_WHITESPACE, ($next + 1), null, true);
                 if ($tokens[$nextToken]['code'] === T_OPEN_CURLY_BRACKET) {
                     $nextToken = $phpcsFile->findNext(T_WHITESPACE, ($nextToken + 1), null, true);
@@ -168,7 +166,7 @@ class UnusedFunctionParameterSniff implements Sniff
                         }
                     }
                 }
-            } else if ($code === T_DOUBLE_QUOTED_STRING
+            } elseif ($code === T_DOUBLE_QUOTED_STRING
                 || $code === T_START_HEREDOC
                 || $code === T_START_NOWDOC
             ) {
@@ -193,7 +191,7 @@ class UnusedFunctionParameterSniff implements Sniff
                     $varContent = '';
                     if ($stringToken[0] === T_DOLLAR_OPEN_CURLY_BRACES) {
                         $varContent = '$'.$stringTokens[($stringPtr + 1)][1];
-                    } else if ($stringToken[0] === T_VARIABLE) {
+                    } elseif ($stringToken[0] === T_VARIABLE) {
                         $varContent = $stringToken[1];
                     }
 
@@ -222,9 +220,9 @@ class UnusedFunctionParameterSniff implements Sniff
             }
 
             $foundLastUsed = false;
-            $lastIndex     = ($methodParamsCount - 1);
-            $errorInfo     = [];
-            for ($i = $lastIndex; $i >= 0; --$i) {
+            $lastIndex = ($methodParamsCount - 1);
+            $errorInfo = [];
+            for ($i = $lastIndex; $i >= 0; $i--) {
                 if ($foundLastUsed !== false) {
                     if (isset($params[$methodParams[$i]['name']]) === true) {
                         $errorInfo[$methodParams[$i]['name']] = [
@@ -258,8 +256,7 @@ class UnusedFunctionParameterSniff implements Sniff
                 }
             }
         }//end if
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

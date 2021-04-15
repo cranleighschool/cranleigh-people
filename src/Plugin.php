@@ -1,180 +1,157 @@
 <?php
 
-	namespace CranleighSchool\CranleighPeople;
+namespace CranleighSchool\CranleighPeople;
 
-	use CranleighSchool\CranleighPeople\Importer\Importer;
+    use CranleighSchool\CranleighPeople\Importer\Importer;
 
-	class Plugin extends BaseController
-	{
+    class Plugin extends BaseController
+    {
+        public const POST_TYPE_KEY = 'staff';
+        public const PROFILE_PHOTO_SIZE_NAME = 'staff-photo';
+        public $isams_controlled = false;
 
-		public CONST POST_TYPE_KEY = 'staff';
-		public CONST PROFILE_PHOTO_SIZE_NAME = 'staff-photo';
-		public $isams_controlled = false;
+        private $load_cpt = false;
 
-		private $load_cpt = false;
+        /**
+         * __construct function.
+         *
+         * @return void
+         */
+        public function __construct(string $plugin_name)
+        {
+            parent::__construct($plugin_name);
 
-		/**
-		 * __construct function.
-		 *
-		 * @access public
-		 * @return void
-		 */
-		public function __construct(string $plugin_name)
-		{
+            $this->load();
 
-			parent::__construct($plugin_name);
+            $this->loadShortcodes();
 
-			$this->load();
+            if (isset($this->settings['isams_controlled']) && $this->settings['isams_controlled'] == 'yes') {
+                $this->isams_controlled = true;
+            } else {
+                $this->isams_controlled = false;
+            }
 
-			$this->loadShortcodes();
+            if (isset($this->settings['load_cpt'])) {
+                if ($this->settings['load_cpt'] == 'yes') {
+                    $this->load_cpt = true;
 
+                    $this->load_if_cpt();
+                } else {
+                    /**
+                     * Commented out by FRB in version 2, as I think it is a mistake.
+                     * Why would we want to register the cpt if load_cpt is not on.
+                     */
+                    //add_action('init', [$this, 'CPT_Cranleigh_People']);
+                }
 
-			if (isset($this->settings['isams_controlled']) && $this->settings['isams_controlled'] == 'yes') {
-				$this->isams_controlled = true;
-			} else {
-				$this->isams_controlled = false;
-			}
+                $this->load_in_all_cases();
+            }
+        }
 
-			if (isset($this->settings['load_cpt'])) :
+        private function loadShortcodes()
+        {
+            return new Shortcodes();
+        }
 
-				if ($this->settings['load_cpt'] == 'yes') :
+        private function load_if_cpt()
+        {
+            register_activation_hook(CRAN_PEOPLE_FILE_PATH, [Activate::class, 'activate']);
+            register_deactivation_hook(CRAN_PEOPLE_FILE_PATH, [Deactivate::class, 'deactivate']);
 
-					$this->load_cpt = true;
+            CustomPostType::register();
+            StaffCategoriesTaxonomy::register();
+            StaffHousesTaxonomy::register();
+            StaffSubjectsTaxonomy::register();
+            Metaboxes::register();
+            TGMPA::register();
 
-					$this->load_if_cpt();
+            add_action('pre_get_posts', [$this, 'owd_post_order']);
 
-				else :
-					/**
-					 * Commented out by FRB in version 2, as I think it is a mistake.
-					 * Why would we want to register the cpt if load_cpt is not on.
-					 */
-					//add_action('init', [$this, 'CPT_Cranleigh_People']);
-				endif;
+            // Add Rest API Support
+            new RestAPI();
+        }
 
-				$this->load_in_all_cases();
+        private function load_in_all_cases()
+        {
+            add_action('after_setup_theme', [$this, 'profile_pictures']);
 
-			endif;
+            if (is_admin()) {
+                Admin::register();
+            }
 
-		}
+            add_action(
+                'widgets_init',
+                function () {
 
-		private function loadShortcodes()
-		{
-			return new Shortcodes();
-		}
+                    // You can keep adding to this if you have added more class files
+                    // - just ensure that the name of the child class is what you put in as a registered widget.
+                    register_widget(__NAMESPACE__.'\Cranleigh_People_Widget');
+                }
+            );
 
-		private function load_if_cpt()
-		{
-			register_activation_hook(CRAN_PEOPLE_FILE_PATH, [Activate::class, 'activate']);
-			register_deactivation_hook(CRAN_PEOPLE_FILE_PATH, [Deactivate::class, 'deactivate']);
+            add_action(Cron::SYNC_CRONJOB_NAME, [Importer::class, 'import']);
+        }
 
+        /**
+         * Retrieves the IMG Tag for the "Staff Profile Photo" sized image of the person.
+         *
+         * @param string      $username
+         * @param string|null $output_type "ID" for the attachment_id, or "URL" for the image url. Default: null
+         *
+         * @return false|int|string
+         * @throws \Exception
+         */
+        public static function getMugshotOf(string $username, string $output_type = null)
+        {
+            remove_filter('post_thumbnail_html', 'cranleigh_post_thumbnail_fallback');
 
-			CustomPostType::register();
-			StaffCategoriesTaxonomy::register();
-			StaffHousesTaxonomy::register();
-			StaffSubjectsTaxonomy::register();
-			Metaboxes::register();
-			TGMPA::register();
+            $staff_post = Importer::find_wp_staff_post($username);
 
-			add_action('pre_get_posts', [$this, 'owd_post_order']);
+            if (strtoupper($output_type) === 'URL') {
+                return get_the_post_thumbnail_url($staff_post, Plugin::PROFILE_PHOTO_SIZE_NAME);
+            } elseif ($output_type == 'id') {
+                $thumbnail_id = get_post_thumbnail_id($staff_post);
 
+                return ($thumbnail_id === '') ? 0 : (int) $thumbnail_id;
+            }
 
-			// Add Rest API Support
-			new RestAPI();
+            return get_the_post_thumbnail($staff_post, Plugin::PROFILE_PHOTO_SIZE_NAME);
+        }
 
-		}
+        /**
+         * profile_pictures function.
+         *
+         * @return void
+         */
+        public function profile_pictures()
+        {
+            add_image_size(self::PROFILE_PHOTO_SIZE_NAME, 400, 600, true);
+        }
 
-		private function load_in_all_cases()
-		{
-			add_action('after_setup_theme', [$this, 'profile_pictures']);
+        public function staff_roles()
+        {
+            $args = [
+                'hide_empty' => false,
+            ];
+            $terms = get_terms(StaffCategoriesTaxonomy::TAXONOMY_KEY, $args);
+            $output = [];
+            foreach ($terms as $role) {
+                $output[$role->slug] = $role->name;
+            }
 
-			if (is_admin()) {
-				Admin::register();
-			}
+            return $output;
+        }
 
-			add_action(
-				'widgets_init',
-				function () {
+        // Order custom post types alphabetically
 
-					// You can keep adding to this if you have added more class files
-					// - just ensure that the name of the child class is what you put in as a registered widget.
-					register_widget(__NAMESPACE__ . '\Cranleigh_People_Widget');
-				}
-			);
+        public function owd_post_order($query)
+        {
+            if ($query->is_post_type_archive(CustomPostType::POST_TYPE_KEY) && $query->is_main_query()) {
+                $query->set('orderby', 'meta_value');
+                $query->set('meta_key', 'staff_surname');
+                $query->set('order', 'ASC');
+            }
 
-			add_action(Cron::SYNC_CRONJOB_NAME, [Importer::class, 'import']);
-
-		}
-
-		/**
-		 * Retrieves the IMG Tag for the "Staff Profile Photo" sized image of the person.
-		 *
-		 * @param string      $username
-		 * @param string|NULL $output_type "ID" for the attachment_id, or "URL" for the image url. Default: null
-		 *
-		 * @return false|int|string
-		 * @throws \Exception
-		 */
-		public static function getMugshotOf(string $username, string $output_type = NULL)
-		{
-			remove_filter('post_thumbnail_html', 'cranleigh_post_thumbnail_fallback');
-
-			$staff_post = Importer::find_wp_staff_post($username);
-
-			if (strtoupper($output_type) === 'URL') {
-				return get_the_post_thumbnail_url($staff_post, Plugin::PROFILE_PHOTO_SIZE_NAME);
-			} elseif ($output_type == 'id') {
-				$thumbnail_id = get_post_thumbnail_id($staff_post);
-
-				return ($thumbnail_id === '') ? 0 : (int)$thumbnail_id;
-			}
-
-			return get_the_post_thumbnail($staff_post, Plugin::PROFILE_PHOTO_SIZE_NAME);
-		}
-
-		/**
-		 * profile_pictures function.
-		 *
-		 * @access public
-		 * @return void
-		 */
-		public function profile_pictures()
-		{
-			add_image_size(self::PROFILE_PHOTO_SIZE_NAME, 400, 600, true);
-		}
-
-
-		public function staff_roles()
-		{
-			$args = [
-				'hide_empty' => false,
-			];
-			$terms = get_terms(StaffCategoriesTaxonomy::TAXONOMY_KEY, $args);
-			$output = [];
-			foreach ($terms as $role) {
-				$output[ $role->slug ] = $role->name;
-			}
-
-			return $output;
-		}
-
-
-		// Order custom post types alphabetically
-
-		public function owd_post_order($query)
-		{
-
-			if ($query->is_post_type_archive(CustomPostType::POST_TYPE_KEY) && $query->is_main_query()) {
-
-				$query->set('orderby', 'meta_value');
-				$query->set('meta_key', 'staff_surname');
-				$query->set('order', 'ASC');
-			}
-
-			return $query;
-		}
-
-
-	}
-
-
-
+            return $query;
+        }
+    }

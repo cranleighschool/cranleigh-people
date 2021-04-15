@@ -29,7 +29,7 @@ class Annotations
      *
      * @var \PHPMD\Node\Annotation[]
      */
-    private $annotations = array();
+    private $annotations = [];
 
     /**
      * Regexp used to extract code annotations.
@@ -58,7 +58,7 @@ class Annotations
      * Checks if one of the annotations suppresses the given rule.
      *
      * @param \PHPMD\Rule $rule
-     * @return boolean
+     * @return bool
      */
     public function suppresses(Rule $rule)
     {

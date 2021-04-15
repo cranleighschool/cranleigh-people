@@ -82,7 +82,7 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
         $inExpression = $this->inExpression();
 
         if ($value instanceof ArgumentInterface) {
-            $this->lazy = !$this->byFactory || !$value instanceof IteratorArgument;
+            $this->lazy = ! $this->byFactory || ! $value instanceof IteratorArgument;
             parent::processValue($value->getValues());
             $this->lazy = $lazy;
 
@@ -117,7 +117,7 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
 
             return $value;
         }
-        if (!$value instanceof Definition) {
+        if (! $value instanceof Definition) {
             return parent::processValue($value, $isRoot);
         }
         if ($isRoot) {
@@ -170,7 +170,7 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
 
         $this->byConstructor = $byConstructor;
 
-        if (!$this->onlyConstructorArguments) {
+        if (! $this->onlyConstructorArguments) {
             $this->processValue($properties);
             $this->processValue($setters);
             $this->processValue($value->getConfigurator());

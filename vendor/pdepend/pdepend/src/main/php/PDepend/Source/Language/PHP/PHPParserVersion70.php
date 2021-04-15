@@ -58,8 +58,8 @@ use PDepend\Source\Tokenizer\Tokens;
 abstract class PHPParserVersion70 extends PHPParserVersion56
 {
     /**
-     * @param integer $tokenType
-     * @return boolean
+     * @param int $tokenType
+     * @return bool
      */
     protected function isConstantName($tokenType)
     {
@@ -133,11 +133,12 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
             case Tokens::T_UNSET:
                 return true;
         }
+
         return parent::isConstantName($tokenType);
     }
 
     /**
-     * @param integer $tokenType
+     * @param int $tokenType
      * @return bool
      */
     protected function isMethodName($tokenType)
@@ -146,6 +147,7 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
             case Tokens::T_CLASS:
                 return true;
         }
+
         return $this->isConstantName($tokenType);
     }
 
@@ -156,13 +158,14 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
     {
         $tokenType = $this->tokenizer->peek();
         switch (true) {
-            case ($this->isConstantName($tokenType)):
+            case $this->isConstantName($tokenType):
                 $node = $this->parseLiteral();
                 break;
             default:
                 $node = parent::parsePostfixIdentifier();
                 break;
         }
+
         return $this->parseOptionalIndexExpression($node);
     }
 
@@ -207,6 +210,7 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
                 $type = $this->parseTypeHint();
                 break;
         }
+
         return $type;
     }
 
@@ -241,7 +245,7 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
 
     /**
      * Parses any expression that is surrounded by an opening and a closing
-     * parenthesis
+     * parenthesis.
      *
      * @return \PDepend\Source\AST\ASTExpression
      */
@@ -271,7 +275,7 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
      * Tests if the given image is a PHP 7 type hint.
      *
      * @param string $image
-     * @return boolean
+     * @return bool
      */
     protected function isScalarOrCallableTypeHint($image)
     {
@@ -327,7 +331,7 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
     }
 
     /**
-     * Attempts to the next sequence of tokens as an anonymous class and adds it to the allocation expression
+     * Attempts to the next sequence of tokens as an anonymous class and adds it to the allocation expression.
      *
      * @param \PDepend\Source\AST\ASTAllocationExpression $allocation
      *
@@ -424,6 +428,7 @@ abstract class PHPParserVersion70 extends PHPParserVersion56
 
         if ($this->tokenizer->peek() === Tokens::T_OBJECT_OPERATOR) {
             $node = count($expr->getChildren()) === 0 ? $expr : $expr->getChild(0);
+
             return $this->parseMemberPrimaryPrefix($node);
         }
 

@@ -35,10 +35,10 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
      *
      * @var array(string=>boolean)
      */
-    protected $processedVariables = array();
+    protected $processedVariables = [];
 
     /**
-     * Extracts all variable and variable declarator nodes from the given node
+     * Extracts all variable and variable declarator nodes from the given node.
      *
      * Checks the variable name length against the configured minimum
      * length.
@@ -60,7 +60,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
     }
 
     /**
-     * Extracts all variable and variable declarator nodes from the given class node
+     * Extracts all variable and variable declarator nodes from the given class node.
      *
      * Checks the variable name length against the configured minimum
      * length.
@@ -81,7 +81,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
     }
 
     /**
-     * Extracts all variable and variable declarator nodes from the given non-class node
+     * Extracts all variable and variable declarator nodes from the given non-class node.
      *
      * Checks the variable name length against the configured minimum
      * length.
@@ -142,11 +142,11 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
             return;
         }
 
-        $this->addViolation($node, array($node->getImage(), $threshold));
+        $this->addViolation($node, [$node->getImage(), $threshold]);
     }
 
     /**
-     * Gets array of exceptions from property
+     * Gets array of exceptions from property.
      *
      * @return array
      */
@@ -167,7 +167,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
      * variable names in catch-statements.
      *
      * @param \PHPMD\AbstractNode $node
-     * @return boolean
+     * @return bool
      */
     protected function isNameAllowedInContext(AbstractNode $node)
     {
@@ -181,18 +181,18 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
     }
 
     /**
-     * Checks if a short name is initialized within a foreach loop statement
+     * Checks if a short name is initialized within a foreach loop statement.
      *
      * @param \PHPMD\AbstractNode $node
-     * @return boolean
+     * @return bool
      */
     protected function isInitializedInLoop(AbstractNode $node)
     {
-        if (!$this->getBooleanProperty('allow-short-variables-in-loop', true)) {
+        if (! $this->getBooleanProperty('allow-short-variables-in-loop', true)) {
             return false;
         }
 
-        $exceptionVariables = array();
+        $exceptionVariables = [];
 
         $parentForeaches = $this->getParentsOfType($node, 'ForeachStatement');
         foreach ($parentForeaches as $foreach) {
@@ -207,14 +207,14 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
     }
 
     /**
-     * Returns an array of parent nodes of the specified type
+     * Returns an array of parent nodes of the specified type.
      *
      * @param \PHPMD\AbstractNode $node
      * @return array
      */
     protected function getParentsOfType(AbstractNode $node, $type)
     {
-        $parents = array();
+        $parents = [];
 
         $parent = $node->getParent();
 
@@ -234,7 +234,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
      *
      * @param \PHPMD\AbstractNode $node
      * @param string $type
-     * @return boolean
+     * @return bool
      */
     protected function isChildOf(AbstractNode $node, $type)
     {
@@ -256,7 +256,7 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
      */
     protected function resetProcessed()
     {
-        $this->processedVariables = array();
+        $this->processedVariables = [];
     }
 
     /**
@@ -274,10 +274,10 @@ class ShortVariable extends AbstractRule implements ClassAware, MethodAware, Fun
      * Checks if the given node was already processed.
      *
      * @param \PHPMD\AbstractNode $node
-     * @return boolean
+     * @return bool
      */
     protected function isNotProcessed(AbstractNode $node)
     {
-        return !isset($this->processedVariables[$node->getImage()]);
+        return ! isset($this->processedVariables[$node->getImage()]);
     }
 }

@@ -127,14 +127,14 @@ interface Rule
     /**
      * Returns the priority of this rule.
      *
-     * @return integer
+     * @return int
      */
     public function getPriority();
 
     /**
      * Set the priority of this rule.
      *
-     * @param integer $priority
+     * @param int $priority
      * @return void
      */
     public function setPriority($priority);
@@ -183,7 +183,7 @@ interface Rule
      * exception when no property with <b>$name</b> exists.
      *
      * @param string $name
-     * @return boolean
+     * @return bool
      * @throws \OutOfBoundsException When no property for <b>$name</b> exists.
      */
     public function getBooleanProperty($name);
@@ -193,7 +193,7 @@ interface Rule
      * exception when no property with <b>$name</b> exists.
      *
      * @param string $name
-     * @return integer
+     * @return int
      * @throws \OutOfBoundsException When no property for <b>$name</b> exists.
      */
     public function getIntProperty($name);

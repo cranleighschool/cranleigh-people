@@ -65,6 +65,7 @@ final class MathUtil
         if (function_exists('bcmul')) {
             return bcmul($left, $right);
         }
+
         return (string) ((int) $left * (int) $right);
     }
 
@@ -82,6 +83,7 @@ final class MathUtil
         if (function_exists('bcadd')) {
             return bcadd($left, $right);
         }
+
         return (string) ((int) $left + (int) $right);
     }
 }

@@ -32,7 +32,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      *
      * @var array(string)
      */
-    protected $images = array();
+    protected $images = [];
 
     /**
      * This method checks that all local variables within the given function or
@@ -43,14 +43,14 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      */
     public function apply(AbstractNode $node)
     {
-        $this->images = array();
+        $this->images = [];
 
         /** @var $node AbstractCallableNode */
         $this->collectVariables($node);
         $this->removeParameters($node);
 
         foreach ($this->images as $nodes) {
-            if (!$this->containsUsages($nodes)) {
+            if (! $this->containsUsages($nodes)) {
                 $this->doCheckNodeImage($nodes[0]);
             }
         }
@@ -72,7 +72,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
         foreach ($nodes as $node) {
             $parent = $node->getParent();
 
-            if (!$parent->isInstanceOf('AssignmentExpression')) {
+            if (! $parent->isInstanceOf('AssignmentExpression')) {
                 return true;
             }
 
@@ -157,7 +157,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
 
             foreach ($node->findChildrenOfType('Expression') as $child) {
                 $variableName = $child->getImage();
-                $variableImage = $variablePrefix . $variableName;
+                $variableImage = $variablePrefix.$variableName;
 
                 $this->storeImage($variableImage, $node);
             }
@@ -185,8 +185,8 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      */
     protected function storeImage($imageName, ASTNode $node)
     {
-        if (!isset($this->images[$imageName])) {
-            $this->images[$imageName] = array();
+        if (! isset($this->images[$imageName])) {
+            $this->images[$imageName] = [];
         }
 
         $this->images[$imageName][] = $node;
@@ -200,10 +200,10 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      */
     protected function collectLiteral(ASTNode $node)
     {
-        $variable = '$' . trim($node->getImage(), '\'');
+        $variable = '$'.trim($node->getImage(), '\'');
 
-        if (!isset($this->images[$variable])) {
-            $this->images[$variable] = array();
+        if (! isset($this->images[$variable])) {
+            $this->images[$variable] = [];
         }
 
         $this->images[$variable][] = $node;
@@ -236,7 +236,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
             return;
         }
 
-        $this->addViolation($node, array($node->getImage()));
+        $this->addViolation($node, [$node->getImage()]);
     }
 
     /**
@@ -245,7 +245,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      * variable names in catch-statements.
      *
      * @param \PHPMD\AbstractNode $node
-     * @return boolean
+     * @return bool
      */
     protected function isNameAllowedInContext(AbstractNode $node)
     {
@@ -264,7 +264,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
     {
         $isForeachVariable = $this->isChildOf($variable, 'ForeachStatement');
 
-        if (!$isForeachVariable) {
+        if (! $isForeachVariable) {
             return false;
         }
 
@@ -277,7 +277,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      *
      * @param \PHPMD\AbstractNode $node
      * @param string $type
-     * @return boolean
+     * @return bool
      */
     protected function isChildOf(AbstractNode $node, $type)
     {
@@ -287,7 +287,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
     }
 
     /**
-     * Gets array of exceptions from property
+     * Gets array of exceptions from property.
      *
      * @return array
      */

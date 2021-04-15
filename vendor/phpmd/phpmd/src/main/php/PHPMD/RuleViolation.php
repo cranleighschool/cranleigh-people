@@ -146,7 +146,7 @@ class RuleViolation
     /**
      * Returns the first line of the node that causes this rule violation.
      *
-     * @return integer
+     * @return int
      */
     public function getBeginLine()
     {
@@ -156,7 +156,7 @@ class RuleViolation
     /**
      * Returns the last line of the node that causes this rule violation.
      *
-     * @return integer
+     * @return int
      */
     public function getEndLine()
     {

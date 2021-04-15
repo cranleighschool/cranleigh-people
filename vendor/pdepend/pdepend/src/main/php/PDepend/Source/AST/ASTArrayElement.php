@@ -66,7 +66,7 @@ class ASTArrayElement extends \PDepend\Source\AST\ASTExpression
      * This method will return <b>true</b> when the element value is passed by
      * reference.
      *
-     * @return boolean
+     * @return bool
      */
     public function isByReference()
     {
@@ -86,7 +86,7 @@ class ASTArrayElement extends \PDepend\Source\AST\ASTExpression
     /**
      * Returns the total number of the used property bag.
      *
-     * @return integer
+     * @return int
      * @since  0.10.4
      * @see    \PDepend\Source\AST\ASTNode#getMetadataSize()
      */

@@ -28,7 +28,7 @@ class ProxyHelper
         } else {
             $type = $r->getReturnType();
         }
-        if (!$type) {
+        if (! $type) {
             return null;
         }
 
@@ -38,7 +38,7 @@ class ProxyHelper
             $name = $type instanceof \ReflectionNamedType ? $type->getName() : (string) $type;
 
             if ($type->isBuiltin()) {
-                if (!$noBuiltin) {
+                if (! $noBuiltin) {
                     $types[] = $name;
                 }
                 continue;
@@ -51,7 +51,7 @@ class ProxyHelper
                 $types[] = '' !== $prefix ? $prefix.$name : $name;
                 continue;
             }
-            if (!$r instanceof \ReflectionMethod) {
+            if (! $r instanceof \ReflectionMethod) {
                 continue;
             }
             if ('self' === $lcName) {

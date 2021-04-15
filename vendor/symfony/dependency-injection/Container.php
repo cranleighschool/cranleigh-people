@@ -160,8 +160,8 @@ class Container implements ContainerInterface, ResetInterface
             throw new InvalidArgumentException('You cannot set service "service_container".');
         }
 
-        if (!(isset($this->fileMap[$id]) || isset($this->methodMap[$id]))) {
-            if (isset($this->syntheticIds[$id]) || !isset($this->getRemovedIds()[$id])) {
+        if (! (isset($this->fileMap[$id]) || isset($this->methodMap[$id]))) {
+            if (isset($this->syntheticIds[$id]) || ! isset($this->getRemovedIds()[$id])) {
                 // no-op
             } elseif (null === $service) {
                 throw new InvalidArgumentException(sprintf('The "%s" service is private, you cannot unset it.', $id));
@@ -256,7 +256,7 @@ class Container implements ContainerInterface, ResetInterface
         }
 
         if (/* self::EXCEPTION_ON_INVALID_REFERENCE */ 1 === $invalidBehavior) {
-            if (!$id) {
+            if (! $id) {
                 throw new ServiceNotFoundException($id);
             }
             if (isset($this->syntheticIds[$id])) {
@@ -391,10 +391,10 @@ class Container implements ContainerInterface, ResetInterface
         if (isset($this->envCache[$name]) || \array_key_exists($name, $this->envCache)) {
             return $this->envCache[$name];
         }
-        if (!$this->has($id = 'container.env_var_processors_locator')) {
+        if (! $this->has($id = 'container.env_var_processors_locator')) {
             $this->set($id, new ServiceLocator([]));
         }
-        if (!$this->getEnv) {
+        if (! $this->getEnv) {
             $this->getEnv = new \ReflectionMethod($this, __FUNCTION__);
             $this->getEnv->setAccessible(true);
             $this->getEnv = $this->getEnv->getClosure($this);
@@ -440,7 +440,7 @@ class Container implements ContainerInterface, ResetInterface
         if (false !== $registry) {
             return $this->{$registry}[$id] ?? $this->{$registry}[$id] = $load ? $this->load($method) : $this->{$method}();
         }
-        if (!$load) {
+        if (! $load) {
             return $this->{$method}();
         }
 

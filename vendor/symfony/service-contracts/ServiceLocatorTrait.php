@@ -53,7 +53,7 @@ trait ServiceLocatorTrait
      */
     public function get($id)
     {
-        if (!isset($this->factories[$id])) {
+        if (! isset($this->factories[$id])) {
             throw $this->createNotFoundException($id);
         }
 
@@ -82,7 +82,7 @@ trait ServiceLocatorTrait
             $this->providedTypes = [];
 
             foreach ($this->factories as $name => $factory) {
-                if (!\is_callable($factory)) {
+                if (! \is_callable($factory)) {
                     $this->providedTypes[$name] = '?';
                 } else {
                     $type = (new \ReflectionFunction($factory))->getReturnType();
@@ -97,7 +97,7 @@ trait ServiceLocatorTrait
 
     private function createNotFoundException(string $id): NotFoundExceptionInterface
     {
-        if (!$alternatives = array_keys($this->factories)) {
+        if (! $alternatives = array_keys($this->factories)) {
             $message = 'is empty...';
         } else {
             $last = array_pop($alternatives);

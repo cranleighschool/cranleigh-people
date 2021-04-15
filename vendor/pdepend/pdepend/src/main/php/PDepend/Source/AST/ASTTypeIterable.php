@@ -70,7 +70,7 @@ class ASTTypeIterable extends ASTType
      * For this concrete type implementation the returned value will be always
      * <b>true</b>.
      *
-     * @return boolean
+     * @return bool
      */
     public function isArray()
     {

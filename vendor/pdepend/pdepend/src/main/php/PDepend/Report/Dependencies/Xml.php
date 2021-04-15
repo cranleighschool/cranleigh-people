@@ -48,13 +48,12 @@ use PDepend\Report\CodeAwareGenerator;
 use PDepend\Report\FileAwareGenerator;
 use PDepend\Report\NoLogOutputException;
 use PDepend\Source\AST\AbstractASTArtifact;
-use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\AbstractASTClassOrInterface;
+use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\ASTClass;
 use PDepend\Source\AST\ASTCompilationUnit;
 use PDepend\Source\AST\ASTFunction;
 use PDepend\Source\AST\ASTInterface;
-use PDepend\Source\AST\ASTMethod;
 use PDepend\Source\AST\ASTNamespace;
 use PDepend\Source\AST\ASTTrait;
 use PDepend\Source\ASTVisitor\AbstractASTVisitor;
@@ -88,7 +87,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      *
      * @var \PDepend\Source\AST\ASTCompilationUnit[]
      */
-    protected $fileSet = array();
+    protected $fileSet = [];
 
     /**
      * @var \PDepend\Metrics\Analyzer\ClassDependencyAnalyzer|null
@@ -100,7 +99,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      *
      * @var \DOMElement[]
      */
-    private $xmlStack = array();
+    private $xmlStack = [];
 
     /**
      * Sets the output log file.
@@ -122,9 +121,9 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      */
     public function getAcceptedAnalyzers()
     {
-        return array(
+        return [
             'pdepend.analyzer.class_dependency',
-        );
+        ];
     }
 
     /**
@@ -143,14 +142,16 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      * with return <b>true</b>, otherwise the return value is <b>false</b>.
      *
      * @param  \PDepend\Metrics\Analyzer $analyzer The analyzer to log.
-     * @return boolean
+     * @return bool
      */
     public function log(Analyzer $analyzer)
     {
         if ($analyzer instanceof ClassDependencyAnalyzer) {
             $this->dependencyAnalyzer = $analyzer;
+
             return true;
         }
+
         return false;
     }
 
@@ -215,12 +216,12 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      */
     private function generateTypeXml(AbstractASTClassOrInterface $type, $typeIdentifier)
     {
-        if (!$type->isUserDefined()) {
+        if (! $type->isUserDefined()) {
             return;
         }
 
         $xml = end($this->xmlStack);
-        if (!$xml) {
+        if (! $xml) {
             return;
         }
 
@@ -267,7 +268,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     public function visitNamespace(ASTNamespace $namespace)
     {
         $xml = end($this->xmlStack);
-        if (!$xml) {
+        if (! $xml) {
             return;
         }
 
@@ -296,7 +297,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
 
     /**
      * Aggregates all dependencies for the given <b>$node</b> instance and adds them
-     * to the <b>\DOMElement</b>
+     * to the <b>\DOMElement</b>.
      *
      * @param  \DOMElement                             $xml
      * @param  \PDepend\Source\AST\AbstractASTArtifact $node
@@ -304,7 +305,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      */
     protected function writeNodeDependencies(\DOMElement $xml, AbstractASTArtifact $node)
     {
-        if (!$this->dependencyAnalyzer) {
+        if (! $this->dependencyAnalyzer) {
             return;
         }
 

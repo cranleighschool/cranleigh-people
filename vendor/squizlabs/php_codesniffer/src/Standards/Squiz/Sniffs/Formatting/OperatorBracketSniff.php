@@ -15,7 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class OperatorBracketSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -26,7 +25,6 @@ class OperatorBracketSniff implements Sniff
         'JS',
     ];
 
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -35,9 +33,9 @@ class OperatorBracketSniff implements Sniff
     public function register()
     {
         return Tokens::$operators;
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -78,9 +76,9 @@ class OperatorBracketSniff implements Sniff
                 $previous = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
                 if ($previous !== false) {
                     $isAssignment = isset(Tokens::$assignmentTokens[$tokens[$previous]['code']]);
-                    $isEquality   = isset(Tokens::$equalityTokens[$tokens[$previous]['code']]);
+                    $isEquality = isset(Tokens::$equalityTokens[$tokens[$previous]['code']]);
                     $isComparison = isset(Tokens::$comparisonTokens[$tokens[$previous]['code']]);
-                    $isUnary      = isset(Tokens::$operators[$tokens[$previous]['code']]);
+                    $isUnary = isset(Tokens::$operators[$tokens[$previous]['code']]);
                     if ($isAssignment === true || $isEquality === true || $isComparison === true || $isUnary === true) {
                         // This is a negative assignment or comparison.
                         // We need to check that the minus and the number are
@@ -119,7 +117,7 @@ class OperatorBracketSniff implements Sniff
         if ($tokens[$stackPtr]['code'] === T_BITWISE_OR
             && isset($tokens[$stackPtr]['nested_parenthesis']) === true
         ) {
-            $brackets    = $tokens[$stackPtr]['nested_parenthesis'];
+            $brackets = $tokens[$stackPtr]['nested_parenthesis'];
             $lastBracket = array_pop($brackets);
             if (isset($tokens[$lastBracket]['parenthesis_owner']) === true
                 && $tokens[$tokens[$lastBracket]['parenthesis_owner']]['code'] === T_CATCH
@@ -158,7 +156,7 @@ class OperatorBracketSniff implements Sniff
             $parenthesis = array_reverse($tokens[$stackPtr]['nested_parenthesis'], true);
             foreach ($parenthesis as $bracket => $endBracket) {
                 $prevToken = $phpcsFile->findPrevious(T_WHITESPACE, ($bracket - 1), null, true);
-                $prevCode  = $tokens[$prevToken]['code'];
+                $prevCode = $tokens[$prevToken]['code'];
 
                 if ($prevCode === T_ISSET) {
                     // This operation is inside an isset() call, but has
@@ -227,10 +225,12 @@ class OperatorBracketSniff implements Sniff
         if ($lastBracket === false) {
             // It is not in a bracketed statement at all.
             $this->addMissingBracketsError($phpcsFile, $stackPtr);
+
             return;
-        } else if ($tokens[$lastBracket]['parenthesis_closer'] < $stackPtr) {
+        } elseif ($tokens[$lastBracket]['parenthesis_closer'] < $stackPtr) {
             // There are a set of brackets in front of it that don't include it.
             $this->addMissingBracketsError($phpcsFile, $stackPtr);
+
             return;
         } else {
             // We are enclosed in a set of bracket, so the last thing to
@@ -256,9 +256,9 @@ class OperatorBracketSniff implements Sniff
         if ($lastAssignment !== false && $lastAssignment > $lastBracket) {
             $this->addMissingBracketsError($phpcsFile, $stackPtr);
         }
+    }
 
-    }//end process()
-
+    //end process()
 
     /**
      * Add and fix the missing brackets error.
@@ -333,7 +333,7 @@ class OperatorBracketSniff implements Sniff
 
         // A few extra tokens are allowed to be on the right side of the expression.
         $allowed[T_EQUAL] = true;
-        $allowed[T_NEW]   = true;
+        $allowed[T_NEW] = true;
 
         // Find the last token in the expression.
         for ($after = ($stackPtr + 1); $after < $phpcsFile->numTokens; $after++) {
@@ -374,6 +374,7 @@ class OperatorBracketSniff implements Sniff
         $error = 'Operation must be bracketed';
         if ($before === $after || $before === $stackPtr || $after === $stackPtr) {
             $phpcsFile->addError($error, $stackPtr, 'MissingBrackets');
+
             return;
         }
 
@@ -386,8 +387,7 @@ class OperatorBracketSniff implements Sniff
             $phpcsFile->fixer->replaceToken($after, $tokens[$after]['content'].')');
             $phpcsFile->fixer->endChangeset();
         }
+    }
 
-    }//end addMissingBracketsError()
-
-
+    //end addMissingBracketsError()
 }//end class

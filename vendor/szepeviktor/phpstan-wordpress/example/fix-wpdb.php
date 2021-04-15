@@ -2,6 +2,5 @@
 /**
  * Allow usage of $wpdb.
  */
-
 global $wpdb;
-$wpdb = new \wpdb( '', '', '', '' );
+$wpdb = new \wpdb('', '', '', '');

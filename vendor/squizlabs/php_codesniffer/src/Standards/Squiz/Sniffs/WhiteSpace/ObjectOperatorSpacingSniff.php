@@ -14,14 +14,12 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ObjectOperatorSpacingSniff implements Sniff
 {
-
     /**
      * Allow newlines instead of spaces.
      *
-     * @var boolean
+     * @var bool
      */
     public $ignoreNewlines = false;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -35,9 +33,9 @@ class ObjectOperatorSpacingSniff implements Sniff
             T_DOUBLE_COLON,
             T_NULLSAFE_OBJECT_OPERATOR,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -82,9 +80,9 @@ class ObjectOperatorSpacingSniff implements Sniff
 
         $phpcsFile->recordMetric($stackPtr, 'Spacing after object operator', $after);
         $this->checkSpacingAfterOperator($phpcsFile, $stackPtr, $after);
+    }
 
-    }//end process()
-
+    //end process()
 
     /**
      * Check the spacing before the operator.
@@ -95,7 +93,7 @@ class ObjectOperatorSpacingSniff implements Sniff
      * @param mixed                       $before    The number of spaces found before the
      *                                               operator or the string 'newline'.
      *
-     * @return boolean true if there was no error, false otherwise.
+     * @return bool true if there was no error, false otherwise.
      */
     protected function checkSpacingBeforeOperator(File $phpcsFile, $stackPtr, $before)
     {
@@ -103,7 +101,7 @@ class ObjectOperatorSpacingSniff implements Sniff
             && ($before !== 'newline' || $this->ignoreNewlines === false)
         ) {
             $error = 'Space found before object operator';
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'Before');
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Before');
             if ($fix === true) {
                 $tokens = $phpcsFile->getTokens();
                 $curPos = ($stackPtr - 1);
@@ -111,7 +109,7 @@ class ObjectOperatorSpacingSniff implements Sniff
                 $phpcsFile->fixer->beginChangeset();
                 while ($tokens[$curPos]['code'] === T_WHITESPACE) {
                     $phpcsFile->fixer->replaceToken($curPos, '');
-                    --$curPos;
+                    $curPos--;
                 }
 
                 $phpcsFile->fixer->endChangeset();
@@ -121,9 +119,9 @@ class ObjectOperatorSpacingSniff implements Sniff
         }
 
         return true;
+    }
 
-    }//end checkSpacingBeforeOperator()
-
+    //end checkSpacingBeforeOperator()
 
     /**
      * Check the spacing after the operator.
@@ -134,7 +132,7 @@ class ObjectOperatorSpacingSniff implements Sniff
      * @param mixed                       $after     The number of spaces found after the
      *                                               operator or the string 'newline'.
      *
-     * @return boolean true if there was no error, false otherwise.
+     * @return bool true if there was no error, false otherwise.
      */
     protected function checkSpacingAfterOperator(File $phpcsFile, $stackPtr, $after)
     {
@@ -142,7 +140,7 @@ class ObjectOperatorSpacingSniff implements Sniff
             && ($after !== 'newline' || $this->ignoreNewlines === false)
         ) {
             $error = 'Space found after object operator';
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'After');
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'After');
             if ($fix === true) {
                 $tokens = $phpcsFile->getTokens();
                 $curPos = ($stackPtr + 1);
@@ -150,7 +148,7 @@ class ObjectOperatorSpacingSniff implements Sniff
                 $phpcsFile->fixer->beginChangeset();
                 while ($tokens[$curPos]['code'] === T_WHITESPACE) {
                     $phpcsFile->fixer->replaceToken($curPos, '');
-                    ++$curPos;
+                    $curPos++;
                 }
 
                 $phpcsFile->fixer->endChangeset();
@@ -160,8 +158,7 @@ class ObjectOperatorSpacingSniff implements Sniff
         }
 
         return true;
+    }
 
-    }//end checkSpacingAfterOperator()
-
-
+    //end checkSpacingAfterOperator()
 }//end class

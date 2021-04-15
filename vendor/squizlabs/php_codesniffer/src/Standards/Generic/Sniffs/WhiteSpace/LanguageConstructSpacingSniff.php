@@ -16,8 +16,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class LanguageConstructSpacingSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -40,9 +38,9 @@ class LanguageConstructSpacingSniff implements Sniff
             T_NAMESPACE,
             T_USE,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -96,8 +94,8 @@ class LanguageConstructSpacingSniff implements Sniff
             }
 
             $error = 'Language constructs must be followed by a single space; expected 1 space between YIELD FROM found "%s"';
-            $data  = [Common::prepareForOutput($found)];
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'IncorrectYieldFrom', $data);
+            $data = [Common::prepareForOutput($found)];
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'IncorrectYieldFrom', $data);
             if ($fix === true) {
                 preg_match('/yield/i', $found, $yield);
                 preg_match('/from/i', $found, $from);
@@ -122,25 +120,24 @@ class LanguageConstructSpacingSniff implements Sniff
             $content = $tokens[($stackPtr + 1)]['content'];
             if ($content !== ' ') {
                 $error = 'Language constructs must be followed by a single space; expected 1 space but found "%s"';
-                $data  = [Common::prepareForOutput($content)];
-                $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'IncorrectSingle', $data);
+                $data = [Common::prepareForOutput($content)];
+                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'IncorrectSingle', $data);
                 if ($fix === true) {
                     $phpcsFile->fixer->replaceToken(($stackPtr + 1), ' ');
                 }
             }
-        } else if ($tokens[($stackPtr + 1)]['code'] !== T_OPEN_PARENTHESIS) {
+        } elseif ($tokens[($stackPtr + 1)]['code'] !== T_OPEN_PARENTHESIS) {
             $error = 'Language constructs must be followed by a single space; expected "%s" but found "%s"';
-            $data  = [
+            $data = [
                 $tokens[$stackPtr]['content'].' '.$tokens[($stackPtr + 1)]['content'],
                 $tokens[$stackPtr]['content'].$tokens[($stackPtr + 1)]['content'],
             ];
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'Incorrect', $data);
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Incorrect', $data);
             if ($fix === true) {
                 $phpcsFile->fixer->addContent($stackPtr, ' ');
             }
         }//end if
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

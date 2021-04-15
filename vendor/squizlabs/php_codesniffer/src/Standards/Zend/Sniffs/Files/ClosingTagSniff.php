@@ -9,14 +9,12 @@
 
 namespace PHP_CodeSniffer\Standards\Zend\Sniffs\Files;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 class ClosingTagSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +23,9 @@ class ClosingTagSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -50,7 +48,7 @@ class ClosingTagSniff implements Sniff
 
         if ($tokens[$last]['code'] === T_CLOSE_TAG) {
             $error = 'A closing tag is not permitted at the end of a PHP file';
-            $fix   = $phpcsFile->addFixableError($error, $last, 'NotAllowed');
+            $fix = $phpcsFile->addFixableError($error, $last, 'NotAllowed');
             if ($fix === true) {
                 $phpcsFile->fixer->beginChangeset();
                 $phpcsFile->fixer->replaceToken($last, $phpcsFile->eolChar);
@@ -71,9 +69,8 @@ class ClosingTagSniff implements Sniff
         }//end if
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens + 1;
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

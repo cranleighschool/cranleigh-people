@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class LowerCaseConstantSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -24,7 +23,6 @@ class LowerCaseConstantSniff implements Sniff
         'PHP',
         'JS',
     ];
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -38,9 +36,9 @@ class LowerCaseConstantSniff implements Sniff
             T_FALSE,
             T_NULL,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -53,8 +51,8 @@ class LowerCaseConstantSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens   = $phpcsFile->getTokens();
-        $keyword  = $tokens[$stackPtr]['content'];
+        $tokens = $phpcsFile->getTokens();
+        $keyword = $tokens[$stackPtr]['content'];
         $expected = strtolower($keyword);
         if ($keyword !== $expected) {
             if ($keyword === strtoupper($keyword)) {
@@ -64,7 +62,7 @@ class LowerCaseConstantSniff implements Sniff
             }
 
             $error = 'TRUE, FALSE and NULL must be lowercase; expected "%s" but found "%s"';
-            $data  = [
+            $data = [
                 $expected,
                 $keyword,
             ];
@@ -76,8 +74,7 @@ class LowerCaseConstantSniff implements Sniff
         } else {
             $phpcsFile->recordMetric($stackPtr, 'PHP constant case', 'lower');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class TraitNameSuffixSniff implements Sniff
 {
-
-
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -23,9 +21,9 @@ class TraitNameSuffixSniff implements Sniff
     public function register()
     {
         return [T_TRAIT];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -47,8 +45,7 @@ class TraitNameSuffixSniff implements Sniff
         if (strtolower($suffix) !== 'trait') {
             $phpcsFile->addError('Trait names must be suffixed with "Trait"; found "%s"', $stackPtr, 'Missing', [$traitName]);
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

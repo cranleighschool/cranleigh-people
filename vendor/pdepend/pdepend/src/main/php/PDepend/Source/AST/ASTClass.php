@@ -62,28 +62,28 @@ class ASTClass extends AbstractASTClassOrInterface
     /**
      * Returns <b>true</b> if this is an abstract class or an interface.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAbstract()
     {
-        return (($this->modifiers & State::IS_EXPLICIT_ABSTRACT) === State::IS_EXPLICIT_ABSTRACT);
+        return ($this->modifiers & State::IS_EXPLICIT_ABSTRACT) === State::IS_EXPLICIT_ABSTRACT;
     }
 
     /**
      * This method will return <b>true</b> when this class is declared as final.
      *
-     * @return boolean
+     * @return bool
      */
     public function isFinal()
     {
-        return (($this->modifiers & State::IS_FINAL) === State::IS_FINAL);
+        return ($this->modifiers & State::IS_FINAL) === State::IS_FINAL;
     }
 
     /**
      * Will return <b>true</b> if this class was declared anonymous in an
      * allocation expression.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAnonymous()
     {
@@ -98,7 +98,7 @@ class ASTClass extends AbstractASTClassOrInterface
     public function getProperties()
     {
         if ($this->properties === null) {
-            $this->properties = array();
+            $this->properties = [];
 
             $declarations = $this->findChildrenOfType('PDepend\\Source\\AST\\ASTFieldDeclaration');
             foreach ($declarations as $declaration) {
@@ -121,7 +121,7 @@ class ASTClass extends AbstractASTClassOrInterface
      * Checks that this user type is a subtype of the given <b>$type</b> instance.
      *
      * @param  \PDepend\Source\AST\AbstractASTType $type
-     * @return boolean
+     * @return bool
      */
     public function isSubtypeOf(AbstractASTType $type)
     {
@@ -137,15 +137,17 @@ class ASTClass extends AbstractASTClassOrInterface
             if ($parent === $type) {
                 return true;
             }
+
             return $parent->isSubtypeOf($type);
         }
+
         return false;
     }
 
     /**
      * Returns the declared modifiers for this type.
      *
-     * @return integer
+     * @return int
      * @since  0.9.4
      */
     public function getModifiers()
@@ -160,7 +162,7 @@ class ASTClass extends AbstractASTClassOrInterface
      * This method will throw an exception when the value of given <b>$modifiers</b>
      * contains an invalid/unexpected modifier
      *
-     * @param  integer $modifiers
+     * @param  int $modifiers
      * @return void
      * @throws \BadMethodCallException
      * @throws \InvalidArgumentException

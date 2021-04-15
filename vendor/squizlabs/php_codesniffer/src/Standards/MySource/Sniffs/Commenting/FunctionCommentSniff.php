@@ -11,14 +11,12 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\Commenting;
 
+use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Standards\Squiz\Sniffs\Commenting\FunctionCommentSniff as SquizFunctionCommentSniff;
 use PHP_CodeSniffer\Util\Tokens;
-use PHP_CodeSniffer\Files\File;
 
 class FunctionCommentSniff extends SquizFunctionCommentSniff
 {
-
-
     /**
      * Processes this test, when one of its tokens is encountered.
      *
@@ -33,7 +31,7 @@ class FunctionCommentSniff extends SquizFunctionCommentSniff
         parent::process($phpcsFile, $stackPtr);
 
         $tokens = $phpcsFile->getTokens();
-        $find   = Tokens::$methodPrefixes;
+        $find = Tokens::$methodPrefixes;
         $find[] = T_WHITESPACE;
 
         $commentEnd = $phpcsFile->findPrevious($find, ($stackPtr - 1), null, true);
@@ -42,7 +40,7 @@ class FunctionCommentSniff extends SquizFunctionCommentSniff
         }
 
         $commentStart = $tokens[$commentEnd]['comment_opener'];
-        $hasApiTag    = false;
+        $hasApiTag = false;
         foreach ($tokens[$commentStart]['comment_tags'] as $tag) {
             if ($tokens[$tag]['content'] === '@api') {
                 if ($hasApiTag === true) {
@@ -60,13 +58,13 @@ class FunctionCommentSniff extends SquizFunctionCommentSniff
                     $error = 'There must be one blank line before the @api tag in a function comment';
                     $phpcsFile->addError($error, $tag, 'ApiSpacing');
                 }
-            } else if (substr($tokens[$tag]['content'], 0, 5) === '@api-') {
+            } elseif (substr($tokens[$tag]['content'], 0, 5) === '@api-') {
                 $hasApiTag = true;
 
                 $prev = $phpcsFile->findPrevious([T_DOC_COMMENT_STRING, T_DOC_COMMENT_TAG], ($tag - 1));
                 if ($tokens[$prev]['line'] !== ($tokens[$tag]['line'] - 1)) {
                     $error = 'There must be no blank line before the @%s tag in a function comment';
-                    $data  = [$tokens[$tag]['content']];
+                    $data = [$tokens[$tag]['content']];
                     $phpcsFile->addError($error, $tag, 'ApiTagSpacing', $data);
                 }
             }//end if
@@ -77,8 +75,7 @@ class FunctionCommentSniff extends SquizFunctionCommentSniff
             $error = 'The @api tags must be the last tags in a function comment';
             $phpcsFile->addError($error, $commentEnd, 'ApiNotLast');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

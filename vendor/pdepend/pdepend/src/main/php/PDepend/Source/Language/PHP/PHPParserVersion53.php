@@ -56,12 +56,11 @@ use PDepend\Source\Tokenizer\Tokens;
  */
 abstract class PHPParserVersion53 extends AbstractPHPParser
 {
-
     /**
      * Tests if the next token is a valid array start delimiter in the supported
      * PHP version.
      *
-     * @return boolean
+     * @return bool
      * @since 1.0.0
      */
     protected function isArrayStartDelimiter()
@@ -70,6 +69,7 @@ abstract class PHPParserVersion53 extends AbstractPHPParser
             case Tokens::T_ARRAY:
                 return true;
         }
+
         return false;
     }
 
@@ -77,7 +77,7 @@ abstract class PHPParserVersion53 extends AbstractPHPParser
      * Parses a php array declaration.
      *
      * @param \PDepend\Source\AST\ASTArray $array
-     * @param boolean $static
+     * @param bool $static
      * @return \PDepend\Source\AST\ASTArray
      * @since 1.0.0
      */

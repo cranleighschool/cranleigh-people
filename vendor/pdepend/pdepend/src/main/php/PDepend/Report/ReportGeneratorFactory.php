@@ -81,20 +81,20 @@ class ReportGeneratorFactory
      */
     public function createGenerator($identifier, $fileName)
     {
-        if (!isset($this->instances[$identifier])) {
+        if (! isset($this->instances[$identifier])) {
             $loggerServices = $this->container->findTaggedServiceIds('pdepend.logger');
 
             $logger = null;
 
             foreach ($loggerServices as $id => $loggerServiceTags) {
                 foreach ($loggerServiceTags as $loggerServiceTag) {
-                    if ($loggerServiceTag['option'] === '--' . $identifier) {
+                    if ($loggerServiceTag['option'] === '--'.$identifier) {
                         $logger = $this->container->get($id);
                     }
                 }
             }
 
-            if (!$logger) {
+            if (! $logger) {
                 throw new \RuntimeException(sprintf('Unknown generator with identifier "%s".', $identifier));
             }
 
@@ -106,6 +106,7 @@ class ReportGeneratorFactory
 
             $this->instances[$identifier] = $logger;
         }
+
         return $this->instances[$identifier];
     }
 
@@ -114,5 +115,5 @@ class ReportGeneratorFactory
      *
      * @var \PDepend\Report\ReportGenerator[]
      */
-    protected $instances = array();
+    protected $instances = [];
 }

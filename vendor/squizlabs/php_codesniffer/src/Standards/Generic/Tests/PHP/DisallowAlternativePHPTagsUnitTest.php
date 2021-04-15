@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class DisallowAlternativePHPTagsUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Get a list of all test files to check.
      *
@@ -38,9 +36,9 @@ class DisallowAlternativePHPTagsUnitTest extends AbstractSniffUnitTest
         }
 
         return $testFiles;
+    }
 
-    }//end getTestFiles()
-
+    //end getTestFiles()
 
     /**
      * Returns the lines where errors should occur.
@@ -52,7 +50,7 @@ class DisallowAlternativePHPTagsUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile='')
+    public function getErrorList($testFile = '')
     {
         switch ($testFile) {
         case 'DisallowAlternativePHPTagsUnitTest.1.inc':
@@ -72,9 +70,9 @@ class DisallowAlternativePHPTagsUnitTest extends AbstractSniffUnitTest
         default:
             return [];
         }//end switch
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -86,7 +84,7 @@ class DisallowAlternativePHPTagsUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getWarningList($testFile='')
+    public function getWarningList($testFile = '')
     {
         if ($testFile === 'DisallowAlternativePHPTagsUnitTest.3.inc') {
             return [
@@ -98,8 +96,7 @@ class DisallowAlternativePHPTagsUnitTest extends AbstractSniffUnitTest
         }
 
         return [];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

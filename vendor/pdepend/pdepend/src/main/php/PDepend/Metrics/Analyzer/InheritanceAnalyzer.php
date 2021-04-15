@@ -47,7 +47,6 @@ use PDepend\Metrics\AnalyzerFilterAware;
 use PDepend\Metrics\AnalyzerNodeAware;
 use PDepend\Metrics\AnalyzerProjectAware;
 use PDepend\Source\AST\ASTArtifact;
-use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\ASTClass;
 
 /**
@@ -71,13 +70,13 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
     /**
      * Metrics provided by the analyzer implementation.
      */
-    const M_AVERAGE_NUMBER_DERIVED_CLASSES = 'andc',
-          M_AVERAGE_HIERARCHY_HEIGHT       = 'ahh',
-          M_DEPTH_OF_INHERITANCE_TREE      = 'dit',
-          M_NUMBER_OF_ADDED_METHODS        = 'noam',
-          M_NUMBER_OF_OVERWRITTEN_METHODS  = 'noom',
-          M_NUMBER_OF_DERIVED_CLASSES      = 'nocc',
-          M_MAXIMUM_INHERITANCE_DEPTH      = 'maxDIT';
+    const M_AVERAGE_NUMBER_DERIVED_CLASSES = 'andc';
+    const M_AVERAGE_HIERARCHY_HEIGHT = 'ahh';
+    const M_DEPTH_OF_INHERITANCE_TREE = 'dit';
+    const M_NUMBER_OF_ADDED_METHODS = 'noam';
+    const M_NUMBER_OF_OVERWRITTEN_METHODS = 'noom';
+    const M_NUMBER_OF_DERIVED_CLASSES = 'nocc';
+    const M_MAXIMUM_INHERITANCE_DEPTH = 'maxDIT';
 
     /**
      * Contains the max inheritance depth for all root classes within the
@@ -86,19 +85,19 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
      *
      * @var array<integer>
      */
-    private $rootClasses = array();
+    private $rootClasses = [];
 
     /**
      * @var array<integer>
      *
      * @deprecated 3.0.0 This property will no longer be accessible on the public access level in next major version.
      */
-    public $derivedClasses = array();
+    public $derivedClasses = [];
 
     /**
      * The maximum depth of inheritance tree value within the analyzed source code.
      *
-     * @var integer
+     * @var int
      */
     private $maxDIT = 0;
 
@@ -119,14 +118,14 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
     /**
      * Total number of classes.
      *
-     * @var integer
+     * @var int
      */
     private $numberOfClasses = 0;
 
     /**
      * Total number of derived classes.
      *
-     * @var integer
+     * @var int
      */
     private $numberOfDerivedClasses = 0;
 
@@ -150,7 +149,8 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
         if (isset($this->nodeMetrics[$artifact->getId()])) {
             return $this->nodeMetrics[$artifact->getId()];
         }
-        return array();
+
+        return [];
     }
 
     /**
@@ -167,11 +167,11 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
      */
     public function getProjectMetrics()
     {
-        return array(
+        return [
             self::M_AVERAGE_NUMBER_DERIVED_CLASSES  =>  $this->andc,
             self::M_AVERAGE_HIERARCHY_HEIGHT        =>  $this->ahh,
             self::M_MAXIMUM_INHERITANCE_DEPTH       =>  $this->maxDIT,
-        );
+        ];
     }
 
     /**
@@ -183,7 +183,7 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
     public function analyze($namespaces)
     {
         if ($this->nodeMetrics === null) {
-            $this->nodeMetrics = array();
+            $this->nodeMetrics = [];
 
             $this->fireStartAnalyzer();
             $this->doAnalyze($namespaces);
@@ -221,14 +221,14 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
      */
     public function visitClass(ASTClass $class)
     {
-        if (!$class->isUserDefined()) {
+        if (! $class->isUserDefined()) {
             return;
         }
 
         $this->fireStartClass($class);
 
         $this->initNodeMetricsForClass($class);
-        
+
         $this->calculateNumberOfDerivedClasses($class);
         $this->calculateNumberOfAddedAndOverwrittenMethods($class);
         $this->calculateDepthOfInheritanceTree($class);
@@ -254,8 +254,8 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
         if ($parentClass !== null && $parentClass->isUserDefined()) {
             $id = $parentClass->getId();
 
-            ++$this->numberOfDerivedClasses;
-            ++$this->nodeMetrics[$id][self::M_NUMBER_OF_DERIVED_CLASSES];
+            $this->numberOfDerivedClasses++;
+            $this->nodeMetrics[$id][self::M_NUMBER_OF_DERIVED_CLASSES]++;
         }
     }
 
@@ -268,18 +268,18 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
      */
     private function calculateDepthOfInheritanceTree(ASTClass $class)
     {
-        $dit  = 0;
+        $dit = 0;
         $id = $class->getId();
         $root = $class->getId();
 
         foreach ($class->getParentClasses() as $parent) {
-            if (!$parent->isUserDefined()) {
-                ++$dit;
+            if (! $parent->isUserDefined()) {
+                $dit++;
             }
-            ++$dit;
+            $dit++;
             $root = $parent->getId();
         }
-        
+
         // Collect max dit value
         $this->maxDIT = max($this->maxDIT, $dit);
 
@@ -304,25 +304,25 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
             return;
         }
 
-        $parentMethodNames = array();
+        $parentMethodNames = [];
         foreach ($parentClass->getAllMethods() as $method) {
             $parentMethodNames[$method->getName()] = $method->isAbstract();
         }
 
-        $numberOfAddedMethods       = 0;
+        $numberOfAddedMethods = 0;
         $numberOfOverwrittenMethods = 0;
 
         foreach ($class->getAllMethods() as $method) {
             if ($method->getParent() !== $class) {
                 continue;
             }
-            
+
             if (isset($parentMethodNames[$method->getName()])) {
-                if (!$parentMethodNames[$method->getName()]) {
-                    ++$numberOfOverwrittenMethods;
+                if (! $parentMethodNames[$method->getName()]) {
+                    $numberOfOverwrittenMethods++;
                 }
             } else {
-                ++$numberOfAddedMethods;
+                $numberOfAddedMethods++;
             }
         }
 
@@ -346,14 +346,14 @@ class InheritanceAnalyzer extends AbstractAnalyzer implements
             return;
         }
 
-        ++$this->numberOfClasses;
+        $this->numberOfClasses++;
 
-        $this->nodeMetrics[$id] = array(
+        $this->nodeMetrics[$id] = [
             self::M_DEPTH_OF_INHERITANCE_TREE     => 0,
             self::M_NUMBER_OF_ADDED_METHODS       => 0,
             self::M_NUMBER_OF_DERIVED_CLASSES     => 0,
-            self::M_NUMBER_OF_OVERWRITTEN_METHODS => 0
-        );
+            self::M_NUMBER_OF_OVERWRITTEN_METHODS => 0,
+        ];
 
         foreach ($class->getParentClasses() as $parent) {
             $this->initNodeMetricsForClass($parent);

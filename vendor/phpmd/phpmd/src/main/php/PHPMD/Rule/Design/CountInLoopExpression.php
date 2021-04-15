@@ -25,7 +25,7 @@ use PHPMD\Node\ClassNode;
 use PHPMD\Rule\ClassAware;
 
 /**
- * Count In Loop Expression Rule
+ * Count In Loop Expression Rule.
  *
  * Performs a scan to check if loops use
  * count() or sizeof() in expressions.
@@ -40,28 +40,28 @@ use PHPMD\Rule\ClassAware;
 class CountInLoopExpression extends AbstractRule implements ClassAware
 {
     /**
-     * List of functions to search against
+     * List of functions to search against.
      *
      * @var array
      */
-    protected $unwantedFunctions = array('count', 'sizeof');
+    protected $unwantedFunctions = ['count', 'sizeof'];
 
     /**
-     * List of already processed functions
+     * List of already processed functions.
      *
      * @var array
      */
-    protected $processedFunctions = array();
+    protected $processedFunctions = [];
 
     /**
-     * Functions in classes tends to be name-spaced
+     * Functions in classes tends to be name-spaced.
      *
      * @var string
      */
     protected $currentNamespace = '';
 
     /**
-     * Gets a list of loops in a node and iterates over them
+     * Gets a list of loops in a node and iterates over them.
      *
      * @param AbstractNode $node
      * @return void
@@ -72,7 +72,7 @@ class CountInLoopExpression extends AbstractRule implements ClassAware
             return $this->applyOnClassMethods($node);
         }
 
-        $this->currentNamespace = $node->getNamespaceName() . '\\';
+        $this->currentNamespace = $node->getNamespaceName().'\\';
         $loops = array_merge(
             $node->findChildrenOfType('ForStatement'),
             $node->findChildrenOfType('WhileStatement'),
@@ -87,7 +87,7 @@ class CountInLoopExpression extends AbstractRule implements ClassAware
 
     /**
      * Scans for expressions and count() or sizeof() functions inside,
-     * if found, triggers a violation
+     * if found, triggers a violation.
      *
      * @param AbstractNode $loop Loop statement to look against
      */
@@ -99,7 +99,7 @@ class CountInLoopExpression extends AbstractRule implements ClassAware
             }
 
             foreach ($expression->findChildrenOfType('FunctionPostfix') as $function) {
-                if (!$this->isUnwantedFunction($function)) {
+                if (! $this->isUnwantedFunction($function)) {
                     continue;
                 }
 
@@ -108,14 +108,14 @@ class CountInLoopExpression extends AbstractRule implements ClassAware
                     continue;
                 }
 
-                $this->addViolation($loop, array($function->getImage(), $loop->getImage()));
+                $this->addViolation($loop, [$function->getImage(), $loop->getImage()]);
                 $this->processedFunctions[$hash] = true;
             }
         }
     }
 
     /**
-     * Checks whether node in a direct child of the loop
+     * Checks whether node in a direct child of the loop.
      *
      * @param AbstractNode $loop
      * @param ASTNode $expression
@@ -127,7 +127,7 @@ class CountInLoopExpression extends AbstractRule implements ClassAware
     }
 
     /**
-     * Generates an unique hash for a given node
+     * Generates an unique hash for a given node.
      *
      * PDepend method getChildrenOfType() iterates trough all children of a node.
      * As one function may be found more than once, we use a hash (which in reality
@@ -153,7 +153,7 @@ class CountInLoopExpression extends AbstractRule implements ClassAware
     }
 
     /**
-     * Checks the given function against the list of unwanted functions
+     * Checks the given function against the list of unwanted functions.
      *
      * @param ASTNode $function
      * @return bool

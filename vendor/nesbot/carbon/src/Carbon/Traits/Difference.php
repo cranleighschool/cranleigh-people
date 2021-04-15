@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\Carbon;
@@ -110,7 +111,7 @@ trait Difference
 
     /**
      * Get the difference as a DateInterval instance.
-     * Return relative interval (negative if
+     * Return relative interval (negative if.
      *
      * @param \Carbon\CarbonInterface|\DateTimeInterface|string|null $date
      * @param bool                                                   $absolute Get the absolute of the difference
@@ -137,7 +138,7 @@ trait Difference
     }
 
     /**
-     * Get the difference in years
+     * Get the difference in years.
      *
      * @param \Carbon\CarbonInterface|\DateTimeInterface|string|null $date
      * @param bool                                                   $absolute Get the absolute of the difference
@@ -256,7 +257,7 @@ trait Difference
         $options = CarbonPeriod::EXCLUDE_END_DATE | ($this->isMutable() ? 0 : CarbonPeriod::IMMUTABLE);
         $diff = $ci->toPeriod($start, $end, $options)->filter($callback)->count();
 
-        return $inverse && !$absolute ? -$diff : $diff;
+        return $inverse && ! $absolute ? -$diff : $diff;
     }
 
     /**
@@ -362,7 +363,7 @@ trait Difference
             $diff->i) * static::SECONDS_PER_MINUTE +
             $diff->s;
 
-        return $absolute || !$diff->invert ? $value : -$value;
+        return $absolute || ! $diff->invert ? $value : -$value;
     }
 
     /**
@@ -381,7 +382,7 @@ trait Difference
             $diff->i) * static::SECONDS_PER_MINUTE +
             ($diff->f + $diff->s)) * static::MICROSECONDS_PER_SECOND);
 
-        return $absolute || !$diff->invert ? $value : -$value;
+        return $absolute || ! $diff->invert ? $value : -$value;
     }
 
     /**
@@ -533,7 +534,7 @@ trait Difference
         $end = $this->resolveCarbon($date);
         $ascending = ($start <= $end);
         $sign = $absolute || $ascending ? 1 : -1;
-        if (!$ascending) {
+        if (! $ascending) {
             [$start, $end] = [$end, $start];
         }
         $monthsDiff = $start->diffInMonths($end);
@@ -568,7 +569,7 @@ trait Difference
         $end = $this->resolveCarbon($date);
         $ascending = ($start <= $end);
         $sign = $absolute || $ascending ? 1 : -1;
-        if (!$ascending) {
+        if (! $ascending) {
             [$start, $end] = [$end, $start];
         }
         $yearsDiff = $start->diffInYears($end);
@@ -670,7 +671,7 @@ trait Difference
         $end = $this->resolveCarbon($date);
         $ascending = ($start <= $end);
         $sign = $absolute || $ascending ? 1 : -1;
-        if (!$ascending) {
+        if (! $ascending) {
             [$start, $end] = [$end, $start];
         }
         $monthsDiff = $start->diffInMonths($end);
@@ -705,7 +706,7 @@ trait Difference
         $end = $this->resolveCarbon($date);
         $ascending = ($start <= $end);
         $sign = $absolute || $ascending ? 1 : -1;
-        if (!$ascending) {
+        if (! $ascending) {
             [$start, $end] = [$end, $start];
         }
         $yearsDiff = $start->diffInYears($end);
@@ -911,7 +912,7 @@ trait Difference
      */
     public function to($other = null, $syntax = null, $short = false, $parts = 1, $options = null)
     {
-        if (!$syntax && !$other) {
+        if (! $syntax && ! $other) {
             $syntax = CarbonInterface::DIFF_RELATIVE_TO_NOW;
         }
 
@@ -998,7 +999,7 @@ trait Difference
 
     /**
      * Get the difference in a human readable format in the current locale from an other
-     * instance given to now
+     * instance given to now.
      *
      * @param int|array $syntax  if array passed, parameters will be extracted from it, the array may contains:
      *                           - 'syntax' entry (see below)
@@ -1031,7 +1032,7 @@ trait Difference
 
     /**
      * Get the difference in a human readable format in the current locale from an other
-     * instance given to now
+     * instance given to now.
      *
      * @param int|array $syntax  if array passed, parameters will be extracted from it, the array may contains:
      *                           - 'syntax' entry (see below)
@@ -1076,7 +1077,7 @@ trait Difference
      */
     public function timespan($other = null, $timezone = null)
     {
-        if (!$other instanceof DateTimeInterface) {
+        if (! $other instanceof DateTimeInterface) {
             $other = static::parse($other, $timezone);
         }
 

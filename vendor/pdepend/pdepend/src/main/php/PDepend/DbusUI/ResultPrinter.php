@@ -65,14 +65,14 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
     /**
      * Time when it the process has started.
      *
-     * @var integer
+     * @var int
      */
     private $startTime = 0;
 
     /**
      * Number of parsed/analyzed files.
      *
-     * @var integer
+     * @var int
      */
     private $parsedFiles = 0;
 
@@ -115,7 +115,7 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
      */
     public function endFileParsing(Tokenizer $tokenizer)
     {
-        ++$this->parsedFiles;
+        $this->parsedFiles++;
     }
 
     /**
@@ -156,11 +156,11 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
             return;
         }
 
-        $dbus  = new Dbus(Dbus::BUS_SESSION);
+        $dbus = new Dbus(Dbus::BUS_SESSION);
         $proxy = $dbus->createProxy(
-            "org.freedesktop.Notifications", // connection name
-            "/org/freedesktop/Notifications", // object
-            "org.freedesktop.Notifications" // interface
+            'org.freedesktop.Notifications', // connection name
+            '/org/freedesktop/Notifications', // object
+            'org.freedesktop.Notifications' // interface
         );
         $proxy->Notify(
             'PDepend',
@@ -172,8 +172,8 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
                 $this->parsedFiles,
                 (date('i:s', time() - $this->startTime))
             ),
-            new DBusArray(DBus::STRING, array()),
-            new DBusDict(DBus::VARIANT, array()),
+            new DBusArray(DBus::STRING, []),
+            new DBusDict(DBus::VARIANT, []),
             1000
         );
     }

@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Sniffs\AbstractPatternSniff;
 
 class FunctionDeclarationSniff extends AbstractPatternSniff
 {
-
-
     /**
      * Returns an array of patterns to check are correct.
      *
@@ -27,8 +25,7 @@ class FunctionDeclarationSniff extends AbstractPatternSniff
             'function abc(...)',
             'abstract function abc(...);',
         ];
+    }
 
-    }//end getPatterns()
-
-
+    //end getPatterns()
 }//end class

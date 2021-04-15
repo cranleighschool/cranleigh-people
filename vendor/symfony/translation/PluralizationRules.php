@@ -50,7 +50,7 @@ class PluralizationRules
         if (isset(self::$rules[$locale])) {
             $return = self::$rules[$locale]($number);
 
-            if (!\is_int($return) || $return < 0) {
+            if (! \is_int($return) || $return < 0) {
                 return 0;
             }
 

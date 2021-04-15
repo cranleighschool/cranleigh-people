@@ -34,13 +34,13 @@ class GraphvizDumper extends Dumper
     private $edges;
     // All values should be strings
     private $options = [
-            'graph' => ['ratio' => 'compress'],
-            'node' => ['fontsize' => '11', 'fontname' => 'Arial', 'shape' => 'record'],
-            'edge' => ['fontsize' => '9', 'fontname' => 'Arial', 'color' => 'grey', 'arrowhead' => 'open', 'arrowsize' => '0.5'],
-            'node.instance' => ['fillcolor' => '#9999ff', 'style' => 'filled'],
-            'node.definition' => ['fillcolor' => '#eeeeee'],
-            'node.missing' => ['fillcolor' => '#ff9999', 'style' => 'filled'],
-        ];
+        'graph' => ['ratio' => 'compress'],
+        'node' => ['fontsize' => '11', 'fontname' => 'Arial', 'shape' => 'record'],
+        'edge' => ['fontsize' => '9', 'fontname' => 'Arial', 'color' => 'grey', 'arrowhead' => 'open', 'arrowsize' => '0.5'],
+        'node.instance' => ['fillcolor' => '#9999ff', 'style' => 'filled'],
+        'node.definition' => ['fillcolor' => '#eeeeee'],
+        'node.missing' => ['fillcolor' => '#ff9999', 'style' => 'filled'],
+    ];
 
     /**
      * Dumps the service container as a graphviz graph.
@@ -124,7 +124,7 @@ class GraphvizDumper extends Dumper
             if ($argument instanceof Reference) {
                 $lazyEdge = $lazy;
 
-                if (!$this->container->has((string) $argument)) {
+                if (! $this->container->has((string) $argument)) {
                     $this->nodes[(string) $argument] = ['name' => $name, 'required' => $required, 'class' => '', 'attributes' => $this->options['node.missing']];
                 } elseif ('service_container' !== (string) $argument) {
                     $lazyEdge = $lazy || $this->container->getDefinition((string) $argument)->isLazy();
@@ -176,7 +176,7 @@ class GraphvizDumper extends Dumper
                 continue;
             }
 
-            if (!$container->hasDefinition($id)) {
+            if (! $container->hasDefinition($id)) {
                 $nodes[$id] = ['class' => str_replace('\\', '\\\\', \get_class($container->get($id))), 'attributes' => $this->options['node.instance']];
             }
         }

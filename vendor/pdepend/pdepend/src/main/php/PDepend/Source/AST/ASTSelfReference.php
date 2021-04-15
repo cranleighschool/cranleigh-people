@@ -86,7 +86,7 @@ class ASTSelfReference extends ASTClassOrInterfaceReference
      */
     public function __construct(BuilderContext $context, AbstractASTClassOrInterface $target)
     {
-        $this->context      = $context;
+        $this->context = $context;
         $this->typeInstance = $target;
     }
 
@@ -113,6 +113,7 @@ class ASTSelfReference extends ASTClassOrInterfaceReference
             $this->typeInstance = $this->context
                 ->getClassOrInterface($this->qualifiedName);
         }
+
         return $this->typeInstance;
     }
 
@@ -126,10 +127,10 @@ class ASTSelfReference extends ASTClassOrInterfaceReference
      */
     public function __sleep()
     {
-        $this->qualifiedName = $this->getType()->getNamespaceName() . '\\' .
+        $this->qualifiedName = $this->getType()->getNamespaceName().'\\'.
                                $this->getType()->getName();
 
-        return array_merge(array('qualifiedName'), parent::__sleep());
+        return array_merge(['qualifiedName'], parent::__sleep());
     }
 
     /**

@@ -15,7 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ComparisonOperatorUsageSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -58,7 +57,6 @@ class ComparisonOperatorUsageSniff implements Sniff
         ],
     ];
 
-
     /**
      * Registers the token types that this sniff wishes to listen to.
      *
@@ -73,9 +71,9 @@ class ComparisonOperatorUsageSniff implements Sniff
             T_WHILE,
             T_FOR,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Process the tokens that this sniff is listening for.
@@ -88,7 +86,7 @@ class ComparisonOperatorUsageSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens    = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
         $tokenizer = $phpcsFile->tokenizerType;
 
         if ($tokens[$stackPtr]['code'] === T_INLINE_THEN) {
@@ -101,22 +99,22 @@ class ComparisonOperatorUsageSniff implements Sniff
                         // Stop here as we assume it is the end
                         // of the previous statement.
                         break;
-                    } else if ($tokens[$i]['code'] === T_OPEN_TAG) {
+                    } elseif ($tokens[$i]['code'] === T_OPEN_TAG) {
                         // Stop here as this is the start of the file.
                         break;
-                    } else if ($tokens[$i]['code'] === T_CLOSE_CURLY_BRACKET) {
+                    } elseif ($tokens[$i]['code'] === T_CLOSE_CURLY_BRACKET) {
                         // Stop if this is the closing brace of
                         // a code block.
                         if (isset($tokens[$i]['scope_opener']) === true) {
                             break;
                         }
-                    } else if ($tokens[$i]['code'] === T_OPEN_CURLY_BRACKET) {
+                    } elseif ($tokens[$i]['code'] === T_OPEN_CURLY_BRACKET) {
                         // Stop if this is the opening brace of
                         // a code block.
                         if (isset($tokens[$i]['scope_closer']) === true) {
                             break;
                         }
-                    } else if ($tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
+                    } elseif ($tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
                         // Stop if this is the start of a pair of
                         // parentheses that surrounds the inline
                         // IF statement.
@@ -136,7 +134,7 @@ class ComparisonOperatorUsageSniff implements Sniff
 
                 $start = $tokens[$end]['parenthesis_opener'];
             }//end if
-        } else if ($tokens[$stackPtr]['code'] === T_FOR) {
+        } elseif ($tokens[$stackPtr]['code'] === T_FOR) {
             if (isset($tokens[$stackPtr]['parenthesis_opener']) === false) {
                 return;
             }
@@ -145,7 +143,7 @@ class ComparisonOperatorUsageSniff implements Sniff
             $closingBracket = $tokens[$stackPtr]['parenthesis_closer'];
 
             $start = $phpcsFile->findNext(T_SEMICOLON, $openingBracket, $closingBracket);
-            $end   = $phpcsFile->findNext(T_SEMICOLON, ($start + 1), $closingBracket);
+            $end = $phpcsFile->findNext(T_SEMICOLON, ($start + 1), $closingBracket);
             if ($start === false || $end === false) {
                 return;
             }
@@ -155,11 +153,11 @@ class ComparisonOperatorUsageSniff implements Sniff
             }
 
             $start = $tokens[$stackPtr]['parenthesis_opener'];
-            $end   = $tokens[$stackPtr]['parenthesis_closer'];
+            $end = $tokens[$stackPtr]['parenthesis_closer'];
         }//end if
 
-        $requiredOps   = 0;
-        $foundOps      = 0;
+        $requiredOps = 0;
+        $foundOps = 0;
         $foundBooleans = 0;
 
         $lastNonEmpty = $start;
@@ -168,13 +166,13 @@ class ComparisonOperatorUsageSniff implements Sniff
             $type = $tokens[$i]['code'];
             if (isset(self::$invalidOps[$tokenizer][$type]) === true) {
                 $error = 'Operator %s prohibited; use %s instead';
-                $data  = [
+                $data = [
                     $tokens[$i]['content'],
                     self::$invalidOps[$tokenizer][$type],
                 ];
                 $phpcsFile->addError($error, $i, 'NotAllowed', $data);
                 $foundOps++;
-            } else if (isset(self::$validOps[$type]) === true) {
+            } elseif (isset(self::$validOps[$type]) === true) {
                 $foundOps++;
             }
 
@@ -182,7 +180,7 @@ class ComparisonOperatorUsageSniff implements Sniff
                 && isset($tokens[$i]['parenthesis_closer']) === true
                 && isset(Tokens::$functionNameTokens[$tokens[$lastNonEmpty]['code']]) === true
             ) {
-                $i            = $tokens[$i]['parenthesis_closer'];
+                $i = $tokens[$i]['parenthesis_closer'];
                 $lastNonEmpty = $i;
                 continue;
             }
@@ -228,8 +226,7 @@ class ComparisonOperatorUsageSniff implements Sniff
             $error = 'Implicit true comparisons prohibited; use === TRUE instead';
             $phpcsFile->addError($error, $stackPtr, 'ImplicitTrue');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

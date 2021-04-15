@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\Exceptions\InvalidFormatException;
@@ -77,7 +78,7 @@ trait Serialization
     {
         $instance = @unserialize("$value");
 
-        if (!$instance instanceof static) {
+        if (! $instance instanceof static) {
             throw new InvalidFormatException("Invalid serialized value: $value");
         }
 
@@ -179,7 +180,7 @@ trait Serialization
      * foreach ($date as $_) {}
      * serializer($date)
      * var_export($date)
-     * get_object_vars($date)
+     * get_object_vars($date).
      */
     public function cleanupDumpProperties()
     {

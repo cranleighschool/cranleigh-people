@@ -57,7 +57,7 @@ class ASTScalarType extends ASTType
      * This method will return <b>true</b> when this type is a php primitive.
      * For this concrete implementation the return value will be always true.
      *
-     * @return boolean
+     * @return bool
      */
     public function isScalar()
     {

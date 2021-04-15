@@ -15,14 +15,12 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class SwitchDeclarationSniff implements Sniff
 {
-
     /**
      * The number of spaces code should be indented.
      *
-     * @var integer
+     * @var int
      */
     public $indent = 4;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -32,9 +30,9 @@ class SwitchDeclarationSniff implements Sniff
     public function register()
     {
         return [T_SWITCH];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -56,8 +54,8 @@ class SwitchDeclarationSniff implements Sniff
             return;
         }
 
-        $switch        = $tokens[$stackPtr];
-        $nextCase      = $stackPtr;
+        $switch = $tokens[$stackPtr];
+        $nextCase = $stackPtr;
         $caseAlignment = ($switch['column'] + $this->indent);
 
         while (($nextCase = $this->findNextCase($phpcsFile, ($nextCase + 1), $switch['scope_closer'])) !== false) {
@@ -69,8 +67,8 @@ class SwitchDeclarationSniff implements Sniff
 
             if ($tokens[$nextCase]['content'] !== strtolower($tokens[$nextCase]['content'])) {
                 $expected = strtolower($tokens[$nextCase]['content']);
-                $error    = strtoupper($type).' keyword must be lowercase; expected "%s" but found "%s"';
-                $data     = [
+                $error = strtoupper($type).' keyword must be lowercase; expected "%s" but found "%s"';
+                $data = [
                     $expected,
                     $tokens[$nextCase]['content'],
                 ];
@@ -86,7 +84,7 @@ class SwitchDeclarationSniff implements Sniff
                 || $tokens[($nextCase + 1)]['content'] !== ' ')
             ) {
                 $error = 'CASE keyword must be followed by a single space';
-                $fix   = $phpcsFile->addFixableError($error, $nextCase, 'SpacingAfterCase');
+                $fix = $phpcsFile->addFixableError($error, $nextCase, 'SpacingAfterCase');
                 if ($fix === true) {
                     if ($tokens[($nextCase + 1)]['code'] !== T_WHITESPACE) {
                         $phpcsFile->fixer->addContent($nextCase, ' ');
@@ -96,12 +94,12 @@ class SwitchDeclarationSniff implements Sniff
                 }
             }
 
-            $opener     = $tokens[$nextCase]['scope_opener'];
+            $opener = $tokens[$nextCase]['scope_opener'];
             $nextCloser = $tokens[$nextCase]['scope_closer'];
             if ($tokens[$opener]['code'] === T_COLON) {
                 if ($tokens[($opener - 1)]['code'] === T_WHITESPACE) {
                     $error = 'There must be no space before the colon in a '.strtoupper($type).' statement';
-                    $fix   = $phpcsFile->addFixableError($error, $nextCase, 'SpaceBeforeColon'.strtoupper($type));
+                    $fix = $phpcsFile->addFixableError($error, $nextCase, 'SpaceBeforeColon'.strtoupper($type));
                     if ($fix === true) {
                         $phpcsFile->fixer->replaceToken(($opener - 1), '');
                     }
@@ -118,7 +116,7 @@ class SwitchDeclarationSniff implements Sniff
 
                 if ($tokens[$next]['line'] !== ($tokens[$opener]['line'] + 1)) {
                     $error = 'The '.strtoupper($type).' body must start on the line following the statement';
-                    $fix   = $phpcsFile->addFixableError($error, $nextCase, 'BodyOnNextLine'.strtoupper($type));
+                    $fix = $phpcsFile->addFixableError($error, $nextCase, 'BodyOnNextLine'.strtoupper($type));
                     if ($fix === true) {
                         if ($tokens[$next]['line'] === $tokens[$opener]['line']) {
                             $padding = str_repeat(' ', ($caseAlignment + $this->indent - 1));
@@ -146,7 +144,7 @@ class SwitchDeclarationSniff implements Sniff
                     $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($nextCloser - 1), $nextCase, true);
                     if ($tokens[$prev]['line'] === $tokens[$nextCloser]['line']) {
                         $error = 'Terminating statement must be on a line by itself';
-                        $fix   = $phpcsFile->addFixableError($error, $nextCloser, 'BreakNotNewLine');
+                        $fix = $phpcsFile->addFixableError($error, $nextCloser, 'BreakNotNewLine');
                         if ($fix === true) {
                             $phpcsFile->fixer->addNewLine($prev);
                             $phpcsFile->fixer->replaceToken($nextCloser, trim($tokens[$nextCloser]['content']));
@@ -155,7 +153,7 @@ class SwitchDeclarationSniff implements Sniff
                         $diff = ($tokens[$nextCase]['column'] + $this->indent - $tokens[$nextCloser]['column']);
                         if ($diff !== 0) {
                             $error = 'Terminating statement must be indented to the same level as the CASE body';
-                            $fix   = $phpcsFile->addFixableError($error, $nextCloser, 'BreakIndent');
+                            $fix = $phpcsFile->addFixableError($error, $nextCloser, 'BreakIndent');
                             if ($fix === true) {
                                 if ($diff > 0) {
                                     $phpcsFile->fixer->addContentBefore($nextCloser, str_repeat(' ', $diff));
@@ -195,9 +193,9 @@ class SwitchDeclarationSniff implements Sniff
                 }
             }
         }//end while
+    }
 
-    }//end process()
-
+    //end process()
 
     /**
      * Find the next CASE or DEFAULT statement from a point in the file.
@@ -224,9 +222,9 @@ class SwitchDeclarationSniff implements Sniff
         }
 
         return $stackPtr;
+    }
 
-    }//end findNextCase()
-
+    //end findNextCase()
 
     /**
      * Returns the position of the nested terminating statement.
@@ -255,7 +253,7 @@ class SwitchDeclarationSniff implements Sniff
             // block. Note that we have to make sure that every block of
             // the entire if/else/switch statement has a terminating statement.
             $currentCloser = $lastToken;
-            $hasElseBlock  = false;
+            $hasElseBlock = false;
             do {
                 $scopeOpener = $tokens[$currentCloser]['scope_opener'];
                 $scopeCloser = $tokens[$currentCloser]['scope_closer'];
@@ -278,7 +276,7 @@ class SwitchDeclarationSniff implements Sniff
                     }
 
                     return $this->findNestedTerminator($phpcsFile, ($scopeOpener + 1), $scopeCloser);
-                } else if ($tokens[$prevToken]['code'] === T_ELSEIF
+                } elseif ($tokens[$prevToken]['code'] === T_ELSEIF
                     || $tokens[$prevToken]['code'] === T_ELSE
                 ) {
                     // If we find a terminating statement within this block,
@@ -292,10 +290,10 @@ class SwitchDeclarationSniff implements Sniff
                     if ($tokens[$prevToken]['code'] === T_ELSE) {
                         $hasElseBlock = true;
                     }
-                } else if ($tokens[$prevToken]['code'] === T_SWITCH) {
+                } elseif ($tokens[$prevToken]['code'] === T_SWITCH) {
                     $hasDefaultBlock = false;
-                    $endOfSwitch     = $tokens[$prevToken]['scope_closer'];
-                    $nextCase        = $prevToken;
+                    $endOfSwitch = $tokens[$prevToken]['scope_closer'];
+                    $nextCase = $prevToken;
 
                     // We look for a terminating statement within every blocks.
                     while (($nextCase = $this->findNextCase($phpcsFile, ($nextCase + 1), $endOfSwitch)) !== false) {
@@ -335,7 +333,7 @@ class SwitchDeclarationSniff implements Sniff
             } while ($currentCloser !== false && $tokens[$currentCloser]['code'] === T_CLOSE_CURLY_BRACKET);
 
             return true;
-        } else if ($tokens[$lastToken]['code'] === T_SEMICOLON) {
+        } elseif ($tokens[$lastToken]['code'] === T_SEMICOLON) {
             // We found the last statement of the CASE. Now we want to
             // check whether it is a terminating one.
             $terminators = [
@@ -353,8 +351,7 @@ class SwitchDeclarationSniff implements Sniff
         }//end if
 
         return false;
+    }
 
-    }//end findNestedTerminator()
-
-
+    //end findNestedTerminator()
 }//end class

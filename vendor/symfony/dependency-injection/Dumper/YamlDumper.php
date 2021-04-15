@@ -46,7 +46,7 @@ class YamlDumper extends Dumper
      */
     public function dump(array $options = [])
     {
-        if (!class_exists(\Symfony\Component\Yaml\Dumper::class)) {
+        if (! class_exists(\Symfony\Component\Yaml\Dumper::class)) {
             throw new LogicException('Unable to dump the container as the Symfony Yaml Component is not installed.');
         }
 
@@ -68,7 +68,7 @@ class YamlDumper extends Dumper
             $code .= sprintf("        class: %s\n", $this->dumper->dump($class));
         }
 
-        if (!$definition->isPrivate()) {
+        if (! $definition->isPrivate()) {
             $code .= sprintf("        public: %s\n", $definition->isPublic() ? 'true' : 'false');
         }
 
@@ -133,7 +133,7 @@ class YamlDumper extends Dumper
             $code .= sprintf("        calls:\n%s\n", $this->dumper->dump($this->dumpValue($definition->getMethodCalls()), 1, 12));
         }
 
-        if (!$definition->isShared()) {
+        if (! $definition->isShared()) {
             $code .= "        shared: false\n";
         }
 
@@ -179,7 +179,7 @@ class YamlDumper extends Dumper
             }
         }
 
-        if (!$id->isDeprecated() && $id->isPrivate()) {
+        if (! $id->isDeprecated() && $id->isPrivate()) {
             return sprintf("    %s: '@%s'\n", $alias, $id);
         }
 
@@ -192,7 +192,7 @@ class YamlDumper extends Dumper
 
     private function addServices(): string
     {
-        if (!$this->container->getDefinitions()) {
+        if (! $this->container->getDefinitions()) {
             return '';
         }
 
@@ -214,7 +214,7 @@ class YamlDumper extends Dumper
 
     private function addParameters(): string
     {
-        if (!$this->container->getParameterBag()->all()) {
+        if (! $this->container->getParameterBag()->all()) {
             return '';
         }
 

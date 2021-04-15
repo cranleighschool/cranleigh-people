@@ -35,7 +35,7 @@ class RegisterReverseContainerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition($this->serviceId)) {
+        if (! $container->hasDefinition($this->serviceId)) {
             return;
         }
 

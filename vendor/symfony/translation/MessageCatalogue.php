@@ -158,7 +158,7 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
      */
     public function add(array $messages, string $domain = 'messages')
     {
-        if (!isset($this->messages[$domain])) {
+        if (! isset($this->messages[$domain])) {
             $this->messages[$domain] = [];
         }
         $intlDomain = $domain;

@@ -75,7 +75,7 @@ final class Macro implements BuiltinMethodReflection
                 /** @var Closure $closure */
                 $closure = $this->reflectionFunction->getClosure();
                 $boundClosure = Closure::bind($closure, new stdClass);
-                $this->static = (!$boundClosure || (new ReflectionFunction($boundClosure))->getClosureThis() === null);
+                $this->static = (! $boundClosure || (new ReflectionFunction($boundClosure))->getClosureThis() === null);
             } catch (Throwable $e) {
                 $this->static = true;
             }

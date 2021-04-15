@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class InlineCommentSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,9 +22,9 @@ class InlineCommentSniff implements Sniff
     public function register()
     {
         return [T_COMMENT];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -44,25 +42,24 @@ class InlineCommentSniff implements Sniff
         if ($tokens[$stackPtr]['content'][0] === '#') {
             $phpcsFile->recordMetric($stackPtr, 'Inline comment style', '# ...');
 
-            $error  = 'Perl-style comments are not allowed. Use "// Comment."';
+            $error = 'Perl-style comments are not allowed. Use "// Comment."';
             $error .= ' or "/* comment */" instead.';
-            $fix    = $phpcsFile->addFixableError($error, $stackPtr, 'WrongStyle');
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'WrongStyle');
             if ($fix === true) {
                 $newComment = ltrim($tokens[$stackPtr]['content'], '# ');
                 $newComment = '// '.$newComment;
                 $phpcsFile->fixer->replaceToken($stackPtr, $newComment);
             }
-        } else if ($tokens[$stackPtr]['content'][0] === '/'
+        } elseif ($tokens[$stackPtr]['content'][0] === '/'
             && $tokens[$stackPtr]['content'][1] === '/'
         ) {
             $phpcsFile->recordMetric($stackPtr, 'Inline comment style', '// ...');
-        } else if ($tokens[$stackPtr]['content'][0] === '/'
+        } elseif ($tokens[$stackPtr]['content'][0] === '/'
             && $tokens[$stackPtr]['content'][1] === '*'
         ) {
             $phpcsFile->recordMetric($stackPtr, 'Inline comment style', '/* ... */');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

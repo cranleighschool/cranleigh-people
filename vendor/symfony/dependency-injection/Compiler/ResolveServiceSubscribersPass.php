@@ -31,7 +31,7 @@ class ResolveServiceSubscribersPass extends AbstractRecursivePass
             return new Reference($this->serviceLocator);
         }
 
-        if (!$value instanceof Definition) {
+        if (! $value instanceof Definition) {
             return parent::processValue($value, $isRoot);
         }
 

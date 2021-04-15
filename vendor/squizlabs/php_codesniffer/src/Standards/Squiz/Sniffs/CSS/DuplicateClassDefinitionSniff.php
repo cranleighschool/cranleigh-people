@@ -15,14 +15,12 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class DuplicateClassDefinitionSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['CSS'];
-
 
     /**
      * Returns the token types that this sniff is interested in.
@@ -32,9 +30,9 @@ class DuplicateClassDefinitionSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -51,7 +49,7 @@ class DuplicateClassDefinitionSniff implements Sniff
 
         // Find the content of each class definition name.
         $classNames = [];
-        $next       = $phpcsFile->findNext(T_OPEN_CURLY_BRACKET, ($stackPtr + 1));
+        $next = $phpcsFile->findNext(T_OPEN_CURLY_BRACKET, ($stackPtr + 1));
         if ($next === false) {
             // No class definitions in the file.
             return;
@@ -98,10 +96,10 @@ class DuplicateClassDefinitionSniff implements Sniff
             if ($name[0] === '@') {
                 // Media block has its own "scope".
                 $scope = $name;
-            } else if (isset($classNames[$scope][$name]) === true) {
+            } elseif (isset($classNames[$scope][$name]) === true) {
                 $first = $classNames[$scope][$name];
                 $error = 'Duplicate class definition found; first defined on line %s';
-                $data  = [$tokens[$first]['line']];
+                $data = [$tokens[$first]['line']];
                 $phpcsFile->addError($error, $next, 'Found', $data);
             } else {
                 $classNames[$scope][$name] = $next;
@@ -109,8 +107,7 @@ class DuplicateClassDefinitionSniff implements Sniff
 
             $next = $phpcsFile->findNext(T_OPEN_CURLY_BRACKET, ($next + 1));
         }//end while
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

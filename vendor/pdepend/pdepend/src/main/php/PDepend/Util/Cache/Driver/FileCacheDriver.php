@@ -60,7 +60,6 @@ use PDepend\Util\Cache\Driver\File\FileCacheGarbageCollector;
  */
 class FileCacheDriver implements CacheDriver
 {
-
     const DEFAULT_TTL = 2592000; //30 days
 
     /**
@@ -69,7 +68,7 @@ class FileCacheDriver implements CacheDriver
     const ENTRY_TYPE = 'cache';
 
     /**
-     * The cache directory handler
+     * The cache directory handler.
      *
      * @var FileCacheDirectory
      */
@@ -108,7 +107,7 @@ class FileCacheDriver implements CacheDriver
     public function __construct($root, $ttl = self::DEFAULT_TTL, $cacheKey = null)
     {
         $this->directory = new FileCacheDirectory($root);
-        $this->version   = preg_replace('(^(\d+\.\d+).*)', '\\1', phpversion());
+        $this->version = preg_replace('(^(\d+\.\d+).*)', '\\1', phpversion());
 
         $this->cacheKey = $cacheKey;
 
@@ -129,6 +128,7 @@ class FileCacheDriver implements CacheDriver
     public function type($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -147,7 +147,7 @@ class FileCacheDriver implements CacheDriver
     public function store($key, $data, $hash = null)
     {
         $file = $this->getCacheFile($key);
-        $this->write($file, serialize(array('hash' => $hash, 'data' => $data)));
+        $this->write($file, serialize(['hash' => $hash, 'data' => $data]));
     }
 
     /**
@@ -183,6 +183,7 @@ class FileCacheDriver implements CacheDriver
         if (file_exists($file)) {
             return $this->restoreFile($file, $hash);
         }
+
         return null;
     }
 
@@ -202,6 +203,7 @@ class FileCacheDriver implements CacheDriver
         if ($data !== false && $data['hash'] === $hash) {
             return $data['data'];
         }
+
         return null;
     }
 
@@ -255,9 +257,9 @@ class FileCacheDriver implements CacheDriver
      */
     protected function getCacheFile($key)
     {
-        $cacheFile = $this->getCacheFileWithoutExtension($key) .
-                     '.' . $this->version .
-                     '.' . $this->type;
+        $cacheFile = $this->getCacheFileWithoutExtension($key).
+                     '.'.$this->version.
+                     '.'.$this->type;
 
         $this->type = self::ENTRY_TYPE;
 
@@ -276,10 +278,11 @@ class FileCacheDriver implements CacheDriver
     protected function getCacheFileWithoutExtension($key)
     {
         if (is_string($this->cacheKey)) {
-            $key = md5($key . $this->cacheKey);
+            $key = md5($key.$this->cacheKey);
         }
 
         $path = $this->directory->createCacheDirectory($key);
+
         return "{$path}/{$key}";
     }
 

@@ -39,7 +39,7 @@ class DecoratorServicePass extends AbstractRecursivePass
         $order = \PHP_INT_MAX;
 
         foreach ($container->getDefinitions() as $id => $definition) {
-            if (!$decorated = $definition->getDecoratedService()) {
+            if (! $decorated = $definition->getDecoratedService()) {
                 continue;
             }
             $definitions->insert([$id, $definition], [$decorated[2], --$order]);
@@ -53,7 +53,7 @@ class DecoratorServicePass extends AbstractRecursivePass
 
             $definition->setDecoratedService(null);
 
-            if (!$renamedId) {
+            if (! $renamedId) {
                 $renamedId = $id.'.inner';
             }
 

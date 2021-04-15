@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Util\Timing;
 
 class Source implements Report
 {
-
-
     /**
      * Generate a partial report for a single processed file.
      *
@@ -30,7 +28,7 @@ class Source implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
+    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
     {
         if ($report['errors'] === 0 && $report['warnings'] === 0) {
             // Nothing to print.
@@ -60,9 +58,9 @@ class Source implements Report
         }
 
         return true;
+    }
 
-    }//end generateFileReport()
-
+    //end generateFileReport()
 
     /**
      * Prints the source of all errors and warnings.
@@ -86,10 +84,10 @@ class Source implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources=false,
-        $width=80,
-        $interactive=false,
-        $toScreen=true
+        $showSources = false,
+        $width = 80,
+        $interactive = false,
+        $toScreen = true
     ) {
         $lines = explode(PHP_EOL, $cachedData);
         array_pop($lines);
@@ -98,14 +96,14 @@ class Source implements Report
             return;
         }
 
-        $sources   = [];
+        $sources = [];
         $maxLength = 0;
 
         foreach ($lines as $line) {
-            $parts   = explode('>>', $line);
-            $source  = $parts[0];
+            $parts = explode('>>', $line);
+            $source = $parts[0];
             $fixable = (bool) $parts[1];
-            $count   = $parts[2];
+            $count = $parts[2];
 
             if (isset($sources[$source]) === false) {
                 if ($showSources === true) {
@@ -122,9 +120,9 @@ class Source implements Report
 
                     $sniff = $this->makeFriendlyName($parts[2]);
                     if (isset($parts[3]) === true) {
-                        $name    = $this->makeFriendlyName($parts[3]);
+                        $name = $this->makeFriendlyName($parts[3]);
                         $name[0] = strtolower($name[0]);
-                        $sniff  .= ' '.$name;
+                        $sniff .= ' '.$name;
                         unset($parts[3]);
                     }
 
@@ -153,7 +151,7 @@ class Source implements Report
 
         // Sort the data based on counts and source code.
         $sourceCodes = array_keys($sources);
-        $counts      = [];
+        $counts = [];
         foreach ($sources as $source => $data) {
             $counts[$source] = $data['count'];
         }
@@ -268,9 +266,9 @@ class Source implements Report
         if ($toScreen === true && $interactive === false) {
             Timing::printRunTime();
         }
+    }
 
-    }//end generate()
-
+    //end generate()
 
     /**
      * Converts a camel caps name into a readable string.
@@ -286,9 +284,9 @@ class Source implements Report
         }
 
         $friendlyName = '';
-        $length       = strlen($name);
+        $length = strlen($name);
 
-        $lastWasUpper   = false;
+        $lastWasUpper = false;
         $lastWasNumeric = false;
         for ($i = 0; $i < $length; $i++) {
             if (is_numeric($name[$i]) === true) {
@@ -296,7 +294,7 @@ class Source implements Report
                     $friendlyName .= ' ';
                 }
 
-                $lastWasUpper   = false;
+                $lastWasUpper = false;
                 $lastWasNumeric = true;
             } else {
                 $lastWasNumeric = false;
@@ -325,12 +323,11 @@ class Source implements Report
             $friendlyName .= $name[$i];
         }//end for
 
-        $friendlyName    = trim($friendlyName);
+        $friendlyName = trim($friendlyName);
         $friendlyName[0] = strtoupper($friendlyName[0]);
 
         return $friendlyName;
+    }
 
-    }//end makeFriendlyName()
-
-
+    //end makeFriendlyName()
 }//end class

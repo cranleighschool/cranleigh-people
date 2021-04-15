@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Util;
 
 class Full implements Report
 {
-
-
     /**
      * Generate a partial report for a single processed file.
      *
@@ -30,7 +28,7 @@ class Full implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
+    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
     {
         if ($report['errors'] === 0 && $report['warnings'] === 0) {
             // Nothing to print.
@@ -49,7 +47,7 @@ class Full implements Report
 
         // The padding that all lines will require that are
         // printing an error message overflow.
-        $paddingLine2  = str_repeat(' ', ($maxLineNumLength + 1));
+        $paddingLine2 = str_repeat(' ', ($maxLineNumLength + 1));
         $paddingLine2 .= ' | ';
         $paddingLine2 .= str_repeat(' ', $typeLength);
         $paddingLine2 .= ' | ';
@@ -74,10 +72,10 @@ class Full implements Report
             }
         }
 
-        $file       = $report['filename'];
+        $file = $report['filename'];
         $fileLength = strlen($file);
-        $maxWidth   = max(($fileLength + 6), ($maxErrorLength + $paddingLength));
-        $width      = min($width, $maxWidth);
+        $maxWidth = max(($fileLength + 6), ($maxErrorLength + $paddingLength));
+        $width = min($width, $maxWidth);
         if ($width < 70) {
             $width = 70;
         }
@@ -118,7 +116,7 @@ class Full implements Report
         foreach ($report['messages'] as $line => $lineErrors) {
             foreach ($lineErrors as $column => $colErrors) {
                 foreach ($colErrors as $error) {
-                    $message  = $error['message'];
+                    $message = $error['message'];
                     $msgLines = [$message];
                     if (strpos($message, "\n") !== false) {
                         $msgLines = explode("\n", $message);
@@ -183,10 +181,11 @@ class Full implements Report
         }
 
         echo PHP_EOL;
+
         return true;
+    }
 
-    }//end generateFileReport()
-
+    //end generateFileReport()
 
     /**
      * Prints all errors and warnings for each file processed.
@@ -210,10 +209,10 @@ class Full implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources=false,
-        $width=80,
-        $interactive=false,
-        $toScreen=true
+        $showSources = false,
+        $width = 80,
+        $interactive = false,
+        $toScreen = true
     ) {
         if ($cachedData === '') {
             return;
@@ -224,8 +223,7 @@ class Full implements Report
         if ($toScreen === true && $interactive === false) {
             Util\Timing::printRunTime();
         }
+    }
 
-    }//end generate()
-
-
+    //end generate()
 }//end class

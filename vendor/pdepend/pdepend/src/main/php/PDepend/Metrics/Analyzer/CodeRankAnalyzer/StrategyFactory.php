@@ -77,11 +77,11 @@ class StrategyFactory
      *
      * @var array<string>
      */
-    private $validStrategies = array(
+    private $validStrategies = [
         self::STRATEGY_INHERITANCE,
         self::STRATEGY_METHOD,
-        self::STRATEGY_PROPERTY
-    );
+        self::STRATEGY_PROPERTY,
+    ];
 
     /**
      * Creates the default code rank strategy.

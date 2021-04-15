@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class NonExecutableCodeUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -26,9 +24,9 @@ class NonExecutableCodeUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [];
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -40,7 +38,7 @@ class NonExecutableCodeUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getWarningList($testFile='')
+    public function getWarningList($testFile = '')
     {
         switch ($testFile) {
         case 'NonExecutableCodeUnitTest.1.inc':
@@ -90,8 +88,7 @@ class NonExecutableCodeUnitTest extends AbstractSniffUnitTest
             return [];
             break;
         }//end switch
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

@@ -63,7 +63,7 @@ class ASTTrait extends ASTClass
      */
     public function getProperties()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -87,7 +87,7 @@ class ASTTrait extends ASTClass
      * Checks that this user type is a subtype of the given <b>$type</b> instance.
      *
      * @param  \PDepend\Source\AST\AbstractASTType $type
-     * @return boolean
+     * @return bool
      * @todo   Should we handle trait subtypes?
      */
     public function isSubtypeOf(AbstractASTType $type)

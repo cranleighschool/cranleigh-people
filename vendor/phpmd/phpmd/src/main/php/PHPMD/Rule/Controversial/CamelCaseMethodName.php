@@ -29,7 +29,7 @@ use PHPMD\Rule\MethodAware;
  */
 class CamelCaseMethodName extends AbstractRule implements MethodAware
 {
-    protected $ignoredMethods = array(
+    protected $ignoredMethods = [
         '__construct',
         '__destruct',
         '__set',
@@ -47,7 +47,7 @@ class CamelCaseMethodName extends AbstractRule implements MethodAware
         '__debugInfo',
         '__serialize',
         '__unserialize',
-    );
+    ];
 
     /**
      * This method checks if a method is not named in camelCase
@@ -59,13 +59,13 @@ class CamelCaseMethodName extends AbstractRule implements MethodAware
     public function apply(AbstractNode $node)
     {
         $methodName = $node->getName();
-        if (!in_array($methodName, $this->ignoredMethods)) {
-            if (!$this->isValid($methodName)) {
+        if (! in_array($methodName, $this->ignoredMethods)) {
+            if (! $this->isValid($methodName)) {
                 $this->addViolation(
                     $node,
-                    array(
+                    [
                         $methodName,
-                    )
+                    ]
                 );
             }
         }

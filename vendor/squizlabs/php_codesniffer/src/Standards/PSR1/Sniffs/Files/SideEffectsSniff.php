@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class SideEffectsSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +23,9 @@ class SideEffectsSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -45,7 +43,7 @@ class SideEffectsSniff implements Sniff
 
         if ($result['symbol'] !== null && $result['effect'] !== null) {
             $error = 'A file should declare new symbols (classes, functions, constants, etc.) and cause no other side effects, or it should execute logic with side effects, but should not do both. The first symbol is defined on line %s and the first side effect is on line %s.';
-            $data  = [
+            $data = [
                 $tokens[$result['symbol']]['line'],
                 $tokens[$result['effect']]['line'],
             ];
@@ -56,10 +54,10 @@ class SideEffectsSniff implements Sniff
         }
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens + 1;
+    }
 
-    }//end process()
-
+    //end process()
 
     /**
      * Searches for symbol declarations and side effects.
@@ -196,7 +194,7 @@ class SideEffectsSniff implements Sniff
 
                 $i = $tokens[$i]['scope_closer'];
                 continue;
-            } else if ($tokens[$i]['code'] === T_STRING
+            } elseif ($tokens[$i]['code'] === T_STRING
                 && strtolower($tokens[$i]['content']) === 'define'
             ) {
                 $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($i - 1), null, true);
@@ -291,8 +289,7 @@ class SideEffectsSniff implements Sniff
             'symbol' => $firstSymbol,
             'effect' => $firstEffect,
         ];
+    }
 
-    }//end searchForConflict()
-
-
+    //end searchForConflict()
 }//end class

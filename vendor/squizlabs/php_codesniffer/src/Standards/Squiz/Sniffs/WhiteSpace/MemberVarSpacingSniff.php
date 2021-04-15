@@ -15,21 +15,19 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class MemberVarSpacingSniff extends AbstractVariableSniff
 {
-
     /**
      * The number of blank lines between member vars.
      *
-     * @var integer
+     * @var int
      */
     public $spacing = 1;
 
     /**
      * The number of blank lines before the first member var.
      *
-     * @var integer
+     * @var int
      */
     public $spacingBeforeFirst = 1;
-
 
     /**
      * Processes the function tokens within the class.
@@ -45,7 +43,7 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $validPrefixes   = Tokens::$methodPrefixes;
+        $validPrefixes = Tokens::$methodPrefixes;
         $validPrefixes[] = T_VAR;
 
         $startOfStatement = $phpcsFile->findPrevious($validPrefixes, ($stackPtr - 1), null, false, null, true);
@@ -55,11 +53,11 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
 
         $endOfStatement = $phpcsFile->findNext(T_SEMICOLON, ($stackPtr + 1), null, false, null, true);
 
-        $ignore   = $validPrefixes;
+        $ignore = $validPrefixes;
         $ignore[] = T_WHITESPACE;
 
         $start = $startOfStatement;
-        $prev  = $phpcsFile->findPrevious($ignore, ($startOfStatement - 1), null, true);
+        $prev = $phpcsFile->findPrevious($ignore, ($startOfStatement - 1), null, true);
         if (isset(Tokens::$commentTokens[$tokens[$prev]['code']]) === true) {
             // Assume the comment belongs to the member var if it is on a line by itself.
             $prevContent = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($prev - 1), null, true);
@@ -68,8 +66,8 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
                 $foundLines = ($tokens[$startOfStatement]['line'] - $tokens[$prev]['line'] - 1);
                 if ($foundLines > 0) {
                     $error = 'Expected 0 blank lines after member var comment; %s found';
-                    $data  = [$foundLines];
-                    $fix   = $phpcsFile->addFixableError($error, $prev, 'AfterComment', $data);
+                    $data = [$foundLines];
+                    $fix = $phpcsFile->addFixableError($error, $prev, 'AfterComment', $data);
                     if ($fix === true) {
                         $phpcsFile->fixer->beginChangeset();
                         // Inline comments have the newline included in the content but
@@ -102,7 +100,7 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
             if ($first === false) {
                 $first = $start;
             }
-        } else if ($tokens[$start]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
+        } elseif ($tokens[$start]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
             $first = $tokens[$start]['comment_opener'];
         } else {
             $first = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($start - 1), null, true);
@@ -121,13 +119,13 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
         if ($tokens[$prev]['code'] === T_OPEN_CURLY_BRACKET
             && isset(Tokens::$ooScopeTokens[$tokens[$tokens[$prev]['scope_condition']]['code']]) === true
         ) {
-            $errorMsg  = 'Expected %s blank line(s) before first member var; %s found';
+            $errorMsg = 'Expected %s blank line(s) before first member var; %s found';
             $errorCode = 'FirstIncorrect';
-            $spacing   = (int) $this->spacingBeforeFirst;
+            $spacing = (int) $this->spacingBeforeFirst;
         } else {
-            $errorMsg  = 'Expected %s blank line(s) before member var; %s found';
+            $errorMsg = 'Expected %s blank line(s) before member var; %s found';
             $errorCode = 'Incorrect';
-            $spacing   = (int) $this->spacing;
+            $spacing = (int) $this->spacing;
         }
 
         $foundLines = ($tokens[$first]['line'] - $tokens[$prev]['line'] - 1);
@@ -177,10 +175,9 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
             return $endOfStatement;
         }
 
-        return;
+    }
 
-    }//end processMemberVar()
-
+    //end processMemberVar()
 
     /**
      * Processes normal variables.
@@ -195,9 +192,9 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
         /*
             We don't care about normal variables.
         */
+    }
 
-    }//end processVariable()
-
+    //end processVariable()
 
     /**
      * Processes variables in double quoted strings.
@@ -212,8 +209,7 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
         /*
             We don't care about normal variables.
         */
+    }
 
-    }//end processVariableInString()
-
-
+    //end processVariableInString()
 }//end class

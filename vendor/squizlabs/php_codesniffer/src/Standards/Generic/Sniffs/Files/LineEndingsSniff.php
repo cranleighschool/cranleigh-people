@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class LineEndingsSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -33,7 +32,6 @@ class LineEndingsSniff implements Sniff
      */
     public $eolChar = '\n';
 
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -42,9 +40,9 @@ class LineEndingsSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -65,13 +63,13 @@ class LineEndingsSniff implements Sniff
 
         if ($found === $this->eolChar) {
             // Ignore the rest of the file.
-            return ($phpcsFile->numTokens + 1);
+            return $phpcsFile->numTokens + 1;
         }
 
         // Check for single line files without an EOL. This is a very special
         // case and the EOL char is set to \n when this happens.
         if ($found === '\n') {
-            $tokens    = $phpcsFile->getTokens();
+            $tokens = $phpcsFile->getTokens();
             $lastToken = ($phpcsFile->numTokens - 1);
             if ($tokens[$lastToken]['line'] === 1
                 && $tokens[$lastToken]['content'] !== "\n"
@@ -80,11 +78,11 @@ class LineEndingsSniff implements Sniff
             }
         }
 
-        $error    = 'End of line character is invalid; expected "%s" but found "%s"';
+        $error = 'End of line character is invalid; expected "%s" but found "%s"';
         $expected = $this->eolChar;
         $expected = str_replace("\n", '\n', $expected);
         $expected = str_replace("\r", '\r', $expected);
-        $data     = [
+        $data = [
             $expected,
             $found,
         ];
@@ -128,7 +126,7 @@ class LineEndingsSniff implements Sniff
                     continue;
                 }
 
-                $newContent  = rtrim($tokenContent, "\r\n");
+                $newContent = rtrim($tokenContent, "\r\n");
                 $newContent .= $eolChar;
                 if ($tokenContent !== $newContent) {
                     $phpcsFile->fixer->replaceToken($i, $newContent);
@@ -137,9 +135,8 @@ class LineEndingsSniff implements Sniff
         }//end if
 
         // Ignore the rest of the file.
-        return ($phpcsFile->numTokens + 1);
+        return $phpcsFile->numTokens + 1;
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

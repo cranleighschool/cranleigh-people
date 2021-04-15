@@ -62,19 +62,19 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
      *
      * @var T[]
      */
-    private $artifacts = array();
+    private $artifacts = [];
 
     /**
      * Total number of available nodes.
      *
-     * @var integer
+     * @var int
      */
     private $count = 0;
 
     /**
      * Current internal offset.
      *
-     * @var integer
+     * @var int
      */
     private $offset = 0;
 
@@ -88,7 +88,7 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
     {
         $filter = CollectionArtifactFilter::getInstance();
 
-        $nodeKeys = array();
+        $nodeKeys = [];
         foreach ($artifacts as $artifact) {
             $id = $artifact->getId();
 
@@ -98,9 +98,9 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
 
             if ($filter->accept($artifact)) {
                 $nodeKeys[$id] = $id;
-                $this->artifacts[]  = $artifact;
+                $this->artifacts[] = $artifact;
 
-                ++$this->count;
+                $this->count++;
             }
         }
     }
@@ -109,7 +109,7 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
      * Returns the number of {@link \PDepend\Source\AST\ASTArtifact}
      * objects in this iterator.
      *
-     * @return integer
+     * @return int
      */
     public function count()
     {
@@ -117,7 +117,7 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
     }
 
     /**
-     * Returns the current node or <b>false</b>
+     * Returns the current node or <b>false</b>.
      *
      * @return T|false
      */
@@ -126,6 +126,7 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
         if ($this->offset >= $this->count) {
             return false;
         }
+
         return $this->artifacts[$this->offset];
     }
 
@@ -146,7 +147,7 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
      */
     public function next()
     {
-        ++$this->offset;
+        $this->offset++;
     }
 
     /**
@@ -162,19 +163,19 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
     /**
      * Returns <b>true</b> while there is a next {@link \PDepend\Source\AST\ASTArtifact}.
      *
-     * @return boolean
+     * @return bool
      */
     public function valid()
     {
-        return ($this->offset < $this->count);
+        return $this->offset < $this->count;
     }
 
     /**
-     * Whether a offset exists
+     * Whether a offset exists.
      *
      * @param mixed $offset An offset to check for.
      *
-     * @return boolean Returns true on success or false on failure. The return
+     * @return bool Returns true on success or false on failure. The return
      *                 value will be casted to boolean if non-boolean was returned.
      * @since  1.0.0
      * @link   http://php.net/manual/en/arrayaccess.offsetexists.php
@@ -185,7 +186,7 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
     }
 
     /**
-     * Offset to retrieve
+     * Offset to retrieve.
      *
      * @param  mixed $offset
      * @return T Can return all value types.
@@ -202,7 +203,7 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
     }
 
     /**
-     * Offset to set
+     * Offset to set.
      *
      * @param  mixed $offset
      * @param  mixed $value
@@ -217,7 +218,7 @@ class ASTArtifactList implements \ArrayAccess, \Iterator, \Countable
     }
 
     /**
-     * Offset to unset
+     * Offset to unset.
      *
      * @param  mixed $offset
      * @return void

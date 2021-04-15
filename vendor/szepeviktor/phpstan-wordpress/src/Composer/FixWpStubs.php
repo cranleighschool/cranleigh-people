@@ -31,6 +31,7 @@ class FixWpStubs
         $stubs = file_get_contents($stubsFile);
         if ($stubs === false) {
             $io->writeError("GiacoCorsiglia's (outdated) WordPress stubs not found.");
+
             return 10;
         }
         $fixedStubs = preg_replace('/(\n)(function is_countable)/', '$1// $2', $stubs);
@@ -39,10 +40,12 @@ class FixWpStubs
         $numberOfBytes = file_put_contents($stubsFile, $fixedStubs);
         if ($numberOfBytes === false) {
             $io->writeError('FAILED.');
+
             return 11;
         }
 
         $io->write('OK.');
+
         return 0;
     }
 }

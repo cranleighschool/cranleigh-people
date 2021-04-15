@@ -9,15 +9,13 @@
 
 namespace PHP_CodeSniffer\Standards\Zend\Sniffs\NamingConventions;
 
+use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\AbstractVariableSniff;
 use PHP_CodeSniffer\Util\Common;
-use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 
 class ValidVariableNameSniff extends AbstractVariableSniff
 {
-
-
     /**
      * Processes this test, when one of its tokens is encountered.
      *
@@ -29,7 +27,7 @@ class ValidVariableNameSniff extends AbstractVariableSniff
      */
     protected function processVariable(File $phpcsFile, $stackPtr)
     {
-        $tokens  = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
         $varName = ltrim($tokens[$stackPtr]['content'], '$');
 
         // If it's a php reserved var, then its ok.
@@ -60,11 +58,11 @@ class ValidVariableNameSniff extends AbstractVariableSniff
 
                     if (Common::isCamelCaps($objVarName, false, true, false) === false) {
                         $error = 'Variable "%s" is not in valid camel caps format';
-                        $data  = [$originalVarName];
+                        $data = [$originalVarName];
                         $phpcsFile->addError($error, $var, 'NotCamelCaps', $data);
-                    } else if (preg_match('|\d|', $objVarName) === 1) {
+                    } elseif (preg_match('|\d|', $objVarName) === 1) {
                         $warning = 'Variable "%s" contains numbers but this is discouraged';
-                        $data    = [$originalVarName];
+                        $data = [$originalVarName];
                         $phpcsFile->addWarning($warning, $stackPtr, 'ContainsNumbers', $data);
                     }
                 }//end if
@@ -92,16 +90,16 @@ class ValidVariableNameSniff extends AbstractVariableSniff
 
         if (Common::isCamelCaps($varName, false, true, false) === false) {
             $error = 'Variable "%s" is not in valid camel caps format';
-            $data  = [$originalVarName];
+            $data = [$originalVarName];
             $phpcsFile->addError($error, $stackPtr, 'NotCamelCaps', $data);
-        } else if (preg_match('|\d|', $varName) === 1) {
+        } elseif (preg_match('|\d|', $varName) === 1) {
             $warning = 'Variable "%s" contains numbers but this is discouraged';
-            $data    = [$originalVarName];
+            $data = [$originalVarName];
             $phpcsFile->addWarning($warning, $stackPtr, 'ContainsNumbers', $data);
         }
+    }
 
-    }//end processVariable()
-
+    //end processVariable()
 
     /**
      * Processes class member variables.
@@ -114,8 +112,8 @@ class ValidVariableNameSniff extends AbstractVariableSniff
      */
     protected function processMemberVar(File $phpcsFile, $stackPtr)
     {
-        $tokens      = $phpcsFile->getTokens();
-        $varName     = ltrim($tokens[$stackPtr]['content'], '$');
+        $tokens = $phpcsFile->getTokens();
+        $varName = ltrim($tokens[$stackPtr]['content'], '$');
         $memberProps = $phpcsFile->getMemberProperties($stackPtr);
         if (empty($memberProps) === true) {
             // Exception encountered.
@@ -127,14 +125,14 @@ class ValidVariableNameSniff extends AbstractVariableSniff
         if ($public === true) {
             if (substr($varName, 0, 1) === '_') {
                 $error = 'Public member variable "%s" must not contain a leading underscore';
-                $data  = [$varName];
+                $data = [$varName];
                 $phpcsFile->addError($error, $stackPtr, 'PublicHasUnderscore', $data);
             }
         } else {
             if (substr($varName, 0, 1) !== '_') {
                 $scope = ucfirst($memberProps['scope']);
                 $error = '%s member variable "%s" must contain a leading underscore';
-                $data  = [
+                $data = [
                     $scope,
                     $varName,
                 ];
@@ -147,16 +145,16 @@ class ValidVariableNameSniff extends AbstractVariableSniff
 
         if (Common::isCamelCaps($varName, false, true, false) === false) {
             $error = 'Member variable "%s" is not in valid camel caps format';
-            $data  = [$varName];
+            $data = [$varName];
             $phpcsFile->addError($error, $stackPtr, 'MemberVarNotCamelCaps', $data);
-        } else if (preg_match('|\d|', $varName) === 1) {
+        } elseif (preg_match('|\d|', $varName) === 1) {
             $warning = 'Member variable "%s" contains numbers but this is discouraged';
-            $data    = [$varName];
+            $data = [$varName];
             $phpcsFile->addWarning($warning, $stackPtr, 'MemberVarContainsNumbers', $data);
         }
+    }
 
-    }//end processMemberVar()
-
+    //end processMemberVar()
 
     /**
      * Processes the variable found within a double quoted string.
@@ -180,17 +178,16 @@ class ValidVariableNameSniff extends AbstractVariableSniff
 
                 if (Common::isCamelCaps($varName, false, true, false) === false) {
                     $error = 'Variable "%s" is not in valid camel caps format';
-                    $data  = [$varName];
+                    $data = [$varName];
                     $phpcsFile->addError($error, $stackPtr, 'StringVarNotCamelCaps', $data);
-                } else if (preg_match('|\d|', $varName) === 1) {
+                } elseif (preg_match('|\d|', $varName) === 1) {
                     $warning = 'Variable "%s" contains numbers but this is discouraged';
-                    $data    = [$varName];
+                    $data = [$varName];
                     $phpcsFile->addWarning($warning, $stackPtr, 'StringVarContainsNumbers', $data);
                 }
             }//end foreach
         }//end if
+    }
 
-    }//end processVariableInString()
-
-
+    //end processVariableInString()
 }//end class

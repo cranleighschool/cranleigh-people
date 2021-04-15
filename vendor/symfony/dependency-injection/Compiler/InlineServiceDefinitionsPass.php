@@ -63,7 +63,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
                 $this->connectedIds = $this->notInlinedIds = $this->inlinedIds = [];
 
                 foreach ($analyzedContainer->getDefinitions() as $id => $definition) {
-                    if (!$this->graph->hasNode($id)) {
+                    if (! $this->graph->hasNode($id)) {
                         continue;
                     }
                     foreach ($this->graph->getNode($id)->getOutEdges() as $edge) {
@@ -92,7 +92,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
 
                 $definition = $container->getDefinition($id);
 
-                if (!$definition->isShared() && !$definition->isPublic()) {
+                if (! $definition->isShared() && ! $definition->isPublic()) {
                     $container->removeDefinition($id);
                 }
             }
@@ -121,22 +121,22 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
             $value = clone $value;
         }
 
-        if (!$value instanceof Reference) {
+        if (! $value instanceof Reference) {
             return parent::processValue($value, $isRoot);
-        } elseif (!$this->container->hasDefinition($id = (string) $value)) {
+        } elseif (! $this->container->hasDefinition($id = (string) $value)) {
             return $value;
         }
 
         $definition = $this->container->getDefinition($id);
 
-        if (!$this->isInlineableDefinition($id, $definition)) {
+        if (! $this->isInlineableDefinition($id, $definition)) {
             $this->notInlinableIds[$id] = true;
 
             return $value;
         }
 
         $this->container->log($this, sprintf('Inlined service "%s" to "%s".', $id, $this->currentId));
-        $this->inlinedIds[$id] = $definition->isPublic() || !$definition->isShared();
+        $this->inlinedIds[$id] = $definition->isPublic() || ! $definition->isShared();
         $this->notInlinedIds[$this->currentId] = true;
 
         if ($definition->isShared()) {
@@ -167,8 +167,8 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
             return false;
         }
 
-        if (!$definition->isShared()) {
-            if (!$this->graph->hasNode($id)) {
+        if (! $definition->isShared()) {
+            if (! $this->graph->hasNode($id)) {
                 return true;
             }
 
@@ -187,7 +187,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
             return false;
         }
 
-        if (!$this->graph->hasNode($id)) {
+        if (! $this->graph->hasNode($id)) {
             return true;
         }
 
@@ -207,7 +207,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
                 return false;
             }
             $srcIds[$srcId] = true;
-            ++$srcCount;
+            $srcCount++;
         }
 
         if (1 !== \count($srcIds)) {

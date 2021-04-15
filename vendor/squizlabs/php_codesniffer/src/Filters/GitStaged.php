@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util;
 
 class GitStaged extends ExactMatch
 {
-
-
     /**
      * Get a list of blacklisted file paths.
      *
@@ -25,9 +23,9 @@ class GitStaged extends ExactMatch
     protected function getBlacklist()
     {
         return [];
+    }
 
-    }//end getBlacklist()
-
+    //end getBlacklist()
 
     /**
      * Get a list of whitelisted file paths.
@@ -38,7 +36,7 @@ class GitStaged extends ExactMatch
     {
         $modified = [];
 
-        $cmd    = 'git diff --cached --name-only -- '.escapeshellarg($this->basedir);
+        $cmd = 'git diff --cached --name-only -- '.escapeshellarg($this->basedir);
         $output = [];
         exec($cmd, $output);
 
@@ -56,13 +54,12 @@ class GitStaged extends ExactMatch
 
             do {
                 $modified[$path] = true;
-                $path            = dirname($path);
+                $path = dirname($path);
             } while ($path !== $basedir);
         }
 
         return $modified;
+    }
 
-    }//end getWhitelist()
-
-
+    //end getWhitelist()
 }//end class

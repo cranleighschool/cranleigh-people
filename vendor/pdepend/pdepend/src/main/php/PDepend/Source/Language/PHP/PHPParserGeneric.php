@@ -60,8 +60,8 @@ class PHPParserGeneric extends PHPParserVersion80
      * Tests if the given token type is a reserved keyword in the supported PHP
      * version.
      *
-     * @param  integer $tokenType
-     * @return boolean
+     * @param  int $tokenType
+     * @return bool
      * @since  1.1.1
      */
     protected function isKeyword($tokenType)
@@ -71,6 +71,7 @@ class PHPParserGeneric extends PHPParserVersion80
             case Tokens::T_INTERFACE:
                 return true;
         }
+
         return false;
     }
 
@@ -78,8 +79,8 @@ class PHPParserGeneric extends PHPParserVersion80
      * Tests if the give token is a valid function name in the supported PHP
      * version.
      *
-     * @param integer $tokenType
-     * @return boolean
+     * @param int $tokenType
+     * @return bool
      * @since 2.3
      */
     protected function isFunctionName($tokenType)
@@ -103,6 +104,7 @@ class PHPParserGeneric extends PHPParserVersion80
             case Tokens::T_TRAIT_C:
                 return true;
         }
+
         return false;
     }
 

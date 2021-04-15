@@ -47,8 +47,10 @@ class ContainerConfigurator extends AbstractConfigurator
 
     final public function extension(string $namespace, array $config)
     {
-        if (!$this->container->hasExtension($namespace)) {
-            $extensions = array_filter(array_map(function (ExtensionInterface $ext) { return $ext->getAlias(); }, $this->container->getExtensions()));
+        if (! $this->container->hasExtension($namespace)) {
+            $extensions = array_filter(array_map(function (ExtensionInterface $ext) {
+                return $ext->getAlias();
+            }, $this->container->getExtensions()));
             throw new InvalidArgumentException(sprintf('There is no extension able to load the configuration for "%s" (in "%s"). Looked for namespace "%s", found "%s".', $namespace, $this->file, $namespace, $extensions ? implode('", "', $extensions) : 'none'));
         }
 

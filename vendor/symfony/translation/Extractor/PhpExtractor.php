@@ -190,11 +190,11 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
             $t = $tokenIterator->current();
 
             if ('[' === $t[0] || '(' === $t[0]) {
-                ++$openBraces;
+                $openBraces++;
             }
 
             if (']' === $t[0] || ')' === $t[0]) {
-                --$openBraces;
+                $openBraces--;
             }
 
             if ((0 === $openBraces && ',' === $t[0]) || (-1 === $openBraces && ')' === $t[0])) {
@@ -219,7 +219,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
                 // Concatenate with next token
                 continue;
             }
-            if (!isset($t[1])) {
+            if (! isset($t[1])) {
                 break;
             }
 
@@ -270,7 +270,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
     {
         $tokenIterator = new \ArrayIterator($tokens);
 
-        for ($key = 0; $key < $tokenIterator->count(); ++$key) {
+        for ($key = 0; $key < $tokenIterator->count(); $key++) {
             foreach ($this->sequences as $sequence) {
                 $message = '';
                 $domain = 'messages';

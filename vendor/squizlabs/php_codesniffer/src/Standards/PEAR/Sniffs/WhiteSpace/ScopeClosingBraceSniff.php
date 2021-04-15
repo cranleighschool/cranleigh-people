@@ -15,26 +15,24 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ScopeClosingBraceSniff implements Sniff
 {
-
     /**
      * The number of spaces code should be indented.
      *
-     * @var integer
+     * @var int
      */
     public $indent = 4;
 
-
-     /**
-      * Returns an array of tokens this test wants to listen for.
-      *
-      * @return int[]
-      */
+    /**
+     * Returns an array of tokens this test wants to listen for.
+     *
+     * @return int[]
+     */
     public function register()
     {
         return Tokens::$scopeOpeners;
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -56,7 +54,7 @@ class ScopeClosingBraceSniff implements Sniff
         }
 
         $scopeStart = $tokens[$stackPtr]['scope_opener'];
-        $scopeEnd   = $tokens[$stackPtr]['scope_closer'];
+        $scopeEnd = $tokens[$stackPtr]['scope_closer'];
 
         // If the scope closer doesn't think it belongs to this scope opener
         // then the opener is sharing its closer with other tokens. We only
@@ -83,7 +81,7 @@ class ScopeClosingBraceSniff implements Sniff
         $startColumn = 1;
         if ($tokens[$lineStart]['code'] === T_WHITESPACE) {
             $startColumn = $tokens[($lineStart + 1)]['column'];
-        } else if ($tokens[$lineStart]['code'] === T_INLINE_HTML) {
+        } elseif ($tokens[$lineStart]['code'] === T_INLINE_HTML) {
             $trimmed = ltrim($tokens[$lineStart]['content']);
             if ($trimmed === '') {
                 $startColumn = $tokens[($lineStart + 1)]['column'];
@@ -106,7 +104,7 @@ class ScopeClosingBraceSniff implements Sniff
 
         if ($tokens[$lastContent]['line'] === $tokens[$scopeEnd]['line']) {
             $error = 'Closing brace must be on a line by itself';
-            $fix   = $phpcsFile->addFixableError($error, $scopeEnd, 'Line');
+            $fix = $phpcsFile->addFixableError($error, $scopeEnd, 'Line');
             if ($fix === true) {
                 $phpcsFile->fixer->addNewlineBefore($scopeEnd);
             }
@@ -127,7 +125,7 @@ class ScopeClosingBraceSniff implements Sniff
         $braceIndent = 0;
         if ($tokens[$lineStart]['code'] === T_WHITESPACE) {
             $braceIndent = ($tokens[($lineStart + 1)]['column'] - 1);
-        } else if ($tokens[$lineStart]['code'] === T_INLINE_HTML) {
+        } elseif ($tokens[$lineStart]['code'] === T_INLINE_HTML) {
             $trimmed = ltrim($tokens[$lineStart]['content']);
             if ($trimmed === '') {
                 $braceIndent = ($tokens[($lineStart + 1)]['column'] - 1);
@@ -145,21 +143,21 @@ class ScopeClosingBraceSniff implements Sniff
             $expectedIndent = ($startColumn + $this->indent - 1);
             if ($braceIndent !== $expectedIndent) {
                 $error = 'Case breaking statement indented incorrectly; expected %s spaces, found %s';
-                $data  = [
+                $data = [
                     $expectedIndent,
                     $braceIndent,
                 ];
-                $fix   = $phpcsFile->addFixableError($error, $scopeEnd, 'BreakIndent', $data);
+                $fix = $phpcsFile->addFixableError($error, $scopeEnd, 'BreakIndent', $data);
             }
         } else {
             $expectedIndent = max(0, ($startColumn - 1));
             if ($braceIndent !== $expectedIndent) {
                 $error = 'Closing brace indented incorrectly; expected %s spaces, found %s';
-                $data  = [
+                $data = [
                     $expectedIndent,
                     $braceIndent,
                 ];
-                $fix   = $phpcsFile->addFixableError($error, $scopeEnd, 'Indent', $data);
+                $fix = $phpcsFile->addFixableError($error, $scopeEnd, 'Indent', $data);
             }
         }//end if
 
@@ -172,8 +170,7 @@ class ScopeClosingBraceSniff implements Sniff
                 $phpcsFile->fixer->addContentBefore($lineStart, $spaces);
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -37,14 +37,14 @@ class Filesystem
     public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false)
     {
         $originIsLocal = stream_is_local($originFile) || 0 === stripos($originFile, 'file://');
-        if ($originIsLocal && !is_file($originFile)) {
+        if ($originIsLocal && ! is_file($originFile)) {
             throw new FileNotFoundException(sprintf('Failed to copy "%s" because file does not exist.', $originFile), 0, null, $originFile);
         }
 
         $this->mkdir(\dirname($targetFile));
 
         $doCopy = true;
-        if (!$overwriteNewerFiles && null === parse_url($originFile, \PHP_URL_HOST) && is_file($targetFile)) {
+        if (! $overwriteNewerFiles && null === parse_url($originFile, \PHP_URL_HOST) && is_file($targetFile)) {
             $doCopy = filemtime($originFile) > filemtime($targetFile);
         }
 
@@ -64,7 +64,7 @@ class Filesystem
             fclose($target);
             unset($source, $target);
 
-            if (!is_file($targetFile)) {
+            if (! is_file($targetFile)) {
                 throw new IOException(sprintf('Failed to copy "%s" to "%s".', $originFile, $targetFile), 0, null, $originFile);
             }
 
@@ -93,8 +93,8 @@ class Filesystem
                 continue;
             }
 
-            if (!self::box('mkdir', $dir, $mode, true)) {
-                if (!is_dir($dir)) {
+            if (! self::box('mkdir', $dir, $mode, true)) {
+                if (! is_dir($dir)) {
                     // The directory was not created by a concurrent process. Let's throw an exception with a developer friendly error message if we have one
                     if (self::$lastError) {
                         throw new IOException(sprintf('Failed to create "%s": ', $dir).self::$lastError, 0, null, $dir);
@@ -121,7 +121,7 @@ class Filesystem
                 throw new IOException(sprintf('Could not check if file exist because path length exceeds %d characters.', $maxPathLength), 0, null, $file);
             }
 
-            if (!file_exists($file)) {
+            if (! file_exists($file)) {
                 return false;
             }
         }
@@ -159,23 +159,23 @@ class Filesystem
     {
         if ($files instanceof \Traversable) {
             $files = iterator_to_array($files, false);
-        } elseif (!\is_array($files)) {
+        } elseif (! \is_array($files)) {
             $files = [$files];
         }
         $files = array_reverse($files);
         foreach ($files as $file) {
             if (is_link($file)) {
                 // See https://bugs.php.net/52176
-                if (!(self::box('unlink', $file) || '\\' !== \DIRECTORY_SEPARATOR || self::box('rmdir', $file)) && file_exists($file)) {
+                if (! (self::box('unlink', $file) || '\\' !== \DIRECTORY_SEPARATOR || self::box('rmdir', $file)) && file_exists($file)) {
                     throw new IOException(sprintf('Failed to remove symlink "%s": ', $file).self::$lastError);
                 }
             } elseif (is_dir($file)) {
                 $this->remove(new \FilesystemIterator($file, \FilesystemIterator::CURRENT_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS));
 
-                if (!self::box('rmdir', $file) && file_exists($file)) {
+                if (! self::box('rmdir', $file) && file_exists($file)) {
                     throw new IOException(sprintf('Failed to remove directory "%s": ', $file).self::$lastError);
                 }
-            } elseif (!self::box('unlink', $file) && (false !== strpos(self::$lastError, 'Permission denied') || file_exists($file))) {
+            } elseif (! self::box('unlink', $file) && (false !== strpos(self::$lastError, 'Permission denied') || file_exists($file))) {
                 throw new IOException(sprintf('Failed to remove file "%s": ', $file).self::$lastError);
             }
         }
@@ -197,7 +197,7 @@ class Filesystem
             if ((\PHP_VERSION_ID < 80000 || \is_int($mode)) && true !== @chmod($file, $mode & ~$umask)) {
                 throw new IOException(sprintf('Failed to chmod file "%s".', $file), 0, null, $file);
             }
-            if ($recursive && is_dir($file) && !is_link($file)) {
+            if ($recursive && is_dir($file) && ! is_link($file)) {
                 $this->chmod(new \FilesystemIterator($file), $mode, $umask, true);
             }
         }
@@ -215,7 +215,7 @@ class Filesystem
     public function chown($files, $user, bool $recursive = false)
     {
         foreach ($this->toIterable($files) as $file) {
-            if ($recursive && is_dir($file) && !is_link($file)) {
+            if ($recursive && is_dir($file) && ! is_link($file)) {
                 $this->chown(new \FilesystemIterator($file), $user, true);
             }
             if (is_link($file) && \function_exists('lchown')) {
@@ -242,7 +242,7 @@ class Filesystem
     public function chgrp($files, $group, bool $recursive = false)
     {
         foreach ($this->toIterable($files) as $file) {
-            if ($recursive && is_dir($file) && !is_link($file)) {
+            if ($recursive && is_dir($file) && ! is_link($file)) {
                 $this->chgrp(new \FilesystemIterator($file), $group, true);
             }
             if (is_link($file) && \function_exists('lchgrp')) {
@@ -266,7 +266,7 @@ class Filesystem
     public function rename(string $origin, string $target, bool $overwrite = false)
     {
         // we check that target does not exist
-        if (!$overwrite && $this->isReadable($target)) {
+        if (! $overwrite && $this->isReadable($target)) {
             throw new IOException(sprintf('Cannot rename because the target "%s" already exists.', $target), 0, null, $target);
         }
 
@@ -325,7 +325,7 @@ class Filesystem
             $this->remove($targetDir);
         }
 
-        if (!self::box('symlink', $originDir, $targetDir)) {
+        if (! self::box('symlink', $originDir, $targetDir)) {
             $this->linkException($originDir, $targetDir, 'symbolic');
         }
     }
@@ -340,11 +340,11 @@ class Filesystem
      */
     public function hardlink(string $originFile, $targetFiles)
     {
-        if (!$this->exists($originFile)) {
+        if (! $this->exists($originFile)) {
             throw new FileNotFoundException(null, 0, null, $originFile);
         }
 
-        if (!is_file($originFile)) {
+        if (! is_file($originFile)) {
             throw new FileNotFoundException(sprintf('Origin file "%s" is not a file.', $originFile));
         }
 
@@ -356,7 +356,7 @@ class Filesystem
                 $this->remove($targetFile);
             }
 
-            if (!self::box('link', $originFile, $targetFile)) {
+            if (! self::box('link', $originFile, $targetFile)) {
                 $this->linkException($originFile, $targetFile, 'hard');
             }
         }
@@ -390,12 +390,12 @@ class Filesystem
      */
     public function readlink(string $path, bool $canonicalize = false)
     {
-        if (!$canonicalize && !is_link($path)) {
+        if (! $canonicalize && ! is_link($path)) {
             return null;
         }
 
         if ($canonicalize) {
-            if (!$this->exists($path)) {
+            if (! $this->exists($path)) {
                 return null;
             }
 
@@ -420,11 +420,11 @@ class Filesystem
      */
     public function makePathRelative(string $endPath, string $startPath)
     {
-        if (!$this->isAbsolutePath($startPath)) {
+        if (! $this->isAbsolutePath($startPath)) {
             throw new InvalidArgumentException(sprintf('The start path "%s" is not absolute.', $startPath));
         }
 
-        if (!$this->isAbsolutePath($endPath)) {
+        if (! $this->isAbsolutePath($endPath)) {
             throw new InvalidArgumentException(sprintf('The end path "%s" is not absolute.', $endPath));
         }
 
@@ -468,7 +468,7 @@ class Filesystem
         // Find for which directory the common path stops
         $index = 0;
         while (isset($startPathArr[$index]) && isset($endPathArr[$index]) && $startPathArr[$index] === $endPathArr[$index]) {
-            ++$index;
+            $index++;
         }
 
         // Determine how deep the start path is relative to the common path (ie, "web/bundles" = 2 levels)
@@ -512,7 +512,7 @@ class Filesystem
         $originDir = rtrim($originDir, '/\\');
         $originDirLen = \strlen($originDir);
 
-        if (!$this->exists($originDir)) {
+        if (! $this->exists($originDir)) {
             throw new IOException(sprintf('The origin directory specified "%s" was not found.', $originDir), 0, null, $originDir);
         }
 
@@ -526,7 +526,7 @@ class Filesystem
             $targetDirLen = \strlen($targetDir);
             foreach ($deleteIterator as $file) {
                 $origin = $originDir.substr($file->getPathname(), $targetDirLen);
-                if (!$this->exists($origin)) {
+                if (! $this->exists($origin)) {
                     $this->remove($file);
                 }
             }
@@ -550,7 +550,7 @@ class Filesystem
             $target = $targetDir.substr($file->getPathname(), $originDirLen);
             $filesCreatedWhileMirroring[$target] = true;
 
-            if (!$copyOnWindows && is_link($file)) {
+            if (! $copyOnWindows && is_link($file)) {
                 $this->symlink($file->getLinkTarget(), $target);
             } elseif (is_dir($file)) {
                 $this->mkdir($target);
@@ -609,7 +609,7 @@ class Filesystem
         }
 
         // Loop until we create a valid temp file or have reached 10 attempts
-        for ($i = 0; $i < 10; ++$i) {
+        for ($i = 0; $i < 10; $i++) {
             // Create a unique filename
             $tmpFile = $dir.'/'.$prefix.uniqid(mt_rand(), true).$suffix;
 
@@ -646,11 +646,11 @@ class Filesystem
 
         $dir = \dirname($filename);
 
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             $this->mkdir($dir);
         }
 
-        if (!is_writable($dir)) {
+        if (! is_writable($dir)) {
             throw new IOException(sprintf('Unable to write to the "%s" directory.', $dir), 0, null, $dir);
         }
 
@@ -688,11 +688,11 @@ class Filesystem
 
         $dir = \dirname($filename);
 
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             $this->mkdir($dir);
         }
 
-        if (!is_writable($dir)) {
+        if (! is_writable($dir)) {
             throw new IOException(sprintf('Unable to write to the "%s" directory.', $dir), 0, null, $dir);
         }
 

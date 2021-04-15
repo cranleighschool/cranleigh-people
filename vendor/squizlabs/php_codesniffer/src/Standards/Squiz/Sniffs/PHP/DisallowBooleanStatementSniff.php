@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class DisallowBooleanStatementSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +23,9 @@ class DisallowBooleanStatementSniff implements Sniff
     public function register()
     {
         return Tokens::$booleanOperators;
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -52,8 +50,7 @@ class DisallowBooleanStatementSniff implements Sniff
 
         $error = 'Boolean operators are not allowed outside of control structure conditions';
         $phpcsFile->addError($error, $stackPtr, 'Found');
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

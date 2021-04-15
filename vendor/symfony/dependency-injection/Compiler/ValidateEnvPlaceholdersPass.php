@@ -37,12 +37,12 @@ class ValidateEnvPlaceholdersPass implements CompilerPassInterface
     {
         $this->extensionConfig = [];
 
-        if (!class_exists(BaseNode::class) || !$extensions = $container->getExtensions()) {
+        if (! class_exists(BaseNode::class) || ! $extensions = $container->getExtensions()) {
             return;
         }
 
         $resolvingBag = $container->getParameterBag();
-        if (!$resolvingBag instanceof EnvPlaceholderParameterBag) {
+        if (! $resolvingBag instanceof EnvPlaceholderParameterBag) {
             return;
         }
 
@@ -69,8 +69,8 @@ class ValidateEnvPlaceholdersPass implements CompilerPassInterface
             $processor = new Processor();
 
             foreach ($extensions as $name => $extension) {
-                if (!($extension instanceof ConfigurationExtensionInterface || $extension instanceof ConfigurationInterface)
-                    || !$config = array_filter($container->getExtensionConfig($name))
+                if (! ($extension instanceof ConfigurationExtensionInterface || $extension instanceof ConfigurationInterface)
+                    || ! $config = array_filter($container->getExtensionConfig($name))
                 ) {
                     // this extension has no semantic configuration or was not called
                     continue;

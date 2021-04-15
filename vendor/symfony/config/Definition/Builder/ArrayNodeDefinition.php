@@ -284,8 +284,7 @@ class ArrayNodeDefinition extends NodeDefinition implements ParentNodeDefinition
             ->end()
             ->children()
                 ->booleanNode('enabled')
-                    ->defaultFalse()
-        ;
+                    ->defaultFalse();
 
         return $this;
     }
@@ -306,8 +305,7 @@ class ArrayNodeDefinition extends NodeDefinition implements ParentNodeDefinition
             ->treatNullLike(['enabled' => true])
             ->children()
                 ->booleanNode('enabled')
-                    ->defaultTrue()
-        ;
+                    ->defaultTrue();
 
         return $this;
     }
@@ -411,7 +409,7 @@ class ArrayNodeDefinition extends NodeDefinition implements ParentNodeDefinition
             }
 
             if ($this->default) {
-                if (!\is_array($this->defaultValue)) {
+                if (! \is_array($this->defaultValue)) {
                     throw new \InvalidArgumentException(sprintf('%s: the default value of an array node has to be an array.', $node->getPath()));
                 }
 

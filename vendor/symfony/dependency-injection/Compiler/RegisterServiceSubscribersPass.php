@@ -30,7 +30,7 @@ class RegisterServiceSubscribersPass extends AbstractRecursivePass
 {
     protected function processValue($value, bool $isRoot = false)
     {
-        if (!$value instanceof Definition || $value->isAbstract() || $value->isSynthetic() || !$value->hasTag('container.service_subscriber')) {
+        if (! $value instanceof Definition || $value->isAbstract() || $value->isSynthetic() || ! $value->hasTag('container.service_subscriber')) {
             return parent::processValue($value, $isRoot);
         }
 
@@ -38,7 +38,7 @@ class RegisterServiceSubscribersPass extends AbstractRecursivePass
         $autowire = $value->isAutowired();
 
         foreach ($value->getTag('container.service_subscriber') as $attributes) {
-            if (!$attributes) {
+            if (! $attributes) {
                 $autowire = true;
                 continue;
             }
@@ -46,10 +46,10 @@ class RegisterServiceSubscribersPass extends AbstractRecursivePass
             if ([] !== array_diff(array_keys($attributes), ['id', 'key'])) {
                 throw new InvalidArgumentException(sprintf('The "container.service_subscriber" tag accepts only the "key" and "id" attributes, "%s" given for service "%s".', implode('", "', array_keys($attributes)), $this->currentId));
             }
-            if (!\array_key_exists('id', $attributes)) {
+            if (! \array_key_exists('id', $attributes)) {
                 throw new InvalidArgumentException(sprintf('Missing "id" attribute on "container.service_subscriber" tag with key="%s" for service "%s".', $attributes['key'], $this->currentId));
             }
-            if (!\array_key_exists('key', $attributes)) {
+            if (! \array_key_exists('key', $attributes)) {
                 $attributes['key'] = $attributes['id'];
             }
             if (isset($serviceMap[$attributes['key']])) {
@@ -59,10 +59,10 @@ class RegisterServiceSubscribersPass extends AbstractRecursivePass
         }
         $class = $value->getClass();
 
-        if (!$r = $this->container->getReflectionClass($class)) {
+        if (! $r = $this->container->getReflectionClass($class)) {
             throw new InvalidArgumentException(sprintf('Class "%s" used for service "%s" cannot be found.', $class, $this->currentId));
         }
-        if (!$r->isSubclassOf(ServiceSubscriberInterface::class)) {
+        if (! $r->isSubclassOf(ServiceSubscriberInterface::class)) {
             throw new InvalidArgumentException(sprintf('Service "%s" must implement interface "%s".', $this->currentId, ServiceSubscriberInterface::class));
         }
         $class = $r->name;
@@ -70,7 +70,7 @@ class RegisterServiceSubscribersPass extends AbstractRecursivePass
         $subscriberMap = [];
 
         foreach ($class::getSubscribedServices() as $key => $type) {
-            if (!\is_string($type) || !preg_match('/^\??[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+)*+$/', $type)) {
+            if (! \is_string($type) || ! preg_match('/^\??[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+(?:\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*+)*+$/', $type)) {
                 throw new InvalidArgumentException(sprintf('"%s::getSubscribedServices()" must return valid PHP types for service "%s" key "%s", "%s" returned.', $class, $this->currentId, $key, \is_string($type) ? $type : get_debug_type($type)));
             }
             if ($optionalBehavior = '?' === $type[0]) {
@@ -81,8 +81,8 @@ class RegisterServiceSubscribersPass extends AbstractRecursivePass
                 $key = $type;
                 $name = null;
             }
-            if (!isset($serviceMap[$key])) {
-                if (!$autowire) {
+            if (! isset($serviceMap[$key])) {
+                if (! $autowire) {
                     throw new InvalidArgumentException(sprintf('Service "%s" misses a "container.service_subscriber" tag with "key"/"id" attributes corresponding to entry "%s" as returned by "%s::getSubscribedServices()".', $this->currentId, $key, $class));
                 }
                 $serviceMap[$key] = new Reference($type);
@@ -94,7 +94,7 @@ class RegisterServiceSubscribersPass extends AbstractRecursivePass
                 $name = null;
             }
 
-            if (null !== $name && !$this->container->has($name) && !$this->container->has($type.' $'.$name)) {
+            if (null !== $name && ! $this->container->has($name) && ! $this->container->has($type.' $'.$name)) {
                 $camelCaseName = lcfirst(str_replace(' ', '', ucwords(preg_replace('/[^a-zA-Z0-9\x7f-\xff]++/', ' ', $name))));
                 $name = $this->container->has($type.' $'.$camelCaseName) ? $camelCaseName : $name;
             }

@@ -56,7 +56,6 @@ use PDepend\Util\Configuration;
  */
 class CacheFactory
 {
-
     const DEFAULT_TTL = 2592000; //30 days
 
     /**
@@ -71,7 +70,7 @@ class CacheFactory
      *
      * @var \PDepend\Util\Cache\CacheDriver[]
      */
-    protected $caches = array();
+    protected $caches = [];
 
     /**
      * Constructs a new cache factory instance for the given configuration.
@@ -96,6 +95,7 @@ class CacheFactory
         if (false === isset($this->caches[$cacheKey])) {
             $this->caches[$cacheKey] = $this->createCache($cacheKey);
         }
+
         return $this->caches[$cacheKey];
     }
 

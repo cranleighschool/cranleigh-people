@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class FunctionCommentThrowTagSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +23,9 @@ class FunctionCommentThrowTagSniff implements Sniff
     public function register()
     {
         return [T_FUNCTION];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -47,7 +45,7 @@ class FunctionCommentThrowTagSniff implements Sniff
             return;
         }
 
-        $find   = Tokens::$methodPrefixes;
+        $find = Tokens::$methodPrefixes;
         $find[] = T_WHITESPACE;
 
         $commentEnd = $phpcsFile->findPrevious($find, ($stackPtr - 1), null, true);
@@ -60,9 +58,9 @@ class FunctionCommentThrowTagSniff implements Sniff
 
         // Find all the exception type tokens within the current scope.
         $thrownExceptions = [];
-        $currPos          = $stackPtr;
-        $foundThrows      = false;
-        $unknownCount     = 0;
+        $currPos = $stackPtr;
+        $foundThrows = false;
+        $unknownCount = 0;
         do {
             $currPos = $phpcsFile->findNext([T_THROW, T_ANON_CLASS, T_CLOSURE], ($currPos + 1), $stackPtrEnd);
             if ($currPos === false) {
@@ -130,7 +128,7 @@ class FunctionCommentThrowTagSniff implements Sniff
                         $thrownExceptions[] = $phpcsFile->getTokensAsString($currException, ($endException - $currException));
                     }
                 }//end if
-            } else if ($tokens[$nextToken]['code'] === T_VARIABLE) {
+            } elseif ($tokens[$nextToken]['code'] === T_VARIABLE) {
                 // Find the nearest catch block in this scope and, if the caught var
                 // matches our re-thrown var, use the exception types being caught as
                 // exception types that are being thrown as well.
@@ -158,7 +156,7 @@ class FunctionCommentThrowTagSniff implements Sniff
                     }
                 }
             } else {
-                ++$unknownCount;
+                $unknownCount++;
             }//end if
         } while ($currPos < $stackPtrEnd && $currPos !== false);
 
@@ -169,7 +167,7 @@ class FunctionCommentThrowTagSniff implements Sniff
         // Only need one @throws tag for each type of exception thrown.
         $thrownExceptions = array_unique($thrownExceptions);
 
-        $throwTags    = [];
+        $throwTags = [];
         $commentStart = $tokens[$commentEnd]['comment_opener'];
         foreach ($tokens[$commentStart]['comment_tags'] as $tag) {
             if ($tokens[$tag]['content'] !== '@throws') {
@@ -178,7 +176,7 @@ class FunctionCommentThrowTagSniff implements Sniff
 
             if ($tokens[($tag + 2)]['code'] === T_DOC_COMMENT_STRING) {
                 $exception = $tokens[($tag + 2)]['content'];
-                $space     = strpos($exception, ' ');
+                $space = strpos($exception, ' ');
                 if ($space !== false) {
                     $exception = substr($exception, 0, $space);
                 }
@@ -190,8 +188,9 @@ class FunctionCommentThrowTagSniff implements Sniff
         if (empty($throwTags) === true) {
             $error = 'Missing @throws tag in function comment';
             $phpcsFile->addError($error, $commentEnd, 'Missing');
+
             return;
-        } else if (empty($thrownExceptions) === true) {
+        } elseif (empty($thrownExceptions) === true) {
             // If token count is zero, it means that only variables are being
             // thrown, so we need at least one @throws tag (checked above).
             // Nothing more to do.
@@ -200,14 +199,15 @@ class FunctionCommentThrowTagSniff implements Sniff
 
         // Make sure @throws tag count matches thrown count.
         $thrownCount = (count($thrownExceptions) + $unknownCount);
-        $tagCount    = count($throwTags);
+        $tagCount = count($throwTags);
         if ($thrownCount !== $tagCount) {
             $error = 'Expected %s @throws tag(s) in function comment; %s found';
-            $data  = [
+            $data = [
                 $thrownCount,
                 $tagCount,
             ];
             $phpcsFile->addError($error, $commentEnd, 'WrongNumber', $data);
+
             return;
         }
 
@@ -223,11 +223,10 @@ class FunctionCommentThrowTagSniff implements Sniff
             }
 
             $error = 'Missing @throws tag for "%s" exception';
-            $data  = [$throw];
+            $data = [$throw];
             $phpcsFile->addError($error, $commentEnd, 'Missing', $data);
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

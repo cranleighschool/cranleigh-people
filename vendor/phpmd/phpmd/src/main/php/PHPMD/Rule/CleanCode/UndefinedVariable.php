@@ -43,7 +43,7 @@ class UndefinedVariable extends AbstractLocalVariable implements FunctionAware, 
      *
      * @var array(string)
      */
-    protected $images = array();
+    protected $images = [];
 
     /**
      * This method checks that all local variables within the given function or
@@ -54,7 +54,7 @@ class UndefinedVariable extends AbstractLocalVariable implements FunctionAware, 
      */
     public function apply(AbstractNode $node)
     {
-        $this->images = array();
+        $this->images = [];
 
         if ($node instanceof MethodNode) {
             $this->collectProperties($this->getNode($node->getNode()->getParent()));
@@ -64,7 +64,6 @@ class UndefinedVariable extends AbstractLocalVariable implements FunctionAware, 
 
         foreach ($node->findChildrenOfType('Class') as $class) {
             /** @var ASTClass $class */
-
             $this->collectProperties($class);
 
             foreach ($class->getMethods() as $method) {
@@ -74,11 +73,10 @@ class UndefinedVariable extends AbstractLocalVariable implements FunctionAware, 
 
         foreach ($node->findChildrenOfType('Variable') as $variable) {
             /** @var ASTVariable $variable */
-
             if ($this->isSuperGlobal($variable) || $this->isPassedByReference($variable)) {
                 $this->addVariableDefinition($variable);
-            } elseif (!$this->checkVariableDefined($variable, $node)) {
-                $this->addViolation($variable, array($this->getVariableImage($variable)));
+            } elseif (! $this->checkVariableDefined($variable, $node)) {
+                $this->addViolation($variable, [$this->getVariableImage($variable)]);
             }
         }
     }
@@ -102,7 +100,7 @@ class UndefinedVariable extends AbstractLocalVariable implements FunctionAware, 
 
     protected function collectProperties($node)
     {
-        if (!($node instanceof ASTClass)) {
+        if (! ($node instanceof ASTClass)) {
             return;
         }
 
@@ -291,7 +289,7 @@ class UndefinedVariable extends AbstractLocalVariable implements FunctionAware, 
     {
         $image = $this->getVariableImage($variable);
 
-        if (!isset($this->images[$image])) {
+        if (! isset($this->images[$image])) {
             $this->images[$image] = $variable;
         }
     }
@@ -302,14 +300,13 @@ class UndefinedVariable extends AbstractLocalVariable implements FunctionAware, 
      * @param \PHPMD\Node\AbstractCallableNode $node
      * @param \PHPMD\Node\ASTNode $variable
      *
-     * @return boolean
+     * @return bool
      */
     protected function isNameAllowedInContext(AbstractCallableNode $node, ASTNode $variable)
     {
-        return (
+        return
             $node instanceof MethodNode &&
             $variable->getImage() === '$this' &&
-            ($node->getModifiers() & State::IS_STATIC) === 0
-        );
+            ($node->getModifiers() & State::IS_STATIC) === 0;
     }
 }

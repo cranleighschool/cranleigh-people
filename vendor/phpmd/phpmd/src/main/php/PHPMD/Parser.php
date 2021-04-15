@@ -18,14 +18,14 @@
 namespace PHPMD;
 
 use PDepend\Engine;
-use PDepend\Report\CodeAwareGenerator;
-use PDepend\Source\ASTVisitor\AbstractASTVisitor;
 use PDepend\Metrics\Analyzer;
-use PDepend\Source\AST\ASTClass;
-use PDepend\Source\AST\ASTMethod;
-use PDepend\Source\AST\ASTInterface;
-use PDepend\Source\AST\ASTFunction;
+use PDepend\Report\CodeAwareGenerator;
 use PDepend\Source\AST\ASTArtifactList;
+use PDepend\Source\AST\ASTClass;
+use PDepend\Source\AST\ASTFunction;
+use PDepend\Source\AST\ASTInterface;
+use PDepend\Source\AST\ASTMethod;
+use PDepend\Source\ASTVisitor\AbstractASTVisitor;
 use PHPMD\Node\ClassNode;
 use PHPMD\Node\FunctionNode;
 use PHPMD\Node\InterfaceNode;
@@ -41,14 +41,14 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
      *
      * @var \PHPMD\RuleSet[]
      */
-    private $ruleSets = array();
+    private $ruleSets = [];
 
     /**
      * The metric containing analyzer instances.
      *
      * @var \PDepend\Metrics\AnalyzerNodeAware[]
      */
-    private $analyzers = array();
+    private $analyzers = [];
 
     /**
      * The raw PDepend code nodes.
@@ -157,7 +157,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
      */
     public function getAcceptedAnalyzers()
     {
-        return array(
+        return [
             'pdepend.analyzer.cyclomatic_complexity',
             'pdepend.analyzer.node_loc',
             'pdepend.analyzer.npath_complexity',
@@ -169,7 +169,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
             'pdepend.analyzer.coupling',
             'pdepend.analyzer.class_level',
             'pdepend.analyzer.cohesion',
-        );
+        ];
     }
 
     /**
@@ -180,7 +180,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
      */
     public function visitClass(ASTClass $node)
     {
-        if (!$node->isUserDefined()) {
+        if (! $node->isUserDefined()) {
             return;
         }
 
@@ -211,7 +211,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
      */
     public function visitInterface(ASTInterface $node)
     {
-        if (!$node->isUserDefined()) {
+        if (! $node->isUserDefined()) {
             return;
         }
 
@@ -269,7 +269,7 @@ class Parser extends AbstractASTVisitor implements CodeAwareGenerator
      */
     private function collectMetrics(AbstractNode $node)
     {
-        $metrics = array();
+        $metrics = [];
 
         $pdepend = $node->getNode();
         foreach ($this->analyzers as $analyzer) {

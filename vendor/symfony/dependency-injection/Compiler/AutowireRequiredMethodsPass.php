@@ -28,10 +28,10 @@ class AutowireRequiredMethodsPass extends AbstractRecursivePass
     {
         $value = parent::processValue($value, $isRoot);
 
-        if (!$value instanceof Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
+        if (! $value instanceof Definition || ! $value->isAutowired() || $value->isAbstract() || ! $value->getClass()) {
             return $value;
         }
-        if (!$reflectionClass = $this->container->getReflectionClass($value->getClass(), false)) {
+        if (! $reflectionClass = $this->container->getReflectionClass($value->getClass(), false)) {
             return $value;
         }
 
@@ -67,7 +67,7 @@ class AutowireRequiredMethodsPass extends AbstractRecursivePass
                         }
                         break;
                     }
-                    if (false === stripos($doc, '@inheritdoc') || !preg_match('#(?:^/\*\*|\n\s*+\*)\s*+(?:\{@inheritdoc\}|@inheritdoc)(?:\s|\*/$)#i', $doc)) {
+                    if (false === stripos($doc, '@inheritdoc') || ! preg_match('#(?:^/\*\*|\n\s*+\*)\s*+(?:\{@inheritdoc\}|@inheritdoc)(?:\s|\*/$)#i', $doc)) {
                         break;
                     }
                 }

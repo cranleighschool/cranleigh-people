@@ -44,7 +44,7 @@ class TranslationReader implements TranslationReaderInterface
      */
     public function read(string $directory, MessageCatalogue $catalogue)
     {
-        if (!is_dir($directory)) {
+        if (! is_dir($directory)) {
             return;
         }
 

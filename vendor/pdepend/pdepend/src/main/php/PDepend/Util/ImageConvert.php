@@ -61,13 +61,13 @@ class ImageConvert
      */
     public static function convert($input, $output)
     {
-        $inputType  = strtolower(pathinfo($input, PATHINFO_EXTENSION));
+        $inputType = strtolower(pathinfo($input, PATHINFO_EXTENSION));
         $outputType = strtolower(pathinfo($output, PATHINFO_EXTENSION));
 
         // Check for output file without extension and reuse input type
         if ($outputType === '') {
             $outputType = $inputType;
-            $output    .= ".{$outputType}";
+            $output .= ".{$outputType}";
         }
 
         if ($inputType === 'svg') {
@@ -81,15 +81,15 @@ class ImageConvert
             $imagick->setImageFormat($outputType);
             $imagick->writeImage($output);
 
-            // The following code is not testable when imagick is installed
+        // The following code is not testable when imagick is installed
             // @codeCoverageIgnoreStart
         } elseif (self::hasImagickConvert() === true) {
-            $input  = escapeshellarg($input);
+            $input = escapeshellarg($input);
             $output = escapeshellarg($output);
 
             system("convert {$input} {$output}");
         } else {
-            $fallback = substr($output, 0, -strlen($outputType)) . $inputType;
+            $fallback = substr($output, 0, -strlen($outputType)).$inputType;
 
             echo "WARNING: Cannot generate image of type '{$outputType}'. This",
                  " feature needs either the\n         pecl/imagick extension or",
@@ -104,24 +104,25 @@ class ImageConvert
     /**
      * Tests that the ImageMagick CLI tool <b>convert</b> exists.
      *
-     * @return boolean
+     * @return bool
      */
     protected static function hasImagickConvert()
     {
         // @codeCoverageIgnoreStart
-        $desc = array(
-            0  =>  array('pipe', 'r'),
-            1  =>  array('pipe', 'w'),
-            2  =>  array('pipe', 'a'),
-        );
+        $desc = [
+            0  =>  ['pipe', 'r'],
+            1  =>  ['pipe', 'w'],
+            2  =>  ['pipe', 'a'],
+        ];
 
         $proc = proc_open('convert', $desc, $pipes);
         if (is_resource($proc)) {
             fwrite($pipes[0], '-version');
             fclose($pipes[0]);
 
-            return (0 === proc_close($proc));
+            return 0 === proc_close($proc);
         }
+
         return false;
         // @codeCoverageIgnoreEnd
     }
@@ -150,7 +151,7 @@ class ImageConvert
             // Get font family
             $fontFamily = (string) $config->imageConvert->fontFamily;
             // Replace CSS separators
-            $fontReplace = 'font-family:' . strtr($fontFamily, ';:', '  ');
+            $fontReplace = 'font-family:'.strtr($fontFamily, ';:', '  ');
             $fontPattern = '/font-family:\s*Arial/';
 
             $svg = preg_replace($fontPattern, $fontReplace, $svg);
@@ -168,7 +169,7 @@ class ImageConvert
             $resize = ($fontSize - max($fontSizes));
             foreach ($fontSizes as $fontSize) {
                 // Calculate resize value
-                $fontReplace = 'font-size:' . ($fontSize + $resize);
+                $fontReplace = 'font-size:'.($fontSize + $resize);
                 $fontPattern = "/font-size:\s*{$fontSize}/";
 
                 $svg = preg_replace($fontPattern, $fontReplace, $svg);

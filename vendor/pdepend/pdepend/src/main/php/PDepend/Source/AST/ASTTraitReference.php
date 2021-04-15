@@ -64,6 +64,7 @@ class ASTTraitReference extends ASTClassOrInterfaceReference
         if ($this->typeInstance === null) {
             $this->typeInstance = $this->context->getTrait($this->getImage());
         }
+
         return $this->typeInstance;
     }
 

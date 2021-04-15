@@ -82,21 +82,21 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      *
      * @var \PDepend\Source\AST\ASTCompilationUnit[]
      */
-    protected $fileSet = array();
+    protected $fileSet = [];
 
     /**
      * List of all generated project metrics.
      *
      * @var array<string, mixed>
      */
-    protected $projectMetrics = array();
+    protected $projectMetrics = [];
 
     /**
      * List of all collected node metrics.
      *
      * @var array<string, array>
      */
-    protected $nodeMetrics = array();
+    protected $nodeMetrics = [];
 
     /**
      * The dependency result set.
@@ -153,7 +153,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      */
     public function getAcceptedAnalyzers()
     {
-        return array('pdepend.analyzer.dependency');
+        return ['pdepend.analyzer.dependency'];
     }
 
     /**
@@ -172,7 +172,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      * with return <b>true</b>, otherwise the return value is <b>false</b>.
      *
      * @param  \PDepend\Metrics\Analyzer $analyzer The analyzer to log.
-     * @return boolean
+     * @return bool
      */
     public function log(Analyzer $analyzer)
     {
@@ -181,6 +181,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
 
             return true;
         }
+
         return false;
     }
 
@@ -204,7 +205,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
         $jdepend = $dom->createElement('PDepend');
 
         $this->packages = $jdepend->appendChild($dom->createElement('Packages'));
-        $this->cycles   = $jdepend->appendChild($dom->createElement('Cycles'));
+        $this->cycles = $jdepend->appendChild($dom->createElement('Cycles'));
 
         foreach ($this->code as $node) {
             $node->accept($this);
@@ -223,7 +224,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      */
     public function visitClass(ASTClass $class)
     {
-        if (!$class->isUserDefined()) {
+        if (! $class->isUserDefined()) {
             return;
         }
 
@@ -252,7 +253,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      */
     public function visitInterface(ASTInterface $interface)
     {
-        if (!$interface->isUserDefined()) {
+        if (! $interface->isUserDefined()) {
             return;
         }
 
@@ -277,7 +278,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      */
     public function visitNamespace(ASTNamespace $namespace)
     {
-        if (!$namespace->isUserDefined()) {
+        if (! $namespace->isUserDefined()) {
             return;
         }
 

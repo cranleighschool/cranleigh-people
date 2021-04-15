@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class TodoUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -25,12 +23,12 @@ class TodoUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile='TodoUnitTest.inc')
+    public function getErrorList($testFile = 'TodoUnitTest.inc')
     {
         return [];
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -42,7 +40,7 @@ class TodoUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getWarningList($testFile='TodoUnitTest.inc')
+    public function getWarningList($testFile = 'TodoUnitTest.inc')
     {
         return [
             3  => 1,
@@ -54,8 +52,7 @@ class TodoUnitTest extends AbstractSniffUnitTest
             18 => 1,
             21 => 1,
         ];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

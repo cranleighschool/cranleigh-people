@@ -74,7 +74,7 @@ class ResolveParameterPlaceHoldersPass extends AbstractRecursivePass
                 $this->container->getDefinition($this->currentId)->addError($e->getMessage());
             }
 
-            return $this->resolveArrays || !$v || !\is_array($v) ? $v : $value;
+            return $this->resolveArrays || ! $v || ! \is_array($v) ? $v : $value;
         }
         if ($value instanceof Definition) {
             $value->setBindings($this->processValue($value->getBindings()));

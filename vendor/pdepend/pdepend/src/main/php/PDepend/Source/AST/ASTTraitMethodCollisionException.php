@@ -32,7 +32,7 @@ class ASTTraitMethodCollisionException extends \RuntimeException
     {
         parent::__construct(
             sprintf(
-                'Trait method %s has not been applied, because there are ' .
+                'Trait method %s has not been applied, because there are '.
                 'collisions with other trait methods on %s\%s.',
                 $method->getName(),
                 preg_replace('(\W+)', '\\', $type->getNamespace()->getName()),

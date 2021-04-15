@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use Carbon\CarbonInterface;
@@ -21,7 +22,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface as ContractsTranslatorInterface;
 
-if (!interface_exists('Symfony\\Component\\Translation\\TranslatorInterface')) {
+if (! interface_exists('Symfony\\Component\\Translation\\TranslatorInterface')) {
     class_alias(
         'Symfony\\Contracts\\Translation\\TranslatorInterface',
         'Symfony\\Component\\Translation\\TranslatorInterface'
@@ -170,14 +171,14 @@ trait Localization
      */
     public static function getTranslationMessageWith($translator, string $key, string $locale = null, string $default = null)
     {
-        if (!($translator instanceof TranslatorBagInterface && $translator instanceof TranslatorInterface)) {
+        if (! ($translator instanceof TranslatorBagInterface && $translator instanceof TranslatorInterface)) {
             throw new InvalidTypeException(
                 'Translator does not implement '.TranslatorInterface::class.' and '.TranslatorBagInterface::class.'. '.
                 (\is_object($translator) ? \get_class($translator) : \gettype($translator)).' has been given.'
             );
         }
 
-        if (!$locale && $translator instanceof LocaleAwareInterface) {
+        if (! $locale && $translator instanceof LocaleAwareInterface) {
             $locale = $translator->getLocale();
         }
 
@@ -342,7 +343,7 @@ trait Localization
             $translator = Translator::get($language);
             $translations = $translator->getMessages();
 
-            if (!isset($translations[$language])) {
+            if (! isset($translations[$language])) {
                 return $timeString;
             }
 
@@ -436,10 +437,10 @@ trait Localization
             return $this->getTranslatorLocale();
         }
 
-        if (!$this->localTranslator || $this->getTranslatorLocale($this->localTranslator) !== $locale) {
+        if (! $this->localTranslator || $this->getTranslatorLocale($this->localTranslator) !== $locale) {
             $translator = Translator::get($locale);
 
-            if (!empty($fallbackLocales)) {
+            if (! empty($fallbackLocales)) {
                 $translator->setFallbackLocales($fallbackLocales);
 
                 foreach ($fallbackLocales as $fallbackLocale) {
@@ -577,7 +578,7 @@ trait Localization
     public static function localeHasDiffSyntax($locale)
     {
         return static::executeWithLocale($locale, function ($newLocale, TranslatorInterface $translator) {
-            if (!$newLocale) {
+            if (! $newLocale) {
                 return false;
             }
 
@@ -651,7 +652,7 @@ trait Localization
 
     /**
      * Returns the list of internally available locales and already loaded custom locales.
-     * (It will ignore custom translator dynamic loading.)
+     * (It will ignore custom translator dynamic loading.).
      *
      * @return array
      */
@@ -728,7 +729,7 @@ trait Localization
             $translator = static::translator();
         }
 
-        if ($translator && !($translator instanceof LocaleAwareInterface || method_exists($translator, 'getLocale'))) {
+        if ($translator && ! ($translator instanceof LocaleAwareInterface || method_exists($translator, 'getLocale'))) {
             throw new NotLocaleAwareException($translator);
         }
 
@@ -767,7 +768,7 @@ trait Localization
                 ? $messages[$wordKey.'_regexp']
                 : ($messages[$wordKey] ?? null);
 
-            if (!$message) {
+            if (! $message) {
                 return '>>DO NOT REPLACE<<';
             }
 

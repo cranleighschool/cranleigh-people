@@ -16,14 +16,12 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ControlStructureSpacingSniff implements Sniff
 {
-
     /**
      * The number of spaces code should be indented.
      *
-     * @var integer
+     * @var int
      */
     public $indent = 4;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -43,9 +41,9 @@ class ControlStructureSpacingSniff implements Sniff
             T_CATCH,
             T_MATCH,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -72,6 +70,7 @@ class ControlStructureSpacingSniff implements Sniff
         if ($tokens[$parenOpener]['line'] === $tokens[$parenCloser]['line']) {
             // Conditions are all on the same line, so follow PSR2.
             $sniff = new PSR2Spacing();
+
             return $sniff->process($phpcsFile, $stackPtr);
         }
 
@@ -84,14 +83,14 @@ class ControlStructureSpacingSniff implements Sniff
         // Check the first expression.
         if ($tokens[$next]['line'] !== ($tokens[$parenOpener]['line'] + 1)) {
             $error = 'The first expression of a multi-line control structure must be on the line after the opening parenthesis';
-            $fix   = $phpcsFile->addFixableError($error, $next, 'FirstExpressionLine');
+            $fix = $phpcsFile->addFixableError($error, $next, 'FirstExpressionLine');
             if ($fix === true) {
                 $phpcsFile->fixer->addNewline($parenOpener);
             }
         }
 
         // Check the indent of each line.
-        $first          = $phpcsFile->findFirstOnLine(T_WHITESPACE, $stackPtr, true);
+        $first = $phpcsFile->findFirstOnLine(T_WHITESPACE, $stackPtr, true);
         $requiredIndent = ($tokens[$first]['column'] + $this->indent - 1);
         for ($i = $parenOpener; $i < $parenCloser; $i++) {
             if ($tokens[$i]['column'] !== 1
@@ -120,11 +119,11 @@ class ControlStructureSpacingSniff implements Sniff
 
             if ($foundIndent < $requiredIndent) {
                 $error = 'Each line in a multi-line control structure must be indented at least once; expected at least %s spaces, but found %s';
-                $data  = [
+                $data = [
                     $requiredIndent,
                     $foundIndent,
                 ];
-                $fix   = $phpcsFile->addFixableError($error, $i, 'LineIndent', $data);
+                $fix = $phpcsFile->addFixableError($error, $i, 'LineIndent', $data);
                 if ($fix === true) {
                     $padding = str_repeat(' ', $requiredIndent);
                     if ($foundIndent === 0) {
@@ -140,7 +139,7 @@ class ControlStructureSpacingSniff implements Sniff
         $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($parenCloser - 1), $parenOpener, true);
         if ($tokens[$parenCloser]['line'] !== ($tokens[$prev]['line'] + 1)) {
             $error = 'The closing parenthesis of a multi-line control structure must be on the line after the last expression';
-            $fix   = $phpcsFile->addFixableError($error, $parenCloser, 'CloseParenthesisLine');
+            $fix = $phpcsFile->addFixableError($error, $parenCloser, 'CloseParenthesisLine');
             if ($fix === true) {
                 if ($tokens[$parenCloser]['line'] === $tokens[$prev]['line']) {
                     $phpcsFile->fixer->addNewlineBefore($parenCloser);
@@ -167,14 +166,14 @@ class ControlStructureSpacingSniff implements Sniff
 
         if ($tokens[$parenCloser]['line'] !== $tokens[$prev]['line']) {
             $requiredIndent = ($tokens[$first]['column'] - 1);
-            $foundIndent    = ($tokens[$parenCloser]['column'] - 1);
+            $foundIndent = ($tokens[$parenCloser]['column'] - 1);
             if ($foundIndent !== $requiredIndent) {
                 $error = 'The closing parenthesis of a multi-line control structure must be indented to the same level as start of the control structure; expected %s spaces but found %s';
-                $data  = [
+                $data = [
                     $requiredIndent,
                     $foundIndent,
                 ];
-                $fix   = $phpcsFile->addFixableError($error, $parenCloser, 'CloseParenthesisIndent', $data);
+                $fix = $phpcsFile->addFixableError($error, $parenCloser, 'CloseParenthesisIndent', $data);
                 if ($fix === true) {
                     $padding = str_repeat(' ', $requiredIndent);
                     if ($foundIndent === 0) {
@@ -185,8 +184,7 @@ class ControlStructureSpacingSniff implements Sniff
                 }
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

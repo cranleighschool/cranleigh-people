@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ArrayBracketSpacingSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -27,9 +25,9 @@ class ArrayBracketSpacingSniff implements Sniff
             T_OPEN_SQUARE_BRACKET,
             T_CLOSE_SQUARE_BRACKET,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -58,13 +56,13 @@ class ArrayBracketSpacingSniff implements Sniff
         if ($prevType === T_WHITESPACE) {
             $nonSpace = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 2), null, true);
             $expected = $tokens[$nonSpace]['content'].$tokens[$stackPtr]['content'];
-            $found    = $phpcsFile->getTokensAsString($nonSpace, ($stackPtr - $nonSpace)).$tokens[$stackPtr]['content'];
-            $error    = 'Space found before square bracket; expected "%s" but found "%s"';
-            $data     = [
+            $found = $phpcsFile->getTokensAsString($nonSpace, ($stackPtr - $nonSpace)).$tokens[$stackPtr]['content'];
+            $error = 'Space found before square bracket; expected "%s" but found "%s"';
+            $data = [
                 $expected,
                 $found,
             ];
-            $fix      = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceBeforeBracket', $data);
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceBeforeBracket', $data);
             if ($fix === true) {
                 $phpcsFile->fixer->replaceToken(($stackPtr - 1), '');
             }
@@ -76,20 +74,19 @@ class ArrayBracketSpacingSniff implements Sniff
             if ($nextType === T_WHITESPACE) {
                 $nonSpace = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 2), null, true);
                 $expected = $tokens[$stackPtr]['content'].$tokens[$nonSpace]['content'];
-                $found    = $phpcsFile->getTokensAsString($stackPtr, ($nonSpace - $stackPtr + 1));
-                $error    = 'Space found after square bracket; expected "%s" but found "%s"';
-                $data     = [
+                $found = $phpcsFile->getTokensAsString($stackPtr, ($nonSpace - $stackPtr + 1));
+                $error = 'Space found after square bracket; expected "%s" but found "%s"';
+                $data = [
                     $expected,
                     $found,
                 ];
-                $fix      = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceAfterBracket', $data);
+                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceAfterBracket', $data);
                 if ($fix === true) {
                     $phpcsFile->fixer->replaceToken(($stackPtr + 1), '');
                 }
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

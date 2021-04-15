@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ConstantVisibilitySniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +23,9 @@ class ConstantVisibilitySniff implements Sniff
     public function register()
     {
         return [T_CONST];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -54,8 +52,7 @@ class ConstantVisibilitySniff implements Sniff
 
         $error = 'Visibility must be declared on all constants if your project supports PHP 7.1 or later';
         $phpcsFile->addWarning($error, $stackPtr, 'NotFound');
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

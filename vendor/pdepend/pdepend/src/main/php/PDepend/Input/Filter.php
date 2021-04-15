@@ -55,7 +55,7 @@ interface Filter
      *
      * @param  string $relative The relative path to the specified root.
      * @param  string $absolute The absolute path to a source file.
-     * @return boolean
+     * @return bool
      */
     public function accept($relative, $absolute);
 }

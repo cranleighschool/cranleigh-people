@@ -9,13 +9,12 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\Channels;
 
-use PHP_CodeSniffer\Sniffs\AbstractScopeSniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\AbstractScopeSniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 class IncludeSystemSniff extends AbstractScopeSniff
 {
-
     /**
      * A list of classes that don't need to be included.
      *
@@ -40,23 +39,22 @@ class IncludeSystemSniff extends AbstractScopeSniff
         'domdocument'               => true,
     ];
 
-
     /**
      * Constructs an AbstractScopeSniff.
      */
     public function __construct()
     {
         parent::__construct([T_FUNCTION], [T_DOUBLE_COLON, T_EXTENDS], true);
+    }
 
-    }//end __construct()
-
+    //end __construct()
 
     /**
      * Processes the function tokens within the class.
      *
      * @param \PHP_CodeSniffer\Files\File $phpcsFile The file where this token was found.
-     * @param integer                     $stackPtr  The position where the token was found.
-     * @param integer                     $currScope The current scope opener token.
+     * @param int                     $stackPtr  The position where the token was found.
+     * @param int                     $currScope The current scope opener token.
      *
      * @return void
      */
@@ -87,17 +85,17 @@ class IncludeSystemSniff extends AbstractScopeSniff
         $includedClasses = [];
 
         $fileName = strtolower($phpcsFile->getFilename());
-        $matches  = [];
+        $matches = [];
         if (preg_match('|/systems/(.*)/([^/]+)?actions.inc$|', $fileName, $matches) !== 0) {
             // This is an actions file, which means we don't
             // have to include the system in which it exists.
             $includedClasses[$matches[2]] = true;
 
             // Or a system it implements.
-            $class      = $phpcsFile->getCondition($stackPtr, T_CLASS);
+            $class = $phpcsFile->getCondition($stackPtr, T_CLASS);
             $implements = $phpcsFile->findNext(T_IMPLEMENTS, $class, ($class + 10));
             if ($implements !== false) {
-                $implementsClass     = $phpcsFile->findNext(T_STRING, $implements);
+                $implementsClass = $phpcsFile->findNext(T_STRING, $implements);
                 $implementsClassName = strtolower($tokens[$implementsClass]['content']);
                 if (substr($implementsClassName, -7) === 'actions') {
                     $includedClasses[substr($implementsClassName, 0, -7)] = true;
@@ -112,8 +110,8 @@ class IncludeSystemSniff extends AbstractScopeSniff
             $name = $this->getIncludedClassFromToken($phpcsFile, $tokens, $i);
             if ($name !== false) {
                 $includedClasses[$name] = true;
-                // Special case for Widgets cause they are, well, special.
-            } else if (strtolower($tokens[$i]['content']) === 'includewidget') {
+            // Special case for Widgets cause they are, well, special.
+            } elseif (strtolower($tokens[$i]['content']) === 'includewidget') {
                 $typeName = $phpcsFile->findNext(T_CONSTANT_ENCAPSED_STRING, ($i + 1));
                 $typeName = trim($tokens[$typeName]['content'], " '");
                 $includedClasses[strtolower($typeName).'widgettype'] = true;
@@ -156,7 +154,7 @@ class IncludeSystemSniff extends AbstractScopeSniff
                     $name = $tokens[$name]['content'];
                     if (substr($name, -8) === 'UnitTest') {
                         // Look for a method called setUp().
-                        $end      = $tokens[$condPtr]['scope_closer'];
+                        $end = $tokens[$condPtr]['scope_closer'];
                         $function = $phpcsFile->findNext(T_FUNCTION, ($condPtr + 1), $end);
                         while ($function !== false) {
                             $name = $phpcsFile->findNext(T_STRING, $function);
@@ -174,7 +172,7 @@ class IncludeSystemSniff extends AbstractScopeSniff
 
         if ($setupFunction !== null) {
             $start = ($tokens[$setupFunction]['scope_opener'] + 1);
-            $end   = $tokens[$setupFunction]['scope_closer'];
+            $end = $tokens[$setupFunction]['scope_closer'];
             for ($i = $start; $i < $end; $i++) {
                 $name = $this->getIncludedClassFromToken($phpcsFile, $tokens, $i);
                 if ($name !== false) {
@@ -185,12 +183,12 @@ class IncludeSystemSniff extends AbstractScopeSniff
 
         if (isset($includedClasses[strtolower($className)]) === false) {
             $error = 'Static method called on non-included class or system "%s"; include system with Channels::includeSystem() or include class with require_once';
-            $data  = [$className];
+            $data = [$className];
             $phpcsFile->addError($error, $stackPtr, 'NotIncludedCall', $data);
         }
+    }
 
-    }//end processTokenWithinScope()
-
+    //end processTokenWithinScope()
 
     /**
      * Processes a token within the scope that this test is listening to.
@@ -208,7 +206,7 @@ class IncludeSystemSniff extends AbstractScopeSniff
         if ($tokens[$stackPtr]['code'] === T_EXTENDS) {
             // Find the class name.
             $classNameToken = $phpcsFile->findNext(T_STRING, ($stackPtr + 1));
-            $className      = $tokens[$classNameToken]['content'];
+            $className = $tokens[$classNameToken]['content'];
         } else {
             // Determine the name of the class that the static function
             // is being called on. But don't process class names represented by
@@ -229,7 +227,7 @@ class IncludeSystemSniff extends AbstractScopeSniff
         $includedClasses = [];
 
         $fileName = strtolower($phpcsFile->getFilename());
-        $matches  = [];
+        $matches = [];
         if (preg_match('|/systems/([^/]+)/([^/]+)?actions.inc$|', $fileName, $matches) !== 0) {
             // This is an actions file, which means we don't
             // have to include the system in which it exists
@@ -255,8 +253,8 @@ class IncludeSystemSniff extends AbstractScopeSniff
             $name = $this->getIncludedClassFromToken($phpcsFile, $tokens, $i);
             if ($name !== false) {
                 $includedClasses[$name] = true;
-                // Special case for Widgets cause they are, well, special.
-            } else if (strtolower($tokens[$i]['content']) === 'includewidget') {
+            // Special case for Widgets cause they are, well, special.
+            } elseif (strtolower($tokens[$i]['content']) === 'includewidget') {
                 $typeName = $phpcsFile->findNext(T_CONSTANT_ENCAPSED_STRING, ($i + 1));
                 $typeName = trim($tokens[$typeName]['content'], " '");
                 $includedClasses[strtolower($typeName).'widgettype'] = true;
@@ -266,17 +264,17 @@ class IncludeSystemSniff extends AbstractScopeSniff
         if (isset($includedClasses[strtolower($className)]) === false) {
             if ($tokens[$stackPtr]['code'] === T_EXTENDS) {
                 $error = 'Class extends non-included class or system "%s"; include system with Channels::includeSystem() or include class with require_once';
-                $data  = [$className];
+                $data = [$className];
                 $phpcsFile->addError($error, $stackPtr, 'NotIncludedExtends', $data);
             } else {
                 $error = 'Static method called on non-included class or system "%s"; include system with Channels::includeSystem() or include class with require_once';
-                $data  = [$className];
+                $data = [$className];
                 $phpcsFile->addError($error, $stackPtr, 'NotIncludedCall', $data);
             }
         }
+    }
 
-    }//end processTokenOutsideScope()
-
+    //end processTokenOutsideScope()
 
     /**
      * Determines the included class name from given token.
@@ -293,22 +291,24 @@ class IncludeSystemSniff extends AbstractScopeSniff
         if (strtolower($tokens[$stackPtr]['content']) === 'includesystem') {
             $systemName = $phpcsFile->findNext(T_CONSTANT_ENCAPSED_STRING, ($stackPtr + 1));
             $systemName = trim($tokens[$systemName]['content'], " '");
+
             return strtolower($systemName);
-        } else if (strtolower($tokens[$stackPtr]['content']) === 'includeasset') {
+        } elseif (strtolower($tokens[$stackPtr]['content']) === 'includeasset') {
             $typeName = $phpcsFile->findNext(T_CONSTANT_ENCAPSED_STRING, ($stackPtr + 1));
             $typeName = trim($tokens[$typeName]['content'], " '");
+
             return strtolower($typeName).'assettype';
-        } else if (isset(Tokens::$includeTokens[$tokens[$stackPtr]['code']]) === true) {
+        } elseif (isset(Tokens::$includeTokens[$tokens[$stackPtr]['code']]) === true) {
             $filePath = $phpcsFile->findNext(T_CONSTANT_ENCAPSED_STRING, ($stackPtr + 1));
             $filePath = $tokens[$filePath]['content'];
             $filePath = trim($filePath, " '");
             $filePath = basename($filePath, '.inc');
+
             return strtolower($filePath);
         }
 
         return false;
+    }
 
-    }//end getIncludedClassFromToken()
-
-
+    //end getIncludedClassFromToken()
 }//end class

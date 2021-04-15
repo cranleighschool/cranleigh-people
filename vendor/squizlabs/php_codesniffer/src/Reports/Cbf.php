@@ -19,8 +19,6 @@ use PHP_CodeSniffer\Util;
 
 class Cbf implements Report
 {
-
-
     /**
      * Generate a partial report for a single processed file.
      *
@@ -36,7 +34,7 @@ class Cbf implements Report
      * @return bool
      * @throws \PHP_CodeSniffer\Exceptions\DeepExitException
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
+    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
     {
         $errors = $phpcsFile->getFixableCount();
         if ($errors !== 0) {
@@ -103,16 +101,16 @@ class Cbf implements Report
             ob_start();
         }
 
-        $errorCount   = $phpcsFile->getErrorCount();
+        $errorCount = $phpcsFile->getErrorCount();
         $warningCount = $phpcsFile->getWarningCount();
         $fixableCount = $phpcsFile->getFixableCount();
-        $fixedCount   = ($errors - $fixableCount);
+        $fixedCount = ($errors - $fixableCount);
         echo $report['filename'].">>$errorCount>>$warningCount>>$fixableCount>>$fixedCount".PHP_EOL;
 
         return $fixed;
+    }
 
-    }//end generateFileReport()
-
+    //end generateFileReport()
 
     /**
      * Prints a summary of fixed files.
@@ -136,26 +134,27 @@ class Cbf implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources=false,
-        $width=80,
-        $interactive=false,
-        $toScreen=true
+        $showSources = false,
+        $width = 80,
+        $interactive = false,
+        $toScreen = true
     ) {
         $lines = explode(PHP_EOL, $cachedData);
         array_pop($lines);
 
         if (empty($lines) === true) {
             echo PHP_EOL.'No fixable errors were found'.PHP_EOL;
+
             return;
         }
 
         $reportFiles = [];
-        $maxLength   = 0;
-        $totalFixed  = 0;
-        $failures    = 0;
+        $maxLength = 0;
+        $totalFixed = 0;
+        $failures = 0;
 
         foreach ($lines as $line) {
-            $parts   = explode('>>', $line);
+            $parts = explode('>>', $line);
             $fileLen = strlen($parts[0]);
             $reportFiles[$parts[0]] = [
                 'errors'   => $parts[1],
@@ -185,7 +184,7 @@ class Cbf implements Report
         foreach ($reportFiles as $file => $data) {
             $padding = ($width - 18 - $data['strlen']);
             if ($padding < 0) {
-                $file    = '...'.substr($file, (($padding * -1) + 3));
+                $file = '...'.substr($file, (($padding * -1) + 3));
                 $padding = 0;
             }
 
@@ -243,8 +242,7 @@ class Cbf implements Report
         if ($toScreen === true && $interactive === false) {
             Util\Timing::printRunTime();
         }
+    }
 
-    }//end generate()
-
-
+    //end generate()
 }//end class

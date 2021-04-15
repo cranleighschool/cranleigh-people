@@ -18,7 +18,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class SuperfluousWhitespaceSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -35,10 +34,9 @@ class SuperfluousWhitespaceSniff implements Sniff
      *
      * Blank lines are those that contain only whitespace.
      *
-     * @var boolean
+     * @var bool
      */
     public $ignoreBlankLines = false;
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -55,9 +53,9 @@ class SuperfluousWhitespaceSniff implements Sniff
             T_DOC_COMMENT_WHITESPACE,
             T_CLOSURE,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -121,7 +119,7 @@ class SuperfluousWhitespaceSniff implements Sniff
 
                 $phpcsFile->fixer->endChangeset();
             }
-        } else if ($tokens[$stackPtr]['code'] === T_CLOSE_TAG) {
+        } elseif ($tokens[$stackPtr]['code'] === T_CLOSE_TAG) {
             /*
                 Check for end of file whitespace.
             */
@@ -172,7 +170,7 @@ class SuperfluousWhitespaceSniff implements Sniff
             $fix = $phpcsFile->addFixableError('Additional whitespace found at end of file', $stackPtr, 'EndFile');
             if ($fix === true) {
                 if ($phpcsFile->tokenizerType !== 'PHP') {
-                    $prev     = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
+                    $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
                     $stackPtr = ($prev + 1);
                 }
 
@@ -211,7 +209,7 @@ class SuperfluousWhitespaceSniff implements Sniff
                         $phpcsFile->fixer->replaceToken($stackPtr, rtrim($tokenContent).$phpcsFile->eolChar);
                     }
                 }
-            } else if ($tokens[($stackPtr - 1)]['content'] !== rtrim($tokens[($stackPtr - 1)]['content'])
+            } elseif ($tokens[($stackPtr - 1)]['content'] !== rtrim($tokens[($stackPtr - 1)]['content'])
                 && $tokens[($stackPtr - 1)]['line'] === $tokens[$stackPtr]['line']
             ) {
                 $fix = $phpcsFile->addFixableError('Whitespace found at end of line', ($stackPtr - 1), 'EndLine');
@@ -229,7 +227,7 @@ class SuperfluousWhitespaceSniff implements Sniff
                 && $tokens[($stackPtr - 2)]['line'] === $tokens[($stackPtr - 1)]['line']
             ) {
                 // Properties and functions in nested classes have their own rules for spacing.
-                $conditions   = $tokens[$stackPtr]['conditions'];
+                $conditions = $tokens[$stackPtr]['conditions'];
                 $deepestScope = end($conditions);
                 if ($deepestScope === T_ANON_CLASS) {
                     return;
@@ -238,11 +236,11 @@ class SuperfluousWhitespaceSniff implements Sniff
                 // This is an empty line and the line before this one is not
                 // empty, so this could be the start of a multiple empty
                 // line block.
-                $next  = $phpcsFile->findNext(T_WHITESPACE, $stackPtr, null, true);
+                $next = $phpcsFile->findNext(T_WHITESPACE, $stackPtr, null, true);
                 $lines = ($tokens[$next]['line'] - $tokens[$stackPtr]['line']);
                 if ($lines > 1) {
                     $error = 'Functions must not contain multiple empty lines in a row; found %s empty lines';
-                    $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'EmptyLines', [$lines]);
+                    $fix = $phpcsFile->addFixableError($error, $stackPtr, 'EmptyLines', [$lines]);
                     if ($fix === true) {
                         $phpcsFile->fixer->beginChangeset();
                         $i = $stackPtr;
@@ -257,8 +255,7 @@ class SuperfluousWhitespaceSniff implements Sniff
                 }
             }//end if
         }//end if
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

@@ -75,7 +75,7 @@ class ASTDeclareStatement extends \PDepend\Source\AST\ASTStatement
      *
      * @var \PDepend\Source\AST\ASTValue[]
      */
-    protected $values = array();
+    protected $values = [];
 
     /**
      * Returns all values/parameters for this declare statement.
@@ -125,6 +125,6 @@ class ASTDeclareStatement extends \PDepend\Source\AST\ASTStatement
      */
     public function __sleep()
     {
-        return array_merge(array('values'), parent::__sleep());
+        return array_merge(['values'], parent::__sleep());
     }
 }

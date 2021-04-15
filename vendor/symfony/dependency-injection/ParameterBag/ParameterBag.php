@@ -66,8 +66,8 @@ class ParameterBag implements ParameterBagInterface
      */
     public function get(string $name)
     {
-        if (!\array_key_exists($name, $this->parameters)) {
-            if (!$name) {
+        if (! \array_key_exists($name, $this->parameters)) {
+            if (! $name) {
                 throw new ParameterNotFoundException($name);
             }
 
@@ -80,7 +80,7 @@ class ParameterBag implements ParameterBagInterface
             }
 
             $nonNestedAlternative = null;
-            if (!\count($alternatives) && false !== strpos($name, '.')) {
+            if (! \count($alternatives) && false !== strpos($name, '.')) {
                 $namePartsLength = array_map('strlen', explode('.', $name));
                 $key = substr($name, 0, -1 * (1 + array_pop($namePartsLength)));
                 while (\count($namePartsLength)) {
@@ -178,7 +178,7 @@ class ParameterBag implements ParameterBagInterface
             return $args;
         }
 
-        if (!\is_string($value) || 2 > \strlen($value)) {
+        if (! \is_string($value) || 2 > \strlen($value)) {
             return $value;
         }
 
@@ -215,7 +215,7 @@ class ParameterBag implements ParameterBagInterface
 
         return preg_replace_callback('/%%|%([^%\s]+)%/', function ($match) use ($resolving, $value) {
             // skip %%
-            if (!isset($match[1])) {
+            if (! isset($match[1])) {
                 return '%%';
             }
 
@@ -226,7 +226,7 @@ class ParameterBag implements ParameterBagInterface
 
             $resolved = $this->get($key);
 
-            if (!\is_string($resolved) && !is_numeric($resolved)) {
+            if (! \is_string($resolved) && ! is_numeric($resolved)) {
                 throw new RuntimeException(sprintf('A string value must be composed of strings and/or numbers, but found parameter "%s" of type "%s" inside string value "%s".', $key, get_debug_type($resolved), $value));
             }
 

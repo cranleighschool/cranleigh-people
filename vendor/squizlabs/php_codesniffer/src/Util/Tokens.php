@@ -171,7 +171,6 @@ define('T_PHPCS_IGNORE_FILE', 'PHPCS_T_PHPCS_IGNORE_FILE');
 
 final class Tokens
 {
-
     /**
      * The token weightings.
      *
@@ -441,7 +440,7 @@ final class Tokens
     ];
 
     /**
-     * Tokens that can prefix a method name
+     * Tokens that can prefix a method name.
      *
      * @var array<int|string, int|string>
      */
@@ -640,7 +639,6 @@ final class Tokens
         T_TRAIT_C  => T_TRAIT_C,
     ];
 
-
     /**
      * Given a token, returns the name of the token.
      *
@@ -660,9 +658,9 @@ final class Tokens
         }
 
         return substr($token, 6);
+    }
 
-    }//end tokenName()
-
+    //end tokenName()
 
     /**
      * Returns the highest weighted token type.
@@ -681,7 +679,7 @@ final class Tokens
      */
     public static function getHighestWeightedToken(array $tokens)
     {
-        $highest     = -1;
+        $highest = -1;
         $highestType = false;
 
         $weights = self::$weightings;
@@ -694,14 +692,13 @@ final class Tokens
             }
 
             if ($weight > $highest) {
-                $highest     = $weight;
+                $highest = $weight;
                 $highestType = $token;
             }
         }
 
         return $highestType;
+    }
 
-    }//end getHighestWeightedToken()
-
-
+    //end getHighestWeightedToken()
 }//end class

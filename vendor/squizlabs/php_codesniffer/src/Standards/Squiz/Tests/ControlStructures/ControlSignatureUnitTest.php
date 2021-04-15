@@ -13,8 +13,6 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class ControlSignatureUnitTest extends AbstractSniffUnitTest
 {
-
-
     /**
      * Returns the lines where errors should occur.
      *
@@ -25,7 +23,7 @@ class ControlSignatureUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile='ControlSignatureUnitTest.inc')
+    public function getErrorList($testFile = 'ControlSignatureUnitTest.inc')
     {
         $errors = [
             7   => 1,
@@ -80,9 +78,9 @@ class ControlSignatureUnitTest extends AbstractSniffUnitTest
         }//end if
 
         return $errors;
+    }
 
-    }//end getErrorList()
-
+    //end getErrorList()
 
     /**
      * Returns the lines where warnings should occur.
@@ -95,8 +93,7 @@ class ControlSignatureUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
+    }
 
-    }//end getWarningList()
-
-
+    //end getWarningList()
 }//end class

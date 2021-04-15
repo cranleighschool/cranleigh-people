@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Carbon\Traits;
 
 use BadMethodCallException;
@@ -32,7 +33,7 @@ use InvalidArgumentException;
 trait Comparison
 {
     /**
-     * Determines if the instance is equal to another
+     * Determines if the instance is equal to another.
      *
      * @example
      * ```
@@ -53,7 +54,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is equal to another
+     * Determines if the instance is equal to another.
      *
      * @example
      * ```
@@ -72,7 +73,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is not equal to another
+     * Determines if the instance is not equal to another.
      *
      * @example
      * ```
@@ -93,7 +94,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is not equal to another
+     * Determines if the instance is not equal to another.
      *
      * @example
      * ```
@@ -108,11 +109,11 @@ trait Comparison
      */
     public function notEqualTo($date): bool
     {
-        return !$this->equalTo($date);
+        return ! $this->equalTo($date);
     }
 
     /**
-     * Determines if the instance is greater (after) than another
+     * Determines if the instance is greater (after) than another.
      *
      * @example
      * ```
@@ -133,7 +134,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than another
+     * Determines if the instance is greater (after) than another.
      *
      * @example
      * ```
@@ -152,7 +153,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than another
+     * Determines if the instance is greater (after) than another.
      *
      * @example
      * ```
@@ -173,7 +174,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than or equal to another
+     * Determines if the instance is greater (after) than or equal to another.
      *
      * @example
      * ```
@@ -194,7 +195,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than or equal to another
+     * Determines if the instance is greater (after) than or equal to another.
      *
      * @example
      * ```
@@ -213,7 +214,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) than another
+     * Determines if the instance is less (before) than another.
      *
      * @example
      * ```
@@ -234,7 +235,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) than another
+     * Determines if the instance is less (before) than another.
      *
      * @example
      * ```
@@ -253,7 +254,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) than another
+     * Determines if the instance is less (before) than another.
      *
      * @example
      * ```
@@ -274,7 +275,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) or equal to another
+     * Determines if the instance is less (before) or equal to another.
      *
      * @example
      * ```
@@ -295,7 +296,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) or equal to another
+     * Determines if the instance is less (before) or equal to another.
      *
      * @example
      * ```
@@ -391,7 +392,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is between two others
+     * Determines if the instance is between two others.
      *
      * @example
      * ```
@@ -425,7 +426,7 @@ trait Comparison
      */
     public function isWeekday()
     {
-        return !$this->isWeekend();
+        return ! $this->isWeekend();
     }
 
     /**
@@ -541,7 +542,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is a long year
+     * Determines if the instance is a long year.
      *
      * @example
      * ```
@@ -614,7 +615,7 @@ trait Comparison
             'microsecond' => 'Y-m-d H:i:s.u',
         ];
 
-        if (!isset($units[$unit])) {
+        if (! isset($units[$unit])) {
             if (isset($this->$unit)) {
                 return $this->$unit === $this->resolveCarbon($date)->$unit;
             }
@@ -669,7 +670,7 @@ trait Comparison
     {
         $date = $this->resolveCarbon($date);
 
-        return $this->quarter === $date->quarter && (!$ofSameYear || $this->isSameYear($date));
+        return $this->quarter === $date->quarter && (! $ofSameYear || $this->isSameYear($date));
     }
 
     /**
@@ -738,7 +739,7 @@ trait Comparison
     }
 
     /**
-     * Check if today is the last day of the Month
+     * Check if today is the last day of the Month.
      *
      * @example
      * ```
@@ -904,7 +905,7 @@ trait Comparison
         try {
             // Try to create a DateTime object. Throws an InvalidArgumentException if the provided time string
             // doesn't match the format in any way.
-            if (!static::rawCreateFromFormat($format, $date)) {
+            if (! static::rawCreateFromFormat($format, $date)) {
                 return false;
             }
         } catch (InvalidArgumentException $e) {

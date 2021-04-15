@@ -78,7 +78,7 @@ class XmlFileLoader extends FileLoader
      */
     public function supports($resource, string $type = null)
     {
-        if (!\is_string($resource)) {
+        if (! \is_string($resource)) {
             return false;
         }
 
@@ -134,8 +134,7 @@ class XmlFileLoader extends FileLoader
             if ('stack' === $service->tagName) {
                 $service->setAttribute('parent', '-');
                 $definition = $this->parseDefinition($service, $file, $defaults)
-                    ->setTags(array_merge_recursive(['container.stack' => [[]]], $defaults->getTags()))
-                ;
+                    ->setTags(array_merge_recursive(['container.stack' => [[]]], $defaults->getTags()));
                 $this->setDefinition($id = (string) $service->getAttribute('id'), $definition);
                 $stack = [];
 
@@ -204,11 +203,11 @@ class XmlFileLoader extends FileLoader
                 $package = $deprecated[0]->getAttribute('package') ?: '';
                 $version = $deprecated[0]->getAttribute('version') ?: '';
 
-                if (!$deprecated[0]->hasAttribute('package')) {
+                if (! $deprecated[0]->hasAttribute('package')) {
                     trigger_deprecation('symfony/dependency-injection', '5.1', 'Not setting the attribute "package" of the node "deprecated" in "%s" is deprecated.', $file);
                 }
 
-                if (!$deprecated[0]->hasAttribute('version')) {
+                if (! $deprecated[0]->hasAttribute('version')) {
                     trigger_deprecation('symfony/dependency-injection', '5.1', 'Not setting the attribute "version" of the node "deprecated" in "%s" is deprecated.', $file);
                 }
 
@@ -322,7 +321,7 @@ class XmlFileLoader extends FileLoader
                     continue;
                 }
 
-                if (false !== strpos($name, '-') && false === strpos($name, '_') && !\array_key_exists($normalizedName = str_replace('-', '_', $name), $parameters)) {
+                if (false !== strpos($name, '-') && false === strpos($name, '_') && ! \array_key_exists($normalizedName = str_replace('-', '_', $name), $parameters)) {
                     $parameters[$normalizedName] = XmlUtils::phpize($node->nodeValue);
                 }
                 // keep not normalized key
@@ -449,7 +448,7 @@ class XmlFileLoader extends FileLoader
             // argument of the parent definition
             if ($arg->hasAttribute('index')) {
                 $key = ($isChildDefinition ? 'index_' : '').$arg->getAttribute('index');
-            } elseif (!$arg->hasAttribute('key')) {
+            } elseif (! $arg->hasAttribute('key')) {
                 // Append an empty argument, then fetch its key to overwrite it later
                 $arguments[] = null;
                 $keys = array_keys($arguments);
@@ -477,7 +476,7 @@ class XmlFileLoader extends FileLoader
                     $arguments[$key] = new Reference($arg->getAttribute('id'), $invalidBehavior);
                     break;
                 case 'expression':
-                    if (!class_exists(Expression::class)) {
+                    if (! class_exists(Expression::class)) {
                         throw new \LogicException('The type="expression" attribute cannot be used without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
                     }
 
@@ -508,7 +507,7 @@ class XmlFileLoader extends FileLoader
                     $type = $arg->getAttribute('type');
                     $forLocator = 'tagged_locator' === $type;
 
-                    if (!$arg->getAttribute('tag')) {
+                    if (! $arg->getAttribute('tag')) {
                         throw new InvalidArgumentException(sprintf('Tag "<%s>" with type="%s" has no or empty "tag" attribute in "%s".', $name, $type, $file));
                     }
 
@@ -572,7 +571,7 @@ class XmlFileLoader extends FileLoader
         if ($element = $dom->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation')) {
             $items = preg_split('/\s+/', $element);
             for ($i = 0, $nb = \count($items); $i < $nb; $i += 2) {
-                if (!$this->container->hasExtension($items[$i])) {
+                if (! $this->container->hasExtension($items[$i])) {
                     continue;
                 }
 
@@ -580,7 +579,7 @@ class XmlFileLoader extends FileLoader
                     $ns = $extension->getNamespace();
                     $path = str_replace([$ns, str_replace('http://', 'https://', $ns)], str_replace('\\', '/', $extension->getXsdValidationBasePath()).'/', $items[$i + 1]);
 
-                    if (!is_file($path)) {
+                    if (! is_file($path)) {
                         throw new RuntimeException(sprintf('Extension "%s" references a non-existent XSD file "%s".', get_debug_type($extension), $path));
                     }
 
@@ -623,8 +622,7 @@ class XmlFileLoader extends FileLoader
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
 $imports
 </xsd:schema>
-EOF
-        ;
+EOF;
 
         if ($this->shouldEnableEntityLoader()) {
             $disableEntities = libxml_disable_entity_loader(false);
@@ -667,22 +665,22 @@ EOF
 </xsd:schema>');
         }
 
-        return !@$dom->schemaValidateSource($schema);
+        return ! @$dom->schemaValidateSource($schema);
     }
 
     private function validateAlias(\DOMElement $alias, string $file)
     {
         foreach ($alias->attributes as $name => $node) {
-            if (!\in_array($name, ['alias', 'id', 'public'])) {
+            if (! \in_array($name, ['alias', 'id', 'public'])) {
                 throw new InvalidArgumentException(sprintf('Invalid attribute "%s" defined for alias "%s" in "%s".', $name, $alias->getAttribute('id'), $file));
             }
         }
 
         foreach ($alias->childNodes as $child) {
-            if (!$child instanceof \DOMElement || self::NS !== $child->namespaceURI) {
+            if (! $child instanceof \DOMElement || self::NS !== $child->namespaceURI) {
                 continue;
             }
-            if (!\in_array($child->localName, ['deprecated'], true)) {
+            if (! \in_array($child->localName, ['deprecated'], true)) {
                 throw new InvalidArgumentException(sprintf('Invalid child element "%s" defined for alias "%s" in "%s".', $child->localName, $alias->getAttribute('id'), $file));
             }
         }
@@ -696,13 +694,15 @@ EOF
     private function validateExtensions(\DOMDocument $dom, string $file)
     {
         foreach ($dom->documentElement->childNodes as $node) {
-            if (!$node instanceof \DOMElement || 'http://symfony.com/schema/dic/services' === $node->namespaceURI) {
+            if (! $node instanceof \DOMElement || 'http://symfony.com/schema/dic/services' === $node->namespaceURI) {
                 continue;
             }
 
             // can it be handled by an extension?
-            if (!$this->container->hasExtension($node->namespaceURI)) {
-                $extensionNamespaces = array_filter(array_map(function (ExtensionInterface $ext) { return $ext->getNamespace(); }, $this->container->getExtensions()));
+            if (! $this->container->hasExtension($node->namespaceURI)) {
+                $extensionNamespaces = array_filter(array_map(function (ExtensionInterface $ext) {
+                    return $ext->getNamespace();
+                }, $this->container->getExtensions()));
                 throw new InvalidArgumentException(sprintf('There is no extension able to load the configuration for "%s" (in "%s"). Looked for namespace "%s", found "%s".', $node->tagName, $file, $node->namespaceURI, $extensionNamespaces ? implode('", "', $extensionNamespaces) : 'none'));
             }
         }
@@ -714,12 +714,12 @@ EOF
     private function loadFromExtensions(\DOMDocument $xml)
     {
         foreach ($xml->documentElement->childNodes as $node) {
-            if (!$node instanceof \DOMElement || self::NS === $node->namespaceURI) {
+            if (! $node instanceof \DOMElement || self::NS === $node->namespaceURI) {
                 continue;
             }
 
             $values = static::convertDomElementToArray($node);
-            if (!\is_array($values)) {
+            if (! \is_array($values)) {
                 $values = [];
             }
 

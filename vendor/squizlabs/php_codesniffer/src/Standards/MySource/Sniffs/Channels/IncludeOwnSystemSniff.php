@@ -9,13 +9,11 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\Channels;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 class IncludeOwnSystemSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,9 +22,9 @@ class IncludeOwnSystemSniff implements Sniff
     public function register()
     {
         return [T_DOUBLE_COLON];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -40,25 +38,25 @@ class IncludeOwnSystemSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $fileName = $phpcsFile->getFilename();
-        $matches  = [];
+        $matches = [];
         if (preg_match('|/systems/(.*)/([^/]+)?actions.inc$|i', $fileName, $matches) === 0) {
             // Not an actions file.
             return;
         }
 
         $ownClass = $matches[2];
-        $tokens   = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
 
         $typeName = $phpcsFile->findNext(T_CONSTANT_ENCAPSED_STRING, ($stackPtr + 2), null, false, true);
         $typeName = trim($tokens[$typeName]['content'], " '");
         switch (strtolower($tokens[($stackPtr + 1)]['content'])) {
-        case 'includesystem' :
+        case 'includesystem':
             $included = strtolower($typeName);
             break;
-        case 'includeasset' :
+        case 'includeasset':
             $included = strtolower($typeName).'assettype';
             break;
-        case 'includewidget' :
+        case 'includewidget':
             $included = strtolower($typeName).'widgettype';
             break;
         default:
@@ -67,12 +65,12 @@ class IncludeOwnSystemSniff implements Sniff
 
         if ($included === strtolower($ownClass)) {
             $error = "You do not need to include \"%s\" from within the system's own actions file";
-            $data  = [$ownClass];
+            $data = [$ownClass];
             $phpcsFile->addError($error, $stackPtr, 'NotRequired', $data);
         }
+    }
 
-    }//end process()
-
+    //end process()
 
     /**
      * Determines the included class name from given token.
@@ -89,10 +87,8 @@ class IncludeOwnSystemSniff implements Sniff
         array $tokens,
         $stackPtr
     ) {
-
         return false;
+    }
 
-    }//end getIncludedClassFromToken()
-
-
+    //end getIncludedClassFromToken()
 }//end class

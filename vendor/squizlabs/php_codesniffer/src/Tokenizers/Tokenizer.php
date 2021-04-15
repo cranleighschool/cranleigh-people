@@ -14,7 +14,6 @@ use PHP_CodeSniffer\Util;
 
 abstract class Tokenizer
 {
-
     /**
      * The config data for the run.
      *
@@ -39,7 +38,7 @@ abstract class Tokenizer
     /**
      * The number of tokens in the tokens array.
      *
-     * @var integer
+     * @var int
      */
     protected $numTokens = 0;
 
@@ -71,7 +70,6 @@ abstract class Tokenizer
      */
     public $ignoredLines = [];
 
-
     /**
      * Initialise and run the tokenizer.
      *
@@ -82,7 +80,7 @@ abstract class Tokenizer
      * @return void
      * @throws \PHP_CodeSniffer\Exceptions\TokenizerException If the file appears to be minified.
      */
-    public function __construct($content, $config, $eolChar='\n')
+    public function __construct($content, $config, $eolChar = '\n')
     {
         $this->eolChar = $eolChar;
 
@@ -101,9 +99,9 @@ abstract class Tokenizer
 
         // Allow the tokenizer to do additional processing if required.
         $this->processAdditional();
+    }
 
-    }//end __construct()
-
+    //end __construct()
 
     /**
      * Checks the content to see if it looks minified.
@@ -111,23 +109,23 @@ abstract class Tokenizer
      * @param string $content The content to tokenize.
      * @param string $eolChar The EOL char used in the content.
      *
-     * @return boolean
+     * @return bool
      */
-    protected function isMinifiedContent($content, $eolChar='\n')
+    protected function isMinifiedContent($content, $eolChar = '\n')
     {
         // Minified files often have a very large number of characters per line
         // and cause issues when tokenizing.
         $numChars = strlen($content);
         $numLines = (substr_count($content, $eolChar) + 1);
-        $average  = ($numChars / $numLines);
+        $average = ($numChars / $numLines);
         if ($average > 100) {
             return true;
         }
 
         return false;
+    }
 
-    }//end isMinifiedContent()
-
+    //end isMinifiedContent()
 
     /**
      * Gets the array of tokens.
@@ -137,9 +135,9 @@ abstract class Tokenizer
     public function getTokens()
     {
         return $this->tokens;
+    }
 
-    }//end getTokens()
-
+    //end getTokens()
 
     /**
      * Creates an array of tokens when given some content.
@@ -150,14 +148,12 @@ abstract class Tokenizer
      */
     abstract protected function tokenize($string);
 
-
     /**
      * Performs additional processing after main tokenizing.
      *
      * @return void
      */
     abstract protected function processAdditional();
-
 
     /**
      * Sets token position information.
@@ -171,9 +167,9 @@ abstract class Tokenizer
     {
         $currColumn = 1;
         $lineNumber = 1;
-        $eolLen     = strlen($this->eolChar);
-        $ignoring   = null;
-        $inTests    = defined('PHP_CODESNIFFER_IN_TESTS');
+        $eolLen = strlen($this->eolChar);
+        $ignoring = null;
+        $inTests = defined('PHP_CODESNIFFER_IN_TESTS');
 
         $checkEncoding = false;
         if (function_exists('iconv_strlen') === true) {
@@ -181,8 +177,8 @@ abstract class Tokenizer
         }
 
         $checkAnnotations = $this->config->annotations;
-        $encoding         = $this->config->encoding;
-        $tabWidth         = $this->config->tabWidth;
+        $encoding = $this->config->encoding;
+        $tabWidth = $this->config->tabWidth;
 
         $tokensWithTabs = [
             T_WHITESPACE               => true,
@@ -199,14 +195,14 @@ abstract class Tokenizer
 
         $this->numTokens = count($this->tokens);
         for ($i = 0; $i < $this->numTokens; $i++) {
-            $this->tokens[$i]['line']   = $lineNumber;
+            $this->tokens[$i]['line'] = $lineNumber;
             $this->tokens[$i]['column'] = $currColumn;
 
             if (isset($this->knownLengths[$this->tokens[$i]['code']]) === true) {
                 // There are no tabs in the tokens we know the length of.
-                $length      = $this->knownLengths[$this->tokens[$i]['code']];
+                $length = $this->knownLengths[$this->tokens[$i]['code']];
                 $currColumn += $length;
-            } else if ($tabWidth === 0
+            } elseif ($tabWidth === 0
                 || isset($tokensWithTabs[$this->tokens[$i]['code']]) === false
                 || strpos($this->tokens[$i]['content'], "\t") === false
             ) {
@@ -229,7 +225,7 @@ abstract class Tokenizer
                 $currColumn += $length;
             } else {
                 $this->replaceTabsInToken($this->tokens[$i]);
-                $length      = $this->tokens[$i]['length'];
+                $length = $this->tokens[$i]['length'];
                 $currColumn += $length;
             }//end if
 
@@ -250,8 +246,8 @@ abstract class Tokenizer
                 || $this->tokens[$i]['code'] === T_DOC_COMMENT_TAG
                 || ($inTests === true && $this->tokens[$i]['code'] === T_INLINE_HTML)
             ) {
-                $commentText      = ltrim($this->tokens[$i]['content'], " \t/*");
-                $commentText      = rtrim($commentText, " */\t\r\n");
+                $commentText = ltrim($this->tokens[$i]['content'], " \t/*");
+                $commentText = rtrim($commentText, " */\t\r\n");
                 $commentTextLower = strtolower($commentText);
                 if (strpos($commentText, '@codingStandards') !== false) {
                     // If this comment is the only thing on the line, it tells us
@@ -279,7 +275,7 @@ abstract class Tokenizer
                         if ($ownLine === true) {
                             $this->ignoredLines[$this->tokens[$i]['line']] = $ignoring;
                         }
-                    } else if ($ignoring !== null
+                    } elseif ($ignoring !== null
                         && strpos($commentText, '@codingStandardsIgnoreEnd') !== false
                     ) {
                         if ($ownLine === true) {
@@ -289,12 +285,12 @@ abstract class Tokenizer
                         }
 
                         $ignoring = null;
-                    } else if ($ignoring === null
+                    } elseif ($ignoring === null
                         && strpos($commentText, '@codingStandardsIgnoreLine') !== false
                     ) {
                         $ignoring = ['.all' => true];
                         if ($ownLine === true) {
-                            $this->ignoredLines[$this->tokens[$i]['line']]       = $ignoring;
+                            $this->ignoredLines[$this->tokens[$i]['line']] = $ignoring;
                             $this->ignoredLines[($this->tokens[$i]['line'] + 1)] = $ignoring;
                         } else {
                             $this->ignoredLines[$this->tokens[$i]['line']] = $ignoring;
@@ -302,20 +298,20 @@ abstract class Tokenizer
 
                         $ignoring = null;
                     }//end if
-                } else if (substr($commentTextLower, 0, 6) === 'phpcs:'
+                } elseif (substr($commentTextLower, 0, 6) === 'phpcs:'
                     || substr($commentTextLower, 0, 7) === '@phpcs:'
                 ) {
                     // If the @phpcs: syntax is being used, strip the @ to make
                     // comparisons easier.
                     if ($commentText[0] === '@') {
-                        $commentText      = substr($commentText, 1);
+                        $commentText = substr($commentText, 1);
                         $commentTextLower = strtolower($commentText);
                     }
 
                     // If there is a comment on the end, strip it off.
                     $commentStart = strpos($commentTextLower, ' --');
                     if ($commentStart !== false) {
-                        $commentText      = substr($commentText, 0, $commentStart);
+                        $commentText = substr($commentText, 0, $commentStart);
                         $commentTextLower = strtolower($commentText);
                     }
 
@@ -323,7 +319,7 @@ abstract class Tokenizer
                     // to ignore the following line. If the line contains other content
                     // then we are just ignoring this one single line.
                     $lineHasOtherContent = false;
-                    $lineHasOtherTokens  = false;
+                    $lineHasOtherTokens = false;
                     if ($i > 0) {
                         for ($prev = ($i - 1); $prev > 0; $prev--) {
                             if ($this->tokens[$prev]['line'] !== $this->tokens[$i]['line']) {
@@ -399,19 +395,19 @@ abstract class Tokenizer
                         if (count($parts) >= 2) {
                             $sniffParts = explode('.', $parts[0]);
                             if (count($sniffParts) >= 3) {
-                                $this->tokens[$i]['sniffCode']          = array_shift($parts);
-                                $this->tokens[$i]['sniffProperty']      = array_shift($parts);
+                                $this->tokens[$i]['sniffCode'] = array_shift($parts);
+                                $this->tokens[$i]['sniffProperty'] = array_shift($parts);
                                 $this->tokens[$i]['sniffPropertyValue'] = rtrim(implode(' ', $parts), " */\r\n");
                             }
                         }
 
                         $this->tokens[$i]['code'] = T_PHPCS_SET;
                         $this->tokens[$i]['type'] = 'T_PHPCS_SET';
-                    } else if (substr($commentTextLower, 0, 16) === 'phpcs:ignorefile') {
+                    } elseif (substr($commentTextLower, 0, 16) === 'phpcs:ignorefile') {
                         // The whole file will be ignored, but at least set the correct token.
                         $this->tokens[$i]['code'] = T_PHPCS_IGNORE_FILE;
                         $this->tokens[$i]['type'] = 'T_PHPCS_IGNORE_FILE';
-                    } else if (substr($commentTextLower, 0, 13) === 'phpcs:disable') {
+                    } elseif (substr($commentTextLower, 0, 13) === 'phpcs:disable') {
                         if ($lineHasOtherContent === false) {
                             // Completely ignore the comment line.
                             $this->ignoredLines[$this->tokens[$i]['line']] = ['.all' => true];
@@ -431,7 +427,7 @@ abstract class Tokenizer
                             foreach ($parts as $sniffCode) {
                                 $sniffCode = trim($sniffCode);
                                 $disabledSniffs[$sniffCode] = true;
-                                $ignoring[$sniffCode]       = true;
+                                $ignoring[$sniffCode] = true;
 
                                 // This newly disabled sniff might be disabling an existing
                                 // enabled exception that we are tracking.
@@ -451,10 +447,10 @@ abstract class Tokenizer
                             }//end foreach
                         }//end if
 
-                        $this->tokens[$i]['code']       = T_PHPCS_DISABLE;
-                        $this->tokens[$i]['type']       = 'T_PHPCS_DISABLE';
+                        $this->tokens[$i]['code'] = T_PHPCS_DISABLE;
+                        $this->tokens[$i]['type'] = 'T_PHPCS_DISABLE';
                         $this->tokens[$i]['sniffCodes'] = $disabledSniffs;
-                    } else if (substr($commentTextLower, 0, 12) === 'phpcs:enable') {
+                    } elseif (substr($commentTextLower, 0, 12) === 'phpcs:enable') {
                         if ($ignoring !== null) {
                             $enabledSniffs = [];
 
@@ -516,7 +512,7 @@ abstract class Tokenizer
 
                         $this->tokens[$i]['code'] = T_PHPCS_ENABLE;
                         $this->tokens[$i]['type'] = 'T_PHPCS_ENABLE';
-                    } else if (substr($commentTextLower, 0, 12) === 'phpcs:ignore') {
+                    } elseif (substr($commentTextLower, 0, 12) === 'phpcs:ignore') {
                         $ignoreRules = [];
 
                         $additionalText = substr($commentText, 13);
@@ -529,8 +525,8 @@ abstract class Tokenizer
                             }
                         }
 
-                        $this->tokens[$i]['code']       = T_PHPCS_IGNORE;
-                        $this->tokens[$i]['type']       = 'T_PHPCS_IGNORE';
+                        $this->tokens[$i]['code'] = T_PHPCS_IGNORE;
+                        $this->tokens[$i]['type'] = 'T_PHPCS_IGNORE';
                         $this->tokens[$i]['sniffCodes'] = $ignoreRules;
 
                         if ($ignoring !== null) {
@@ -540,7 +536,7 @@ abstract class Tokenizer
                         if ($lineHasOtherContent === false) {
                             // Completely ignore the comment line, and set the following
                             // line to include the ignore rules we've set.
-                            $this->ignoredLines[$this->tokens[$i]['line']]       = ['.all' => true];
+                            $this->ignoredLines[$this->tokens[$i]['line']] = ['.all' => true];
                             $this->ignoredLines[($this->tokens[$i]['line'] + 1)] = $ignoreRules;
                         } else {
                             // The comment is on the same line as the code it is ignoring,
@@ -561,9 +557,9 @@ abstract class Tokenizer
         if ($checkAnnotations === false) {
             $this->ignoredLines = [];
         }
+    }
 
-    }//end createPositionMap()
-
+    //end createPositionMap()
 
     /**
      * Replaces tabs in original token content with spaces.
@@ -580,7 +576,7 @@ abstract class Tokenizer
      *
      * @return void
      */
-    public function replaceTabsInToken(&$token, $prefix=' ', $padding=' ', $tabWidth=null)
+    public function replaceTabsInToken(&$token, $prefix = ' ', $padding = ' ', $tabWidth = null)
     {
         $checkEncoding = false;
         if (function_exists('iconv_strlen') === true) {
@@ -600,16 +596,16 @@ abstract class Tokenizer
             $numTabs = strlen($token['content']);
 
             $firstTabSize = ($tabWidth - (($currColumn - 1) % $tabWidth));
-            $length       = ($firstTabSize + ($tabWidth * ($numTabs - 1)));
-            $newContent   = $prefix.str_repeat($padding, ($length - 1));
+            $length = ($firstTabSize + ($tabWidth * ($numTabs - 1)));
+            $newContent = $prefix.str_repeat($padding, ($length - 1));
         } else {
             // We need to determine the length of each tab.
             $tabs = explode("\t", $token['content']);
 
-            $numTabs    = (count($tabs) - 1);
-            $tabNum     = 0;
+            $numTabs = (count($tabs) - 1);
+            $tabNum = 0;
             $newContent = '';
-            $length     = 0;
+            $length = 0;
 
             foreach ($tabs as $content) {
                 if ($content !== '') {
@@ -629,7 +625,7 @@ abstract class Tokenizer
                     }
 
                     $currColumn += $contentLength;
-                    $length     += $contentLength;
+                    $length += $contentLength;
                 }
 
                 // The last piece of content does not have a tab after it.
@@ -655,17 +651,17 @@ abstract class Tokenizer
                     $currColumn++;
                 }
 
-                $length     += ($currColumn - $lastCurrColumn);
+                $length += ($currColumn - $lastCurrColumn);
                 $newContent .= $prefix.str_repeat($padding, ($currColumn - $lastCurrColumn - 1));
             }//end foreach
         }//end if
 
         $token['orig_content'] = $token['content'];
-        $token['content']      = $newContent;
-        $token['length']       = $length;
+        $token['content'] = $newContent;
+        $token['length'] = $length;
+    }
 
-    }//end replaceTabsInToken()
-
+    //end replaceTabsInToken()
 
     /**
      * Creates a map of brackets positions.
@@ -678,11 +674,11 @@ abstract class Tokenizer
             echo "\t*** START TOKEN MAP ***".PHP_EOL;
         }
 
-        $squareOpeners   = [];
-        $curlyOpeners    = [];
+        $squareOpeners = [];
+        $curlyOpeners = [];
         $this->numTokens = count($this->tokens);
 
-        $openers   = [];
+        $openers = [];
         $openOwner = null;
 
         for ($i = 0; $i < $this->numTokens; $i++) {
@@ -693,14 +689,14 @@ abstract class Tokenizer
             if (isset(Util\Tokens::$parenthesisOpeners[$this->tokens[$i]['code']]) === true) {
                 $this->tokens[$i]['parenthesis_opener'] = null;
                 $this->tokens[$i]['parenthesis_closer'] = null;
-                $this->tokens[$i]['parenthesis_owner']  = $i;
+                $this->tokens[$i]['parenthesis_owner'] = $i;
                 $openOwner = $i;
 
                 if (PHP_CODESNIFFER_VERBOSITY > 1) {
                     echo str_repeat("\t", (count($openers) + 1));
                     echo "=> Found parenthesis owner at $i".PHP_EOL;
                 }
-            } else if ($this->tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
+            } elseif ($this->tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
                 $openers[] = $i;
                 $this->tokens[$i]['parenthesis_opener'] = $i;
                 if ($openOwner !== null) {
@@ -710,13 +706,13 @@ abstract class Tokenizer
                     }
 
                     $this->tokens[$openOwner]['parenthesis_opener'] = $i;
-                    $this->tokens[$i]['parenthesis_owner']          = $openOwner;
+                    $this->tokens[$i]['parenthesis_owner'] = $openOwner;
                     $openOwner = null;
-                } else if (PHP_CODESNIFFER_VERBOSITY > 1) {
+                } elseif (PHP_CODESNIFFER_VERBOSITY > 1) {
                     echo str_repeat("\t", count($openers));
                     echo "=> Found unowned parenthesis opener at $i".PHP_EOL;
                 }
-            } else if ($this->tokens[$i]['code'] === T_CLOSE_PARENTHESIS) {
+            } elseif ($this->tokens[$i]['code'] === T_CLOSE_PARENTHESIS) {
                 // Did we set an owner for this set of parenthesis?
                 $numOpeners = count($openers);
                 if ($numOpeners !== 0) {
@@ -725,22 +721,22 @@ abstract class Tokenizer
                         $owner = $this->tokens[$opener]['parenthesis_owner'];
 
                         $this->tokens[$owner]['parenthesis_closer'] = $i;
-                        $this->tokens[$i]['parenthesis_owner']      = $owner;
+                        $this->tokens[$i]['parenthesis_owner'] = $owner;
 
                         if (PHP_CODESNIFFER_VERBOSITY > 1) {
                             echo str_repeat("\t", (count($openers) + 1));
                             echo "=> Found parenthesis closer at $i for $owner".PHP_EOL;
                         }
-                    } else if (PHP_CODESNIFFER_VERBOSITY > 1) {
+                    } elseif (PHP_CODESNIFFER_VERBOSITY > 1) {
                         echo str_repeat("\t", (count($openers) + 1));
                         echo "=> Found unowned parenthesis closer at $i for $opener".PHP_EOL;
                     }
 
-                    $this->tokens[$i]['parenthesis_opener']      = $opener;
-                    $this->tokens[$i]['parenthesis_closer']      = $i;
+                    $this->tokens[$i]['parenthesis_opener'] = $opener;
+                    $this->tokens[$i]['parenthesis_closer'] = $i;
                     $this->tokens[$opener]['parenthesis_closer'] = $i;
                 }//end if
-            } else if ($this->tokens[$i]['code'] === T_ATTRIBUTE) {
+            } elseif ($this->tokens[$i]['code'] === T_ATTRIBUTE) {
                 $openers[] = $i;
                 if (PHP_CODESNIFFER_VERBOSITY > 1) {
                     echo str_repeat("\t", count($openers));
@@ -749,7 +745,7 @@ abstract class Tokenizer
 
                 $this->tokens[$i]['attribute_opener'] = $i;
                 $this->tokens[$i]['attribute_closer'] = null;
-            } else if ($this->tokens[$i]['code'] === T_ATTRIBUTE_END) {
+            } elseif ($this->tokens[$i]['code'] === T_ATTRIBUTE_END) {
                 $numOpeners = count($openers);
                 if ($numOpeners !== 0) {
                     $opener = array_pop($openers);
@@ -761,7 +757,7 @@ abstract class Tokenizer
                             echo "=> Found attribute closer at $i for $opener".PHP_EOL;
                         }
 
-                        for ($x = ($opener + 1); $x <= $i; ++$x) {
+                        for ($x = ($opener + 1); $x <= $i; $x++) {
                             if (isset($this->tokens[$x]['attribute_closer']) === true) {
                                 continue;
                             }
@@ -769,7 +765,7 @@ abstract class Tokenizer
                             $this->tokens[$x]['attribute_opener'] = $opener;
                             $this->tokens[$x]['attribute_closer'] = $i;
                         }
-                    } else if (PHP_CODESNIFFER_VERBOSITY > 1) {
+                    } elseif (PHP_CODESNIFFER_VERBOSITY > 1) {
                         echo str_repeat("\t", (count($openers) + 1));
                         echo "=> Found unowned attribute closer at $i for $opener".PHP_EOL;
                     }
@@ -804,8 +800,8 @@ abstract class Tokenizer
             case T_CLOSE_SQUARE_BRACKET:
                 if (empty($squareOpeners) === false) {
                     $opener = array_pop($squareOpeners);
-                    $this->tokens[$i]['bracket_opener']      = $opener;
-                    $this->tokens[$i]['bracket_closer']      = $i;
+                    $this->tokens[$i]['bracket_opener'] = $opener;
+                    $this->tokens[$i]['bracket_closer'] = $i;
                     $this->tokens[$opener]['bracket_opener'] = $opener;
                     $this->tokens[$opener]['bracket_closer'] = $i;
 
@@ -821,8 +817,8 @@ abstract class Tokenizer
                     && isset($this->tokens[$i]['scope_opener']) === false
                 ) {
                     $opener = array_pop($curlyOpeners);
-                    $this->tokens[$i]['bracket_opener']      = $opener;
-                    $this->tokens[$i]['bracket_closer']      = $i;
+                    $this->tokens[$i]['bracket_opener'] = $opener;
+                    $this->tokens[$i]['bracket_closer'] = $i;
                     $this->tokens[$opener]['bracket_opener'] = $opener;
                     $this->tokens[$opener]['bracket_closer'] = $i;
 
@@ -848,9 +844,9 @@ abstract class Tokenizer
         if (PHP_CODESNIFFER_VERBOSITY > 1) {
             echo "\t*** END TOKEN MAP ***".PHP_EOL;
         }
+    }
 
-    }//end createTokenMap()
-
+    //end createTokenMap()
 
     /**
      * Creates a map for the parenthesis tokens that surround other tokens.
@@ -872,7 +868,7 @@ abstract class Tokenizer
                     $map[$this->tokens[$i]['parenthesis_opener']]
                         = $this->tokens[$i]['parenthesis_closer'];
                 }
-            } else if (isset($this->tokens[$i]['parenthesis_closer']) === true
+            } elseif (isset($this->tokens[$i]['parenthesis_closer']) === true
                 && $i === $this->tokens[$i]['parenthesis_closer']
             ) {
                 array_pop($map);
@@ -885,9 +881,9 @@ abstract class Tokenizer
                 }
             }//end if
         }//end for
+    }
 
-    }//end createParenthesisNestingMap()
-
+    //end createParenthesisNestingMap()
 
     /**
      * Creates a scope map of tokens that open scopes.
@@ -905,7 +901,7 @@ abstract class Tokenizer
             // Check to see if the current token starts a new scope.
             if (isset($this->scopeOpeners[$this->tokens[$i]['code']]) === true) {
                 if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                    $type    = $this->tokens[$i]['type'];
+                    $type = $this->tokens[$i]['type'];
                     $content = Util\Common::prepareForOutput($this->tokens[$i]['content']);
                     echo "\tStart scope map at $i:$type => $content".PHP_EOL;
                 }
@@ -925,9 +921,9 @@ abstract class Tokenizer
         if (PHP_CODESNIFFER_VERBOSITY > 1) {
             echo "\t*** END SCOPE MAP ***".PHP_EOL;
         }
+    }
 
-    }//end createScopeMap()
-
+    //end createScopeMap()
 
     /**
      * Recurses though the scope openers to build a scope map.
@@ -940,15 +936,15 @@ abstract class Tokenizer
      * @return int The position in the stack that closed the scope.
      * @throws \PHP_CodeSniffer\Exceptions\TokenizerException If the nesting level gets too deep.
      */
-    private function recurseScopeMap($stackPtr, $depth=1, &$ignore=0)
+    private function recurseScopeMap($stackPtr, $depth = 1, &$ignore = 0)
     {
         if (PHP_CODESNIFFER_VERBOSITY > 1) {
             echo str_repeat("\t", $depth);
             echo "=> Begin scope map recursion at token $stackPtr with depth $depth".PHP_EOL;
         }
 
-        $opener    = null;
-        $currType  = $this->tokens[$stackPtr]['code'];
+        $opener = null;
+        $currType = $this->tokens[$stackPtr]['code'];
         $startLine = $this->tokens[$stackPtr]['line'];
 
         // We will need this to restore the value if we end up
@@ -966,8 +962,8 @@ abstract class Tokenizer
             $tokenType = $this->tokens[$i]['code'];
 
             if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                $type    = $this->tokens[$i]['type'];
-                $line    = $this->tokens[$i]['line'];
+                $type = $this->tokens[$i]['type'];
+                $line = $this->tokens[$i]['line'];
                 $content = Util\Common::prepareForOutput($this->tokens[$i]['content']);
 
                 echo str_repeat("\t", $depth);
@@ -1024,7 +1020,7 @@ abstract class Tokenizer
                     echo "=> Found curly brace closer before scope opener for $stackPtr:$type, bailing".PHP_EOL;
                 }
 
-                return ($i - 1);
+                return $i - 1;
             }
 
             if ($opener !== null
@@ -1042,7 +1038,7 @@ abstract class Tokenizer
 
                     $ignore--;
                     continue;
-                } else if ($this->tokens[$opener]['code'] === T_OPEN_CURLY_BRACKET
+                } elseif ($this->tokens[$opener]['code'] === T_OPEN_CURLY_BRACKET
                     && $tokenType !== T_CLOSE_CURLY_BRACKET
                 ) {
                     // The opener is a curly bracket so the closer must be a curly bracket as well.
@@ -1055,13 +1051,13 @@ abstract class Tokenizer
                     }
                 } else {
                     $scopeCloser = $i;
-                    $todo        = [
+                    $todo = [
                         $stackPtr,
                         $opener,
                     ];
 
                     if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                        $type       = $this->tokens[$stackPtr]['type'];
+                        $type = $this->tokens[$stackPtr]['type'];
                         $closerType = $this->tokens[$scopeCloser]['type'];
                         echo str_repeat("\t", $depth);
                         echo "=> Found scope closer ($scopeCloser:$closerType) for $stackPtr:$type".PHP_EOL;
@@ -1074,7 +1070,7 @@ abstract class Tokenizer
                         // To be a closer, this token must have an opener.
                         if (PHP_CODESNIFFER_VERBOSITY > 1) {
                             echo str_repeat("\t", $depth);
-                            echo "* closer needs to be tested *".PHP_EOL;
+                            echo '* closer needs to be tested *'.PHP_EOL;
                         }
 
                         $i = self::recurseScopeMap($i, ($depth + 1), $ignore);
@@ -1083,19 +1079,19 @@ abstract class Tokenizer
                             $validCloser = false;
                             if (PHP_CODESNIFFER_VERBOSITY > 1) {
                                 echo str_repeat("\t", $depth);
-                                echo "* closer is not valid (no opener found) *".PHP_EOL;
+                                echo '* closer is not valid (no opener found) *'.PHP_EOL;
                             }
-                        } else if ($this->tokens[$this->tokens[$scopeCloser]['scope_opener']]['code'] !== $this->tokens[$opener]['code']) {
+                        } elseif ($this->tokens[$this->tokens[$scopeCloser]['scope_opener']]['code'] !== $this->tokens[$opener]['code']) {
                             $validCloser = false;
                             if (PHP_CODESNIFFER_VERBOSITY > 1) {
                                 echo str_repeat("\t", $depth);
-                                $type       = $this->tokens[$this->tokens[$scopeCloser]['scope_opener']]['type'];
+                                $type = $this->tokens[$this->tokens[$scopeCloser]['scope_opener']]['type'];
                                 $openerType = $this->tokens[$opener]['type'];
                                 echo "* closer is not valid (mismatched opener type; $type != $openerType) *".PHP_EOL;
                             }
-                        } else if (PHP_CODESNIFFER_VERBOSITY > 1) {
+                        } elseif (PHP_CODESNIFFER_VERBOSITY > 1) {
                             echo str_repeat("\t", $depth);
-                            echo "* closer was valid *".PHP_EOL;
+                            echo '* closer was valid *'.PHP_EOL;
                         }
                     } else {
                         // The closer was not processed, so we need to
@@ -1106,16 +1102,17 @@ abstract class Tokenizer
                     if ($validCloser === true) {
                         foreach ($todo as $token) {
                             $this->tokens[$token]['scope_condition'] = $stackPtr;
-                            $this->tokens[$token]['scope_opener']    = $opener;
-                            $this->tokens[$token]['scope_closer']    = $scopeCloser;
+                            $this->tokens[$token]['scope_opener'] = $opener;
+                            $this->tokens[$token]['scope_closer'] = $scopeCloser;
                         }
 
                         if ($this->scopeOpeners[$this->tokens[$stackPtr]['code']]['shared'] === true) {
                             // As we are going back to where we started originally, restore
                             // the ignore value back to its original value.
                             $ignore = $originalIgnore;
+
                             return $opener;
-                        } else if ($scopeCloser === $i
+                        } elseif ($scopeCloser === $i
                             && isset($this->scopeOpeners[$tokenType]) === true
                         ) {
                             // Unset scope_condition here or else the token will appear to have
@@ -1125,7 +1122,8 @@ abstract class Tokenizer
                             // token before this one; so the closer has a chance to be processed
                             // a second time, but as an opener.
                             unset($this->tokens[$scopeCloser]['scope_condition']);
-                            return ($i - 1);
+
+                            return $i - 1;
                         } else {
                             return $i;
                         }
@@ -1216,13 +1214,13 @@ abstract class Tokenizer
                         || $this->tokens[$i]['code'] === T_ELSEIF)
                     ) {
                         if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                            echo "continuing".PHP_EOL;
+                            echo 'continuing'.PHP_EOL;
                         }
 
-                        return ($i - 1);
+                        return $i - 1;
                     } else {
                         if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                            echo "backtracking".PHP_EOL;
+                            echo 'backtracking'.PHP_EOL;
                         }
 
                         return $stackPtr;
@@ -1250,7 +1248,7 @@ abstract class Tokenizer
                     }
 
                     continue;
-                } else if ($currType === $tokenType
+                } elseif ($currType === $tokenType
                     && $isShared === false
                     && $opener === null
                 ) {
@@ -1271,7 +1269,7 @@ abstract class Tokenizer
 
                     if (isset($this->scopeOpeners[$tokenType]['end'][T_CLOSE_CURLY_BRACKET]) === true) {
                         $oldIgnore = $ignore;
-                        $ignore    = 0;
+                        $ignore = 0;
                     }
 
                     // PHP has a max nesting level for functions. Stop before we hit that limit
@@ -1296,7 +1294,7 @@ abstract class Tokenizer
                         $depth--;
                     }
 
-                    $i     = self::recurseScopeMap($i, ($depth + 1), $ignore);
+                    $i = self::recurseScopeMap($i, ($depth + 1), $ignore);
                     $depth = $oldDepth;
 
                     if (isset($this->scopeOpeners[$tokenType]['end'][T_CLOSE_CURLY_BRACKET]) === true) {
@@ -1330,7 +1328,7 @@ abstract class Tokenizer
                                 // If the first non-whitespace/comment token looks like this
                                 // brace is a string offset, or this brace is mid-way through
                                 // a new statement, it isn't a scope opener.
-                                $disallowed  = Util\Tokens::$assignmentTokens;
+                                $disallowed = Util\Tokens::$assignmentTokens;
                                 $disallowed += [
                                     T_DOLLAR                   => true,
                                     T_VARIABLE                 => true,
@@ -1357,7 +1355,7 @@ abstract class Tokenizer
 
                 if ($ignore === 0 || $tokenType !== T_OPEN_CURLY_BRACKET) {
                     $openerNested = isset($this->tokens[$i]['nested_parenthesis']);
-                    $ownerNested  = isset($this->tokens[$stackPtr]['nested_parenthesis']);
+                    $ownerNested = isset($this->tokens[$stackPtr]['nested_parenthesis']);
 
                     if (($openerNested === true && $ownerNested === false)
                         || ($openerNested === false && $ownerNested === true)
@@ -1381,7 +1379,7 @@ abstract class Tokenizer
                         $opener = $i;
                     }
                 }//end if
-            } else if ($tokenType === T_SEMICOLON
+            } elseif ($tokenType === T_SEMICOLON
                 && $opener === null
                 && (isset($this->tokens[$stackPtr]['parenthesis_closer']) === false
                 || $i > $this->tokens[$stackPtr]['parenthesis_closer'])
@@ -1394,8 +1392,8 @@ abstract class Tokenizer
                     echo "=> Found end of statement before scope opener for $stackPtr:$type, continuing".PHP_EOL;
                 }
 
-                return ($i - 1);
-            } else if ($tokenType === T_OPEN_PARENTHESIS) {
+                return $i - 1;
+            } elseif ($tokenType === T_OPEN_PARENTHESIS) {
                 if (isset($this->tokens[$i]['parenthesis_owner']) === true) {
                     $owner = $this->tokens[$i]['parenthesis_owner'];
                     if (isset(Util\Tokens::$scopeOpeners[$this->tokens[$owner]['code']]) === true
@@ -1409,7 +1407,7 @@ abstract class Tokenizer
                         $startLine = $this->tokens[$this->tokens[$i]['parenthesis_closer']]['line'];
                     }
                 }
-            } else if ($tokenType === T_OPEN_CURLY_BRACKET && $opener !== null) {
+            } elseif ($tokenType === T_OPEN_CURLY_BRACKET && $opener !== null) {
                 // We opened something that we don't have a scope opener for.
                 // Examples of this are curly brackets for string offsets etc.
                 // We want to ignore this so that we don't have an invalid scope
@@ -1420,7 +1418,7 @@ abstract class Tokenizer
                 }
 
                 $ignore++;
-            } else if ($tokenType === T_CLOSE_CURLY_BRACKET && $ignore > 0) {
+            } elseif ($tokenType === T_CLOSE_CURLY_BRACKET && $ignore > 0) {
                 // We found the end token for the opener we were ignoring.
                 if (PHP_CODESNIFFER_VERBOSITY > 1) {
                     echo str_repeat("\t", $depth);
@@ -1428,7 +1426,7 @@ abstract class Tokenizer
                 }
 
                 $ignore--;
-            } else if ($opener === null
+            } elseif ($opener === null
                 && isset($this->scopeOpeners[$currType]) === true
             ) {
                 // If we still haven't found the opener after 30 lines,
@@ -1441,7 +1439,7 @@ abstract class Tokenizer
                 ) {
                     if ($this->scopeOpeners[$currType]['strict'] === true) {
                         if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                            $type  = $this->tokens[$stackPtr]['type'];
+                            $type = $this->tokens[$stackPtr]['type'];
                             $lines = ($this->tokens[$i]['line'] - $startLine);
                             echo str_repeat("\t", $depth);
                             echo "=> Still looking for $stackPtr:$type scope opener after $lines lines".PHP_EOL;
@@ -1456,7 +1454,7 @@ abstract class Tokenizer
                         return $stackPtr;
                     }
                 }
-            } else if ($opener !== null
+            } elseif ($opener !== null
                 && $tokenType !== T_BREAK
                 && isset($this->endScopeTokens[$tokenType]) === true
             ) {
@@ -1482,20 +1480,20 @@ abstract class Tokenizer
 
                         foreach ([$stackPtr, $opener] as $token) {
                             $this->tokens[$token]['scope_condition'] = $stackPtr;
-                            $this->tokens[$token]['scope_opener']    = $opener;
-                            $this->tokens[$token]['scope_closer']    = $i;
+                            $this->tokens[$token]['scope_opener'] = $opener;
+                            $this->tokens[$token]['scope_closer'] = $i;
                         }
 
-                        return ($i - 1);
+                        return $i - 1;
                     }//end if
                 }//end if
             }//end if
         }//end for
 
         return $stackPtr;
+    }
 
-    }//end recurseScopeMap()
-
+    //end recurseScopeMap()
 
     /**
      * Constructs the level map.
@@ -1514,17 +1512,17 @@ abstract class Tokenizer
         }
 
         $this->numTokens = count($this->tokens);
-        $level           = 0;
-        $conditions      = [];
-        $lastOpener      = null;
-        $openers         = [];
+        $level = 0;
+        $conditions = [];
+        $lastOpener = null;
+        $openers = [];
 
         for ($i = 0; $i < $this->numTokens; $i++) {
             if (PHP_CODESNIFFER_VERBOSITY > 1) {
                 $type = $this->tokens[$i]['type'];
                 $line = $this->tokens[$i]['line'];
-                $len  = $this->tokens[$i]['length'];
-                $col  = $this->tokens[$i]['column'];
+                $len = $this->tokens[$i]['length'];
+                $col = $this->tokens[$i]['column'];
 
                 $content = Util\Common::prepareForOutput($this->tokens[$i]['content']);
 
@@ -1542,7 +1540,7 @@ abstract class Tokenizer
                 echo "]: $type => $content".PHP_EOL;
             }//end if
 
-            $this->tokens[$i]['level']      = $level;
+            $this->tokens[$i]['level'] = $level;
             $this->tokens[$i]['conditions'] = $conditions;
 
             if (isset($this->tokens[$i]['scope_condition']) === true) {
@@ -1569,7 +1567,7 @@ abstract class Tokenizer
                         // or if they are just sharing because one doesn't have a
                         // closer (like CASE with no BREAK using a SWITCHes closer).
                         $thisType = $this->tokens[$this->tokens[$i]['scope_condition']]['code'];
-                        $opener   = $this->tokens[$lastOpener]['scope_condition'];
+                        $opener = $this->tokens[$lastOpener]['scope_condition'];
 
                         $isShared = isset($this->scopeOpeners[$thisType]['with'][$this->tokens[$opener]['code']]);
 
@@ -1587,11 +1585,11 @@ abstract class Tokenizer
 
                             for ($x = $this->tokens[$i]['scope_condition']; $x <= $i; $x++) {
                                 $oldConditions = $this->tokens[$x]['conditions'];
-                                $oldLevel      = $this->tokens[$x]['level'];
+                                $oldLevel = $this->tokens[$x]['level'];
                                 $this->tokens[$x]['level']--;
                                 unset($this->tokens[$x]['conditions'][$badToken]);
                                 if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                                    $type     = $this->tokens[$x]['type'];
+                                    $type = $this->tokens[$x]['type'];
                                     $oldConds = '';
                                     foreach ($oldConditions as $condition) {
                                         $oldConds .= Util\Tokens::tokenName($condition).',';
@@ -1650,12 +1648,12 @@ abstract class Tokenizer
                     if ($lastOpener !== null) {
                         $openers[$lastOpener] = $lastOpener;
                     }
-                } else if ($lastOpener !== null && $this->tokens[$lastOpener]['scope_closer'] === $i) {
+                } elseif ($lastOpener !== null && $this->tokens[$lastOpener]['scope_closer'] === $i) {
                     foreach (array_reverse($openers) as $opener) {
                         if ($this->tokens[$opener]['scope_closer'] === $i) {
                             $oldOpener = array_pop($openers);
                             if (empty($openers) === false) {
-                                $lastOpener           = array_pop($openers);
+                                $lastOpener = array_pop($openers);
                                 $openers[$lastOpener] = $lastOpener;
                             } else {
                                 $lastOpener = null;
@@ -1689,11 +1687,11 @@ abstract class Tokenizer
 
                                     for ($x = ($oldOpener + 1); $x <= $i; $x++) {
                                         $oldConditions = $this->tokens[$x]['conditions'];
-                                        $oldLevel      = $this->tokens[$x]['level'];
+                                        $oldLevel = $this->tokens[$x]['level'];
                                         $this->tokens[$x]['level']--;
                                         unset($this->tokens[$x]['conditions'][$badToken]);
                                         if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                                            $type     = $this->tokens[$x]['type'];
+                                            $type = $this->tokens[$x]['type'];
                                             $oldConds = '';
                                             foreach ($oldConditions as $condition) {
                                                 $oldConds .= Util\Tokens::tokenName($condition).',';
@@ -1726,7 +1724,7 @@ abstract class Tokenizer
                                 echo '* level decreased *'.PHP_EOL;
                             }
 
-                            $this->tokens[$i]['level']      = $level;
+                            $this->tokens[$i]['level'] = $level;
                             $this->tokens[$i]['conditions'] = $conditions;
                         }//end if
                     }//end foreach
@@ -1737,8 +1735,7 @@ abstract class Tokenizer
         if (PHP_CODESNIFFER_VERBOSITY > 1) {
             echo "\t*** END LEVEL MAP ***".PHP_EOL;
         }
+    }
 
-    }//end createLevelMap()
-
-
+    //end createLevelMap()
 }//end class

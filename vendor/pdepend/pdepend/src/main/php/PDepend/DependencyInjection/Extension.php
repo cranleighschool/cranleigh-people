@@ -61,7 +61,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 abstract class Extension
 {
     /**
-     * Return name of the extension
+     * Return name of the extension.
      *
      * @return string
      */
@@ -79,16 +79,16 @@ abstract class Extension
         $path = rtrim($this->getServiceDefinitionsPath(), DIRECTORY_SEPARATOR);
         $name = $this->getServiceDefinitionsName();
 
-        if (file_exists($path . DIRECTORY_SEPARATOR . ($file = $name . '.xml'))) {
+        if (file_exists($path.DIRECTORY_SEPARATOR.($file = $name.'.xml'))) {
             $loader = new XmlFileLoader($container, new FileLocator($path));
             $loader->load($file);
         }
-        if (file_exists($path . DIRECTORY_SEPARATOR . ($file = $name . '.yml'))) {
+        if (file_exists($path.DIRECTORY_SEPARATOR.($file = $name.'.yml'))) {
             $loader = new YamlFileLoader($container, new FileLocator($path));
             $loader->load($file);
         }
 
-        $container->setParameter($this->getName() . '.parameters', $config);
+        $container->setParameter($this->getName().'.parameters', $config);
     }
 
     /**
@@ -111,7 +111,7 @@ abstract class Extension
      */
     public function getCompilerPasses()
     {
-        return array();
+        return [];
     }
 
     /**

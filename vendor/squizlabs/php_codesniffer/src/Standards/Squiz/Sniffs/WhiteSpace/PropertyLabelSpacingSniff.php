@@ -14,14 +14,12 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class PropertyLabelSpacingSniff implements Sniff
 {
-
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['JS'];
-
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -34,9 +32,9 @@ class PropertyLabelSpacingSniff implements Sniff
             T_PROPERTY,
             T_LABEL,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -55,7 +53,7 @@ class PropertyLabelSpacingSniff implements Sniff
 
         if ($colon !== ($stackPtr + 1)) {
             $error = 'There must be no space before the colon in a property/label declaration';
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'Before');
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Before');
             if ($fix === true) {
                 $phpcsFile->fixer->replaceToken(($stackPtr + 1), '');
             }
@@ -63,7 +61,7 @@ class PropertyLabelSpacingSniff implements Sniff
 
         if ($tokens[($colon + 1)]['code'] !== T_WHITESPACE || $tokens[($colon + 1)]['content'] !== ' ') {
             $error = 'There must be a single space after the colon in a property/label declaration';
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'After');
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'After');
             if ($fix === true) {
                 if ($tokens[($colon + 1)]['code'] === T_WHITESPACE) {
                     $phpcsFile->fixer->replaceToken(($colon + 1), ' ');
@@ -72,8 +70,7 @@ class PropertyLabelSpacingSniff implements Sniff
                 }
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

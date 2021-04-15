@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class OneTraitPerFileSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,9 +22,9 @@ class OneTraitPerFileSniff implements Sniff
     public function register()
     {
         return [T_TRAIT];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -44,8 +42,7 @@ class OneTraitPerFileSniff implements Sniff
             $error = 'Only one trait is allowed in a file';
             $phpcsFile->addError($error, $nextClass, 'MultipleFound');
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

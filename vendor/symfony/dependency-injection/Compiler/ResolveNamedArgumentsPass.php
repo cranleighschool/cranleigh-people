@@ -33,7 +33,7 @@ class ResolveNamedArgumentsPass extends AbstractRecursivePass
             $value->setContext(sprintf('A value found in service "%s"', $this->currentId));
         }
 
-        if (!$value instanceof Definition) {
+        if (! $value instanceof Definition) {
             return parent::processValue($value, $isRoot);
         }
 
@@ -62,7 +62,7 @@ class ResolveNamedArgumentsPass extends AbstractRecursivePass
                     $parameters = $r->getParameters();
                 }
 
-                if (isset($key[0]) && '$' !== $key[0] && !class_exists($key) && !interface_exists($key, false)) {
+                if (isset($key[0]) && '$' !== $key[0] && ! class_exists($key) && ! interface_exists($key, false)) {
                     throw new InvalidArgumentException(sprintf('Invalid service "%s": did you forget to add the "$" prefix to argument "%s"?', $this->currentId, $key));
                 }
 
@@ -84,19 +84,19 @@ class ResolveNamedArgumentsPass extends AbstractRecursivePass
                     throw new InvalidArgumentException(sprintf('Invalid service "%s": method "%s()" has no argument named "%s". Check your service definition.', $this->currentId, $class !== $this->currentId ? $class.'::'.$method : $method, $key));
                 }
 
-                if (null !== $argument && !$argument instanceof Reference && !$argument instanceof Definition) {
+                if (null !== $argument && ! $argument instanceof Reference && ! $argument instanceof Definition) {
                     throw new InvalidArgumentException(sprintf('Invalid service "%s": the value of argument "%s" of method "%s()" must be null, an instance of "%s" or an instance of "%s", "%s" given.', $this->currentId, $key, $class !== $this->currentId ? $class.'::'.$method : $method, Reference::class, Definition::class, get_debug_type($argument)));
                 }
 
                 $typeFound = false;
                 foreach ($parameters as $j => $p) {
-                    if (!\array_key_exists($j, $resolvedArguments) && ProxyHelper::getTypeHint($r, $p, true) === $key) {
+                    if (! \array_key_exists($j, $resolvedArguments) && ProxyHelper::getTypeHint($r, $p, true) === $key) {
                         $resolvedArguments[$j] = $argument;
                         $typeFound = true;
                     }
                 }
 
-                if (!$typeFound) {
+                if (! $typeFound) {
                     throw new InvalidArgumentException(sprintf('Invalid service "%s": method "%s()" has no argument type-hinted as "%s". Check your service definition.', $this->currentId, $class !== $this->currentId ? $class.'::'.$method : $method, $key));
                 }
             }

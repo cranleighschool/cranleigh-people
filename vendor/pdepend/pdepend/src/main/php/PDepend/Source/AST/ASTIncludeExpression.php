@@ -55,14 +55,14 @@ class ASTIncludeExpression extends ASTExpression
     /**
      * Does this node represent a <b>include_once</b>-expression?
      *
-     * @var boolean
+     * @var bool
      */
     protected $once = false;
 
     /**
      * Does this node represent a <b>include_once</b>-expression?
      *
-     * @return boolean
+     * @return bool
      */
     public function isOnce()
     {
@@ -103,6 +103,6 @@ class ASTIncludeExpression extends ASTExpression
      */
     public function __sleep()
     {
-        return array_merge(array('once'), parent::__sleep());
+        return array_merge(['once'], parent::__sleep());
     }
 }

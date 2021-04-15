@@ -102,10 +102,11 @@ class FileCacheDirectory
      */
     protected function createOrReturnCacheDirectory($key)
     {
-        $path = $this->getCacheDir() . '/' . substr($key, 0, 2);
+        $path = $this->getCacheDir().'/'.substr($key, 0, 2);
         if (false === file_exists($path)) {
             @mkdir($path, 0775, true);
         }
+
         return $path;
     }
 
@@ -120,6 +121,7 @@ class FileCacheDirectory
         if (false === file_exists($cacheDir)) {
             @mkdir($cacheDir, 0775, true);
         }
+
         return $cacheDir;
     }
 
@@ -127,11 +129,11 @@ class FileCacheDirectory
      * Tests if the current software cache version is similar to the stored
      * file system cache version.
      *
-     * @return boolean
+     * @return bool
      */
     protected function isValidVersion()
     {
-        return (self::VERSION === $this->readVersion());
+        return self::VERSION === $this->readVersion();
     }
 
     /**
@@ -144,6 +146,7 @@ class FileCacheDirectory
         if (file_exists($this->getVersionFile())) {
             return trim(file_get_contents($this->getVersionFile()));
         }
+
         return null;
     }
 
@@ -165,7 +168,7 @@ class FileCacheDirectory
      */
     protected function getVersionFile()
     {
-        return $this->getCacheDir() . '/_version';
+        return $this->getCacheDir().'/_version';
     }
 
     /**

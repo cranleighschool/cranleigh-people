@@ -60,31 +60,31 @@ class TokenStack
      *
      * @var \PDepend\Source\Tokenizer\Token[]
      */
-    private $tokens = array();
+    private $tokens = [];
 
     /**
      * Stack with token scopes.
      *
      * @var \PDepend\Source\Tokenizer\Token[][]
      */
-    private $stack = array();
+    private $stack = [];
 
     /**
      * The current stack offset.
      *
-     * @var integer
+     * @var int
      */
     private $offset = 0;
 
     /**
-     * This method will push a new token scope onto the stack,
+     * This method will push a new token scope onto the stack,.
      *
      * @return void
      */
     public function push()
     {
         $this->stack[$this->offset++] = $this->tokens;
-        $this->tokens                  = array();
+        $this->tokens = [];
     }
 
     /**
@@ -96,7 +96,7 @@ class TokenStack
      */
     public function pop()
     {
-        $tokens        = $this->tokens;
+        $tokens = $this->tokens;
         $this->tokens = $this->stack[--$this->offset];
 
         unset($this->stack[$this->offset]);
@@ -104,6 +104,7 @@ class TokenStack
         foreach ($tokens as $token) {
             $this->tokens[] = $token;
         }
+
         return $tokens;
     }
 
@@ -115,6 +116,6 @@ class TokenStack
      */
     public function add(Token $token)
     {
-        return ($this->tokens[] = $token);
+        return $this->tokens[] = $token;
     }
 }

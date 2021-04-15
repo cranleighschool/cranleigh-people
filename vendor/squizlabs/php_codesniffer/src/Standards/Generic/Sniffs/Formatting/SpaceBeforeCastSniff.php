@@ -15,8 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class SpaceBeforeCastSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +23,9 @@ class SpaceBeforeCastSniff implements Sniff
     public function register()
     {
         return Tokens::$castTokens;
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -48,12 +46,13 @@ class SpaceBeforeCastSniff implements Sniff
 
         if ($tokens[($stackPtr - 1)]['code'] !== T_WHITESPACE) {
             $error = 'A cast statement must be preceded by a single space';
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpace');
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpace');
             if ($fix === true) {
                 $phpcsFile->fixer->addContentBefore($stackPtr, ' ');
             }
 
             $phpcsFile->recordMetric($stackPtr, 'Spacing before cast statement', 0);
+
             return;
         }
 
@@ -61,13 +60,12 @@ class SpaceBeforeCastSniff implements Sniff
 
         if ($tokens[($stackPtr - 1)]['column'] !== 1 && $tokens[($stackPtr - 1)]['length'] !== 1) {
             $error = 'A cast statement must be preceded by a single space';
-            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'TooMuchSpace');
+            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'TooMuchSpace');
             if ($fix === true) {
                 $phpcsFile->fixer->replaceToken(($stackPtr - 1), ' ');
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

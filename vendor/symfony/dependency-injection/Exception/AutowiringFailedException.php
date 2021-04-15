@@ -29,7 +29,7 @@ class AutowiringFailedException extends RuntimeException
             $message = $message();
         }
 
-        if (!$message instanceof \Closure) {
+        if (! $message instanceof \Closure) {
             parent::__construct($message, $code, $previous);
 
             return;

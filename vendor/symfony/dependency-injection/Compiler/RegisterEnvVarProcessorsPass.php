@@ -33,9 +33,9 @@ class RegisterEnvVarProcessorsPass implements CompilerPassInterface
         $types = [];
         $processors = [];
         foreach ($container->findTaggedServiceIds('container.env_var_processor') as $id => $tags) {
-            if (!$r = $container->getReflectionClass($class = $container->getDefinition($id)->getClass())) {
+            if (! $r = $container->getReflectionClass($class = $container->getDefinition($id)->getClass())) {
                 throw new InvalidArgumentException(sprintf('Class "%s" used for service "%s" cannot be found.', $class, $id));
-            } elseif (!$r->isSubclassOf(EnvVarProcessorInterface::class)) {
+            } elseif (! $r->isSubclassOf(EnvVarProcessorInterface::class)) {
                 throw new InvalidArgumentException(sprintf('Service "%s" must implement interface "%s".', $id, EnvVarProcessorInterface::class));
             }
             foreach ($class::getProvidedTypes() as $prefix => $type) {
@@ -46,7 +46,7 @@ class RegisterEnvVarProcessorsPass implements CompilerPassInterface
 
         if ($bag instanceof EnvPlaceholderParameterBag) {
             foreach (EnvVarProcessor::getProvidedTypes() as $prefix => $type) {
-                if (!isset($types[$prefix])) {
+                if (! isset($types[$prefix])) {
                     $types[$prefix] = self::validateProvidedTypes($type, EnvVarProcessor::class);
                 }
             }
@@ -55,8 +55,7 @@ class RegisterEnvVarProcessorsPass implements CompilerPassInterface
 
         if ($processors) {
             $container->setAlias('container.env_var_processors_locator', (string) ServiceLocatorTagPass::register($container, $processors))
-                ->setPublic(true)
-            ;
+                ->setPublic(true);
         }
     }
 
@@ -65,7 +64,7 @@ class RegisterEnvVarProcessorsPass implements CompilerPassInterface
         $types = explode('|', $types);
 
         foreach ($types as $type) {
-            if (!\in_array($type, self::ALLOWED_TYPES)) {
+            if (! \in_array($type, self::ALLOWED_TYPES)) {
                 throw new InvalidArgumentException(sprintf('Invalid type "%s" returned by "%s::getProvidedTypes()", expected one of "%s".', $type, $class, implode('", "', self::ALLOWED_TYPES)));
             }
         }

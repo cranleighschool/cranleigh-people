@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ClassFileNameSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -28,9 +26,9 @@ class ClassFileNameSniff implements Sniff
             T_INTERFACE,
             T_TRAIT,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -50,20 +48,19 @@ class ClassFileNameSniff implements Sniff
             return;
         }
 
-        $tokens  = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
         $decName = $phpcsFile->findNext(T_STRING, $stackPtr);
 
         if ($tokens[$decName]['content'] !== $fileName) {
             $error = '%s name doesn\'t match filename; expected "%s %s"';
-            $data  = [
+            $data = [
                 ucfirst($tokens[$stackPtr]['content']),
                 $tokens[$stackPtr]['content'],
                 $fileName,
             ];
             $phpcsFile->addError($error, $stackPtr, 'NoMatch', $data);
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class

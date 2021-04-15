@@ -19,12 +19,11 @@ namespace PHPMD\Rule\CleanCode;
 
 use PHPMD\AbstractNode;
 use PHPMD\AbstractRule;
-use PHPMD\Rule\ClassAware;
 use PHPMD\Rule\FunctionAware;
 use PHPMD\Rule\MethodAware;
 
 /**
- * Error Control Operators Rule
+ * Error Control Operators Rule.
  *
  * This rule detects usage of error control operator (@).
  *
@@ -43,7 +42,7 @@ class ErrorControlOperator extends AbstractRule implements MethodAware, Function
     {
         foreach ($node->findChildrenOfType('UnaryExpression') as $unaryExpression) {
             if ($unaryExpression->getImage() === '@') {
-                $this->addViolation($node, array($unaryExpression->getBeginLine()));
+                $this->addViolation($node, [$unaryExpression->getBeginLine()]);
             }
         }
     }

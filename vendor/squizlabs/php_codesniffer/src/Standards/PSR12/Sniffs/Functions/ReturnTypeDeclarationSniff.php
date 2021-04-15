@@ -14,8 +14,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ReturnTypeDeclarationSniff implements Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -28,9 +26,9 @@ class ReturnTypeDeclarationSniff implements Sniff
             T_CLOSURE,
             T_FN,
         ];
+    }
 
-    }//end register()
-
+    //end register()
 
     /**
      * Processes this test when one of its tokens is encountered.
@@ -75,7 +73,7 @@ class ReturnTypeDeclarationSniff implements Sniff
                 if ($fix === true) {
                     $phpcsFile->fixer->replaceToken(($returnType - 1), ' ');
                 }
-            } else if ($tokens[($returnType - 1)]['code'] === T_COLON) {
+            } elseif ($tokens[($returnType - 1)]['code'] === T_COLON) {
                 $fix = $phpcsFile->addFixableError($error, $returnType, 'SpaceBeforeReturnType');
                 if ($fix === true) {
                     $phpcsFile->fixer->addContentBefore($returnType, ' ');
@@ -88,7 +86,7 @@ class ReturnTypeDeclarationSniff implements Sniff
         $colon = $phpcsFile->findPrevious(T_COLON, $returnType);
         if ($tokens[($colon - 1)]['code'] !== T_CLOSE_PARENTHESIS) {
             $error = 'There must not be a space before the colon in a return type declaration';
-            $prev  = $phpcsFile->findPrevious(T_WHITESPACE, ($colon - 1), null, true);
+            $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($colon - 1), null, true);
             if ($tokens[$prev]['code'] === T_CLOSE_PARENTHESIS) {
                 $fix = $phpcsFile->addFixableError($error, $colon, 'SpaceBeforeColon');
                 if ($fix === true) {
@@ -103,8 +101,7 @@ class ReturnTypeDeclarationSniff implements Sniff
                 $phpcsFile->addError($error, $colon, 'SpaceBeforeColon');
             }
         }
+    }
 
-    }//end process()
-
-
+    //end process()
 }//end class
