@@ -1,7 +1,5 @@
 <?php
 
-	use CranleighSchool\CranleighPeople\Plugin;
-
 ?>
 <div class="card landscape">
 	<div class="row">
@@ -9,8 +7,8 @@
 			<div class="card-image">
 				<a href="<?php the_permalink(); ?>">
 					<?php
-						\CranleighSchool\CranleighPeople\View::the_post_thumbnail();
-					?>
+                        \CranleighSchool\CranleighPeople\View::the_post_thumbnail();
+                    ?>
 				</a>
 			</div>
 		</div>
