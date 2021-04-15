@@ -9,18 +9,17 @@
 
 namespace CranleighSchool\CranleighPeople;
 
-    class Slacker extends \FredBradley\CranleighSlacker\Slacker
-    {
-        public static $room = 'it-cranleigh-people';
-        private static $webhookEndpoint;
+class Slacker extends \FredBradley\CranleighSlacker\Slacker {
 
-        public function __construct()
-        {
-            self::$webhookEndpoint = Plugin::getPluginSetting('slack_webhook_endpoint');
-            if (defined('APP_ENV') && APP_ENV == 'local') {
-                self::$room = 'development-app-logs';
-            }
+	public static $room = 'it-cranleigh-people';
+	private static $webhookEndpoint;
 
-            parent::__construct(self::$webhookEndpoint, self::$room);
-        }
-    }
+	public function __construct() {
+		self::$webhookEndpoint = Plugin::getPluginSetting( 'slack_webhook_endpoint' );
+		if ( defined( 'APP_ENV' ) && APP_ENV == 'local' ) {
+			self::$room = 'development-app-logs';
+		}
+
+		parent::__construct( self::$webhookEndpoint, self::$room );
+	}
+}

@@ -2,35 +2,33 @@
 
 namespace CranleighSchool\CranleighPeople;
 
-    class Activate
-    {
-        /**
-         * activate function. Called only once upon activation of the plugin on any site.
-         *
-         * @return void
-         */
-        public static function activate()
-        {
-            self::insert_staff_roles();
+class Activate {
 
-            Cron::setup_sync_cronjob();
-        }
+	/**
+	 * activate function. Called only once upon activation of the plugin on any site.
+	 *
+	 * @return void
+	 */
+	public static function activate() {
+		self::insert_staff_roles();
 
-        public static function insert_staff_roles()
-        {
-            $args = [];
+		Cron::setup_sync_cronjob();
+	}
 
-            $roles = [
-                'Head of Department',
-                'Deputy Head',
-                'Headmaster',
-                'Housemaster / Housemistress',
-                'Teacher',
-                'Senior Management Team',
-            ];
+	public static function insert_staff_roles() {
+		$args = array();
 
-            foreach ($roles as $role) {
-                $test[] = wp_insert_term($role, StaffCategoriesTaxonomy::TAXONOMY_KEY);
-            }
-        }
-    }
+		$roles = array(
+			'Head of Department',
+			'Deputy Head',
+			'Headmaster',
+			'Housemaster / Housemistress',
+			'Teacher',
+			'Senior Management Team',
+		);
+
+		foreach ( $roles as $role ) {
+			$test[] = wp_insert_term( $role, StaffCategoriesTaxonomy::TAXONOMY_KEY );
+		}
+	}
+}

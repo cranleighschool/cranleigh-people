@@ -2,46 +2,43 @@
 
 namespace CranleighSchool\CranleighPeople\Shortcodes;
 
-    use CranleighSchool\CranleighPeople\Traits\ShortcodeTrait;
+	use CranleighSchool\CranleighPeople\Traits\ShortcodeTrait;
 
-    /**
-     * Class BaseShortcode.
-     */
-    abstract class BaseShortcode implements ShortcodeInterface
-    {
-        use ShortcodeTrait;
+	/**
+	 * Class BaseShortcode.
+	 */
+abstract class BaseShortcode implements ShortcodeInterface {
 
-        public $tag;
+	use ShortcodeTrait;
 
-        /**
-         * BaseShortcode constructor.
-         */
-        public function __construct()
-        {
-            $this->tag = $this->tagName();
-        }
+	public $tag;
 
-        /**
-         * Returns the name of the shortcode tag.
-         *
-         * @return string
-         */
-        abstract protected function tagName(): string;
+	/**
+	 * BaseShortcode constructor.
+	 */
+	public function __construct() {
+		$this->tag = $this->tagName();
+	}
 
-        /**
-         * Static method that registers the shortcode.
-         */
-        public static function register(): void
-        {
-            $instance = new static();
-            add_shortcode($instance->tagName(), [$instance, 'handle']);
-        }
+	/**
+	 * Returns the name of the shortcode tag.
+	 *
+	 * @return string
+	 */
+	abstract protected function tagName(): string;
 
-        /**
-         * @return string
-         */
-        public function __toString()
-        {
-            return $this->tagName();
-        }
-    }
+	/**
+	 * Static method that registers the shortcode.
+	 */
+	public static function register(): void {
+		$instance = new static();
+		add_shortcode( $instance->tagName(), array( $instance, 'handle' ) );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->tagName();
+	}
+}

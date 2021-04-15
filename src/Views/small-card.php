@@ -7,8 +7,8 @@
 			<div class="card-image">
 				<a href="<?php the_permalink(); ?>">
 					<?php
-                        \CranleighSchool\CranleighPeople\View::the_post_thumbnail();
-                    ?>
+						\CranleighSchool\CranleighPeople\View::the_post_thumbnail();
+					?>
 				</a>
 			</div>
 		</div>

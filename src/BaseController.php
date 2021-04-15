@@ -2,93 +2,83 @@
 
 namespace CranleighSchool\CranleighPeople;
 
-    /**
-     * Class BaseController.
-     */
-    class BaseController
-    {
-        /**
-         * @var bool
-         */
-        public $load_from_blog_id = false;
+	/**
+	 * Class BaseController.
+	 */
+class BaseController {
 
-        public $settings = [];
+	/**
+	 * @var bool
+	 */
+	public $load_from_blog_id = false;
 
-        public function __construct(string $plugin_name)
-        {
-            new PluginUpdateCheck($plugin_name);
-        }
+	public $settings = array();
 
-        public static function getPluginSetting(string $setting, bool $isset = false)
-        {
-            $settings = get_option(Settings::SETTINGS_SECTION_ID);
+	public function __construct( string $plugin_name ) {
+		new PluginUpdateCheck( $plugin_name );
+	}
 
-            if ($isset === true) {
-                return (bool) isset($settings[$setting]);
-            }
+	public static function getPluginSetting( string $setting, bool $isset = false ) {
+		$settings = get_option( Settings::SETTINGS_SECTION_ID );
 
-            return $settings[$setting];
-        }
+		if ( $isset === true ) {
+			return (bool) isset( $settings[ $setting ] );
+		}
 
-        public static function restore_current_blog()
-        {
-            if (is_multisite()) {
-                if (ms_is_switched()) {
-                    return restore_current_blog();
-                }
-            }
-        }
+		return $settings[ $setting ];
+	}
 
-        public static function switch_to_blog($new_blog)
-        {
-            if (is_multisite()) {
-                if (! ms_is_switched()) {
-                    return switch_to_blog($new_blog);
-                }
-            }
-        }
+	public static function restore_current_blog() {
+		if ( is_multisite() ) {
+			if ( ms_is_switched() ) {
+				return restore_current_blog();
+			}
+		}
+	}
 
-        public function load()
-        {
-            $this->loadSettings();
-            $this->setLoadFromBlogId();
-        }
+	public static function switch_to_blog( $new_blog ) {
+		if ( is_multisite() ) {
+			if ( ! ms_is_switched() ) {
+				return switch_to_blog( $new_blog );
+			}
+		}
+	}
 
-        private function loadSettings()
-        {
-            $this->settings = get_option(Settings::SETTINGS_SECTION_ID);
-        }
+	public function load() {
+		$this->loadSettings();
+		$this->setLoadFromBlogId();
+	}
 
-        public static function get_default_attachment_id()
-        {
-            return self::getPluginSetting('default_photo_attachment_id');
-        }
+	private function loadSettings() {
+		$this->settings = get_option( Settings::SETTINGS_SECTION_ID );
+	}
 
-        public function setLoadFromBlogId()
-        {
-            if (isset($this->settings['load_from_blog_id'])) {
-                $this->load_from_blog_id = $this->settings['load_from_blog_id'];
-            } else {
-                $this->load_from_blog_id = BLOG_ID_CURRENT_SITE;
-            }
-        }
+	public static function get_default_attachment_id() {
+		return self::getPluginSetting( 'default_photo_attachment_id' );
+	}
 
-        public function get_permalink(int $post_id)
-        {
-            if (is_multisite()) {
-                return get_blog_permalink($this->load_from_blog_id, $post_id);
-            } else {
-                return $this->get_permalink($post_id);
-            }
-        }
+	public function setLoadFromBlogId() {
+		if ( isset( $this->settings['load_from_blog_id'] ) ) {
+			$this->load_from_blog_id = $this->settings['load_from_blog_id'];
+		} else {
+			$this->load_from_blog_id = BLOG_ID_CURRENT_SITE;
+		}
+	}
 
-        /**
-         * @param string $variable
-         *
-         * @return mixed
-         */
-        public function setting(string $variable)
-        {
-            return $this->settings[$variable];
-        }
-    }
+	public function get_permalink( int $post_id ) {
+		if ( is_multisite() ) {
+			return get_blog_permalink( $this->load_from_blog_id, $post_id );
+		} else {
+			return $this->get_permalink( $post_id );
+		}
+	}
+
+	/**
+	 * @param string $variable
+	 *
+	 * @return mixed
+	 */
+	public function setting( string $variable ) {
+		return $this->settings[ $variable ];
+	}
+}

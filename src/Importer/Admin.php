@@ -2,46 +2,48 @@
 
 namespace CranleighSchool\CranleighPeople\Importer;
 
-    use CranleighSchool\CranleighPeople\Cron;
-    use CranleighSchool\CranleighPeople\Plugin;
+	use CranleighSchool\CranleighPeople\Cron;
+	use CranleighSchool\CranleighPeople\Plugin;
 
-    class Admin
-    {
-        public static function add_submenu_page()
-        {
-            add_action('admin_menu', function () {
-                add_submenu_page(
-                    'edit.php?post_type='.Plugin::POST_TYPE_KEY,
-                    __('Manual Importer', 'cranleigh'),
-                    __('Manual Importer', 'cranleigh'),
-                    'manage_options',
-                    'cranleigh_people_manual_importer',
-                    [__CLASS__, 'importPage']
-                );
-            });
-        }
+class Admin {
 
-        /**
-         * @return bool
-         * @throws \Exception
-         */
-        public static function importPage()
-        {
-            if (isset($_POST['usernames'])) {
-                $usernames = array_map('trim', explode(',', strtoupper($_POST['usernames'])));
-                Importer::import($usernames);
-            }
-            if (isset($_POST['thewholelot'])) {
-                Importer::import();
-            } ?>
+	public static function add_submenu_page() {
+		add_action(
+			'admin_menu',
+			function () {
+				add_submenu_page(
+					'edit.php?post_type=' . Plugin::POST_TYPE_KEY,
+					__( 'Manual Importer', 'cranleigh' ),
+					__( 'Manual Importer', 'cranleigh' ),
+					'manage_options',
+					'cranleigh_people_manual_importer',
+					array( __CLASS__, 'importPage' )
+				);
+			}
+		);
+	}
+
+	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public static function importPage() {
+		if ( isset( $_POST['usernames'] ) ) {
+			$usernames = array_map( 'trim', explode( ',', strtoupper( $_POST['usernames'] ) ) );
+			Importer::import( $usernames );
+		}
+		if ( isset( $_POST['thewholelot'] ) ) {
+			Importer::import();
+		} ?>
 			<div class="wrap">
 				<h2>Cranleigh People Importer</h2>
 				<?php
-                    if (! Plugin::getPluginSetting('importer_api_endpoint', true)) {
-                        echo "<div class='error notice-error notice'><p><strong>Error: </strong>You haven't set an API endpoint. You'll need to do that first.</p></div>";
+				if ( ! Plugin::getPluginSetting( 'importer_api_endpoint', true ) ) {
+					echo "<div class='error notice-error notice'><p><strong>Error: </strong>You haven't set an API endpoint. You'll need to do that first.</p></div>";
 
-                        return false;
-                    } ?>
+					return false;
+				}
+				?>
 				<p>Please use this manually run the script to import staff members from <a
 						href="https://people.cranleigh.org/">Cranleigh People Manager</a>.</p>
 
@@ -72,5 +74,5 @@ namespace CranleighSchool\CranleighPeople\Importer;
 				</form>
 			</div>
 			<?php
-        }
-    }
+	}
+}
