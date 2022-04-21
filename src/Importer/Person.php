@@ -17,7 +17,7 @@ class Person {
 	}
 
 	public function __get( $property ) {
-		return array_key_exists( $property, $this->_data ) ? $this->_data->{$property} : null;
+		return property_exists( $this->_data, $property ) ? $this->_data->{$property} : null;
 	}
 
 	/**
