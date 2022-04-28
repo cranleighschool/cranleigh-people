@@ -42,9 +42,9 @@ class ResolveReferencesToAliasesPass extends AbstractRecursivePass
     /**
      * {@inheritdoc}
      */
-    protected function processValue($value, bool $isRoot = false)
+    protected function processValue(mixed $value, bool $isRoot = false): mixed
     {
-        if (! $value instanceof Reference) {
+        if (!$value instanceof Reference) {
             return parent::processValue($value, $isRoot);
         }
 
@@ -55,7 +55,7 @@ class ResolveReferencesToAliasesPass extends AbstractRecursivePass
 
     private function getDefinitionId(string $id, ContainerBuilder $container): string
     {
-        if (! $container->hasAlias($id)) {
+        if (!$container->hasAlias($id)) {
             return $id;
         }
 
@@ -63,7 +63,7 @@ class ResolveReferencesToAliasesPass extends AbstractRecursivePass
 
         if ($alias->isDeprecated()) {
             $referencingDefinition = $container->hasDefinition($this->currentId) ? $container->getDefinition($this->currentId) : $container->getAlias($this->currentId);
-            if (! $referencingDefinition->isDeprecated()) {
+            if (!$referencingDefinition->isDeprecated()) {
                 $deprecation = $alias->getDeprecation($id);
                 trigger_deprecation($deprecation['package'], $deprecation['version'], rtrim($deprecation['message'], '. ').'. It is being referenced by the "%s" '.($container->hasDefinition($this->currentId) ? 'service.' : 'alias.'), $this->currentId);
             }

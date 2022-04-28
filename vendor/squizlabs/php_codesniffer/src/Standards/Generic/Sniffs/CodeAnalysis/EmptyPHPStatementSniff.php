@@ -18,6 +18,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class EmptyPHPStatementSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -29,9 +31,9 @@ class EmptyPHPStatementSniff implements Sniff
             T_SEMICOLON,
             T_CLOSE_TAG,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -78,7 +80,7 @@ class EmptyPHPStatementSniff implements Sniff
             }
 
             if (isset($tokens[$stackPtr]['nested_parenthesis']) === true) {
-                $nested = $tokens[$stackPtr]['nested_parenthesis'];
+                $nested     = $tokens[$stackPtr]['nested_parenthesis'];
                 $lastCloser = array_pop($nested);
                 if (isset($tokens[$lastCloser]['parenthesis_owner']) === true
                     && $tokens[$tokens[$lastCloser]['parenthesis_owner']]['code'] === T_FOR
@@ -153,7 +155,8 @@ class EmptyPHPStatementSniff implements Sniff
             // Deliberately left empty.
             break;
         }//end switch
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

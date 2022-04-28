@@ -15,23 +15,26 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class LowercasePHPFunctionsSniff implements Sniff
 {
+
     /**
-     * String -> int hash map of all php built in function names.
+     * String -> int hash map of all php built in function names
      *
      * @var array
      */
     private $builtInFunctions;
 
+
     /**
-     * Construct the LowercasePHPFunctionSniff.
+     * Construct the LowercasePHPFunctionSniff
      */
     public function __construct()
     {
-        $allFunctions = get_defined_functions();
-        $this->builtInFunctions = array_flip($allFunctions['internal']);
-    }
 
-    //end __construct()
+        $allFunctions           = get_defined_functions();
+        $this->builtInFunctions = array_flip($allFunctions['internal']);
+
+    }//end __construct()
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -41,9 +44,9 @@ class LowercasePHPFunctionsSniff implements Sniff
     public function register()
     {
         return [T_STRING];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -58,7 +61,7 @@ class LowercasePHPFunctionsSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $content = $tokens[$stackPtr]['content'];
+        $content   = $tokens[$stackPtr]['content'];
         $contentLc = strtolower($content);
         if ($content === $contentLc) {
             return;
@@ -78,9 +81,9 @@ class LowercasePHPFunctionsSniff implements Sniff
             return;
         }
 
-        $ignore = Tokens::$emptyTokens;
+        $ignore   = Tokens::$emptyTokens;
         $ignore[] = T_BITWISE_AND;
-        $prev = $phpcsFile->findPrevious($ignore, ($stackPtr - 1), null, true);
+        $prev     = $phpcsFile->findPrevious($ignore, ($stackPtr - 1), null, true);
         $prevPrev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($prev - 1), null, true);
 
         if ($tokens[$next]['code'] !== T_OPEN_PARENTHESIS) {
@@ -92,7 +95,7 @@ class LowercasePHPFunctionsSniff implements Sniff
                 && $tokens[$prevPrev]['code'] === T_USE
             ) {
                 $error = 'Use statements for PHP native functions must be lowercase; expected "%s" but found "%s"';
-                $data = [
+                $data  = [
                     $contentLc,
                     $content,
                 ];
@@ -143,7 +146,7 @@ class LowercasePHPFunctionsSniff implements Sniff
         }
 
         $error = 'Calls to PHP native functions must be lowercase; expected "%s" but found "%s"';
-        $data = [
+        $data  = [
             $contentLc,
             $content,
         ];
@@ -152,7 +155,8 @@ class LowercasePHPFunctionsSniff implements Sniff
         if ($fix === true) {
             $phpcsFile->fixer->replaceToken($stackPtr, $contentLc);
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

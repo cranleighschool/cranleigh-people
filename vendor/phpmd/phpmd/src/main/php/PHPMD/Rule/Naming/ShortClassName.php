@@ -29,14 +29,14 @@ use PHPMD\Utility\Strings;
 class ShortClassName extends AbstractRule implements ClassAware, InterfaceAware
 {
     /**
-     * Temporary cache of configured exceptions. Have name as key.
+     * Temporary cache of configured exceptions. Have name as key
      *
      * @var array<string, int>|null
      */
     protected $exceptions;
 
     /**
-     * Check if a class or interface name is below the minimum configured length and emit a rule violation.
+     * Check if a class or interface name is below the minimum configured length and emit a rule violation
      *
      * @param \PHPMD\AbstractNode $node
      * @return void
@@ -54,11 +54,11 @@ class ShortClassName extends AbstractRule implements ClassAware, InterfaceAware
             return;
         }
 
-        $this->addViolation($node, [$classOrInterfaceName, $threshold]);
+        $this->addViolation($node, array($classOrInterfaceName, $threshold));
     }
 
     /**
-     * Gets array of exceptions from property.
+     * Gets array of exceptions from property
      *
      * @return array<string, int>
      */

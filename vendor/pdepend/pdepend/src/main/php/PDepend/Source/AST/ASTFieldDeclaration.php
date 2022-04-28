@@ -38,12 +38,15 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 
 namespace PDepend\Source\AST;
 
+use InvalidArgumentException;
 use OutOfBoundsException;
+use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
  * This class represents a field or property declaration of a class.
@@ -64,6 +67,7 @@ use OutOfBoundsException;
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 class ASTFieldDeclaration extends AbstractASTNode
@@ -75,13 +79,13 @@ class ASTFieldDeclaration extends AbstractASTNode
      */
     public function hasType()
     {
-        return reset($this->nodes) instanceof ASTType;
+        return (reset($this->nodes) instanceof ASTType);
     }
 
     /**
      * Returns the type of this parameter.
      *
-     * @return \PDepend\Source\AST\ASTType
+     * @return ASTType
      */
     public function getType()
     {
@@ -112,19 +116,21 @@ class ASTFieldDeclaration extends AbstractASTNode
      *
      * @param int $modifiers The declared modifiers for this node.
      *
+     * @throws InvalidArgumentException If the given modifier contains unexpected values.
+     *
      * @return void
-     * @throws \InvalidArgumentException If the given modifier contains unexpected values.
      */
     public function setModifiers($modifiers)
     {
         $expected = ~State::IS_PUBLIC
                   & ~State::IS_PROTECTED
                   & ~State::IS_PRIVATE
-                  & ~State::IS_STATIC;
+                  & ~State::IS_STATIC
+                  & ~State::IS_READONLY;
 
         if (($expected & $modifiers) !== 0) {
-            throw new \InvalidArgumentException(
-                'Invalid field modifiers given, allowed modifiers are '.
+            throw new InvalidArgumentException(
+                'Invalid field modifiers given, allowed modifiers are ' .
                 'IS_PUBLIC, IS_PROTECTED, IS_PRIVATE and IS_STATIC.'
             );
         }
@@ -140,7 +146,7 @@ class ASTFieldDeclaration extends AbstractASTNode
      */
     public function isPublic()
     {
-        return ($this->getModifiers() & State::IS_PUBLIC) === State::IS_PUBLIC;
+        return (($this->getModifiers() & State::IS_PUBLIC) === State::IS_PUBLIC);
     }
 
     /**
@@ -151,7 +157,7 @@ class ASTFieldDeclaration extends AbstractASTNode
      */
     public function isProtected()
     {
-        return ($this->getModifiers() & State::IS_PROTECTED) === State::IS_PROTECTED;
+        return (($this->getModifiers() & State::IS_PROTECTED) === State::IS_PROTECTED);
     }
 
     /**
@@ -162,7 +168,7 @@ class ASTFieldDeclaration extends AbstractASTNode
      */
     public function isPrivate()
     {
-        return ($this->getModifiers() & State::IS_PRIVATE) === State::IS_PRIVATE;
+        return (($this->getModifiers() & State::IS_PRIVATE) === State::IS_PRIVATE);
     }
 
     /**
@@ -173,20 +179,18 @@ class ASTFieldDeclaration extends AbstractASTNode
      */
     public function isStatic()
     {
-        return ($this->getModifiers() & State::IS_STATIC) === State::IS_STATIC;
+        return (($this->getModifiers() & State::IS_STATIC) === State::IS_STATIC);
     }
 
     /**
      * Accept method of the visitor design pattern. This method will be called
      * by a visitor during tree traversal.
      *
-     * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor The calling visitor instance.
-     * @param mixed                                 $data
+     * @param ASTVisitor $visitor The calling visitor instance.
      *
-     * @return mixed
      * @since  0.9.12
      */
-    public function accept(\PDepend\Source\ASTVisitor\ASTVisitor $visitor, $data = null)
+    public function accept(ASTVisitor $visitor, $data = null)
     {
         return $visitor->visitFieldDeclaration($this, $data);
     }
@@ -195,8 +199,9 @@ class ASTFieldDeclaration extends AbstractASTNode
      * Returns the total number of the used property bag.
      *
      * @return int
+     *
      * @since  0.10.4
-     * @see    \PDepend\Source\AST\ASTNode#getMetadataSize()
+     * @see    ASTNode#getMetadataSize()
      */
     protected function getMetadataSize()
     {

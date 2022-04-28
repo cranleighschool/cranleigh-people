@@ -26,9 +26,9 @@ class_exists(NotFoundExceptionInterface::class);
  */
 trait ServiceLocatorTrait
 {
-    private $factories;
-    private $loading = [];
-    private $providedTypes;
+    private array $factories;
+    private array $loading = [];
+    private array $providedTypes;
 
     /**
      * @param callable[] $factories
@@ -40,10 +40,8 @@ trait ServiceLocatorTrait
 
     /**
      * {@inheritdoc}
-     *
-     * @return bool
      */
-    public function has($id)
+    public function has(string $id): bool
     {
         return isset($this->factories[$id]);
     }
@@ -51,9 +49,9 @@ trait ServiceLocatorTrait
     /**
      * {@inheritdoc}
      */
-    public function get($id)
+    public function get(string $id): mixed
     {
-        if (! isset($this->factories[$id])) {
+        if (!isset($this->factories[$id])) {
             throw $this->createNotFoundException($id);
         }
 
@@ -78,11 +76,11 @@ trait ServiceLocatorTrait
      */
     public function getProvidedServices(): array
     {
-        if (null === $this->providedTypes) {
+        if (!isset($this->providedTypes)) {
             $this->providedTypes = [];
 
             foreach ($this->factories as $name => $factory) {
-                if (! \is_callable($factory)) {
+                if (!\is_callable($factory)) {
                     $this->providedTypes[$name] = '?';
                 } else {
                     $type = (new \ReflectionFunction($factory))->getReturnType();
@@ -97,7 +95,7 @@ trait ServiceLocatorTrait
 
     private function createNotFoundException(string $id): NotFoundExceptionInterface
     {
-        if (! $alternatives = array_keys($this->factories)) {
+        if (!$alternatives = array_keys($this->factories)) {
             $message = 'is empty...';
         } else {
             $last = array_pop($alternatives);

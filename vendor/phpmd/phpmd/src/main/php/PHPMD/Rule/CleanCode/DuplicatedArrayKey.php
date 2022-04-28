@@ -27,7 +27,7 @@ use PHPMD\Rule\FunctionAware;
 use PHPMD\Rule\MethodAware;
 
 /**
- * Duplicated Array Key Rule.
+ * Duplicated Array Key Rule
  *
  * This rule detects duplicated array keys.
  *
@@ -37,7 +37,7 @@ use PHPMD\Rule\MethodAware;
 class DuplicatedArrayKey extends AbstractRule implements MethodAware, FunctionAware
 {
     /**
-     * Retrieves all arrays from single node and performs comparison logic on it.
+     * Retrieves all arrays from single node and performs comparison logic on it
      *
      * @param AbstractNode $node
      * @return void
@@ -59,7 +59,7 @@ class DuplicatedArrayKey extends AbstractRule implements MethodAware, FunctionAw
      */
     protected function checkForDuplicatedArrayKeys(ASTNode $node)
     {
-        $keys = [];
+        $keys = array();
         /** @var ASTArrayElement $arrayElement */
         foreach ($node->getChildren() as $index => $arrayElement) {
             $arrayElement = $this->normalizeKey($arrayElement, $index);
@@ -70,7 +70,7 @@ class DuplicatedArrayKey extends AbstractRule implements MethodAware, FunctionAw
 
             $key = $arrayElement->getImage();
             if (isset($keys[$key])) {
-                $this->addViolation($node, [$key, $arrayElement->getStartLine()]);
+                $this->addViolation($node, array($key, $arrayElement->getStartLine()));
                 continue;
             }
             $keys[$key] = $arrayElement;
@@ -99,13 +99,13 @@ class DuplicatedArrayKey extends AbstractRule implements MethodAware, FunctionAw
         }
         // non-associative - key name equals to its index
         if ($childCount === 0) {
-            $node->setImage((string) $index);
+            $node->setImage((string)$index);
 
             return $node;
         }
 
         $node = $node->getChild(0);
-        if (! ($node instanceof ASTLiteral)) {
+        if (!($node instanceof ASTLiteral)) {
             // skip expressions, method calls, globals and constants
             return null;
         }
@@ -115,7 +115,7 @@ class DuplicatedArrayKey extends AbstractRule implements MethodAware, FunctionAw
     }
 
     /**
-     * Cleans string literals and casts boolean and null values as PHP engine does.
+     * Cleans string literals and casts boolean and null values as PHP engine does
      *
      * @param PDependASTNode $key
      * @return string

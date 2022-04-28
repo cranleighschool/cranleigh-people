@@ -40,7 +40,7 @@ class BooleanGetMethodName extends AbstractRule implements MethodAware
     {
         /** @var $node MethodNode */
         if ($this->isBooleanGetMethod($node)) {
-            $this->addViolation($node, [$node->getImage()]);
+            $this->addViolation($node, array($node->getImage()));
         }
     }
 
@@ -49,7 +49,7 @@ class BooleanGetMethodName extends AbstractRule implements MethodAware
      * boolean get method.
      *
      * @param \PHPMD\Node\MethodNode $node
-     * @return bool
+     * @return boolean
      */
     protected function isBooleanGetMethod(MethodNode $node)
     {
@@ -62,24 +62,27 @@ class BooleanGetMethodName extends AbstractRule implements MethodAware
      * Tests if the given method starts with <b>get</b> or <b>_get</b>.
      *
      * @param \PHPMD\Node\MethodNode $node
-     * @return bool
+     * @return boolean
      */
     protected function isGetterMethodName(MethodNode $node)
     {
-        return preg_match('(^_?get)i', $node->getImage()) > 0;
+        return (preg_match('(^_?get)i', $node->getImage()) > 0);
     }
 
     /**
      * Tests if the given method is declared with return type boolean.
      *
      * @param \PHPMD\Node\MethodNode $node
-     * @return bool
+     * @return boolean
      */
     protected function isReturnTypeBoolean(MethodNode $node)
     {
         $comment = $node->getDocComment();
+        if ($comment === null) {
+            return false;
+        }
 
-        return preg_match('(\*\s*@return\s+bool(ean)?\s)i', $comment) > 0;
+        return (preg_match('(\*\s*@return\s+bool(ean)?\s)i', $comment) > 0);
     }
 
     /**
@@ -87,7 +90,7 @@ class BooleanGetMethodName extends AbstractRule implements MethodAware
      * or has no parameters.
      *
      * @param \PHPMD\Node\MethodNode $node
-     * @return bool
+     * @return boolean
      */
     protected function isParameterizedOrIgnored(MethodNode $node)
     {

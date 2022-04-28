@@ -15,15 +15,17 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class MethodScopeSniff extends AbstractScopeSniff
 {
+
+
     /**
      * Constructs a Squiz_Sniffs_Scope_MethodScopeSniff.
      */
     public function __construct()
     {
         parent::__construct(Tokens::$ooScopeTokens, [T_FUNCTION]);
-    }
 
-    //end __construct()
+    }//end __construct()
+
 
     /**
      * Processes the function tokens within the class.
@@ -56,7 +58,7 @@ class MethodScopeSniff extends AbstractScopeSniff
         for ($i = ($stackPtr - 1); $i > 0; $i--) {
             if ($tokens[$i]['line'] < $tokens[$stackPtr]['line']) {
                 break;
-            } elseif (isset(Tokens::$scopeModifiers[$tokens[$i]['code']]) === true) {
+            } else if (isset(Tokens::$scopeModifiers[$tokens[$i]['code']]) === true) {
                 $modifier = $i;
                 break;
             }
@@ -64,12 +66,12 @@ class MethodScopeSniff extends AbstractScopeSniff
 
         if ($modifier === null) {
             $error = 'Visibility must be declared on method "%s"';
-            $data = [$methodName];
+            $data  = [$methodName];
             $phpcsFile->addError($error, $stackPtr, 'Missing', $data);
         }
-    }
 
-    //end processTokenWithinScope()
+    }//end processTokenWithinScope()
+
 
     /**
      * Processes a token that is found within the scope that this test is
@@ -83,7 +85,8 @@ class MethodScopeSniff extends AbstractScopeSniff
      */
     protected function processTokenOutsideScope(File $phpcsFile, $stackPtr)
     {
-    }
 
-    //end processTokenOutsideScope()
+    }//end processTokenOutsideScope()
+
+
 }//end class

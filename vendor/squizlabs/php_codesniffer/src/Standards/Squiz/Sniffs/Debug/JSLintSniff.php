@@ -16,12 +16,14 @@ use PHP_CodeSniffer\Util\Common;
 
 class JSLintSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['JS'];
+
 
     /**
      * Returns the token types that this sniff is interested in.
@@ -31,9 +33,9 @@ class JSLintSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -47,7 +49,7 @@ class JSLintSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $rhinoPath = Config::getExecutablePath('rhino');
+        $rhinoPath  = Config::getExecutablePath('rhino');
         $jslintPath = Config::getExecutablePath('jslint');
         if ($rhinoPath === null || $jslintPath === null) {
             return;
@@ -55,7 +57,7 @@ class JSLintSniff implements Sniff
 
         $fileName = $phpcsFile->getFilename();
 
-        $rhinoPath = Common::escapeshellcmd($rhinoPath);
+        $rhinoPath  = Common::escapeshellcmd($rhinoPath);
         $jslintPath = Common::escapeshellcmd($jslintPath);
 
         $cmd = "$rhinoPath \"$jslintPath\" ".escapeshellarg($fileName);
@@ -63,21 +65,22 @@ class JSLintSniff implements Sniff
 
         if (is_array($output) === true) {
             foreach ($output as $finding) {
-                $matches = [];
+                $matches    = [];
                 $numMatches = preg_match('/Lint at line ([0-9]+).*:(.*)$/', $finding, $matches);
                 if ($numMatches === 0) {
                     continue;
                 }
 
-                $line = (int) $matches[1];
+                $line    = (int) $matches[1];
                 $message = 'jslint says: '.trim($matches[2]);
                 $phpcsFile->addWarningOnLine($message, $line, 'ExternalTool');
             }
         }
 
         // Ignore the rest of the file.
-        return $phpcsFile->numTokens + 1;
-    }
+        return ($phpcsFile->numTokens + 1);
 
-    //end process()
+    }//end process()
+
+
 }//end class

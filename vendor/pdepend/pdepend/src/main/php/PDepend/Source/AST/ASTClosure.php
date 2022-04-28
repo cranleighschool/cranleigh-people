@@ -38,22 +38,26 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.12
  */
 
 namespace PDepend\Source\AST;
+
+use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
  * This node class represents a closure-expression.
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.12
  */
 class ASTClosure extends AbstractASTNode implements ASTCallable
 {
     /**
-     * @return \PDepend\Source\AST\ASTType|null
+     * @return ASTType|null
      */
     public function getReturnType()
     {
@@ -62,7 +66,6 @@ class ASTClosure extends AbstractASTNode implements ASTCallable
                 return $node;
             }
         }
-
         return null;
     }
 
@@ -86,7 +89,7 @@ class ASTClosure extends AbstractASTNode implements ASTCallable
      */
     public function setReturnsByReference($returnsReference)
     {
-        $this->setMetadataBoolean(5, (bool) $returnsReference);
+        $this->setMetadataBoolean(5, (boolean) $returnsReference);
     }
 
     /**
@@ -110,6 +113,7 @@ class ASTClosure extends AbstractASTNode implements ASTCallable
      * </code>
      *
      * @return bool
+     *
      * @since  1.0.0
      */
     public function isStatic()
@@ -123,24 +127,23 @@ class ASTClosure extends AbstractASTNode implements ASTCallable
      * @param bool $static Whether this closure is static or not.
      *
      * @return void
+     *
      * @since  1.0.0
      */
     public function setStatic($static)
     {
-        $this->setMetadataBoolean(6, (bool) $static);
+        $this->setMetadataBoolean(6, (boolean) $static);
     }
 
     /**
      * Accept method of the visitor design pattern. This method will be called
      * by a visitor during tree traversal.
      *
-     * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor The calling visitor instance.
-     * @param mixed                                 $data
+     * @param ASTVisitor $visitor The calling visitor instance.
      *
-     * @return mixed
      * @since  0.9.12
      */
-    public function accept(\PDepend\Source\ASTVisitor\ASTVisitor $visitor, $data = null)
+    public function accept(ASTVisitor $visitor, $data = null)
     {
         return $visitor->visitClosure($this, $data);
     }
@@ -149,8 +152,9 @@ class ASTClosure extends AbstractASTNode implements ASTCallable
      * Returns the total number of the used property bag.
      *
      * @return int
+     *
      * @since  1.0.0
-     * @see    \PDepend\Source\AST\ASTNode#getMetadataSize()
+     * @see    ASTNode#getMetadataSize()
      */
     protected function getMetadataSize()
     {

@@ -105,6 +105,6 @@ final class Log
      */
     public static function log($message)
     {
-        fwrite(self::$stream, PHP_EOL.$message);
+        fwrite(self::$stream, PHP_EOL . $message);
     }
 }

@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
 {
+
+
     /**
      * Processes this test, when one of its tokens is encountered.
      *
@@ -36,9 +38,9 @@ class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
             $error = 'Only one interface or class is allowed in a file';
             $phpcsFile->addError($error, $nextClass, 'MultipleClasses');
         }
-    }
 
-    //end process()
+    }//end process()
+
 
     /**
      * Processes the opening section of a class declaration.
@@ -59,15 +61,15 @@ class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
             $prevContent = $tokens[($stackPtr - 1)]['content'];
             if ($prevContent !== $phpcsFile->eolChar) {
                 $blankSpace = substr($prevContent, strpos($prevContent, $phpcsFile->eolChar));
-                $spaces = strlen($blankSpace);
+                $spaces     = strlen($blankSpace);
 
                 if ($tokens[($stackPtr - 2)]['code'] !== T_ABSTRACT
                     && $tokens[($stackPtr - 2)]['code'] !== T_FINAL
                 ) {
                     if ($spaces !== 0) {
-                        $type = strtolower($tokens[$stackPtr]['content']);
+                        $type  = strtolower($tokens[$stackPtr]['content']);
                         $error = 'Expected 0 spaces before %s keyword; %s found';
-                        $data = [
+                        $data  = [
                             $type,
                             $spaces,
                         ];
@@ -80,9 +82,9 @@ class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
                 }
             }//end if
         }//end if
-    }
 
-    //end processOpen()
+    }//end processOpen()
+
 
     /**
      * Processes the closing section of a class declaration.
@@ -131,8 +133,8 @@ class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
             || $tokens[$lastContent]['line'] === $tokens[$closeBrace]['line']
         ) {
             $error = 'Closing %s brace must be on a line by itself';
-            $data = [$tokens[$stackPtr]['content']];
-            $fix = $phpcsFile->addFixableError($error, $closeBrace, 'CloseBraceSameLine', $data);
+            $data  = [$tokens[$stackPtr]['content']];
+            $fix   = $phpcsFile->addFixableError($error, $closeBrace, 'CloseBraceSameLine', $data);
             if ($fix === true) {
                 if ($difference === -1) {
                     $phpcsFile->fixer->addNewlineBefore($nextContent);
@@ -142,19 +144,19 @@ class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
                     $phpcsFile->fixer->addNewlineBefore($closeBrace);
                 }
             }
-        } elseif ($tokens[($closeBrace - 1)]['code'] === T_WHITESPACE) {
+        } else if ($tokens[($closeBrace - 1)]['code'] === T_WHITESPACE) {
             $prevContent = $tokens[($closeBrace - 1)]['content'];
             if ($prevContent !== $phpcsFile->eolChar) {
                 $blankSpace = substr($prevContent, strpos($prevContent, $phpcsFile->eolChar));
-                $spaces = strlen($blankSpace);
+                $spaces     = strlen($blankSpace);
                 if ($spaces !== 0) {
                     if ($tokens[($closeBrace - 1)]['line'] !== $tokens[$closeBrace]['line']) {
                         $error = 'Expected 0 spaces before closing brace; newline found';
                         $phpcsFile->addError($error, $closeBrace, 'NewLineBeforeCloseBrace');
                     } else {
                         $error = 'Expected 0 spaces before closing brace; %s found';
-                        $data = [$spaces];
-                        $fix = $phpcsFile->addFixableError($error, $closeBrace, 'SpaceBeforeCloseBrace', $data);
+                        $data  = [$spaces];
+                        $fix   = $phpcsFile->addFixableError($error, $closeBrace, 'SpaceBeforeCloseBrace', $data);
                         if ($fix === true) {
                             $phpcsFile->fixer->replaceToken(($closeBrace - 1), '');
                         }
@@ -172,11 +174,11 @@ class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
             }
 
             $error = 'Closing brace of a %s must be followed by a single blank line; found %s';
-            $data = [
+            $data  = [
                 $tokens[$stackPtr]['content'],
                 $difference,
             ];
-            $fix = $phpcsFile->addFixableError($error, $closeBrace, 'NewlinesAfterCloseBrace', $data);
+            $fix   = $phpcsFile->addFixableError($error, $closeBrace, 'NewlinesAfterCloseBrace', $data);
             if ($fix === true) {
                 if ($difference === 0) {
                     $first = $phpcsFile->findFirstOnLine([], $nextContent, true);
@@ -186,7 +188,7 @@ class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
                     for ($i = ($closeBrace + 1); $i < $nextContent; $i++) {
                         if ($tokens[$i]['line'] <= ($tokens[$closeBrace]['line'] + 1)) {
                             continue;
-                        } elseif ($tokens[$i]['line'] === $tokens[$nextContent]['line']) {
+                        } else if ($tokens[$i]['line'] === $tokens[$nextContent]['line']) {
                             break;
                         }
 
@@ -197,7 +199,8 @@ class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
                 }
             }
         }//end if
-    }
 
-    //end processClose()
+    }//end processClose()
+
+
 }//end class

@@ -13,6 +13,7 @@ use PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\ForbiddenFunctionsSniff as Gene
 
 class DiscouragedFunctionsSniff extends GenericForbiddenFunctionsSniff
 {
+
     /**
      * A list of forbidden functions with their alternatives.
      *
@@ -30,7 +31,8 @@ class DiscouragedFunctionsSniff extends GenericForbiddenFunctionsSniff
     /**
      * If true, an error will be thrown; otherwise a warning.
      *
-     * @var bool
+     * @var boolean
      */
     public $error = false;
+
 }//end class

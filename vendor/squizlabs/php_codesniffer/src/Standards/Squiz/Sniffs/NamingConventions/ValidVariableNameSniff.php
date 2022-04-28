@@ -16,6 +16,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ValidVariableNameSniff extends AbstractVariableSniff
 {
+
+
     /**
      * Processes this test, when one of its tokens is encountered.
      *
@@ -27,7 +29,7 @@ class ValidVariableNameSniff extends AbstractVariableSniff
      */
     protected function processVariable(File $phpcsFile, $stackPtr)
     {
-        $tokens = $phpcsFile->getTokens();
+        $tokens  = $phpcsFile->getTokens();
         $varName = ltrim($tokens[$stackPtr]['content'], '$');
 
         // If it's a php reserved var, then its ok.
@@ -56,7 +58,7 @@ class ValidVariableNameSniff extends AbstractVariableSniff
 
                     if (Common::isCamelCaps($objVarName, false, true, false) === false) {
                         $error = 'Member variable "%s" is not in valid camel caps format';
-                        $data = [$originalVarName];
+                        $data  = [$originalVarName];
                         $phpcsFile->addError($error, $var, 'MemberNotCamelCaps', $data);
                     }
                 }//end if
@@ -74,7 +76,7 @@ class ValidVariableNameSniff extends AbstractVariableSniff
 
             if (Common::isCamelCaps($objVarName, false, true, false) === false) {
                 $error = 'Member variable "%s" is not in valid camel caps format';
-                $data = [$tokens[$stackPtr]['content']];
+                $data  = [$tokens[$stackPtr]['content']];
                 $phpcsFile->addError($error, $stackPtr, 'MemberNotCamelCaps', $data);
             }
 
@@ -94,12 +96,12 @@ class ValidVariableNameSniff extends AbstractVariableSniff
 
         if (Common::isCamelCaps($varName, false, true, false) === false) {
             $error = 'Variable "%s" is not in valid camel caps format';
-            $data = [$originalVarName];
+            $data  = [$originalVarName];
             $phpcsFile->addError($error, $stackPtr, 'NotCamelCaps', $data);
         }
-    }
 
-    //end processVariable()
+    }//end processVariable()
+
 
     /**
      * Processes class member variables.
@@ -114,7 +116,7 @@ class ValidVariableNameSniff extends AbstractVariableSniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $varName = ltrim($tokens[$stackPtr]['content'], '$');
+        $varName     = ltrim($tokens[$stackPtr]['content'], '$');
         $memberProps = $phpcsFile->getMemberProperties($stackPtr);
         if (empty($memberProps) === true) {
             // Couldn't get any info about this variable, which
@@ -124,13 +126,13 @@ class ValidVariableNameSniff extends AbstractVariableSniff
             return;
         }
 
-        $public = ($memberProps['scope'] !== 'private');
+        $public    = ($memberProps['scope'] !== 'private');
         $errorData = [$varName];
 
         if ($public === true) {
             if (substr($varName, 0, 1) === '_') {
                 $error = '%s member variable "%s" must not contain a leading underscore';
-                $data = [
+                $data  = [
                     ucfirst($memberProps['scope']),
                     $errorData[0],
                 ];
@@ -150,9 +152,9 @@ class ValidVariableNameSniff extends AbstractVariableSniff
             $error = 'Member variable "%s" is not in valid camel caps format';
             $phpcsFile->addError($error, $stackPtr, 'MemberNotCamelCaps', $errorData);
         }
-    }
 
-    //end processMemberVar()
+    }//end processMemberVar()
+
 
     /**
      * Processes the variable found within a double quoted string.
@@ -176,12 +178,13 @@ class ValidVariableNameSniff extends AbstractVariableSniff
 
                 if (Common::isCamelCaps($varName, false, true, false) === false) {
                     $error = 'Variable "%s" is not in valid camel caps format';
-                    $data = [$varName];
+                    $data  = [$varName];
                     $phpcsFile->addError($error, $stackPtr, 'StringNotCamelCaps', $data);
                 }
             }
         }
-    }
 
-    //end processVariableInString()
+    }//end processVariableInString()
+
+
 }//end class

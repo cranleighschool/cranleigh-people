@@ -42,12 +42,14 @@
 
 namespace PDepend\TextUI;
 
+use Exception;
 use PDepend\Engine;
 use PDepend\Input\ExcludePathFilter;
 use PDepend\Input\ExtensionFilter;
 use PDepend\ProcessListener;
 use PDepend\Report\ReportGeneratorFactory;
 use PDepend\Source\AST\ASTArtifactList\PackageArtifactFilter;
+use RuntimeException;
 
 /**
  * The command line runner starts a PDepend process.
@@ -73,7 +75,7 @@ class Runner
      *
      * @var array<string>
      */
-    private $extensions = ['php', 'php5'];
+    private $extensions = array('php', 'php5');
 
     /**
      * List of exclude directories. Default exclude dirs are <b>.svn</b> and
@@ -81,21 +83,21 @@ class Runner
      *
      * @var array<string>
      */
-    private $excludeDirectories = ['.git', '.svn', 'CVS'];
+    private $excludeDirectories = array('.git', '.svn', 'CVS');
 
     /**
      * List of exclude namespaces.
      *
      * @var array<string>
      */
-    private $excludeNamespaces = [];
+    private $excludeNamespaces = array();
 
     /**
      * List of source code directories and files.
      *
      * @var array<string>
      */
-    private $sourceArguments = [];
+    private $sourceArguments = array();
 
     /**
      * Should the parse ignore doc comment annotations?
@@ -109,37 +111,37 @@ class Runner
      *
      * @var array<string, string>
      */
-    private $loggerMap = [];
+    private $loggerMap = array();
 
     /**
      * List of cli options for loggers or analyzers.
      *
      * @var array<string, mixed>
      */
-    private $options = [];
+    private $options = array();
 
     /**
      * This of process listeners that will be hooked into PDepend's analyzing
      * process.
      *
-     * @var \PDepend\ProcessListener[]
+     * @var ProcessListener[]
      */
-    private $processListeners = [];
+    private $processListeners = array();
 
     /**
      * List of error messages for all parsing errors.
      *
      * @var array<string>
      */
-    private $parseErrors = [];
+    private $parseErrors = array();
 
     /**
-     * @var \PDepend\Report\ReportGeneratorFactory
+     * @var ReportGeneratorFactory
      */
     private $reportGeneratorFactory;
 
     /**
-     * @var \PDepend\Engine
+     * @var Engine
      */
     private $engine;
 
@@ -155,6 +157,7 @@ class Runner
      * NOTE: If you call this method, it will replace the default file extensions.
      *
      * @param array<string> $extensions
+     *
      * @return void
      */
     public function setFileExtensions(array $extensions)
@@ -168,6 +171,7 @@ class Runner
      * NOTE: If this method is called, it will overwrite the default settings.
      *
      * @param array<string> $excludeDirectories
+     *
      * @return void
      */
     public function setExcludeDirectories(array $excludeDirectories)
@@ -179,6 +183,7 @@ class Runner
      * Sets a list of exclude packages.
      *
      * @param array<string> $excludePackages
+     *
      * @return void
      */
     public function setExcludeNamespaces(array $excludePackages)
@@ -190,6 +195,7 @@ class Runner
      * Sets a list of source directories and files.
      *
      * @param array<string> $sourceArguments
+     *
      * @return void
      */
     public function setSourceArguments(array $sourceArguments)
@@ -212,6 +218,7 @@ class Runner
      *
      * @param string $generatorId
      * @param string $reportFile
+     *
      * @return void
      */
     public function addReportGenerator($generatorId, $reportFile)
@@ -222,8 +229,9 @@ class Runner
     /**
      * Adds a logger or analyzer option.
      *
-     * @param string $identifier
-     * @param string|array<string> $value
+     * @param string               $identifier
+     * @param array<string>|string $value
+     *
      * @return void
      */
     public function addOption($identifier, $value)
@@ -235,7 +243,6 @@ class Runner
      * Adds a process listener instance that will be hooked into PDepend's
      * analyzing process.
      *
-     * @param \PDepend\ProcessListener $processListener
      * @return void
      */
     public function addProcessListener(ProcessListener $processListener)
@@ -247,9 +254,10 @@ class Runner
      * Starts the main PDepend process and returns <b>true</b> after a successful
      * execution.
      *
+     * @throws RuntimeException An exception with a readable error message and
+     *                          an exit code.
+     *
      * @return int
-     * @throws \RuntimeException An exception with a readable error message and
-     * an exit code.
      */
     public function run()
     {
@@ -263,13 +271,13 @@ class Runner
 
         if (count($this->excludeDirectories) > 0) {
             $exclude = $this->excludeDirectories;
-            $filter = new ExcludePathFilter($exclude);
+            $filter  = new ExcludePathFilter($exclude);
             $engine->addFileFilter($filter);
         }
 
         if (count($this->excludeNamespaces) > 0) {
             $exclude = $this->excludeNamespaces;
-            $filter = new PackageArtifactFilter($exclude);
+            $filter  = new PackageArtifactFilter($exclude);
             $engine->setCodeFilter($filter);
         }
 
@@ -286,12 +294,12 @@ class Runner
                     $engine->addFile($sourceArgument);
                 }
             }
-        } catch (\Exception $e) {
-            throw new \RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
         }
 
         if (count($this->loggerMap) === 0) {
-            throw new \RuntimeException('No output specified.', self::EXCEPTION_EXIT);
+            throw new RuntimeException('No output specified.', self::EXCEPTION_EXIT);
         }
 
         // To append all registered loggers.
@@ -302,8 +310,8 @@ class Runner
 
                 $engine->addReportGenerator($generator);
             }
-        } catch (\Exception $e) {
-            throw new \RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
         }
 
         foreach ($this->processListeners as $processListener) {
@@ -316,8 +324,8 @@ class Runner
             foreach ($engine->getExceptions() as $exception) {
                 $this->parseErrors[] = $exception->getMessage();
             }
-        } catch (\Exception $e) {
-            throw new \RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage(), self::EXCEPTION_EXIT);
         }
 
         return self::SUCCESS_EXIT;
@@ -331,7 +339,7 @@ class Runner
      */
     public function hasParseErrors()
     {
-        return count($this->parseErrors) > 0;
+        return (count($this->parseErrors) > 0);
     }
 
     /**

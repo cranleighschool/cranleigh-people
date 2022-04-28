@@ -40,12 +40,12 @@ class CamelCaseParameterName extends AbstractRule implements MethodAware, Functi
     public function apply(AbstractNode $node)
     {
         foreach ($node->getParameters() as $parameter) {
-            if (! $this->isValid($parameter->getName())) {
+            if (!$this->isValid($parameter->getName())) {
                 $this->addViolation(
                     $node,
-                    [
+                    array(
                         $parameter->getName(),
-                    ]
+                    )
                 );
             }
         }

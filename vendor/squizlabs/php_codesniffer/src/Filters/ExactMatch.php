@@ -15,6 +15,7 @@ use PHP_CodeSniffer\Util;
 
 abstract class ExactMatch extends Filter
 {
+
     /**
      * A list of files to exclude.
      *
@@ -30,6 +31,7 @@ abstract class ExactMatch extends Filter
      * @var array
      */
     private $whitelist = null;
+
 
     /**
      * Check whether the current element of the iterator is acceptable.
@@ -65,9 +67,9 @@ abstract class ExactMatch extends Filter
         }
 
         return isset($this->whitelist[$filePath]);
-    }
 
-    //end accept()
+    }//end accept()
+
 
     /**
      * Returns an iterator for the current entry.
@@ -79,14 +81,13 @@ abstract class ExactMatch extends Filter
      */
     public function getChildren()
     {
-        $children = parent::getChildren();
+        $children            = parent::getChildren();
         $children->blacklist = $this->blacklist;
         $children->whitelist = $this->whitelist;
-
         return $children;
-    }
 
-    //end getChildren()
+    }//end getChildren()
+
 
     /**
      * Get a list of blacklisted file paths.
@@ -95,10 +96,13 @@ abstract class ExactMatch extends Filter
      */
     abstract protected function getBlacklist();
 
+
     /**
      * Get a list of whitelisted file paths.
      *
      * @return array
      */
     abstract protected function getWhitelist();
+
+
 }//end class

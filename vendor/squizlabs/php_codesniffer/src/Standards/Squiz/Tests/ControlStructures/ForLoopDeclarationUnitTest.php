@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class ForLoopDeclarationUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -23,7 +25,7 @@ class ForLoopDeclarationUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = 'ForLoopDeclarationUnitTest.inc')
+    public function getErrorList($testFile='ForLoopDeclarationUnitTest.inc')
     {
         switch ($testFile) {
         case 'ForLoopDeclarationUnitTest.inc':
@@ -97,9 +99,9 @@ class ForLoopDeclarationUnitTest extends AbstractSniffUnitTest
         default:
             return [];
         }//end switch
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -111,7 +113,7 @@ class ForLoopDeclarationUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getWarningList($testFile = 'ForLoopDeclarationUnitTest.inc')
+    public function getWarningList($testFile='ForLoopDeclarationUnitTest.inc')
     {
         switch ($testFile) {
         case 'ForLoopDeclarationUnitTest.inc':
@@ -123,7 +125,8 @@ class ForLoopDeclarationUnitTest extends AbstractSniffUnitTest
         default:
             return [];
         }//end switch
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

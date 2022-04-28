@@ -24,19 +24,19 @@ use PHPMD\Rule\InterfaceAware;
 use PHPMD\Utility\Strings;
 
 /**
- * This rule checks if an interface or class name exceeds the configured length excluding certain configured suffixes.
+ * This rule checks if an interface or class name exceeds the configured length excluding certain configured suffixes
  */
 class LongClassName extends AbstractRule implements ClassAware, InterfaceAware
 {
     /**
-     * Temporary cache of configured suffixes to subtract.
+     * Temporary cache of configured suffixes to subtract
      *
      * @var string[]|null
      */
     protected $subtractSuffixes;
 
     /**
-     * Check if a class name exceeds the configured maximum length and emit a rule violation.
+     * Check if a class name exceeds the configured maximum length and emit a rule violation
      *
      * @param \PHPMD\AbstractNode $node
      * @return void
@@ -48,11 +48,11 @@ class LongClassName extends AbstractRule implements ClassAware, InterfaceAware
         if (Strings::lengthWithoutSuffixes($classOrInterfaceName, $this->getSubtractSuffixList()) <= $threshold) {
             return;
         }
-        $this->addViolation($node, [$classOrInterfaceName, $threshold]);
+        $this->addViolation($node, array($classOrInterfaceName, $threshold));
     }
 
     /**
-     * Gets array of suffixes from property.
+     * Gets array of suffixes from property
      *
      * @return string[]
      */

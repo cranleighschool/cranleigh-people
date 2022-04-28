@@ -31,7 +31,7 @@ use PHPMD\Utility\Strings;
 class LongVariable extends AbstractRule implements ClassAware, MethodAware, FunctionAware
 {
     /**
-     * Temporary cache of configured suffixes to subtract.
+     * Temporary cache of configured suffixes to subtract
      *
      * @var string[]|null
      */
@@ -43,7 +43,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
      *
      * @var array(string=>boolean)
      */
-    protected $processedVariables = [];
+    protected $processedVariables = array();
 
     /**
      * Extracts all variable and variable declarator nodes from the given node
@@ -74,7 +74,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
             $this->checkNodeImage($declarator);
         }
 
-        $variables = $node->findChildrenOfType('Variable');
+        $variables = $node->findChildrenOfTypeVariable();
         foreach ($variables as $variable) {
             $this->checkNodeImage($variable);
         }
@@ -115,7 +115,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
         if ($this->isNameAllowedInContext($node)) {
             return;
         }
-        $this->addViolation($node, [$variableName, $threshold]);
+        $this->addViolation($node, array($variableName, $threshold));
     }
 
     /**
@@ -123,7 +123,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
      * moment the only context is a static member.
      *
      * @param \PHPMD\AbstractNode $node
-     * @return bool
+     * @return boolean
      */
     protected function isNameAllowedInContext(AbstractNode $node)
     {
@@ -136,7 +136,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
      *
      * @param \PHPMD\AbstractNode $node
      * @param string $type
-     * @return bool
+     * @return boolean
      */
     protected function isChildOf(AbstractNode $node, $type)
     {
@@ -158,7 +158,7 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
      */
     protected function resetProcessed()
     {
-        $this->processedVariables = [];
+        $this->processedVariables = array();
     }
 
     /**
@@ -176,15 +176,15 @@ class LongVariable extends AbstractRule implements ClassAware, MethodAware, Func
      * Checks if the given node was already processed.
      *
      * @param \PHPMD\AbstractNode $node
-     * @return bool
+     * @return boolean
      */
     protected function isNotProcessed(AbstractNode $node)
     {
-        return ! isset($this->processedVariables[$node->getImage()]);
+        return !isset($this->processedVariables[$node->getImage()]);
     }
 
     /**
-     * Gets array of suffixes from property.
+     * Gets array of suffixes from property
      *
      * @return string[]
      */

@@ -28,17 +28,17 @@ class QtFileLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load($resource, string $locale, string $domain = 'messages')
+    public function load(mixed $resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {
-        if (! class_exists(XmlUtils::class)) {
+        if (!class_exists(XmlUtils::class)) {
             throw new RuntimeException('Loading translations from the QT format requires the Symfony Config component.');
         }
 
-        if (! stream_is_local($resource)) {
+        if (!stream_is_local($resource)) {
             throw new InvalidResourceException(sprintf('This is not a local file "%s".', $resource));
         }
 
-        if (! file_exists($resource)) {
+        if (!file_exists($resource)) {
             throw new NotFoundResourceException(sprintf('File "%s" not found.', $resource));
         }
 
@@ -60,7 +60,7 @@ class QtFileLoader implements LoaderInterface
             foreach ($translations as $translation) {
                 $translationValue = (string) $translation->getElementsByTagName('translation')->item(0)->nodeValue;
 
-                if (! empty($translationValue)) {
+                if (!empty($translationValue)) {
                     $catalogue->set(
                         (string) $translation->getElementsByTagName('source')->item(0)->nodeValue,
                         $translationValue,

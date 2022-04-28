@@ -29,7 +29,7 @@ class Annotations
      *
      * @var \PHPMD\Node\Annotation[]
      */
-    private $annotations = [];
+    private $annotations = array();
 
     /**
      * Regexp used to extract code annotations.
@@ -45,7 +45,12 @@ class Annotations
      */
     public function __construct(\PHPMD\AbstractNode $node)
     {
-        preg_match_all($this->regexp, $node->getDocComment(), $matches);
+        $comment = $node->getDocComment();
+        if ($comment === null) {
+            return;
+        }
+
+        preg_match_all($this->regexp, $comment, $matches);
         foreach (array_keys($matches[0]) as $i) {
             $name = $matches[1][$i];
             $value = trim($matches[2][$i], '" ');
@@ -58,7 +63,7 @@ class Annotations
      * Checks if one of the annotations suppresses the given rule.
      *
      * @param \PHPMD\Rule $rule
-     * @return bool
+     * @return boolean
      */
     public function suppresses(Rule $rule)
     {

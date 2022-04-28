@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class FunctionCommentThrowTagUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -36,9 +38,9 @@ class FunctionCommentThrowTagUnitTest extends AbstractSniffUnitTest
             287 => 1,
             397 => 1,
         ];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -51,7 +53,8 @@ class FunctionCommentThrowTagUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

@@ -9,13 +9,15 @@
 
 namespace PHP_CodeSniffer\Files;
 
-use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Ruleset;
+use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Util\Cache;
 use PHP_CodeSniffer\Util\Common;
 
 class LocalFile extends File
 {
+
+
     /**
      * Creates a LocalFile object and sets the content.
      *
@@ -33,7 +35,6 @@ class LocalFile extends File
             $error = 'Error opening file; file no longer exists or you do not have access to read the file';
             $this->addMessage(true, $error, 1, 1, 'Internal.LocalFile', [], 5, false);
             $this->ignored = true;
-
             return;
         }
 
@@ -43,7 +44,7 @@ class LocalFile extends File
         if ($config->annotations === true) {
             $handle = fopen($this->path, 'r');
             if ($handle !== false) {
-                $firstContent = fgets($handle);
+                $firstContent  = fgets($handle);
                 $firstContent .= fgets($handle);
                 fclose($handle);
 
@@ -52,7 +53,6 @@ class LocalFile extends File
                 ) {
                     // We are ignoring the whole file.
                     $this->ignored = true;
-
                     return;
                 }
             }
@@ -61,9 +61,9 @@ class LocalFile extends File
         $this->reloadContent();
 
         parent::__construct($this->path, $ruleset, $config);
-    }
 
-    //end __construct()
+    }//end __construct()
+
 
     /**
      * Loads the latest version of the file's content from the file system.
@@ -73,9 +73,9 @@ class LocalFile extends File
     public function reloadContent()
     {
         $this->setContent(file_get_contents($this->path));
-    }
 
-    //end reloadContent()
+    }//end reloadContent()
+
 
     /**
      * Processes the file.
@@ -90,11 +90,10 @@ class LocalFile extends File
 
         if ($this->configCache['cache'] === false) {
             parent::process();
-
             return;
         }
 
-        $hash = md5_file($this->path);
+        $hash  = md5_file($this->path);
         $hash .= fileperms($this->path);
         $cache = Cache::get($this->path);
         if ($cache !== false && $cache['hash'] === $hash) {
@@ -108,7 +107,7 @@ class LocalFile extends File
                 $this->replayErrors($cache['errors'], $cache['warnings']);
                 $this->configCache['cache'] = true;
             } else {
-                $this->errorCount = $cache['errorCount'];
+                $this->errorCount   = $cache['errorCount'];
                 $this->warningCount = $cache['warningCount'];
                 $this->fixableCount = $cache['fixableCount'];
             }
@@ -116,12 +115,11 @@ class LocalFile extends File
             if (PHP_CODESNIFFER_VERBOSITY > 0
                 || (PHP_CODESNIFFER_CBF === true && empty($this->config->files) === false)
             ) {
-                echo '[loaded from cache]... ';
+                echo "[loaded from cache]... ";
             }
 
             $this->numTokens = $cache['numTokens'];
             $this->fromCache = true;
-
             return;
         }//end if
 
@@ -151,9 +149,9 @@ class LocalFile extends File
             $this->replayErrors($this->errors, $this->warnings);
             $this->configCache['cache'] = true;
         }
-    }
 
-    //end process()
+    }//end process()
+
 
     /**
      * Clears and replays error and warnings for the file.
@@ -169,9 +167,9 @@ class LocalFile extends File
      */
     private function replayErrors($errors, $warnings)
     {
-        $this->errors = [];
-        $this->warnings = [];
-        $this->errorCount = 0;
+        $this->errors       = [];
+        $this->warnings     = [];
+        $this->errorCount   = 0;
         $this->warningCount = 0;
         $this->fixableCount = 0;
 
@@ -214,7 +212,8 @@ class LocalFile extends File
         }
 
         $this->replayingErrors = false;
-    }
 
-    //end replayErrors()
+    }//end replayErrors()
+
+
 }//end class

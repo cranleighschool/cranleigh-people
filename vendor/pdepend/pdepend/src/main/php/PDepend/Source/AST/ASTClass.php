@@ -42,6 +42,8 @@
 
 namespace PDepend\Source\AST;
 
+use BadMethodCallException;
+use InvalidArgumentException;
 use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
@@ -55,7 +57,7 @@ class ASTClass extends AbstractASTClassOrInterface
     /**
      * List of associated properties.
      *
-     * @var \PDepend\Source\AST\ASTProperty[]
+     * @var ASTProperty[]
      */
     private $properties = null;
 
@@ -66,7 +68,7 @@ class ASTClass extends AbstractASTClassOrInterface
      */
     public function isAbstract()
     {
-        return ($this->modifiers & State::IS_EXPLICIT_ABSTRACT) === State::IS_EXPLICIT_ABSTRACT;
+        return (($this->modifiers & State::IS_EXPLICIT_ABSTRACT) === State::IS_EXPLICIT_ABSTRACT);
     }
 
     /**
@@ -76,7 +78,7 @@ class ASTClass extends AbstractASTClassOrInterface
      */
     public function isFinal()
     {
-        return ($this->modifiers & State::IS_FINAL) === State::IS_FINAL;
+        return (($this->modifiers & State::IS_FINAL) === State::IS_FINAL);
     }
 
     /**
@@ -93,12 +95,12 @@ class ASTClass extends AbstractASTClassOrInterface
     /**
      * Returns all properties for this class.
      *
-     * @return \PDepend\Source\AST\ASTProperty[]
+     * @return ASTArtifactList<ASTProperty>
      */
     public function getProperties()
     {
         if ($this->properties === null) {
-            $this->properties = [];
+            $this->properties = array();
 
             $declarations = $this->findChildrenOfType('PDepend\\Source\\AST\\ASTFieldDeclaration');
             foreach ($declarations as $declaration) {
@@ -120,7 +122,6 @@ class ASTClass extends AbstractASTClassOrInterface
     /**
      * Checks that this user type is a subtype of the given <b>$type</b> instance.
      *
-     * @param  \PDepend\Source\AST\AbstractASTType $type
      * @return bool
      */
     public function isSubtypeOf(AbstractASTType $type)
@@ -137,10 +138,8 @@ class ASTClass extends AbstractASTClassOrInterface
             if ($parent === $type) {
                 return true;
             }
-
             return $parent->isSubtypeOf($type);
         }
-
         return false;
     }
 
@@ -148,6 +147,7 @@ class ASTClass extends AbstractASTClassOrInterface
      * Returns the declared modifiers for this type.
      *
      * @return int
+     *
      * @since  0.9.4
      */
     public function getModifiers()
@@ -162,16 +162,19 @@ class ASTClass extends AbstractASTClassOrInterface
      * This method will throw an exception when the value of given <b>$modifiers</b>
      * contains an invalid/unexpected modifier
      *
-     * @param  int $modifiers
+     * @param int $modifiers
+     *
+     * @throws BadMethodCallException
+     * @throws InvalidArgumentException
+     *
      * @return void
-     * @throws \BadMethodCallException
-     * @throws \InvalidArgumentException
+     *
      * @since  0.9.4
      */
     public function setModifiers($modifiers)
     {
         if ($this->modifiers !== 0) {
-            throw new \BadMethodCallException(
+            throw new BadMethodCallException(
                 'Cannot overwrite previously set class modifiers.'
             );
         }
@@ -181,7 +184,7 @@ class ASTClass extends AbstractASTClassOrInterface
                   & ~State::IS_FINAL;
 
         if (($expected & $modifiers) !== 0) {
-            throw new \InvalidArgumentException('Invalid class modifier given.');
+            throw new InvalidArgumentException('Invalid class modifier given.');
         }
 
         $this->modifiers = $modifiers;
@@ -190,7 +193,6 @@ class ASTClass extends AbstractASTClassOrInterface
     /**
      * ASTVisitor method for node tree traversal.
      *
-     * @param  \PDepend\Source\ASTVisitor\ASTVisitor $visitor
      * @return void
      */
     public function accept(ASTVisitor $visitor)
@@ -205,6 +207,7 @@ class ASTClass extends AbstractASTClassOrInterface
      * context.
      *
      * @return void
+     *
      * @since  0.10.0
      */
     public function __wakeup()

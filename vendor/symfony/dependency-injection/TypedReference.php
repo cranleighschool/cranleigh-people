@@ -18,14 +18,14 @@ namespace Symfony\Component\DependencyInjection;
  */
 class TypedReference extends Reference
 {
-    private $type;
-    private $name;
+    private string $type;
+    private ?string $name;
 
     /**
-     * @param string $id              The service identifier
-     * @param string $type            The PHP type of the identified service
-     * @param int    $invalidBehavior The behavior when the service does not exist
-     * @param string $name            The name of the argument targeting the service
+     * @param string      $id              The service identifier
+     * @param string      $type            The PHP type of the identified service
+     * @param int         $invalidBehavior The behavior when the service does not exist
+     * @param string|null $name            The name of the argument targeting the service
      */
     public function __construct(string $id, string $type, int $invalidBehavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, string $name = null)
     {

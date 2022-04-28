@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class CastSpacingUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -30,9 +32,9 @@ class CastSpacingUnitTest extends AbstractSniffUnitTest
             6 => 1,
             9 => 1,
         ];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -45,7 +47,8 @@ class CastSpacingUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

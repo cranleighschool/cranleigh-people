@@ -60,7 +60,7 @@ class MethodStrategy extends AbstractASTVisitor implements CodeRankStrategyI
      *
      * @var array<string, array>
      */
-    private $nodes = [];
+    private $nodes = array();
 
     /**
      * Returns the collected nodes.
@@ -75,7 +75,6 @@ class MethodStrategy extends AbstractASTVisitor implements CodeRankStrategyI
     /**
      * Visits a method node.
      *
-     * @param  \PDepend\Source\AST\ASTMethod $method
      * @return void
      */
     public function visitMethod(ASTMethod $method)
@@ -102,8 +101,6 @@ class MethodStrategy extends AbstractASTVisitor implements CodeRankStrategyI
      * Extracts the coupling information between the two given types and their
      * parent namespacess.
      *
-     * @param  \PDepend\Source\AST\AbstractASTClassOrInterface $type
-     * @param  \PDepend\Source\AST\AbstractASTClassOrInterface $dependency
      * @return void
      */
     private function processType(AbstractASTClassOrInterface $type, AbstractASTClassOrInterface $dependency)
@@ -131,18 +128,17 @@ class MethodStrategy extends AbstractASTVisitor implements CodeRankStrategyI
     /**
      * Initializes the temporary node container for the given <b>$node</b>.
      *
-     * @param  \PDepend\Source\AST\AbstractASTArtifact $node
      * @return void
      */
     private function initNode(AbstractASTArtifact $node)
     {
-        if (! isset($this->nodes[$node->getId()])) {
-            $this->nodes[$node->getId()] = [
-                'in'   =>  [],
-                'out'  =>  [],
+        if (!isset($this->nodes[$node->getId()])) {
+            $this->nodes[$node->getId()] = array(
+                'in'   =>  array(),
+                'out'  =>  array(),
                 'name'  =>  $node->getName(),
-                'type'  =>  get_class($node),
-            ];
+                'type'  =>  get_class($node)
+            );
         }
     }
 }

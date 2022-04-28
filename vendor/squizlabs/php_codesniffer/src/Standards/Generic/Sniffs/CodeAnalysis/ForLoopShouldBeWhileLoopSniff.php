@@ -28,6 +28,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ForLoopShouldBeWhileLoopSniff implements Sniff
 {
+
+
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -36,9 +38,9 @@ class ForLoopShouldBeWhileLoopSniff implements Sniff
     public function register()
     {
         return [T_FOR];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -52,7 +54,7 @@ class ForLoopShouldBeWhileLoopSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $token = $tokens[$stackPtr];
+        $token  = $tokens[$stackPtr];
 
         // Skip invalid statement.
         if (isset($token['parenthesis_opener']) === false) {
@@ -60,7 +62,7 @@ class ForLoopShouldBeWhileLoopSniff implements Sniff
         }
 
         $next = ++$token['parenthesis_opener'];
-        $end = --$token['parenthesis_closer'];
+        $end  = --$token['parenthesis_closer'];
 
         $parts = [
             0,
@@ -69,12 +71,12 @@ class ForLoopShouldBeWhileLoopSniff implements Sniff
         ];
         $index = 0;
 
-        for (; $next <= $end; $next++) {
+        for (; $next <= $end; ++$next) {
             $code = $tokens[$next]['code'];
             if ($code === T_SEMICOLON) {
-                $index++;
-            } elseif (isset(Tokens::$emptyTokens[$code]) === false) {
-                $parts[$index]++;
+                ++$index;
+            } else if (isset(Tokens::$emptyTokens[$code]) === false) {
+                ++$parts[$index];
             }
         }
 
@@ -82,7 +84,8 @@ class ForLoopShouldBeWhileLoopSniff implements Sniff
             $error = 'This FOR loop can be simplified to a WHILE loop';
             $phpcsFile->addWarning($error, $stackPtr, 'CanSimplify');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

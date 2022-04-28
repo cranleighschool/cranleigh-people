@@ -43,6 +43,10 @@
 namespace PDepend\Util\Cache\Driver\File;
 
 use PDepend\Util\Log;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
+use UnexpectedValueException;
 
 /**
  * Simple garbage collector for PDepend's file cache.
@@ -66,7 +70,7 @@ class FileCacheGarbageCollector
 
     /**
      * @param string $cacheDir
-     * @param int $ttl
+     * @param int    $ttl
      */
     public function __construct($cacheDir, $ttl = self::DEFAULT_TTL)
     {
@@ -89,8 +93,8 @@ class FileCacheGarbageCollector
         $count = 0;
 
         try {
-            $files = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($this->cacheDir)
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($this->cacheDir)
             );
             foreach ($files as $file) {
                 if ($this->isCollectibleFile($file)) {
@@ -100,7 +104,7 @@ class FileCacheGarbageCollector
             }
 
             return $count;
-        } catch (\UnexpectedValueException $e) {
+        } catch (UnexpectedValueException $e) {
             /* This may happen if PHPMD and PDepend run in parallel */
             return $count;
         }
@@ -109,10 +113,9 @@ class FileCacheGarbageCollector
     /**
      * Checks if the given file can be removed.
      *
-     * @param \SplFileInfo $file
      * @return bool
      */
-    private function isCollectibleFile(\SplFileInfo $file)
+    private function isCollectibleFile(SplFileInfo $file)
     {
         if (false === $file->isFile()) {
             return false;
@@ -134,10 +137,9 @@ class FileCacheGarbageCollector
     /**
      * Removes the given cache file.
      *
-     * @param \SplFileInfo $file
      * @return void
      */
-    private function garbageCollectFile(\SplFileInfo $file)
+    private function garbageCollectFile(SplFileInfo $file)
     {
         Log::debug("Removing file '{$file->getPathname()}' from cache.");
 

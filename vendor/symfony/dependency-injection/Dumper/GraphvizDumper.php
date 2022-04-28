@@ -30,17 +30,17 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class GraphvizDumper extends Dumper
 {
-    private $nodes;
-    private $edges;
+    private array $nodes;
+    private array $edges;
     // All values should be strings
-    private $options = [
-        'graph' => ['ratio' => 'compress'],
-        'node' => ['fontsize' => '11', 'fontname' => 'Arial', 'shape' => 'record'],
-        'edge' => ['fontsize' => '9', 'fontname' => 'Arial', 'color' => 'grey', 'arrowhead' => 'open', 'arrowsize' => '0.5'],
-        'node.instance' => ['fillcolor' => '#9999ff', 'style' => 'filled'],
-        'node.definition' => ['fillcolor' => '#eeeeee'],
-        'node.missing' => ['fillcolor' => '#ff9999', 'style' => 'filled'],
-    ];
+    private array $options = [
+            'graph' => ['ratio' => 'compress'],
+            'node' => ['fontsize' => '11', 'fontname' => 'Arial', 'shape' => 'record'],
+            'edge' => ['fontsize' => '9', 'fontname' => 'Arial', 'color' => 'grey', 'arrowhead' => 'open', 'arrowsize' => '0.5'],
+            'node.instance' => ['fillcolor' => '#9999ff', 'style' => 'filled'],
+            'node.definition' => ['fillcolor' => '#eeeeee'],
+            'node.missing' => ['fillcolor' => '#ff9999', 'style' => 'filled'],
+        ];
 
     /**
      * Dumps the service container as a graphviz graph.
@@ -53,10 +53,8 @@ class GraphvizDumper extends Dumper
      *  * node.instance: The default options for services that are defined directly by object instances
      *  * node.definition: The default options for services that are defined via service definition instances
      *  * node.missing: The default options for missing services
-     *
-     * @return string The dot representation of the service container
      */
-    public function dump(array $options = [])
+    public function dump(array $options = []): string
     {
         foreach (['graph', 'node', 'edge', 'node.instance', 'node.definition', 'node.missing'] as $key) {
             if (isset($options[$key])) {
@@ -124,29 +122,28 @@ class GraphvizDumper extends Dumper
             if ($argument instanceof Reference) {
                 $lazyEdge = $lazy;
 
-                if (! $this->container->has((string) $argument)) {
+                if (!$this->container->has((string) $argument)) {
                     $this->nodes[(string) $argument] = ['name' => $name, 'required' => $required, 'class' => '', 'attributes' => $this->options['node.missing']];
                 } elseif ('service_container' !== (string) $argument) {
                     $lazyEdge = $lazy || $this->container->getDefinition((string) $argument)->isLazy();
                 }
 
-                $edges[] = ['name' => $name, 'required' => $required, 'to' => $argument, 'lazy' => $lazyEdge];
+                $edges[] = [['name' => $name, 'required' => $required, 'to' => $argument, 'lazy' => $lazyEdge]];
             } elseif ($argument instanceof ArgumentInterface) {
-                $edges = array_merge($edges, $this->findEdges($id, $argument->getValues(), $required, $name, true));
+                $edges[] = $this->findEdges($id, $argument->getValues(), $required, $name, true);
             } elseif ($argument instanceof Definition) {
-                $edges = array_merge($edges,
-                    $this->findEdges($id, $argument->getArguments(), $required, ''),
-                    $this->findEdges($id, $argument->getProperties(), false, '')
-                );
+                $edges[] = $this->findEdges($id, $argument->getArguments(), $required, '');
+                $edges[] = $this->findEdges($id, $argument->getProperties(), false, '');
+
                 foreach ($argument->getMethodCalls() as $call) {
-                    $edges = array_merge($edges, $this->findEdges($id, $call[1], false, $call[0].'()'));
+                    $edges[] = $this->findEdges($id, $call[1], false, $call[0].'()');
                 }
             } elseif (\is_array($argument)) {
-                $edges = array_merge($edges, $this->findEdges($id, $argument, $required, $name, $lazy));
+                $edges[] = $this->findEdges($id, $argument, $required, $name, $lazy);
             }
         }
 
-        return $edges;
+        return array_merge([], ...$edges);
     }
 
     private function findNodes(): array
@@ -176,7 +173,7 @@ class GraphvizDumper extends Dumper
                 continue;
             }
 
-            if (! $container->hasDefinition($id)) {
+            if (!$container->hasDefinition($id)) {
                 $nodes[$id] = ['class' => str_replace('\\', '\\\\', \get_class($container->get($id))), 'attributes' => $this->options['node.instance']];
             }
         }

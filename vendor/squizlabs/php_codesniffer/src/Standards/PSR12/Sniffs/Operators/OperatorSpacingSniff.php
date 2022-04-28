@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class OperatorSpacingSniff extends SquizOperatorSpacingSniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,19 +26,19 @@ class OperatorSpacingSniff extends SquizOperatorSpacingSniff
     {
         parent::register();
 
-        $targets = Tokens::$comparisonTokens;
-        $targets += Tokens::$operators;
-        $targets += Tokens::$assignmentTokens;
-        $targets += Tokens::$booleanOperators;
+        $targets   = Tokens::$comparisonTokens;
+        $targets  += Tokens::$operators;
+        $targets  += Tokens::$assignmentTokens;
+        $targets  += Tokens::$booleanOperators;
         $targets[] = T_INLINE_THEN;
         $targets[] = T_INLINE_ELSE;
         $targets[] = T_STRING_CONCAT;
         $targets[] = T_INSTANCEOF;
 
         return $targets;
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -58,7 +60,7 @@ class OperatorSpacingSniff extends SquizOperatorSpacingSniff
         $operator = $tokens[$stackPtr]['content'];
 
         $checkBefore = true;
-        $checkAfter = true;
+        $checkAfter  = true;
 
         // Skip short ternary.
         if ($tokens[($stackPtr)]['code'] === T_INLINE_ELSE
@@ -88,8 +90,8 @@ class OperatorSpacingSniff extends SquizOperatorSpacingSniff
 
         if ($checkBefore === true && $tokens[($stackPtr - 1)]['code'] !== T_WHITESPACE) {
             $error = 'Expected at least 1 space before "%s"; 0 found';
-            $data = [$operator];
-            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceBefore', $data);
+            $data  = [$operator];
+            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceBefore', $data);
             if ($fix === true) {
                 $phpcsFile->fixer->addContentBefore($stackPtr, ' ');
             }
@@ -97,13 +99,14 @@ class OperatorSpacingSniff extends SquizOperatorSpacingSniff
 
         if ($checkAfter === true && $tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
             $error = 'Expected at least 1 space after "%s"; 0 found';
-            $data = [$operator];
-            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceAfter', $data);
+            $data  = [$operator];
+            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceAfter', $data);
             if ($fix === true) {
                 $phpcsFile->fixer->addContent($stackPtr, ' ');
             }
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

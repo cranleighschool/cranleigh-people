@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class InlineControlStructureUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -23,7 +25,7 @@ class InlineControlStructureUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = 'InlineControlStructureUnitTest.1.inc')
+    public function getErrorList($testFile='InlineControlStructureUnitTest.1.inc')
     {
         switch ($testFile) {
         case 'InlineControlStructureUnitTest.1.inc':
@@ -69,6 +71,8 @@ class InlineControlStructureUnitTest extends AbstractSniffUnitTest
                 236 => 1,
                 238 => 1,
                 242 => 1,
+                260 => 1,
+                269 => 1,
             ];
 
         case 'InlineControlStructureUnitTest.js':
@@ -86,9 +90,9 @@ class InlineControlStructureUnitTest extends AbstractSniffUnitTest
         default:
             return [];
         }//end switch
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -101,7 +105,8 @@ class InlineControlStructureUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

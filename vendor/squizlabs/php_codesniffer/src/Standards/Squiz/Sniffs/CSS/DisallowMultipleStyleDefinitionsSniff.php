@@ -14,12 +14,14 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DisallowMultipleStyleDefinitionsSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['CSS'];
+
 
     /**
      * Returns the token types that this sniff is interested in.
@@ -29,9 +31,9 @@ class DisallowMultipleStyleDefinitionsSniff implements Sniff
     public function register()
     {
         return [T_STYLE];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -45,7 +47,7 @@ class DisallowMultipleStyleDefinitionsSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $next = $phpcsFile->findNext(T_STYLE, ($stackPtr + 1));
+        $next   = $phpcsFile->findNext(T_STYLE, ($stackPtr + 1));
         if ($next === false) {
             return;
         }
@@ -57,12 +59,13 @@ class DisallowMultipleStyleDefinitionsSniff implements Sniff
 
         if ($tokens[$next]['line'] === $tokens[$stackPtr]['line']) {
             $error = 'Each style definition must be on a line by itself';
-            $fix = $phpcsFile->addFixableError($error, $next, 'Found');
+            $fix   = $phpcsFile->addFixableError($error, $next, 'Found');
             if ($fix === true) {
                 $phpcsFile->fixer->addNewlineBefore($next);
             }
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

@@ -13,20 +13,30 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class LowercasedFilenameUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
      * The key of the array should represent the line number and the value
      * should represent the number of errors that should occur on that line.
      *
+     * @param string $testFile The name of the file being tested.
+     *
      * @return array<int, int>
      */
-    public function getErrorList()
+    public function getErrorList($testFile='')
     {
-        return [1 => 1];
-    }
+        switch ($testFile) {
+        case 'LowercasedFilenameUnitTest.1.inc':
+        case 'LowercasedFilenameUnitTest.2.inc':
+            return [1 => 1];
+        default:
+            return [];
+        }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -39,7 +49,8 @@ class LowercasedFilenameUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

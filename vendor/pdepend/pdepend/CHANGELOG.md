@@ -1,3 +1,54 @@
+pdepend-2.10.3 (2022/02/23)
+==========================
+
+- Added [\#574](https://github.com/pdepend/pdepend/pull/574): Support symfony 6
+- Fixed [\#583](https://github.com/pdepend/pdepend/pull/583), [\#578](https://github.com/pdepend/pdepend/pull/578), [\#577](https://github.com/pdepend/pdepend/pull/577), [\#576](https://github.com/pdepend/pdepend/pull/576) : Add declare ReturnTypeWillChange to fix deprecation warnings.
+- Fixed [\#575](https://github.com/pdepend/pdepend/pull/575): Fix deprecation warning in AbstractPHPParser::parseVarAnnotation.
+- Fixed [\#579](https://github.com/pdepend/pdepend/pull/579): Fix deprecation messages in AbstractPHPParser::prepareCallable
+- Changed [\#589](https://github.com/pdepend/pdepend/pull/589), [\#588](https://github.com/pdepend/pdepend/pull/588), [\#587](https://github.com/pdepend/pdepend/pull/587), [\#586](https://github.com/pdepend/pdepend/pull/586), [\#585](https://github.com/pdepend/pdepend/pull/585), [\#582](https://github.com/pdepend/pdepend/pull/582), [\#581](https://github.com/pdepend/pdepend/pull/581), [\#580](https://github.com/pdepend/pdepend/pull/580) : Internal code cleanup and PHPStan fixes.
+
+pdepend-2.10.2 (2021/11/16)
+==========================
+
+- Added [\#568](https://github.com/pdepend/pdepend/pull/568): Support PHP 8.1 final constants.
+- Fixed [\#572](https://github.com/pdepend/pdepend/pull/572): Allow "readonly" as part of a class name.
+- Fixed [\#567](https://github.com/pdepend/pdepend/pull/567): Allow const, field, method named readonly.
+
+pdepend-2.10.1 (2021/10/11)
+==========================
+
+- Added [\#563](https://github.com/pdepend/pdepend/pull/563): Support PHP 8.1 `never` return type.
+- Added [\#565](https://github.com/pdepend/pdepend/pull/565): Support PHP 8.1 readonly properties.
+- Added [\#561](https://github.com/pdepend/pdepend/pull/561): Support trailing comma in `isset()` and `unset()` lists.
+- Fixed [\#562](https://github.com/pdepend/pdepend/pull/562): Allow any keyword as the name of an argument.
+- Fixed [\#555](https://github.com/pdepend/pdepend/pull/555): Restore modifier after serialization.
+
+pdepend-2.10.0 (2021/07/20)
+==========================
+
+- Added [\#534](https://github.com/pdepend/pdepend/pull/534): Support trailing comma in parameters list.
+- Added [\#535](https://github.com/pdepend/pdepend/pull/535): Support trailing comma in closure list.
+- Added [\#538](https://github.com/pdepend/pdepend/pull/538): Add named argument value as child to make it discoverable.
+- Added [\#540](https://github.com/pdepend/pdepend/pull/540): Support throw expression.
+- Added [\#543](https://github.com/pdepend/pdepend/pull/543): Support multiple expressions as match key.
+- Fixed [\#530](https://github.com/pdepend/pdepend/pull/530): Automate release generation for the website.
+- Fixed [\#537](https://github.com/pdepend/pdepend/pull/537): Match expression does not have namespace
+- Fixed [\#541](https://github.com/pdepend/pdepend/pull/541): Fix support for union types
+- Fixed [\#544](https://github.com/pdepend/pdepend/pull/544): Math throw entry may end on curly braces
+- Fixed [\#547](https://github.com/pdepend/pdepend/pull/547): Add the phar to the website. The new URL is: https://pdepend.org/static/latest/pdepend.phar
+- Fixed [\#550](https://github.com/pdepend/pdepend/pull/550): Allow multiple arguments in invocation
+- Fixed [\#551](https://github.com/pdepend/pdepend/pull/551): Allow null and false in union type for typed properties
+- Fixed [\#552](https://github.com/pdepend/pdepend/pull/552): Allow null-safe operator anywhere object operator is allowed
+
+pdepend-2.9.1 (2021/04/15)
+==========================
+
+- Added [\#519](https://github.com/pdepend/pdepend/issues/519): Support PHP 7.2 trailing commas in grouped use declarations
+- Added [\#518](https://github.com/pdepend/pdepend/issues/518): Support PHP 8 `static` type hint
+- Added [\#522](https://github.com/pdepend/pdepend/issues/522): Support PHP 8 `null` and `false` type hint
+- Added [\#516](https://github.com/pdepend/pdepend/issues/516): Support PHP 8 catch without variable
+- Fixed [\#527](https://github.com/pdepend/pdepend/issues/527): Allow nested arrays in PHP 8 attributes
+
 pdepend-2.9.0 (2021/03/11)
 ==========================
 

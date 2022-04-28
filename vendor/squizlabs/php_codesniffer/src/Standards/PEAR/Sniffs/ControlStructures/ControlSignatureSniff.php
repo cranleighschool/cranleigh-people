@@ -13,12 +13,14 @@ use PHP_CodeSniffer\Sniffs\AbstractPatternSniff;
 
 class ControlSignatureSniff extends AbstractPatternSniff
 {
+
     /**
      * If true, comments will be ignored if they are found in the code.
      *
-     * @var bool
+     * @var boolean
      */
     public $ignoreComments = true;
+
 
     /**
      * Returns the patterns that this test wishes to verify.
@@ -39,7 +41,8 @@ class ControlSignatureSniff extends AbstractPatternSniff
             'do {EOL',
             'match (...) {EOL',
         ];
-    }
 
-    //end getPatterns()
+    }//end getPatterns()
+
+
 }//end class

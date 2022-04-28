@@ -12,6 +12,7 @@
 namespace Symfony\Component\Config\Definition\Dumper;
 
 use Symfony\Component\Config\Definition\ArrayNode;
+use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\EnumNode;
 use Symfony\Component\Config\Definition\NodeInterface;
@@ -27,7 +28,7 @@ use Symfony\Component\Yaml\Inline;
  */
 class YamlReferenceDumper
 {
-    private $reference;
+    private ?string $reference = null;
 
     public function dump(ConfigurationInterface $configuration)
     {
@@ -39,7 +40,7 @@ class YamlReferenceDumper
         $rootNode = $node = $configuration->getConfigTreeBuilder()->buildTree();
 
         foreach (explode('.', $path) as $step) {
-            if (! $node instanceof ArrayNode) {
+            if (!$node instanceof ArrayNode) {
                 throw new \UnexpectedValueException(sprintf('Unable to find node at path "%s.%s".', $rootNode->getName(), $path));
             }
 
@@ -76,7 +77,10 @@ class YamlReferenceDumper
         $default = '';
         $defaultArray = null;
         $children = null;
-        $example = $node->getExample();
+        $example = null;
+        if ($node instanceof BaseNode) {
+            $example = $node->getExample();
+        }
 
         // defaults
         if ($node instanceof ArrayNode) {
@@ -86,10 +90,10 @@ class YamlReferenceDumper
                 $children = $this->getPrototypeChildren($node);
             }
 
-            if (! $children) {
+            if (!$children) {
                 if ($node->hasDefaultValue() && \count($defaultArray = $node->getDefaultValue())) {
                     $default = '';
-                } elseif (! \is_array($example)) {
+                } elseif (!\is_array($example)) {
                     $default = '[]';
                 }
             }
@@ -108,7 +112,7 @@ class YamlReferenceDumper
                 if (\is_array($default)) {
                     if (\count($defaultArray = $node->getDefaultValue())) {
                         $default = '';
-                    } elseif (! \is_array($example)) {
+                    } elseif (!\is_array($example)) {
                         $default = '[]';
                     }
                 } else {
@@ -123,13 +127,13 @@ class YamlReferenceDumper
         }
 
         // deprecated?
-        if ($node->isDeprecated()) {
+        if ($node instanceof BaseNode && $node->isDeprecated()) {
             $deprecation = $node->getDeprecation($node->getName(), $parentNode ? $parentNode->getPath() : $node->getPath());
             $comments[] = sprintf('Deprecated (%s)', ($deprecation['package'] || $deprecation['version'] ? "Since {$deprecation['package']} {$deprecation['version']}: " : '').$deprecation['message']);
         }
 
         // example
-        if ($example && ! \is_array($example)) {
+        if ($example && !\is_array($example)) {
             $comments[] = 'Example: '.Inline::dump($example);
         }
 
@@ -139,7 +143,7 @@ class YamlReferenceDumper
         $key = $prototypedArray ? '-' : $node->getName().':';
         $text = rtrim(sprintf('%-21s%s %s', $key, $default, $comments), ' ');
 
-        if ($info = $node->getInfo()) {
+        if ($node instanceof BaseNode && $info = $node->getInfo()) {
             $this->writeLine('');
             // indenting multi-line info
             $info = str_replace("\n", sprintf("\n%".($depth * 4).'s# ', ' '), $info);
@@ -171,7 +175,7 @@ class YamlReferenceDumper
 
         if ($children) {
             foreach ($children as $childNode) {
-                $this->writeNode($childNode, $node, $depth + 1, $node instanceof PrototypedArrayNode && ! $node->getKeyAttribute());
+                $this->writeNode($childNode, $node, $depth + 1, $node instanceof PrototypedArrayNode && !$node->getKeyAttribute());
             }
         }
     }
@@ -216,7 +220,7 @@ class YamlReferenceDumper
         $key = $node->getKeyAttribute();
 
         // Do not expand prototype if it isn't an array node nor uses attribute as key
-        if (! $key && ! $prototype instanceof ArrayNode) {
+        if (!$key && !$prototype instanceof ArrayNode) {
             return $node->getChildren();
         }
 

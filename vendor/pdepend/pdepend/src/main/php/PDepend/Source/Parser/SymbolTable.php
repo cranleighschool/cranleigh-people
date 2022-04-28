@@ -55,14 +55,14 @@ class SymbolTable
      *
      * @var array<array>
      */
-    private $scopeStack = [];
+    private $scopeStack = array();
 
     /**
      * The currently active scope.
      *
      * @var array<string, string>|null
      */
-    private $scope = [];
+    private $scope = array();
 
     /**
      * This method creates a new scope.
@@ -98,8 +98,8 @@ class SymbolTable
     /**
      * Adds a new value to the top most scope.
      *
-     * @param  string $key   The key of this scope value.
-     * @param  mixed  $value A new scope value.
+     * @param string $key   The key of this scope value.
+     * @param mixed  $value A new scope value.
      *
      * @throws NoActiveScopeException
      *
@@ -112,7 +112,7 @@ class SymbolTable
     }
 
     /**
-     * Resets the current scope.
+     * Resets the current scope
      *
      * @throws NoActiveScopeException
      *
@@ -121,7 +121,7 @@ class SymbolTable
     public function resetScope()
     {
         $this->ensureActiveScopeExists();
-        $this->scope = [];
+        $this->scope = array();
     }
 
     /**

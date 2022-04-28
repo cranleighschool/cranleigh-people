@@ -51,161 +51,168 @@ use PDepend\Source\Tokenizer\Tokens;
 /**
  * Define PHP 5.4 __TRAIT__ token constant.
  */
-if (! defined('T_TRAIT_C')) {
+if (!defined('T_TRAIT_C')) {
     define('T_TRAIT_C', 42000);
 }
 
 /**
  * Define PHP 5.4 'trait' token constant.
  */
-if (! defined('T_TRAIT')) {
+if (!defined('T_TRAIT')) {
     define('T_TRAIT', 42001);
 }
 
 /**
  * Define PHP 5.4 'insteadof' token constant.
  */
-if (! defined('T_INSTEADOF')) {
+if (!defined('T_INSTEADOF')) {
     define('T_INSTEADOF', 42002);
 }
 
 /**
  * Define PHP 5.3 __NAMESPACE__ token constant.
  */
-if (! defined('T_NS_C')) {
+if (!defined('T_NS_C')) {
     define('T_NS_C', 42003);
 }
 
 /**
- * Define PHP 5.3 'use' token constant.
+ * Define PHP 5.3 'use' token constant
  */
-if (! defined('T_USE')) {
+if (!defined('T_USE')) {
     define('T_USE', 42004);
 }
 
 /**
  * Define PHP 5.3 'namespace' token constant.
  */
-if (! defined('T_NAMESPACE')) {
+if (!defined('T_NAMESPACE')) {
     define('T_NAMESPACE', 42005);
 }
 
 /**
- * Define PHP 5.6 '...' token constant.
+ * Define PHP 5.6 '...' token constant
  */
-if (! defined('T_ELLIPSIS')) {
+if (!defined('T_ELLIPSIS')) {
     define('T_ELLIPSIS', 42006);
 }
 
 /**
  * Define PHP 5.3's '__DIR__' token constant.
  */
-if (! defined('T_DIR')) {
+if (!defined('T_DIR')) {
     define('T_DIR', 42006);
 }
 
 /**
  * Define PHP 5.3's 'T_GOTO' token constant.
  */
-if (! defined('T_GOTO')) {
+if (!defined('T_GOTO')) {
     define('T_GOTO', 42007);
 }
 
 /**
- * Define PHP 5.4's 'T_CALLABLE' token constant.
+ * Define PHP 5.4's 'T_CALLABLE' token constant
  */
-if (! defined('T_CALLABLE')) {
+if (!defined('T_CALLABLE')) {
     define('T_CALLABLE', 42008);
 }
 
 /**
- * Define PHP 5.5's 'T_YIELD' token constant.
+ * Define PHP 5.5's 'T_YIELD' token constant
  */
-if (! defined('T_YIELD')) {
+if (!defined('T_YIELD')) {
     define('T_YIELD', 42009);
 }
 
 /**
- * Define PHP 5,5's 'T_FINALLY' token constant.
+ * Define PHP 5,5's 'T_FINALLY' token constant
  */
-if (! defined('T_FINALLY')) {
+if (!defined('T_FINALLY')) {
     define('T_FINALLY', 42010);
 }
 
 /**
- * Define character token that was removed in PHP 7.
+ * Define character token that was removed in PHP 7
  */
-if (! defined('T_CHARACTER')) {
+if (!defined('T_CHARACTER')) {
     define('T_CHARACTER', 42011);
 }
 
 /**
- * Define bad character token that was removed in PHP 7.
+ * Define bad character token that was removed in PHP 7
  */
-if (! defined('T_BAD_CHARACTER')) {
+if (!defined('T_BAD_CHARACTER')) {
     define('T_BAD_CHARACTER', 42012);
 }
 
 /**
- * Define PHP 7's '<=>' token constant.
+ * Define PHP 7's '<=>' token constant
  */
-if (! defined('T_SPACESHIP')) {
+if (!defined('T_SPACESHIP')) {
     define('T_SPACESHIP', 42013);
 }
 
 /**
- * Define PHP 7's '??' token constant.
+ * Define PHP 7's '??' token constant
  */
-if (! defined('T_COALESCE')) {
+if (!defined('T_COALESCE')) {
     define('T_COALESCE', 42014);
 }
 
 /**
- * Define PHP 7's '**' token constant.
+ * Define PHP 7's '**' token constant
  */
-if (! defined('T_POW')) {
+if (!defined('T_POW')) {
     define('T_POW', 42015);
 }
 
 /**
- * Define PHP 7.4's fn arrow function keyword.
+ * Define PHP 7.4's fn arrow function keyword
  */
-if (! defined('T_FN')) {
+if (!defined('T_FN')) {
     define('T_FN', 42016);
 }
 
 /**
- * Define PHP 7.4's ??= operator.
+ * Define PHP 7.4's ??= operator
  */
-if (! defined('T_COALESCE_EQUAL')) {
+if (!defined('T_COALESCE_EQUAL')) {
     define('T_COALESCE_EQUAL', 42017);
 }
 
 /**
- * Define PHP 8.0 tokens.
+ * Define PHP 8.0 tokens
  */
-if (! defined('T_NAME_QUALIFIED')) {
+if (!defined('T_NAME_QUALIFIED')) {
     define('T_NAME_QUALIFIED', 42314);
 }
 
-if (! defined('T_NAME_FULLY_QUALIFIED')) {
+if (!defined('T_NAME_FULLY_QUALIFIED')) {
     define('T_NAME_FULLY_QUALIFIED', 42312);
 }
 
-if (! defined('T_NAME_RELATIVE')) {
+if (!defined('T_NAME_RELATIVE')) {
     define('T_NAME_RELATIVE', 42313);
 }
 
-if (! defined('T_MATCH')) {
+if (!defined('T_MATCH')) {
     define('T_MATCH', 42341);
 }
 
-if (! defined('T_ATTRIBUTE')) {
+if (!defined('T_ATTRIBUTE')) {
     define('T_ATTRIBUTE', 42383);
 }
 
-if (! defined('T_NULLSAFE_OBJECT_OPERATOR')) {
+if (!defined('T_NULLSAFE_OBJECT_OPERATOR')) {
     define('T_NULLSAFE_OBJECT_OPERATOR', 42387);
+}
+
+/**
+ * Define PHP 8.1 tokens
+ */
+if (!defined('T_READONLY')) {
+    define('T_READONLY', 42401);
 }
 
 /**
@@ -220,9 +227,9 @@ class PHPTokenizerInternal implements FullTokenizer
     /**
      * Mapping between php internal tokens and php depend tokens.
      *
-     * @var array<integer, integer>
+     * @var array<int, integer>
      */
-    protected static $tokenMap = [
+    protected static $tokenMap = array(
         T_AS                        => Tokens::T_AS,
         T_DO                        => Tokens::T_DO,
         T_IF                        => Tokens::T_IF,
@@ -360,7 +367,8 @@ class PHPTokenizerInternal implements FullTokenizer
         T_FN                        => Tokens::T_FN,
         T_MATCH                     => Tokens::T_STRING,
         T_NULLSAFE_OBJECT_OPERATOR  => Tokens::T_NULLSAFE_OBJECT_OPERATOR,
-    ];
+        T_READONLY                  => Tokens::T_READONLY,
+    );
 
     /**
      * Internally used transition token.
@@ -372,7 +380,7 @@ class PHPTokenizerInternal implements FullTokenizer
      *
      * @var array<string, integer>
      */
-    protected static $literalMap = [
+    protected static $literalMap = array(
         '@'              =>  Tokens::T_AT,
         '/'              =>  Tokens::T_DIV,
         '%'              =>  Tokens::T_MOD,
@@ -420,165 +428,175 @@ class PHPTokenizerInternal implements FullTokenizer
         '__dir__'        =>  Tokens::T_DIR,
         '__trait__'      =>  Tokens::T_TRAIT_C,
         '__namespace__'  =>  Tokens::T_NS_C,
-    ];
+        'readonly'       =>  Tokens::T_READONLY,
+    );
 
     /**
      * @var array<mixed, array>
      */
-    protected static $substituteTokens = [
-        T_DOLLAR_OPEN_CURLY_BRACES  =>  ['$', '{'],
-    ];
+    protected static $substituteTokens = array(
+        T_DOLLAR_OPEN_CURLY_BRACES  =>  array('$', '{'),
+    );
 
     /**
      * BuilderContext sensitive alternative mappings.
      *
-     * @var array<integer, array>
+     * Re-map based on the previous token
+     *
+     * @var array<int, array>
      */
-    protected static $alternativeMap = [
-        Tokens::T_USE => [
+    protected static $alternativeMap = array(
+        Tokens::T_USE => array(
             Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
             Tokens::T_CONST            =>  Tokens::T_STRING,
             Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_GOTO => [
+        Tokens::T_GOTO => array(
             Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
             Tokens::T_CONST            =>  Tokens::T_STRING,
             Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_NULL => [
+        Tokens::T_NULL => array(
             Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
             Tokens::T_CONST            =>  Tokens::T_STRING,
             Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_SELF => [
+        Tokens::T_SELF => array(
             Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
             Tokens::T_CONST            =>  Tokens::T_STRING,
             Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_TRUE => [
-            Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
-            Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
-            Tokens::T_NAMESPACE        =>  Tokens::T_STRING,
-            Tokens::T_CONST            =>  Tokens::T_STRING,
-            Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
-
-        Tokens::T_ARRAY => [
-            Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
-        ],
-
-        Tokens::T_FALSE => [
+        Tokens::T_TRUE => array(
             Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
             Tokens::T_NAMESPACE        =>  Tokens::T_STRING,
             Tokens::T_CONST            =>  Tokens::T_STRING,
             Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_NAMESPACE => [
+        Tokens::T_ARRAY => array(
+            Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
+        ),
+
+        Tokens::T_FALSE => array(
+            Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
+            Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
+            Tokens::T_NAMESPACE        =>  Tokens::T_STRING,
+            Tokens::T_CONST            =>  Tokens::T_STRING,
+            Tokens::T_FUNCTION         =>  Tokens::T_STRING,
+        ),
+
+        Tokens::T_NAMESPACE => array(
             Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
             Tokens::T_CONST            =>  Tokens::T_STRING,
             Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_DIR => [
+        Tokens::T_DIR => array(
             Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
             Tokens::T_CONST            =>  Tokens::T_STRING,
             Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_NS_C => [
+        Tokens::T_NS_C => array(
             Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
             Tokens::T_CONST            =>  Tokens::T_STRING,
             Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_PARENT => [
+        Tokens::T_PARENT => array(
             Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
             Tokens::T_CONST            =>  Tokens::T_STRING,
             Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_FINALLY => [
+        Tokens::T_FINALLY => array(
             Tokens::T_OBJECT_OPERATOR  =>  Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     =>  Tokens::T_STRING,
             Tokens::T_CONST            =>  Tokens::T_STRING,
             Tokens::T_FUNCTION         =>  Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_CALLABLE => [
+        Tokens::T_CALLABLE => array(
             Tokens::T_OBJECT_OPERATOR  => Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     => Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_LIST => [
+        Tokens::T_LIST => array(
             Tokens::T_OBJECT_OPERATOR  => Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     => Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_EMPTY => [
+        Tokens::T_EMPTY => array(
             Tokens::T_OBJECT_OPERATOR  => Tokens::T_STRING,
             Tokens::T_DOUBLE_COLON     => Tokens::T_STRING,
-        ],
+        ),
 
-        Tokens::T_CLASS => [
+        Tokens::T_CLASS => array(
             Tokens::T_DOUBLE_COLON     => Tokens::T_CLASS_FQN,
-        ],
-    ];
+        ),
+
+        Tokens::T_READONLY => array(
+            Tokens::T_OBJECT_OPERATOR  => Tokens::T_STRING,
+            Tokens::T_FUNCTION         => Tokens::T_STRING,
+            Tokens::T_CONST            => Tokens::T_STRING,
+            Tokens::T_DOUBLE_COLON     => Tokens::T_STRING,
+        ),
+    );
 
     /**
-     * @var array<integer, array<integer, array<string, string|integer>>>
+     * @var array<int, array<int, array<string, integer|string>>>
      */
-    protected static $reductionMap = [
-        Tokens::T_CONCAT => [
-            Tokens::T_CONCAT => [
+    protected static $reductionMap = array(
+        Tokens::T_CONCAT => array(
+            Tokens::T_CONCAT => array(
                 'type'  => self::T_ELLIPSIS,
                 'image' => '..',
-            ],
-            self::T_ELLIPSIS  =>  [
+            ),
+            self::T_ELLIPSIS  =>  array(
                 'type'  => Tokens::T_ELLIPSIS,
                 'image' => '...',
-            ],
-        ],
+            )
+        ),
 
-        Tokens::T_ANGLE_BRACKET_CLOSE => [
-            Tokens::T_IS_SMALLER_OR_EQUAL => [
+        Tokens::T_ANGLE_BRACKET_CLOSE => array(
+            Tokens::T_IS_SMALLER_OR_EQUAL => array(
                 'type'  => Tokens::T_SPACESHIP,
                 'image' => '<=>',
-            ],
-        ],
+            )
+        ),
 
-        Tokens::T_QUESTION_MARK => [
-            Tokens::T_QUESTION_MARK => [
+        Tokens::T_QUESTION_MARK => array(
+            Tokens::T_QUESTION_MARK => array(
                 'type'  => Tokens::T_COALESCE,
                 'image' => '??',
-            ],
-        ],
+            )
+        ),
 
-        Tokens::T_MUL => [
-            Tokens::T_MUL => [
+        Tokens::T_MUL => array(
+            Tokens::T_MUL => array(
                 'type'  => Tokens::T_POW,
                 'image' => '**',
-            ],
-        ],
-    ];
+            )
+        ),
+    );
 
     /**
      * The source file instance.
      *
-     * @var \PDepend\Source\AST\ASTCompilationUnit|null
+     * @var ASTCompilationUnit|null
      */
     protected $sourceFile = null;
 
@@ -613,7 +631,7 @@ class PHPTokenizerInternal implements FullTokenizer
     /**
      * Returns the name of the source file.
      *
-     * @return \PDepend\Source\AST\ASTCompilationUnit|null
+     * @return ASTCompilationUnit|null
      */
     public function getSourceFile()
     {
@@ -666,10 +684,10 @@ class PHPTokenizerInternal implements FullTokenizer
     }
 
     /**
-     * Returns the next token or {@link \PDepend\Source\Tokenizer\Tokenizer::T_EOF} if
+     * Returns the next token or {@link Tokenizer::T_EOF} if
      * there is no next token.
      *
-     * @return Token|int
+     * @return int|Token
      */
     public function next()
     {
@@ -683,7 +701,7 @@ class PHPTokenizerInternal implements FullTokenizer
     }
 
     /**
-     * Returns the next token type or {@link \PDepend\Source\Tokenizer\Tokenizer::T_EOF} if
+     * Returns the next token type or {@link Tokenizer::T_EOF} if
      * there is no next token.
      *
      * @return int
@@ -703,6 +721,7 @@ class PHPTokenizerInternal implements FullTokenizer
      * Returns the token type at the given position relatively to the current position.
      *
      * @param int $shift positive or negative to apply to the current index.
+     *
      * @return int
      */
     public function peekAt($shift)
@@ -727,6 +746,7 @@ class PHPTokenizerInternal implements FullTokenizer
      * ignores all comments between the current and the next token.
      *
      * @return int|null
+     *
      * @since  0.9.12
      */
     public function peekNext()
@@ -738,7 +758,7 @@ class PHPTokenizerInternal implements FullTokenizer
         do {
             $index = $this->index + ++$offset;
 
-            if (! isset($this->tokens[$index])) {
+            if (!isset($this->tokens[$index])) {
                 return null;
             }
 
@@ -749,7 +769,7 @@ class PHPTokenizerInternal implements FullTokenizer
     }
 
     /**
-     * Returns the previous token type or {@link \PDepend\Source\Tokenizer\Tokenizer::T_BOF}
+     * Returns the previous token type or {@link Tokenizer::T_BOF}
      * if there is no previous token.
      *
      * @return int
@@ -761,7 +781,6 @@ class PHPTokenizerInternal implements FullTokenizer
         if ($this->index > 1) {
             return $this->tokens[$this->index - 2]->type;
         }
-
         return self::T_BOF;
     }
 
@@ -774,23 +793,23 @@ class PHPTokenizerInternal implements FullTokenizer
      */
     private function splitQualifiedNameToken($token)
     {
-        $result = [];
+        $result = array();
 
         foreach (explode('\\', $token[1]) as $index => $string) {
             if ($index) {
-                $result[] = [
+                $result[] = array(
                     T_NS_SEPARATOR,
                     '\\',
                     $token[2],
-                ];
+                );
             }
 
             if ($string !== '') {
-                $result[] = [
+                $result[] = array(
                     T_STRING,
                     $string,
                     $token[2],
-                ];
+                );
             }
         }
 
@@ -801,33 +820,33 @@ class PHPTokenizerInternal implements FullTokenizer
      * Split PHP 8 T_NAME_RELATIVE token into PHP 7 compatible tokens.
      *
      * @param array<int|string> $token
-     * @param string $namespace
+     * @param string            $namespace
      *
      * @return array<array>
      */
     private function splitRelativeNameToken($token, $namespace)
     {
-        $result = [
-            [
+        $result = array(
+            array(
                 T_NAMESPACE,
                 'namespace',
                 $token[2],
-            ],
-        ];
+            ),
+        );
 
         foreach (explode('\\', $namespace) as $string) {
-            $result[] = [
+            $result[] = array(
                 T_NS_SEPARATOR,
                 '\\',
                 $token[2],
-            ];
+            );
 
             if ($string !== '') {
-                $result[] = [
+                $result[] = array(
                     T_STRING,
                     $string,
                     $token[2],
-                ];
+                );
             }
         }
 
@@ -839,23 +858,32 @@ class PHPTokenizerInternal implements FullTokenizer
      * and substitutes some of the tokens with those required by PDepend's
      * parser implementation.
      *
-     * @param array<array<integer, integer|string>|string> $tokens Unprepared array of php tokens.
+     * @param array<array<int, integer|string>|string> $tokens Unprepared array of php tokens.
      *
-     * @return array<array<integer, integer|string>|string>
+     * @return array<array<int, integer|string>|string>
      */
     private function substituteTokens(array $tokens)
     {
-        $result = [];
+        $result = array();
         $attributeComment = null;
         $attributeCommentLine = null;
+        $brackets = 0;
 
         foreach ($tokens as $index => $token) {
             $temp = (array) $token;
             $temp = $temp[0];
 
             if ($attributeComment) {
+                if ($temp === '[') {
+                    $brackets++;
+                }
+
                 if ($temp === ']') {
-                    $result[] = [T_COMMENT, "$attributeComment */", $attributeCommentLine];
+                    $brackets--;
+                }
+
+                if ($brackets <= 0) {
+                    $result[] = array(T_COMMENT, "$attributeComment */", $attributeCommentLine);
                     $attributeComment = null;
 
                     continue;
@@ -865,6 +893,7 @@ class PHPTokenizerInternal implements FullTokenizer
             } elseif ($temp === T_ATTRIBUTE) {
                 $attributeComment = '/* @';
                 $attributeCommentLine = $token[2];
+                $brackets = 1;
             } elseif ($temp === T_NAME_QUALIFIED || $temp === T_NAME_FULLY_QUALIFIED) {
                 foreach ($this->splitQualifiedNameToken($token) as $subToken) {
                     $result[] = $subToken;
@@ -878,11 +907,11 @@ class PHPTokenizerInternal implements FullTokenizer
                     $result[] = $token;
                 }
             } elseif ($temp === '?' && isset($tokens[$index + 1][0]) && $tokens[$index + 1][0] === T_OBJECT_OPERATOR) {
-                $tokens[$index + 1] = [
+                $tokens[$index + 1] = array(
                     T_NULLSAFE_OBJECT_OPERATOR,
                     '?->',
                     1,
-                ];
+                );
 
                 continue;
             } else {
@@ -905,9 +934,9 @@ class PHPTokenizerInternal implements FullTokenizer
             return;
         }
 
-        $this->tokens = [];
-        $this->index = 0;
-        $this->count = 0;
+        $this->tokens = array();
+        $this->index  = 0;
+        $this->count  = 0;
 
         // No longer replacing short open tags since some want to track them.
         $source = $this->sourceFile->getSource();
@@ -921,33 +950,33 @@ class PHPTokenizerInternal implements FullTokenizer
         $startLine = 1;
 
         $startColumn = 1;
-        $endColumn = 1;
+        $endColumn   = 1;
 
         $literalMap = self::$literalMap;
-        $tokenMap = self::$tokenMap;
+        $tokenMap   = self::$tokenMap;
 
         // Previous found type
         $previousType = null;
         $previousStartColumn = 0;
 
         while ($token = current($tokens)) {
-            $type = null;
+            $type  = null;
             $image = null;
 
             if (is_string($token)) {
-                $token = [null, $token];
+                $token = array(null, $token);
             }
 
             if ($token[0] === T_OPEN_TAG || $token[0] === T_OPEN_TAG_WITH_ECHO) {
-                $type = $tokenMap[$token[0]];
+                $type  = $tokenMap[$token[0]];
                 $image = $token[1];
                 $inTag = true;
             } elseif ($token[0] === T_CLOSE_TAG) {
-                $type = $tokenMap[$token[0]];
+                $type  = $tokenMap[$token[0]];
                 $image = $token[1];
                 $inTag = false;
             } elseif ($inTag === false) {
-                $type = Tokens::T_NO_PHP;
+                $type  = Tokens::T_NO_PHP;
                 $image = $this->consumeNonePhpTokens($tokens);
             } elseif ($token[0] === T_WHITESPACE) {
                 // Count newlines in token
@@ -992,7 +1021,7 @@ class PHPTokenizerInternal implements FullTokenizer
                 } else {
                     // This should never happen
                     // @codeCoverageIgnoreStart
-                    [$type, $image] = $this->generateUnknownToken($token[1]);
+                    list($type, $image) = $this->generateUnknownToken($token[1]);
                     // @codeCoverageIgnoreEnd
                 }
             }
@@ -1047,7 +1076,7 @@ class PHPTokenizerInternal implements FullTokenizer
      * returns the collected content. The returned value will be null if there
      * was no none php token.
      *
-     * @param array<array<integer, integer|string>|string> $tokens Reference to the current token stream.
+     * @param array<array<int, integer|string>|string> $tokens Reference to the current token stream.
      *
      * @return string|null
      */
@@ -1081,10 +1110,10 @@ class PHPTokenizerInternal implements FullTokenizer
      *
      * @param string $token The unknown string token.
      *
-     * @return array<integer, mixed>
+     * @return array<int, mixed>
      */
     private function generateUnknownToken($token)
     {
-        return [$this->unknownTokenID++, $token];
+        return array($this->unknownTokenID++, $token);
     }
 }

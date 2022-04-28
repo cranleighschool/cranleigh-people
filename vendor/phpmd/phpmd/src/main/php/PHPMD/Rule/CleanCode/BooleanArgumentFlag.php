@@ -46,7 +46,7 @@ class BooleanArgumentFlag extends AbstractRule implements MethodAware, FunctionA
                 continue;
             }
 
-            $this->addViolation($param, [$node->getImage(), $declarator->getImage()]);
+            $this->addViolation($param, array($node->getImage(), $declarator->getImage()));
         }
     }
 

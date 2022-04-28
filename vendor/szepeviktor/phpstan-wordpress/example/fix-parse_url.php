@@ -4,4 +4,4 @@
  */
 
 /** @var array<string, string> */
-$parsed_url = parse_url(urldecode($url));
+$parsed_url = parse_url( urldecode( $url ) );

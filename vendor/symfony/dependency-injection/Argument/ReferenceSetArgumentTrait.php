@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 trait ReferenceSetArgumentTrait
 {
-    private $values;
+    private array $values;
 
     /**
      * @param Reference[] $values
@@ -31,9 +31,9 @@ trait ReferenceSetArgumentTrait
     }
 
     /**
-     * @return Reference[] The values in the set
+     * @return Reference[]
      */
-    public function getValues()
+    public function getValues(): array
     {
         return $this->values;
     }
@@ -44,7 +44,7 @@ trait ReferenceSetArgumentTrait
     public function setValues(array $values)
     {
         foreach ($values as $k => $v) {
-            if (null !== $v && ! $v instanceof Reference) {
+            if (null !== $v && !$v instanceof Reference) {
                 throw new InvalidArgumentException(sprintf('A "%s" must hold only Reference instances, "%s" given.', __CLASS__, get_debug_type($v)));
             }
         }

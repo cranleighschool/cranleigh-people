@@ -56,12 +56,13 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  * Copied from Behat
  *
  * @link   https://github.com/Behat/Behat/blob/3.0/src/Behat/Behat/Extension/Extension.php
+ *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
 abstract class Extension
 {
     /**
-     * Return name of the extension.
+     * Return name of the extension
      *
      * @return string
      */
@@ -72,6 +73,7 @@ abstract class Extension
      *
      * @param array<mixed>     $config    Extension configuration hash (from behat.yml)
      * @param ContainerBuilder $container ContainerBuilder instance
+     *
      * @return void
      */
     public function load(array $config, ContainerBuilder $container)
@@ -79,22 +81,21 @@ abstract class Extension
         $path = rtrim($this->getServiceDefinitionsPath(), DIRECTORY_SEPARATOR);
         $name = $this->getServiceDefinitionsName();
 
-        if (file_exists($path.DIRECTORY_SEPARATOR.($file = $name.'.xml'))) {
+        if (file_exists($path . DIRECTORY_SEPARATOR . ($file = $name . '.xml'))) {
             $loader = new XmlFileLoader($container, new FileLocator($path));
             $loader->load($file);
         }
-        if (file_exists($path.DIRECTORY_SEPARATOR.($file = $name.'.yml'))) {
+        if (file_exists($path . DIRECTORY_SEPARATOR . ($file = $name . '.yml'))) {
             $loader = new YamlFileLoader($container, new FileLocator($path));
             $loader->load($file);
         }
 
-        $container->setParameter($this->getName().'.parameters', $config);
+        $container->setParameter($this->getName() . '.parameters', $config);
     }
 
     /**
      * Setups configuration for current extension.
      *
-     * @param ArrayNodeDefinition $builder
      * @return void
      */
     public function getConfig(ArrayNodeDefinition $builder)
@@ -111,7 +112,7 @@ abstract class Extension
      */
     public function getCompilerPasses()
     {
-        return [];
+        return array();
     }
 
     /**

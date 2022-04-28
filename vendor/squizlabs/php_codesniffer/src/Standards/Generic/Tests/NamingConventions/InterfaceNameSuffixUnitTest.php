@@ -10,8 +10,10 @@ namespace PHP_CodeSniffer\Standards\Generic\Tests\NamingConventions;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
-class InterfaceSuffixNameUnitTest extends AbstractSniffUnitTest
+class InterfaceNameSuffixUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -23,9 +25,9 @@ class InterfaceSuffixNameUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [8 => 1];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -38,7 +40,8 @@ class InterfaceSuffixNameUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

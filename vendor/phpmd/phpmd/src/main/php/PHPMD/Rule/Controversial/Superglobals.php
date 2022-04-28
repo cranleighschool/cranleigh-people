@@ -30,7 +30,7 @@ use PHPMD\Rule\MethodAware;
  */
 class Superglobals extends AbstractRule implements MethodAware, FunctionAware
 {
-    protected $superglobals = [
+    protected $superglobals = array(
         '$GLOBALS',
         '$_SERVER',
         '$HTTP_SERVER_VARS',
@@ -47,7 +47,7 @@ class Superglobals extends AbstractRule implements MethodAware, FunctionAware
         '$_REQUEST',
         '$_ENV',
         '$HTTP_ENV_VARS',
-    ];
+    );
 
     /**
      * This method checks if a superglobal is used
@@ -58,14 +58,14 @@ class Superglobals extends AbstractRule implements MethodAware, FunctionAware
      */
     public function apply(AbstractNode $node)
     {
-        foreach ($node->findChildrenOfType('Variable') as $variable) {
+        foreach ($node->findChildrenOfTypeVariable() as $variable) {
             if (in_array($variable->getImage(), $this->superglobals)) {
                 $this->addViolation(
                     $node,
-                    [
+                    array(
                         $node->getName(),
                         $variable->getImage(),
-                    ]
+                    )
                 );
             }
         }

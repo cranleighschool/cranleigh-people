@@ -42,25 +42,30 @@
 
 namespace PDepend\Input;
 
+use FilterIterator;
+use ReturnTypeWillChange;
+use SplFileInfo;
+
 /**
  * Simple utility filter iterator for php source files.
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
-class Iterator extends \FilterIterator
+class Iterator extends FilterIterator
 {
     /**
      * The associated filter object.
      *
-     * @var \PDepend\Input\Filter
+     * @var Filter
      */
     protected $filter = null;
 
     /**
      * Optional root path for the files.
      *
-     * @var   string|null
+     * @var string|null
+     *
      * @since 0.10.0
      */
     protected $rootPath = null;
@@ -68,15 +73,15 @@ class Iterator extends \FilterIterator
     /**
      * Constructs a new file filter iterator.
      *
-     * @param \Iterator<\SplFileInfo> $iterator The inner iterator.
-     * @param \PDepend\Input\Filter   $filter   The filter object.
-     * @param string                  $rootPath Optional root path for the files.
+     * @param \Iterator<SplFileInfo> $iterator The inner iterator.
+     * @param Filter                 $filter   The filter object.
+     * @param string                 $rootPath Optional root path for the files.
      */
     public function __construct(\Iterator $iterator, Filter $filter, $rootPath = null)
     {
         parent::__construct($iterator);
 
-        $this->filter = $filter;
+        $this->filter   = $filter;
         $this->rootPath = $rootPath;
     }
 
@@ -85,12 +90,12 @@ class Iterator extends \FilterIterator
      *
      * @return bool
      */
+    #[ReturnTypeWillChange]
     public function accept()
     {
         if ($this->getInnerIterator()->current()->isDir()) {
             return false;
         }
-
         return $this->filter->accept($this->getLocalPath(), $this->getFullPath());
     }
 
@@ -98,6 +103,7 @@ class Iterator extends \FilterIterator
      * Returns the full qualified realpath for the currently active file.
      *
      * @return string
+     *
      * @since  0.10.0
      */
     protected function getFullPath()
@@ -110,6 +116,7 @@ class Iterator extends \FilterIterator
      * set. If not, this method returns the absolute file path.
      *
      * @return string
+     *
      * @since  0.10.0
      */
     protected function getLocalPath()
@@ -117,7 +124,6 @@ class Iterator extends \FilterIterator
         if ($this->rootPath && 0 === strpos($this->getFullPath(), $this->rootPath)) {
             return substr($this->getFullPath(), strlen($this->rootPath));
         }
-
         return $this->getFullPath();
     }
 }

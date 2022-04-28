@@ -12,11 +12,13 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\PHP;
 
-use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 class AjaxNullComparisonSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +27,9 @@ class AjaxNullComparisonSniff implements Sniff
     public function register()
     {
         return [T_FUNCTION];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -43,7 +45,7 @@ class AjaxNullComparisonSniff implements Sniff
         $tokens = $phpcsFile->getTokens();
 
         // Make sure it is an API function. We know this by the doc comment.
-        $commentEnd = $phpcsFile->findPrevious(T_DOC_COMMENT_CLOSE_TAG, $stackPtr);
+        $commentEnd   = $phpcsFile->findPrevious(T_DOC_COMMENT_CLOSE_TAG, $stackPtr);
         $commentStart = $phpcsFile->findPrevious(T_DOC_COMMENT_OPEN_TAG, ($commentEnd - 1));
         // If function doesn't contain any doc comments - skip it.
         if ($commentEnd === false || $commentStart === false) {
@@ -58,8 +60,8 @@ class AjaxNullComparisonSniff implements Sniff
         // Find all the vars passed in as we are only interested in comparisons
         // to NULL for these specific variables.
         $foundVars = [];
-        $open = $tokens[$stackPtr]['parenthesis_opener'];
-        $close = $tokens[$stackPtr]['parenthesis_closer'];
+        $open      = $tokens[$stackPtr]['parenthesis_opener'];
+        $close     = $tokens[$stackPtr]['parenthesis_closer'];
         for ($i = ($open + 1); $i < $close; $i++) {
             if ($tokens[$i]['code'] === T_VARIABLE) {
                 $foundVars[$tokens[$i]['content']] = true;
@@ -71,7 +73,7 @@ class AjaxNullComparisonSniff implements Sniff
         }
 
         $start = $tokens[$stackPtr]['scope_opener'];
-        $end = $tokens[$stackPtr]['scope_closer'];
+        $end   = $tokens[$stackPtr]['scope_closer'];
         for ($i = ($start + 1); $i < $end; $i++) {
             if ($tokens[$i]['code'] !== T_VARIABLE
                 || isset($foundVars[$tokens[$i]['content']]) === false
@@ -94,7 +96,8 @@ class AjaxNullComparisonSniff implements Sniff
             $error = 'Values submitted via Ajax requests should not be compared directly to NULL; use empty() instead';
             $phpcsFile->addWarning($error, $nullValue, 'Found');
         }//end for
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

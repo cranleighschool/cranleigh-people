@@ -42,6 +42,7 @@
 
 namespace PDepend\Source\AST;
 
+use InvalidArgumentException;
 use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
@@ -82,19 +83,21 @@ class ASTConstantDefinition extends AbstractASTNode
      *
      * @param int $modifiers The declared modifiers for this node.
      *
+     * @throws InvalidArgumentException If the given modifier contains unexpected values.
+     *
      * @return void
-     * @throws \InvalidArgumentException If the given modifier contains unexpected values.
      */
     public function setModifiers($modifiers)
     {
         $expected = ~State::IS_PUBLIC
             & ~State::IS_PROTECTED
-            & ~State::IS_PRIVATE;
+            & ~State::IS_PRIVATE
+            & ~State::IS_FINAL;
 
         if (($expected & $modifiers) !== 0) {
-            throw new \InvalidArgumentException(
-                'Invalid field modifiers given, allowed modifiers are '.
-                'IS_PUBLIC, IS_PROTECTED and IS_PRIVATE.'
+            throw new InvalidArgumentException(
+                'Invalid field modifiers given, allowed modifiers are ' .
+                'IS_PUBLIC, IS_PROTECTED, IS_PRIVATE and IS_FINAL.'
             );
         }
 
@@ -109,7 +112,7 @@ class ASTConstantDefinition extends AbstractASTNode
      */
     public function isPublic()
     {
-        return ($this->getModifiers() & State::IS_PUBLIC) === State::IS_PUBLIC;
+        return (($this->getModifiers() & State::IS_PUBLIC) === State::IS_PUBLIC);
     }
 
     /**
@@ -120,7 +123,7 @@ class ASTConstantDefinition extends AbstractASTNode
      */
     public function isProtected()
     {
-        return ($this->getModifiers() & State::IS_PROTECTED) === State::IS_PROTECTED;
+        return (($this->getModifiers() & State::IS_PROTECTED) === State::IS_PROTECTED);
     }
 
     /**
@@ -131,16 +134,13 @@ class ASTConstantDefinition extends AbstractASTNode
      */
     public function isPrivate()
     {
-        return ($this->getModifiers() & State::IS_PRIVATE) === State::IS_PRIVATE;
+        return (($this->getModifiers() & State::IS_PRIVATE) === State::IS_PRIVATE);
     }
 
     /**
      * Accept method of the visitor design pattern. This method will be called
      * by a visitor during tree traversal.
      *
-     * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor
-     * @param mixed $data
-     * @return mixed
      * @since 0.9.12
      */
     public function accept(ASTVisitor $visitor, $data = null)
@@ -148,12 +148,14 @@ class ASTConstantDefinition extends AbstractASTNode
         return $visitor->visitConstantDefinition($this, $data);
     }
 
+
     /**
      * Returns the total number of the used property bag.
      *
      * @return int
+     *
      * @since  0.10.4
-     * @see    \PDepend\Source\AST\ASTNode#getMetadataSize()
+     * @see    ASTNode#getMetadataSize()
      */
     protected function getMetadataSize()
     {

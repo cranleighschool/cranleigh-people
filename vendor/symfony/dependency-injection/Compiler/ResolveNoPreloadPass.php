@@ -24,13 +24,7 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
 {
     private const DO_PRELOAD_TAG = '.container.do_preload';
 
-    private $tagName;
-    private $resolvedIds = [];
-
-    public function __construct(string $tagName = 'container.no_preload')
-    {
-        $this->tagName = $tagName;
-    }
+    private array $resolvedIds = [];
 
     /**
      * {@inheritdoc}
@@ -41,14 +35,14 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
 
         try {
             foreach ($container->getDefinitions() as $id => $definition) {
-                if ($definition->isPublic() && ! $definition->isPrivate() && ! isset($this->resolvedIds[$id])) {
+                if ($definition->isPublic() && !$definition->isPrivate() && !isset($this->resolvedIds[$id])) {
                     $this->resolvedIds[$id] = true;
                     $this->processValue($definition, true);
                 }
             }
 
             foreach ($container->getAliases() as $alias) {
-                if ($alias->isPublic() && ! $alias->isPrivate() && ! isset($this->resolvedIds[$id = (string) $alias]) && $container->hasDefinition($id)) {
+                if ($alias->isPublic() && !$alias->isPrivate() && !isset($this->resolvedIds[$id = (string) $alias]) && $container->hasDefinition($id)) {
                     $this->resolvedIds[$id] = true;
                     $this->processValue($container->getDefinition($id), true);
                 }
@@ -61,8 +55,8 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
         foreach ($container->getDefinitions() as $definition) {
             if ($definition->hasTag(self::DO_PRELOAD_TAG)) {
                 $definition->clearTag(self::DO_PRELOAD_TAG);
-            } elseif (! $definition->isDeprecated() && ! $definition->hasErrors()) {
-                $definition->addTag($this->tagName);
+            } elseif (!$definition->isDeprecated() && !$definition->hasErrors()) {
+                $definition->addTag('container.no_preload');
             }
         }
     }
@@ -70,12 +64,12 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
     /**
      * {@inheritdoc}
      */
-    protected function processValue($value, bool $isRoot = false)
+    protected function processValue(mixed $value, bool $isRoot = false): mixed
     {
         if ($value instanceof Reference && ContainerBuilder::IGNORE_ON_UNINITIALIZED_REFERENCE !== $value->getInvalidBehavior() && $this->container->hasDefinition($id = (string) $value)) {
             $definition = $this->container->getDefinition($id);
 
-            if (! isset($this->resolvedIds[$id]) && (! $definition->isPublic() || $definition->isPrivate())) {
+            if (!isset($this->resolvedIds[$id]) && (!$definition->isPublic() || $definition->isPrivate())) {
                 $this->resolvedIds[$id] = true;
                 $this->processValue($definition, true);
             }
@@ -83,11 +77,11 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
             return $value;
         }
 
-        if (! $value instanceof Definition) {
+        if (!$value instanceof Definition) {
             return parent::processValue($value, $isRoot);
         }
 
-        if ($value->hasTag($this->tagName) || $value->isDeprecated() || $value->hasErrors()) {
+        if ($value->hasTag('container.no_preload') || $value->isDeprecated() || $value->hasErrors()) {
             return $value;
         }
 

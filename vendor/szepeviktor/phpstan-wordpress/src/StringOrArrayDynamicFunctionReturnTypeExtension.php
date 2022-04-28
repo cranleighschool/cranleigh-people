@@ -6,14 +6,14 @@
 
 declare(strict_types=1);
 
-namespace PHPStan\WordPress;
+namespace SzepeViktor\PHPStan\WordPress;
 
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Type;
 
 class StringOrArrayDynamicFunctionReturnTypeExtension implements \PHPStan\Type\DynamicFunctionReturnTypeExtension
@@ -39,10 +39,8 @@ class StringOrArrayDynamicFunctionReturnTypeExtension implements \PHPStan\Type\D
         if ($dataArgType instanceof ArrayType) {
             $keyType = $dataArgType->getIterableKeyType();
             $itemType = $dataArgType->getIterableValueType();
-
             return new ArrayType($keyType, $itemType);
         }
-
         return new StringType();
     }
 }

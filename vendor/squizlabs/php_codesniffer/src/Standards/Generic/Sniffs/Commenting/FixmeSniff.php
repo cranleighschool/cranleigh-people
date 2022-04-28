@@ -16,6 +16,7 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class FixmeSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -26,6 +27,7 @@ class FixmeSniff implements Sniff
         'JS',
     ];
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -34,9 +36,9 @@ class FixmeSniff implements Sniff
     public function register()
     {
         return array_diff(Tokens::$commentTokens, Tokens::$phpcsCommentTokens);
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -57,19 +59,20 @@ class FixmeSniff implements Sniff
         if (empty($matches) === false) {
             // Clear whitespace and some common characters not required at
             // the end of a fixme message to make the error more informative.
-            $type = 'CommentFound';
+            $type         = 'CommentFound';
             $fixmeMessage = trim($matches[1]);
             $fixmeMessage = trim($fixmeMessage, '-:[](). ');
-            $error = 'Comment refers to a FIXME task';
-            $data = [$fixmeMessage];
+            $error        = 'Comment refers to a FIXME task';
+            $data         = [$fixmeMessage];
             if ($fixmeMessage !== '') {
-                $type = 'TaskFound';
+                $type   = 'TaskFound';
                 $error .= ' "%s"';
             }
 
             $phpcsFile->addError($error, $stackPtr, $type, $data);
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

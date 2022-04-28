@@ -14,6 +14,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ForbiddenStylesSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -50,16 +51,17 @@ class ForbiddenStylesSniff implements Sniff
     /**
      * If true, forbidden styles will be considered regular expressions.
      *
-     * @var bool
+     * @var boolean
      */
     protected $patternMatch = false;
 
     /**
      * If true, an error will be thrown; otherwise a warning.
      *
-     * @var bool
+     * @var boolean
      */
     public $error = true;
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -77,9 +79,9 @@ class ForbiddenStylesSniff implements Sniff
         }
 
         return [T_STYLE];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -92,12 +94,12 @@ class ForbiddenStylesSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens = $phpcsFile->getTokens();
-        $style = strtolower($tokens[$stackPtr]['content']);
+        $tokens  = $phpcsFile->getTokens();
+        $style   = strtolower($tokens[$stackPtr]['content']);
         $pattern = null;
 
         if ($this->patternMatch === true) {
-            $count = 0;
+            $count   = 0;
             $pattern = preg_replace(
                 $this->forbiddenStyleNames,
                 $this->forbiddenStyleNames,
@@ -119,9 +121,9 @@ class ForbiddenStylesSniff implements Sniff
         }//end if
 
         $this->addError($phpcsFile, $stackPtr, $style, $pattern);
-    }
 
-    //end process()
+    }//end process()
+
 
     /**
      * Generates the error or warning for this sniff.
@@ -134,15 +136,15 @@ class ForbiddenStylesSniff implements Sniff
      *
      * @return void
      */
-    protected function addError($phpcsFile, $stackPtr, $style, $pattern = null)
+    protected function addError($phpcsFile, $stackPtr, $style, $pattern=null)
     {
-        $data = [$style];
+        $data  = [$style];
         $error = 'The use of style %s is ';
         if ($this->error === true) {
-            $type = 'Found';
+            $type   = 'Found';
             $error .= 'forbidden';
         } else {
-            $type = 'Discouraged';
+            $type   = 'Discouraged';
             $error .= 'discouraged';
         }
 
@@ -168,7 +170,8 @@ class ForbiddenStylesSniff implements Sniff
                 $phpcsFile->addWarning($error, $stackPtr, $type, $data);
             }
         }
-    }
 
-    //end addError()
+    }//end addError()
+
+
 }//end class

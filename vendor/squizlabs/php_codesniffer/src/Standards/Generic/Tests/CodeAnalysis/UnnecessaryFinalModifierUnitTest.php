@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class UnnecessaryFinalModifierUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -24,9 +26,9 @@ class UnnecessaryFinalModifierUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -44,7 +46,8 @@ class UnnecessaryFinalModifierUnitTest extends AbstractSniffUnitTest
             15 => 1,
             18 => 1,
         ];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

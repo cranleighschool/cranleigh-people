@@ -17,6 +17,8 @@ use PHP_CodeSniffer\Config;
 
 class HTML extends Generator
 {
+
+
     /**
      * Generates the documentation for a standard.
      *
@@ -42,9 +44,9 @@ class HTML extends Generator
         ob_end_clean();
 
         echo $content;
-    }
 
-    //end generate()
+    }//end generate()
+
 
     /**
      * Print the header of the HTML page.
@@ -126,9 +128,9 @@ class HTML extends Generator
         echo ' </head>'.PHP_EOL;
         echo ' <body>'.PHP_EOL;
         echo "  <h1>$standard Coding Standards</h1>".PHP_EOL;
-    }
 
-    //end printHeader()
+    }//end printHeader()
+
 
     /**
      * Print the table of contents for the standard.
@@ -146,14 +148,14 @@ class HTML extends Generator
             $doc = new \DOMDocument();
             $doc->load($file);
             $documentation = $doc->getElementsByTagName('documentation')->item(0);
-            $title = $this->getTitle($documentation);
+            $title         = $this->getTitle($documentation);
             echo '   <li><a href="#'.str_replace(' ', '-', $title)."\">$title</a></li>".PHP_EOL;
         }
 
         echo '  </ul>'.PHP_EOL;
-    }
 
-    //end printToc()
+    }//end printToc()
+
 
     /**
      * Print the footer of the HTML page.
@@ -173,9 +175,9 @@ class HTML extends Generator
 
         echo ' </body>'.PHP_EOL;
         echo '</html>'.PHP_EOL;
-    }
 
-    //end printFooter()
+    }//end printFooter()
+
 
     /**
      * Process the documentation for a single sniff.
@@ -195,13 +197,13 @@ class HTML extends Generator
         foreach ($doc->childNodes as $node) {
             if ($node->nodeName === 'standard') {
                 $this->printTextBlock($node);
-            } elseif ($node->nodeName === 'code_comparison') {
+            } else if ($node->nodeName === 'code_comparison') {
                 $this->printCodeComparisonBlock($node);
             }
         }
-    }
 
-    //end processSniff()
+    }//end processSniff()
+
 
     /**
      * Print a text block found in a standard.
@@ -220,9 +222,9 @@ class HTML extends Generator
         $content = str_replace('&lt;/em&gt;', '</em>', $content);
 
         echo "  <p class=\"text\">$content</p>".PHP_EOL;
-    }
 
-    //end printTextBlock()
+    }//end printTextBlock()
+
 
     /**
      * Print a code comparison block found in a standard.
@@ -236,20 +238,20 @@ class HTML extends Generator
         $codeBlocks = $node->getElementsByTagName('code');
 
         $firstTitle = $codeBlocks->item(0)->getAttribute('title');
-        $first = trim($codeBlocks->item(0)->nodeValue);
-        $first = str_replace('<?php', '&lt;?php', $first);
-        $first = str_replace("\n", '</br>', $first);
-        $first = str_replace(' ', '&nbsp;', $first);
-        $first = str_replace('<em>', '<span class="code-comparison-highlight">', $first);
-        $first = str_replace('</em>', '</span>', $first);
+        $first      = trim($codeBlocks->item(0)->nodeValue);
+        $first      = str_replace('<?php', '&lt;?php', $first);
+        $first      = str_replace("\n", '</br>', $first);
+        $first      = str_replace(' ', '&nbsp;', $first);
+        $first      = str_replace('<em>', '<span class="code-comparison-highlight">', $first);
+        $first      = str_replace('</em>', '</span>', $first);
 
         $secondTitle = $codeBlocks->item(1)->getAttribute('title');
-        $second = trim($codeBlocks->item(1)->nodeValue);
-        $second = str_replace('<?php', '&lt;?php', $second);
-        $second = str_replace("\n", '</br>', $second);
-        $second = str_replace(' ', '&nbsp;', $second);
-        $second = str_replace('<em>', '<span class="code-comparison-highlight">', $second);
-        $second = str_replace('</em>', '</span>', $second);
+        $second      = trim($codeBlocks->item(1)->nodeValue);
+        $second      = str_replace('<?php', '&lt;?php', $second);
+        $second      = str_replace("\n", '</br>', $second);
+        $second      = str_replace(' ', '&nbsp;', $second);
+        $second      = str_replace('<em>', '<span class="code-comparison-highlight">', $second);
+        $second      = str_replace('</em>', '</span>', $second);
 
         echo '  <table class="code-comparison">'.PHP_EOL;
         echo '   <tr>'.PHP_EOL;
@@ -261,7 +263,8 @@ class HTML extends Generator
         echo "    <td class=\"code-comparison-code\">$second</td>".PHP_EOL;
         echo '   </tr>'.PHP_EOL;
         echo '  </table>'.PHP_EOL;
-    }
 
-    //end printCodeComparisonBlock()
+    }//end printCodeComparisonBlock()
+
+
 }//end class

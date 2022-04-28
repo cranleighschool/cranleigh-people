@@ -32,7 +32,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      *
      * @var array(string)
      */
-    protected $images = [];
+    protected $images = array();
 
     /**
      * This method checks that all local variables within the given function or
@@ -43,14 +43,14 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      */
     public function apply(AbstractNode $node)
     {
-        $this->images = [];
+        $this->images = array();
 
         /** @var $node AbstractCallableNode */
         $this->collectVariables($node);
         $this->removeParameters($node);
 
         foreach ($this->images as $nodes) {
-            if (! $this->containsUsages($nodes)) {
+            if (!$this->containsUsages($nodes)) {
                 $this->doCheckNodeImage($nodes[0]);
             }
         }
@@ -72,7 +72,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
         foreach ($nodes as $node) {
             $parent = $node->getParent();
 
-            if (! $parent->isInstanceOf('AssignmentExpression')) {
+            if (!$parent->isInstanceOf('AssignmentExpression')) {
                 return true;
             }
 
@@ -101,7 +101,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
         $declarators = $parameters->findChildrenOfType('VariableDeclarator');
 
         foreach ($declarators as $declarator) {
-            unset($this->images[$declarator->getImage()]);
+            unset($this->images[$this->getVariableImage($declarator)]);
         }
     }
 
@@ -116,8 +116,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      */
     protected function collectVariables(AbstractCallableNode $node)
     {
-        foreach ($node->findChildrenOfType('Variable') as $variable) {
-            /** @var $variable ASTNode */
+        foreach ($node->findChildrenOfTypeVariable() as $variable) {
             if ($this->isLocal($variable)) {
                 $this->collectVariable($variable);
             }
@@ -156,8 +155,8 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
             $variablePrefix = $node->getImage();
 
             foreach ($node->findChildrenOfType('Expression') as $child) {
-                $variableName = $child->getImage();
-                $variableImage = $variablePrefix.$variableName;
+                $variableName = $this->getVariableImage($child);
+                $variableImage = $variablePrefix . $variableName;
 
                 $this->storeImage($variableImage, $node);
             }
@@ -172,8 +171,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      */
     protected function collectVariable(ASTNode $node)
     {
-        $imageName = $node->getImage();
-        $this->storeImage($imageName, $node);
+        $this->storeImage($this->getVariableImage($node), $node);
     }
 
     /**
@@ -185,8 +183,8 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      */
     protected function storeImage($imageName, ASTNode $node)
     {
-        if (! isset($this->images[$imageName])) {
-            $this->images[$imageName] = [];
+        if (!isset($this->images[$imageName])) {
+            $this->images[$imageName] = array();
         }
 
         $this->images[$imageName][] = $node;
@@ -200,10 +198,10 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      */
     protected function collectLiteral(ASTNode $node)
     {
-        $variable = '$'.trim($node->getImage(), '\'');
+        $variable = '$' . trim($node->getImage(), '\'"');
 
-        if (! isset($this->images[$variable])) {
-            $this->images[$variable] = [];
+        if (!isset($this->images[$variable])) {
+            $this->images[$variable] = array();
         }
 
         $this->images[$variable][] = $node;
@@ -225,7 +223,9 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
             return;
         }
 
-        if (in_array(substr($node->getImage(), 1), $this->getExceptionsList())) {
+        $image = $this->getVariableImage($node);
+
+        if (substr($image, 0, 2) === '::' || in_array(substr($image, 1), $this->getExceptionsList())) {
             return;
         }
 
@@ -236,7 +236,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
             return;
         }
 
-        $this->addViolation($node, [$node->getImage()]);
+        $this->addViolation($node, array($image));
     }
 
     /**
@@ -245,7 +245,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      * variable names in catch-statements.
      *
      * @param \PHPMD\AbstractNode $node
-     * @return bool
+     * @return boolean
      */
     protected function isNameAllowedInContext(AbstractNode $node)
     {
@@ -264,7 +264,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
     {
         $isForeachVariable = $this->isChildOf($variable, 'ForeachStatement');
 
-        if (! $isForeachVariable) {
+        if (!$isForeachVariable) {
             return false;
         }
 
@@ -277,7 +277,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
      *
      * @param \PHPMD\AbstractNode $node
      * @param string $type
-     * @return bool
+     * @return boolean
      */
     protected function isChildOf(AbstractNode $node, $type)
     {
@@ -287,7 +287,7 @@ class UnusedLocalVariable extends AbstractLocalVariable implements FunctionAware
     }
 
     /**
-     * Gets array of exceptions from property.
+     * Gets array of exceptions from property
      *
      * @return array
      */

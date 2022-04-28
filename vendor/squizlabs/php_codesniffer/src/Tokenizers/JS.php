@@ -15,6 +15,7 @@ use PHP_CodeSniffer\Util;
 
 class JS extends Tokenizer
 {
+
     /**
      * A list of tokens that are allowed to open a scope.
      *
@@ -244,6 +245,7 @@ class JS extends Tokenizer
         '/**' => '*/',
     ];
 
+
     /**
      * Initialise the tokenizer.
      *
@@ -256,16 +258,16 @@ class JS extends Tokenizer
      * @return void
      * @throws \PHP_CodeSniffer\Exceptions\TokenizerException If the file appears to be minified.
      */
-    public function __construct($content, Config $config, $eolChar = '\n')
+    public function __construct($content, Config $config, $eolChar='\n')
     {
         if ($this->isMinifiedContent($content, $eolChar) === true) {
             throw new TokenizerException('File appears to be minified and cannot be processed');
         }
 
         parent::__construct($content, $config, $eolChar);
-    }
 
-    //end __construct()
+    }//end __construct()
+
 
     /**
      * Creates an array of tokens when given some JS code.
@@ -287,13 +289,13 @@ class JS extends Tokenizer
             }
         }
 
-        $tokens = [];
-        $inString = '';
-        $stringChar = null;
-        $inComment = '';
-        $buffer = '';
+        $tokens          = [];
+        $inString        = '';
+        $stringChar      = null;
+        $inComment       = '';
+        $buffer          = '';
         $preStringBuffer = '';
-        $cleanBuffer = false;
+        $cleanBuffer     = false;
 
         $commentTokenizer = new Comment();
 
@@ -307,13 +309,13 @@ class JS extends Tokenizer
         // processing. We will change them back later.
         $string = str_replace($this->eolChar, "\n", $string);
 
-        $chars = str_split($string);
+        $chars    = str_split($string);
         $numChars = count($chars);
         for ($i = 0; $i < $numChars; $i++) {
             $char = $chars[$i];
 
             if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                $content = Util\Common::prepareForOutput($char);
+                $content       = Util\Common::prepareForOutput($char);
                 $bufferContent = Util\Common::prepareForOutput($buffer);
 
                 if ($inString !== '') {
@@ -396,15 +398,15 @@ class JS extends Tokenizer
                             echo "\t=> Added token T_CONSTANT_ENCAPSED_STRING ($content)".PHP_EOL;
                         }
 
-                        $buffer = '';
+                        $buffer          = '';
                         $preStringBuffer = '';
-                        $inString = '';
-                        $stringChar = null;
+                        $inString        = '';
+                        $stringChar      = null;
                         continue;
                     }//end if
-                } elseif ($inString === '') {
-                    $inString = $char;
-                    $stringChar = $i;
+                } else if ($inString === '') {
+                    $inString        = $char;
+                    $stringChar      = $i;
                     $preStringBuffer = $buffer;
 
                     if (PHP_CODESNIFFER_VERBOSITY > 1) {
@@ -418,12 +420,12 @@ class JS extends Tokenizer
                 // end before the end of the line, which means it probably
                 // wasn't a string at all (maybe a regex).
                 if ($chars[($i - 1)] !== '\\') {
-                    $i = $stringChar;
+                    $i      = $stringChar;
                     $buffer = $preStringBuffer;
                     $preStringBuffer = '';
-                    $inString = '';
-                    $stringChar = null;
-                    $char = $chars[$i];
+                    $inString        = '';
+                    $stringChar      = null;
+                    $char            = $chars[$i];
 
                     if (PHP_CODESNIFFER_VERBOSITY > 1) {
                         echo "\t\t* found newline before end of string, bailing *".PHP_EOL;
@@ -456,8 +458,8 @@ class JS extends Tokenizer
                         echo "\t=> Added token T_REGULAR_EXPRESSION ($content)".PHP_EOL;
                     }
 
-                    $i = $regex['end'];
-                    $buffer = '';
+                    $i           = $regex['end'];
+                    $buffer      = '';
                     $cleanBuffer = false;
                     continue;
                 }//end if
@@ -470,7 +472,7 @@ class JS extends Tokenizer
                 || isset($chars[($i + 1)]) === false
                 || preg_match('|[a-zA-z0-9_]|', $chars[($i + 1)]) === 0)
             ) {
-                $matchedToken = false;
+                $matchedToken    = false;
                 $lookAheadLength = ($maxTokenLength - strlen($buffer));
 
                 if ($lookAheadLength > 0) {
@@ -547,7 +549,7 @@ class JS extends Tokenizer
 
                     $cleanBuffer = true;
                 }//end if
-            } elseif (isset($this->tokenValues[strtolower($char)]) === true) {
+            } else if (isset($this->tokenValues[strtolower($char)]) === true) {
                 // No matter what token we end up using, we don't
                 // need the content in the buffer any more because we have
                 // found a valid token.
@@ -572,7 +574,7 @@ class JS extends Tokenizer
                 // The char is a token type, but we need to look ahead at the
                 // next chars to see if this is actually part of a larger token.
                 // For example, = and ===.
-                $charBuffer = $char;
+                $charBuffer   = $char;
                 $matchedToken = false;
                 for ($x = 1; $x <= $maxTokenLength; $x++) {
                     if (isset($chars[($i + $x)]) === false) {
@@ -600,7 +602,7 @@ class JS extends Tokenizer
                 }//end for
 
                 if ($matchedToken === false) {
-                    $value = $this->tokenValues[strtolower($char)];
+                    $value    = $this->tokenValues[strtolower($char)];
                     $tokens[] = [
                         'code'    => constant($value),
                         'type'    => $value,
@@ -626,19 +628,19 @@ class JS extends Tokenizer
                 // This is not really a comment if the content
                 // looks like \// (i.e., it is escaped).
                 if (isset($chars[($i - 2)]) === true && $chars[($i - 2)] === '\\') {
-                    $lastToken = array_pop($tokens);
+                    $lastToken   = array_pop($tokens);
                     $lastContent = $lastToken['content'];
                     if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                        $value = $this->tokenValues[strtolower($lastContent)];
+                        $value   = $this->tokenValues[strtolower($lastContent)];
                         $content = Util\Common::prepareForOutput($lastContent);
                         echo "\t=> Removed token $value ($content)".PHP_EOL;
                     }
 
-                    $lastChars = str_split($lastContent);
+                    $lastChars    = str_split($lastContent);
                     $lastNumChars = count($lastChars);
                     for ($x = 0; $x < $lastNumChars; $x++) {
                         $lastChar = $lastChars[$x];
-                        $value = $this->tokenValues[strtolower($lastChar)];
+                        $value    = $this->tokenValues[strtolower($lastChar)];
                         $tokens[] = [
                             'code'    => constant($value),
                             'type'    => $value,
@@ -658,7 +660,7 @@ class JS extends Tokenizer
                         echo "\t\t* looking for end of comment *".PHP_EOL;
                     }
                 }//end if
-            } elseif ($inComment !== '') {
+            } else if ($inComment !== '') {
                 if ($this->commentTokens[$inComment] === null) {
                     // Comment ends at the next newline.
                     if (strpos($buffer, "\n") !== false) {
@@ -693,7 +695,7 @@ class JS extends Tokenizer
             }//end if
 
             if ($cleanBuffer === true) {
-                $buffer = '';
+                $buffer      = '';
                 $cleanBuffer = false;
             }
         }//end for
@@ -741,7 +743,7 @@ class JS extends Tokenizer
 
         $finalTokens = [];
         $newStackPtr = 0;
-        $numTokens = count($tokens);
+        $numTokens   = count($tokens);
         for ($stackPtr = 0; $stackPtr < $numTokens; $stackPtr++) {
             $token = $tokens[$stackPtr];
 
@@ -750,7 +752,7 @@ class JS extends Tokenizer
             */
 
             if ($token['code'] === T_COMMENT || $token['code'] === T_DOC_COMMENT) {
-                $newContent = '';
+                $newContent   = '';
                 $tokenContent = $token['content'];
 
                 $endContent = null;
@@ -819,7 +821,7 @@ class JS extends Tokenizer
 
             if (strpos($token['content'], $this->eolChar) !== false) {
                 $tokenLines = explode($this->eolChar, $token['content']);
-                $numLines = count($tokenLines);
+                $numLines   = count($tokenLines);
 
                 for ($i = 0; $i < $numLines; $i++) {
                     $newToken = ['content' => $tokenLines[$i]];
@@ -831,8 +833,8 @@ class JS extends Tokenizer
                         $newToken['content'] .= $this->eolChar;
                     }
 
-                    $newToken['type'] = $token['type'];
-                    $newToken['code'] = $token['code'];
+                    $newToken['type']          = $token['type'];
+                    $newToken['code']          = $token['code'];
                     $finalTokens[$newStackPtr] = $newToken;
                     $newStackPtr++;
                 }
@@ -845,7 +847,7 @@ class JS extends Tokenizer
             if ($token['code'] === T_STRING
                 || $token['code'] === T_OBJECT_OPERATOR
             ) {
-                $newContent = '';
+                $newContent  = '';
                 $oldStackPtr = $stackPtr;
                 while (preg_match('|^[0-9\.]+$|', $tokens[$stackPtr]['content']) !== 0) {
                     $newContent .= $tokens[$stackPtr]['content'];
@@ -894,9 +896,9 @@ class JS extends Tokenizer
         }
 
         return $finalTokens;
-    }
 
-    //end tokenize()
+    }//end tokenize()
+
 
     /**
      * Tokenizes a regular expression if one is found.
@@ -968,7 +970,7 @@ class JS extends Tokenizer
                 if ($chars[($next - 1)] !== '\\') {
                     // In the simple form: /.../ so we found the end.
                     break;
-                } elseif ($chars[($next - 2)] === '\\') {
+                } else if ($chars[($next - 2)] === '\\') {
                     // In the form: /...\\/ so we found the end.
                     break;
                 }
@@ -1036,9 +1038,9 @@ class JS extends Tokenizer
         ];
 
         return $token;
-    }
 
-    //end getRegexToken()
+    }//end getRegexToken()
+
 
     /**
      * Performs additional processing after main tokenizing.
@@ -1053,12 +1055,12 @@ class JS extends Tokenizer
             echo "\t*** START ADDITIONAL JS PROCESSING ***".PHP_EOL;
         }
 
-        $numTokens = count($this->tokens);
+        $numTokens  = count($this->tokens);
         $classStack = [];
 
         for ($i = 0; $i < $numTokens; $i++) {
             if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                $type = $this->tokens[$i]['type'];
+                $type    = $this->tokens[$i]['type'];
                 $content = Util\Common::prepareForOutput($this->tokens[$i]['content']);
 
                 echo str_repeat("\t", count($classStack));
@@ -1097,7 +1099,7 @@ class JS extends Tokenizer
                 }//end if
 
                 continue;
-            } elseif ($this->tokens[$i]['code'] === T_OPEN_CURLY_BRACKET
+            } else if ($this->tokens[$i]['code'] === T_OPEN_CURLY_BRACKET
                 && isset($this->tokens[$i]['scope_condition']) === false
                 && isset($this->tokens[$i]['bracket_closer']) === true
             ) {
@@ -1135,12 +1137,12 @@ class JS extends Tokenizer
                             $this->tokens[$name]['type'] = 'T_FUNCTION';
 
                             foreach ([$name, $i, $closer] as $token) {
-                                $this->tokens[$token]['scope_condition'] = $name;
-                                $this->tokens[$token]['scope_opener'] = $i;
-                                $this->tokens[$token]['scope_closer'] = $closer;
+                                $this->tokens[$token]['scope_condition']    = $name;
+                                $this->tokens[$token]['scope_opener']       = $i;
+                                $this->tokens[$token]['scope_closer']       = $closer;
                                 $this->tokens[$token]['parenthesis_opener'] = $parenOpener;
                                 $this->tokens[$token]['parenthesis_closer'] = $parenCloser;
-                                $this->tokens[$token]['parenthesis_owner'] = $name;
+                                $this->tokens[$token]['parenthesis_owner']  = $name;
                             }
 
                             $this->tokens[$parenOpener]['parenthesis_owner'] = $name;
@@ -1164,8 +1166,8 @@ class JS extends Tokenizer
                 $classStack[] = $i;
 
                 $closer = $this->tokens[$i]['bracket_closer'];
-                $this->tokens[$i]['code'] = T_OBJECT;
-                $this->tokens[$i]['type'] = 'T_OBJECT';
+                $this->tokens[$i]['code']      = T_OBJECT;
+                $this->tokens[$i]['type']      = 'T_OBJECT';
                 $this->tokens[$closer]['code'] = T_CLOSE_OBJECT;
                 $this->tokens[$closer]['type'] = 'T_CLOSE_OBJECT';
 
@@ -1185,9 +1187,9 @@ class JS extends Tokenizer
                         echo "\t\t* added T_OBJECT condition to $x ($type) *".PHP_EOL;
                     }
                 }
-            } elseif ($this->tokens[$i]['code'] === T_CLOSE_OBJECT) {
+            } else if ($this->tokens[$i]['code'] === T_CLOSE_OBJECT) {
                 $opener = array_pop($classStack);
-            } elseif ($this->tokens[$i]['code'] === T_COLON) {
+            } else if ($this->tokens[$i]['code'] === T_COLON) {
                 // If it is a scope opener, it belongs to a
                 // DEFAULT or CASE statement.
                 if (isset($this->tokens[$i]['scope_condition']) === true) {
@@ -1205,8 +1207,8 @@ class JS extends Tokenizer
                             echo "\t* token $i converted from T_COLON to T_INLINE_THEN *".PHP_EOL;
                         }
 
-                        continue 2;
-                    } elseif ($this->tokens[$x]['line'] < $this->tokens[$i]['line']) {
+                        continue(2);
+                    } else if ($this->tokens[$x]['line'] < $this->tokens[$i]['line']) {
                         break;
                     }
                 }
@@ -1247,7 +1249,8 @@ class JS extends Tokenizer
         if (PHP_CODESNIFFER_VERBOSITY > 1) {
             echo "\t*** END ADDITIONAL JS PROCESSING ***".PHP_EOL;
         }
-    }
 
-    //end processAdditional()
+    }//end processAdditional()
+
+
 }//end class

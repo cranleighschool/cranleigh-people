@@ -27,11 +27,11 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
  */
 class ResolveChildDefinitionsPass extends AbstractRecursivePass
 {
-    private $currentPath;
+    private array $currentPath;
 
-    protected function processValue($value, bool $isRoot = false)
+    protected function processValue(mixed $value, bool $isRoot = false): mixed
     {
-        if (! $value instanceof Definition) {
+        if (!$value instanceof Definition) {
             return parent::processValue($value, $isRoot);
         }
         if ($isRoot) {
@@ -72,7 +72,7 @@ class ResolveChildDefinitionsPass extends AbstractRecursivePass
 
     private function doResolveDefinition(ChildDefinition $definition): Definition
     {
-        if (! $this->container->has($parent = $definition->getParent())) {
+        if (!$this->container->has($parent = $definition->getParent())) {
             throw new RuntimeException(sprintf('Parent definition "%s" does not exist.', $parent));
         }
 
@@ -115,6 +115,8 @@ class ResolveChildDefinitionsPass extends AbstractRecursivePass
 
         $def->setBindings($definition->getBindings() + $parentDef->getBindings());
 
+        $def->setSynthetic($definition->isSynthetic());
+
         // overwrite with values specified in the decorator
         $changes = $definition->getChanges();
         if (isset($changes['class'])) {
@@ -137,13 +139,9 @@ class ResolveChildDefinitionsPass extends AbstractRecursivePass
         if (isset($changes['lazy'])) {
             $def->setLazy($definition->isLazy());
         }
-        if (isset($changes['deprecated'])) {
-            if ($definition->isDeprecated()) {
-                $deprecation = $definition->getDeprecation('%service_id%');
-                $def->setDeprecated($deprecation['package'], $deprecation['version'], $deprecation['message']);
-            } else {
-                $def->setDeprecated(false);
-            }
+        if (isset($changes['deprecated']) && $definition->isDeprecated()) {
+            $deprecation = $definition->getDeprecation('%service_id%');
+            $def->setDeprecated($deprecation['package'], $deprecation['version'], $deprecation['message']);
         }
         if (isset($changes['autowired'])) {
             $def->setAutowired($definition->isAutowired());
@@ -164,7 +162,7 @@ class ResolveChildDefinitionsPass extends AbstractRecursivePass
         foreach ($definition->getArguments() as $k => $v) {
             if (is_numeric($k)) {
                 $def->addArgument($v);
-            } elseif (0 === strpos($k, 'index_')) {
+            } elseif (str_starts_with($k, 'index_')) {
                 $def->replaceArgument((int) substr($k, \strlen('index_')), $v);
             } else {
                 $def->setArgument($k, $v);

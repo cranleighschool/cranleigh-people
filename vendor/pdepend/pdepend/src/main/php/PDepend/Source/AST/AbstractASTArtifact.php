@@ -81,7 +81,7 @@ abstract class AbstractASTArtifact implements ASTArtifact
     /**
      * The source file for this item.
      *
-     * @var \PDepend\Source\AST\ASTCompilationUnit|null
+     * @var ASTCompilationUnit|null
      */
     protected $compilationUnit = null;
 
@@ -128,12 +128,15 @@ abstract class AbstractASTArtifact implements ASTArtifact
      * @param string $name The item name.
      *
      * @return void
+     *
      * @since  1.0.0
      */
     public function setName($name)
     {
         $this->name = $name;
     }
+
+
 
     /**
      * Returns a id for this code node.
@@ -145,15 +148,16 @@ abstract class AbstractASTArtifact implements ASTArtifact
         if ($this->id === null) {
             $this->id = md5(uniqid('', true));
         }
-
         return $this->id;
     }
 
     /**
      * Sets the unique identifier for this node instance.
      *
-     * @param  string $id Identifier for this node.
+     * @param string $id Identifier for this node.
+     *
      * @return void
+     *
      * @since  0.9.12
      */
     public function setId($id)
@@ -164,7 +168,7 @@ abstract class AbstractASTArtifact implements ASTArtifact
     /**
      * Returns the source file for this item.
      *
-     * @return \PDepend\Source\AST\ASTCompilationUnit|null
+     * @return ASTCompilationUnit|null
      */
     public function getCompilationUnit()
     {
@@ -174,7 +178,6 @@ abstract class AbstractASTArtifact implements ASTArtifact
     /**
      * Sets the source file for this item.
      *
-     * @param  \PDepend\Source\AST\ASTCompilationUnit $compilationUnit
      * @return void
      */
     public function setCompilationUnit(ASTCompilationUnit $compilationUnit)
@@ -188,7 +191,7 @@ abstract class AbstractASTArtifact implements ASTArtifact
      * Returns a doc comment for this node or <b>null</b> when no comment was
      * found.
      *
-     * @return string
+     * @return string|null
      */
     public function getComment()
     {
@@ -199,6 +202,7 @@ abstract class AbstractASTArtifact implements ASTArtifact
      * Sets the raw doc comment for this node.
      *
      * @param string $comment
+     *
      * @return void
      */
     public function setComment($comment)
@@ -232,6 +236,7 @@ abstract class AbstractASTArtifact implements ASTArtifact
      * Returns the doc comment for this item or <b>null</b>.
      *
      * @return string
+     *
      * @deprecated Use getComment() inherit from ASTNode instead.
      */
     public function getDocComment()
@@ -243,7 +248,9 @@ abstract class AbstractASTArtifact implements ASTArtifact
      * Sets the doc comment for this item.
      *
      * @param string $docComment
+     *
      * @return void
+     *
      * @deprecated Use setComment() inherit from ASTNode instead.
      */
     public function setDocComment($docComment)

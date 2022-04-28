@@ -36,7 +36,7 @@ abstract class AbstractNode extends \PHPMD\AbstractNode
      * instance.
      *
      * @param \PHPMD\Rule $rule
-     * @return bool
+     * @return boolean
      */
     public function hasSuppressWarningsAnnotationFor(Rule $rule)
     {

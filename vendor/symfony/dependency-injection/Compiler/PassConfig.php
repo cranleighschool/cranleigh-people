@@ -29,11 +29,11 @@ class PassConfig
     public const TYPE_REMOVE = 'removing';
 
     private $mergePass;
-    private $afterRemovingPasses = [];
-    private $beforeOptimizationPasses = [];
-    private $beforeRemovingPasses = [];
-    private $optimizationPasses;
-    private $removingPasses;
+    private array $afterRemovingPasses;
+    private array $beforeOptimizationPasses;
+    private array $beforeRemovingPasses = [];
+    private array $optimizationPasses;
+    private array $removingPasses;
 
     public function __construct()
     {
@@ -42,6 +42,8 @@ class PassConfig
         $this->beforeOptimizationPasses = [
             100 => [
                 new ResolveClassPass(),
+                new RegisterAutoconfigureAttributesPass(),
+                new AttributeAutoconfigurationPass(),
                 new ResolveInstanceofConditionalsPass(),
                 new RegisterEnvVarProcessorsPass(),
             ],
@@ -64,6 +66,7 @@ class PassConfig
             new DecoratorServicePass(),
             new CheckDefinitionValidityPass(),
             new AutowirePass(false),
+            new ServiceLocatorTagPass(),
             new ResolveTaggedIteratorArgumentPass(),
             new ResolveServiceSubscribersPass(),
             new ResolveReferencesToAliasesPass(),
@@ -98,7 +101,7 @@ class PassConfig
      *
      * @return CompilerPassInterface[]
      */
-    public function getPasses()
+    public function getPasses(): array
     {
         return array_merge(
             [$this->mergePass],
@@ -118,13 +121,13 @@ class PassConfig
     public function addPass(CompilerPassInterface $pass, string $type = self::TYPE_BEFORE_OPTIMIZATION, int $priority = 0)
     {
         $property = $type.'Passes';
-        if (! isset($this->$property)) {
+        if (!isset($this->$property)) {
             throw new InvalidArgumentException(sprintf('Invalid type "%s".', $type));
         }
 
         $passes = &$this->$property;
 
-        if (! isset($passes[$priority])) {
+        if (!isset($passes[$priority])) {
             $passes[$priority] = [];
         }
         $passes[$priority][] = $pass;
@@ -135,7 +138,7 @@ class PassConfig
      *
      * @return CompilerPassInterface[]
      */
-    public function getAfterRemovingPasses()
+    public function getAfterRemovingPasses(): array
     {
         return $this->sortPasses($this->afterRemovingPasses);
     }
@@ -145,7 +148,7 @@ class PassConfig
      *
      * @return CompilerPassInterface[]
      */
-    public function getBeforeOptimizationPasses()
+    public function getBeforeOptimizationPasses(): array
     {
         return $this->sortPasses($this->beforeOptimizationPasses);
     }
@@ -155,7 +158,7 @@ class PassConfig
      *
      * @return CompilerPassInterface[]
      */
-    public function getBeforeRemovingPasses()
+    public function getBeforeRemovingPasses(): array
     {
         return $this->sortPasses($this->beforeRemovingPasses);
     }
@@ -165,7 +168,7 @@ class PassConfig
      *
      * @return CompilerPassInterface[]
      */
-    public function getOptimizationPasses()
+    public function getOptimizationPasses(): array
     {
         return $this->sortPasses($this->optimizationPasses);
     }
@@ -175,17 +178,15 @@ class PassConfig
      *
      * @return CompilerPassInterface[]
      */
-    public function getRemovingPasses()
+    public function getRemovingPasses(): array
     {
         return $this->sortPasses($this->removingPasses);
     }
 
     /**
      * Gets the Merge pass.
-     *
-     * @return CompilerPassInterface
      */
-    public function getMergePass()
+    public function getMergePass(): CompilerPassInterface
     {
         return $this->mergePass;
     }

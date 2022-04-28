@@ -55,6 +55,7 @@ final class FileUtil
      * this method will return the system temp directory.
      *
      * @return string
+     *
      * @since  0.10.0
      */
     public static function getUserHomeDirOrSysTempDir()
@@ -82,15 +83,16 @@ final class FileUtil
      * Returns the home directory of the current user.
      *
      * @return string
+     *
      * @since  0.10.0
      */
     public static function getUserHomeDir()
     {
         $userHomeDir = getenv('HOME');
 
-        if (! $userHomeDir) {
+        if (!$userHomeDir) {
             // The HOME environment isn't always set on Windows, then we do a fallback to the HOMEDRIVE and HOMEPATH
-            $userHomeDir = getenv('HOMEDRIVE').getenv('HOMEPATH');
+            $userHomeDir = getenv('HOMEDRIVE') . getenv('HOMEPATH');
         }
 
         return $userHomeDir;

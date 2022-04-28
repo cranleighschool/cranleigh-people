@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class BlockCommentUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Get a list of CLI values to set before the file is tested.
      *
@@ -24,9 +26,9 @@ class BlockCommentUnitTest extends AbstractSniffUnitTest
     public function setCliValues($testFile, $config)
     {
         $config->tabWidth = 4;
-    }
 
-    //end setCliValues()
+    }//end setCliValues()
+
 
     /**
      * Returns the lines where errors should occur.
@@ -75,12 +77,14 @@ class BlockCommentUnitTest extends AbstractSniffUnitTest
             232 => 1,
             233 => 1,
             256 => 1,
+            271 => 1,
+            273 => 1,
         ];
 
         return $errors;
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -93,7 +97,8 @@ class BlockCommentUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

@@ -9,18 +9,20 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\Strings;
 
-use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 
 class JoinStringsSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['JS'];
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -30,15 +32,15 @@ class JoinStringsSniff implements Sniff
     public function register()
     {
         return [T_STRING];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
      *
      * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
-     * @param int                     $stackPtr  The position of the current token
+     * @param integer                     $stackPtr  The position of the current token
      *                                               in the stack passed in $tokens.
      *
      * @return void
@@ -67,7 +69,8 @@ class JoinStringsSniff implements Sniff
                 $phpcsFile->addError($error, $stackPtr, 'ArrayNotAllowed');
             }
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

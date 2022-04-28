@@ -6,19 +6,19 @@
 
 declare(strict_types=1);
 
-namespace PHPStan\WordPress;
+namespace SzepeViktor\PHPStan\WordPress;
 
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Type\Type;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
+use PHPStan\Type\NullType;
 use PHPStan\Type\TypeCombinator;
 
 class GetCommentDynamicFunctionReturnTypeExtension implements \PHPStan\Type\DynamicFunctionReturnTypeExtension

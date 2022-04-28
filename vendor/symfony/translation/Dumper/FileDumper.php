@@ -47,16 +47,16 @@ abstract class FileDumper implements DumperInterface
      */
     public function dump(MessageCatalogue $messages, array $options = [])
     {
-        if (! \array_key_exists('path', $options)) {
+        if (!\array_key_exists('path', $options)) {
             throw new InvalidArgumentException('The file dumper needs a path option.');
         }
 
         // save a file for each domain
         foreach ($messages->getDomains() as $domain) {
             $fullpath = $options['path'].'/'.$this->getRelativePath($domain, $messages->getLocale());
-            if (! file_exists($fullpath)) {
+            if (!file_exists($fullpath)) {
                 $directory = \dirname($fullpath);
-                if (! file_exists($directory) && ! @mkdir($directory, 0777, true)) {
+                if (!file_exists($directory) && !@mkdir($directory, 0777, true)) {
                     throw new RuntimeException(sprintf('Unable to create directory "%s".', $directory));
                 }
             }
@@ -86,17 +86,13 @@ abstract class FileDumper implements DumperInterface
 
     /**
      * Transforms a domain of a message catalogue to its string representation.
-     *
-     * @return string representation
      */
-    abstract public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []);
+    abstract public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string;
 
     /**
      * Gets the file extension of the dumper.
-     *
-     * @return string file extension
      */
-    abstract protected function getExtension();
+    abstract protected function getExtension(): string;
 
     /**
      * Gets the relative file path using the template.

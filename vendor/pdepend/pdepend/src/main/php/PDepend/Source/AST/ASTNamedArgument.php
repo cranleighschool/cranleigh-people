@@ -38,6 +38,7 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.8
  */
 
@@ -50,6 +51,7 @@ use PDepend\Source\ASTVisitor\ASTVisitor;
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 2.9.0
  */
 class ASTNamedArgument extends AbstractASTNode
@@ -60,11 +62,6 @@ class ASTNamedArgument extends AbstractASTNode
     protected $name;
 
     /**
-     * @var ASTNode
-     */
-    protected $value;
-
-    /**
      * @param string $name
      */
     public function __construct($name, ASTNode $value)
@@ -72,7 +69,7 @@ class ASTNamedArgument extends AbstractASTNode
         parent::__construct();
 
         $this->name = $name;
-        $this->value = $value;
+        $this->addChild($value);
     }
 
     /**
@@ -88,7 +85,7 @@ class ASTNamedArgument extends AbstractASTNode
      */
     public function getValue()
     {
-        return $this->value;
+        return $this->getChild(0);
     }
 
     /**
@@ -96,7 +93,7 @@ class ASTNamedArgument extends AbstractASTNode
      */
     public function getImage()
     {
-        return sprintf('%s: %s', $this->name, $this->value->getImage());
+        return sprintf('%s: %s', $this->name, $this->getChild(0)->getImage());
     }
 
     /**
@@ -104,9 +101,6 @@ class ASTNamedArgument extends AbstractASTNode
      * by a visitor during tree traversal.
      *
      * @param ASTVisitor $visitor The calling visitor instance.
-     * @param mixed      $data
-     *
-     * @return mixed
      */
     public function accept(ASTVisitor $visitor, $data = null)
     {

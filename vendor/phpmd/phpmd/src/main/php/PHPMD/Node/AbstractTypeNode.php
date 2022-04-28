@@ -49,7 +49,7 @@ abstract class AbstractTypeNode extends AbstractNode
      */
     public function getMethods()
     {
-        $methods = [];
+        $methods = array();
         foreach ($this->node->getMethods() as $method) {
             $methods[] = new MethodNode($method);
         }
@@ -65,7 +65,7 @@ abstract class AbstractTypeNode extends AbstractNode
      */
     public function getMethodNames()
     {
-        $names = [];
+        $names = array();
         foreach ($this->node->getMethods() as $method) {
             $names[] = $method->getName();
         }
@@ -76,7 +76,7 @@ abstract class AbstractTypeNode extends AbstractNode
     /**
      * Returns the number of constants declared in this type.
      *
-     * @return int
+     * @return integer
      */
     public function getConstantCount()
     {

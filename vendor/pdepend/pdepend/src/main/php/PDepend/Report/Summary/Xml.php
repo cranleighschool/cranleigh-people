@@ -42,6 +42,8 @@
 
 namespace PDepend\Report\Summary;
 
+use DOMDocument;
+use DOMElement;
 use PDepend\Metrics\Analyzer;
 use PDepend\Metrics\AnalyzerNodeAware;
 use PDepend\Metrics\AnalyzerProjectAware;
@@ -77,41 +79,41 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     private $logFile = null;
 
     /**
-     * The raw {@link \PDepend\Source\AST\ASTNamespace} instances.
+     * The raw {@link ASTNamespace} instances.
      *
-     * @var \PDepend\Source\AST\ASTArtifactList<\PDepend\Source\AST\ASTNamespace>
+     * @var ASTArtifactList<ASTNamespace>
      */
     protected $code = null;
 
     /**
      * Set of all analyzed files.
      *
-     * @var \PDepend\Source\AST\ASTCompilationUnit[]
+     * @var ASTCompilationUnit[]
      */
-    protected $fileSet = [];
+    protected $fileSet = array();
 
     /**
      * List of all analyzers that implement the node aware interface
-     * {@link \PDepend\Metrics\AnalyzerNodeAware}.
+     * {@link AnalyzerNodeAware}.
      *
-     * @var \PDepend\Metrics\AnalyzerNodeAware[]
+     * @var AnalyzerNodeAware[]
      */
-    private $nodeAwareAnalyzers = [];
+    private $nodeAwareAnalyzers = array();
 
     /**
      * List of all analyzers that implement the node aware interface
-     * {@link \PDepend\Metrics\AnalyzerProjectAware}.
+     * {@link AnalyzerProjectAware}.
      *
-     * @var \PDepend\Metrics\AnalyzerProjectAware[]
+     * @var AnalyzerProjectAware[]
      */
-    private $projectAwareAnalyzers = [];
+    private $projectAwareAnalyzers = array();
 
     /**
      * The internal used xml stack.
      *
-     * @var \DOMElement[]
+     * @var DOMElement[]
      */
-    private $xmlStack = [];
+    private $xmlStack = array();
 
     /**
      * Sets the output log file.
@@ -133,7 +135,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      */
     public function getAcceptedAnalyzers()
     {
-        return [
+        return array(
             'pdepend.analyzer.cyclomatic_complexity',
             'pdepend.analyzer.node_loc',
             'pdepend.analyzer.npath_complexity',
@@ -147,13 +149,14 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
             'pdepend.analyzer.cohesion',
             'pdepend.analyzer.halstead',
             'pdepend.analyzer.maintainability',
-        ];
+        );
     }
 
     /**
      * Sets the context code nodes.
      *
-     * @param  \PDepend\Source\AST\ASTArtifactList<\PDepend\Source\AST\ASTNamespace> $artifacts
+     * @param ASTArtifactList<ASTNamespace> $artifacts
+     *
      * @return void
      */
     public function setArtifacts(ASTArtifactList $artifacts)
@@ -165,7 +168,8 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      * Adds an analyzer to log. If this logger accepts the given analyzer it
      * with return <b>true</b>, otherwise the return value is <b>false</b>.
      *
-     * @param  \PDepend\Metrics\Analyzer $analyzer The analyzer to log.
+     * @param Analyzer $analyzer The analyzer to log.
+     *
      * @return bool
      */
     public function log(Analyzer $analyzer)
@@ -181,15 +185,15 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
 
             $accepted = true;
         }
-
         return $accepted;
     }
 
     /**
      * Closes the logger process and writes the output file.
      *
+     * @throws NoLogOutputException If the no log target exists.
+     *
      * @return void
-     * @throws \PDepend\Report\NoLogOutputException If the no log target exists.
      */
     public function close()
     {
@@ -197,7 +201,7 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
             throw new NoLogOutputException($this);
         }
 
-        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom = new DOMDocument('1.0', 'UTF-8');
 
         $dom->formatOutput = true;
 
@@ -238,11 +242,12 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      * Returns an array with all collected project metrics.
      *
      * @return array<string, mixed>
+     *
      * @since  0.9.10
      */
     private function getProjectMetrics()
     {
-        $projectMetrics = [];
+        $projectMetrics = array();
         foreach ($this->projectAwareAnalyzers as $analyzer) {
             $projectMetrics = array_merge(
                 $projectMetrics,
@@ -257,7 +262,6 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a class node.
      *
-     * @param  \PDepend\Source\AST\ASTClass $class
      * @return void
      */
     public function visitClass(ASTClass $class)
@@ -268,7 +272,6 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a trait node.
      *
-     * @param  \PDepend\Source\AST\ASTTrait $trait
      * @return void
      */
     public function visitTrait(ASTTrait $trait)
@@ -279,18 +282,18 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Generates the XML for a class or trait node.
      *
-     * @param  \PDepend\Source\AST\ASTClass $type
-     * @param  string                       $typeIdentifier
+     * @param string $typeIdentifier
+     *
      * @return void
      */
     private function generateTypeXml(ASTClass $type, $typeIdentifier)
     {
-        if (! $type->isUserDefined()) {
+        if (!$type->isUserDefined()) {
             return;
         }
 
         $xml = end($this->xmlStack);
-        if (! $xml) {
+        if (!$xml) {
             return;
         }
 
@@ -299,8 +302,8 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
         $typeXml = $doc->createElement($typeIdentifier);
         $typeXml->setAttribute('name', Utf8Util::ensureEncoding($type->getName()));
         $typeXml->setAttribute('fqname', Utf8Util::ensureEncoding($type->getNamespacedName()));
-        $typeXml->setAttribute('start', (string) $type->getStartLine());
-        $typeXml->setAttribute('end', (string) $type->getEndLine());
+        $typeXml->setAttribute('start', (string)$type->getStartLine());
+        $typeXml->setAttribute('end', (string)$type->getEndLine());
 
         $this->writeNodeMetrics($typeXml, $type);
         $this->writeFileReference($typeXml, $type->getCompilationUnit());
@@ -322,13 +325,12 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a function node.
      *
-     * @param  \PDepend\Source\AST\ASTFunction $function
      * @return void
      */
     public function visitFunction(ASTFunction $function)
     {
         $xml = end($this->xmlStack);
-        if (! $xml) {
+        if (!$xml) {
             return;
         }
 
@@ -336,8 +338,8 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
 
         $functionXml = $doc->createElement('function');
         $functionXml->setAttribute('name', Utf8Util::ensureEncoding($function->getName()));
-        $functionXml->setAttribute('start', (string) $function->getStartLine());
-        $functionXml->setAttribute('end', (string) $function->getEndLine());
+        $functionXml->setAttribute('start', (string)$function->getStartLine());
+        $functionXml->setAttribute('end', (string)$function->getEndLine());
 
         $this->writeNodeMetrics($functionXml, $function);
         $this->writeFileReference($functionXml, $function->getCompilationUnit());
@@ -348,7 +350,6 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a code interface object.
      *
-     * @param  \PDepend\Source\AST\ASTInterface $interface
      * @return void
      */
     public function visitInterface(ASTInterface $interface)
@@ -359,13 +360,12 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a method node.
      *
-     * @param  \PDepend\Source\AST\ASTMethod $method
      * @return void
      */
     public function visitMethod(ASTMethod $method)
     {
         $xml = end($this->xmlStack);
-        if (! $xml) {
+        if (!$xml) {
             return;
         }
 
@@ -373,8 +373,8 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
 
         $methodXml = $doc->createElement('method');
         $methodXml->setAttribute('name', Utf8Util::ensureEncoding($method->getName()));
-        $methodXml->setAttribute('start', (string) $method->getStartLine());
-        $methodXml->setAttribute('end', (string) $method->getEndLine());
+        $methodXml->setAttribute('start', (string)$method->getStartLine());
+        $methodXml->setAttribute('end', (string)$method->getEndLine());
 
         $this->writeNodeMetrics($methodXml, $method);
 
@@ -384,13 +384,12 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a namespace node.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace $namespace
      * @return void
      */
     public function visitNamespace(ASTNamespace $namespace)
     {
         $xml = end($this->xmlStack);
-        if (! $xml) {
+        if (!$xml) {
             return;
         }
 
@@ -421,15 +420,13 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
 
     /**
      * Aggregates all metrics for the given <b>$node</b> instance and adds them
-     * to the <b>\DOMElement</b>.
+     * to the <b>\DOMElement</b>
      *
-     * @param  \DOMElement                             $xml
-     * @param  \PDepend\Source\AST\AbstractASTArtifact $node
      * @return void
      */
-    protected function writeNodeMetrics(\DOMElement $xml, AbstractASTArtifact $node)
+    protected function writeNodeMetrics(DOMElement $xml, AbstractASTArtifact $node)
     {
-        $metrics = [];
+        $metrics = array();
         foreach ($this->nodeAwareAnalyzers as $analyzer) {
             $metrics = array_merge($metrics, $analyzer->getNodeMetrics($node));
         }
@@ -448,11 +445,12 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      *   </class>
      * </code>
      *
-     * @param  \DOMElement                            $xml             The parent xml element.
-     * @param  \PDepend\Source\AST\ASTCompilationUnit $compilationUnit The code file instance.
+     * @param DOMElement         $xml             The parent xml element.
+     * @param ASTCompilationUnit $compilationUnit The code file instance.
+     *
      * @return void
      */
-    protected function writeFileReference(\DOMElement $xml, ASTCompilationUnit $compilationUnit = null)
+    protected function writeFileReference(DOMElement $xml, ASTCompilationUnit $compilationUnit = null)
     {
         if (in_array($compilationUnit, $this->fileSet, true) === false) {
             $this->fileSet[] = $compilationUnit;

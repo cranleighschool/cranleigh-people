@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DoubleQuoteUsageSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +27,9 @@ class DoubleQuoteUsageSniff implements Sniff
             T_CONSTANT_ENCAPSED_STRING,
             T_DOUBLE_QUOTED_STRING,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -81,7 +83,7 @@ class DoubleQuoteUsageSniff implements Sniff
             foreach ($stringTokens as $token) {
                 if (is_array($token) === true && $token[0] === T_VARIABLE) {
                     $error = 'Variable "%s" not allowed in double quoted string; use concatenation instead';
-                    $data = [$token[1]];
+                    $data  = [$token[1]];
                     $phpcsFile->addError($error, $stackPtr, 'ContainsVar', $data);
                 }
             }
@@ -117,8 +119,8 @@ class DoubleQuoteUsageSniff implements Sniff
         }
 
         $error = 'String %s does not require double quotes; use single quotes instead';
-        $data = [str_replace(["\r", "\n"], ['\r', '\n'], $workingString)];
-        $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NotRequired', $data);
+        $data  = [str_replace(["\r", "\n"], ['\r', '\n'], $workingString)];
+        $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NotRequired', $data);
 
         if ($fix === true) {
             $phpcsFile->fixer->beginChangeset();
@@ -135,7 +137,8 @@ class DoubleQuoteUsageSniff implements Sniff
         }
 
         return $skipTo;
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

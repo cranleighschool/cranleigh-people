@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class UseDeclarationUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -23,7 +25,7 @@ class UseDeclarationUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = '')
+    public function getErrorList($testFile='')
     {
         switch ($testFile) {
         case 'UseDeclarationUnitTest.2.inc':
@@ -73,9 +75,9 @@ class UseDeclarationUnitTest extends AbstractSniffUnitTest
         default:
             return [];
         }//end switch
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -88,7 +90,8 @@ class UseDeclarationUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

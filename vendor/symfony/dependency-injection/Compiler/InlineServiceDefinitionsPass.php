@@ -25,12 +25,12 @@ use Symfony\Component\DependencyInjection\Reference;
 class InlineServiceDefinitionsPass extends AbstractRecursivePass
 {
     private $analyzingPass;
-    private $cloningIds = [];
-    private $connectedIds = [];
-    private $notInlinedIds = [];
-    private $inlinedIds = [];
-    private $notInlinableIds = [];
-    private $graph;
+    private array $cloningIds = [];
+    private array $connectedIds = [];
+    private array $notInlinedIds = [];
+    private array $inlinedIds = [];
+    private array $notInlinableIds = [];
+    private $graph = null;
 
     public function __construct(AnalyzeServiceReferencesPass $analyzingPass = null)
     {
@@ -63,7 +63,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
                 $this->connectedIds = $this->notInlinedIds = $this->inlinedIds = [];
 
                 foreach ($analyzedContainer->getDefinitions() as $id => $definition) {
-                    if (! $this->graph->hasNode($id)) {
+                    if (!$this->graph->hasNode($id)) {
                         continue;
                     }
                     foreach ($this->graph->getNode($id)->getOutEdges() as $edge) {
@@ -92,7 +92,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
 
                 $definition = $container->getDefinition($id);
 
-                if (! $definition->isShared() && ! $definition->isPublic()) {
+                if (!$definition->isShared() && !$definition->isPublic()) {
                     $container->removeDefinition($id);
                 }
             }
@@ -107,10 +107,10 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
     /**
      * {@inheritdoc}
      */
-    protected function processValue($value, bool $isRoot = false)
+    protected function processValue(mixed $value, bool $isRoot = false): mixed
     {
         if ($value instanceof ArgumentInterface) {
-            // Reference found in ArgumentInterface::getValues() are not inlineable
+            // References found in ArgumentInterface::getValues() are not inlineable
             return $value;
         }
 
@@ -121,22 +121,22 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
             $value = clone $value;
         }
 
-        if (! $value instanceof Reference) {
+        if (!$value instanceof Reference) {
             return parent::processValue($value, $isRoot);
-        } elseif (! $this->container->hasDefinition($id = (string) $value)) {
+        } elseif (!$this->container->hasDefinition($id = (string) $value)) {
             return $value;
         }
 
         $definition = $this->container->getDefinition($id);
 
-        if (! $this->isInlineableDefinition($id, $definition)) {
+        if (!$this->isInlineableDefinition($id, $definition)) {
             $this->notInlinableIds[$id] = true;
 
             return $value;
         }
 
         $this->container->log($this, sprintf('Inlined service "%s" to "%s".', $id, $this->currentId));
-        $this->inlinedIds[$id] = $definition->isPublic() || ! $definition->isShared();
+        $this->inlinedIds[$id] = $definition->isPublic() || !$definition->isShared();
         $this->notInlinedIds[$this->currentId] = true;
 
         if ($definition->isShared()) {
@@ -167,8 +167,8 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
             return false;
         }
 
-        if (! $definition->isShared()) {
-            if (! $this->graph->hasNode($id)) {
+        if (!$definition->isShared()) {
+            if (!$this->graph->hasNode($id)) {
                 return true;
             }
 
@@ -176,7 +176,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
                 $srcId = $edge->getSourceNode()->getId();
                 $this->connectedIds[$srcId] = true;
                 if ($edge->isWeak() || $edge->isLazy()) {
-                    return false;
+                    return !$this->connectedIds[$id] = true;
                 }
             }
 
@@ -187,7 +187,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
             return false;
         }
 
-        if (! $this->graph->hasNode($id)) {
+        if (!$this->graph->hasNode($id)) {
             return true;
         }
 
@@ -198,16 +198,14 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
 
         $srcIds = [];
         $srcCount = 0;
-        $isReferencedByConstructor = false;
         foreach ($this->graph->getNode($id)->getInEdges() as $edge) {
-            $isReferencedByConstructor = $isReferencedByConstructor || $edge->isReferencedByConstructor();
             $srcId = $edge->getSourceNode()->getId();
             $this->connectedIds[$srcId] = true;
             if ($edge->isWeak() || $edge->isLazy()) {
                 return false;
             }
             $srcIds[$srcId] = true;
-            $srcCount++;
+            ++$srcCount;
         }
 
         if (1 !== \count($srcIds)) {

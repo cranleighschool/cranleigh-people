@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class ServiceClosureArgument implements ArgumentInterface
 {
-    private $values;
+    private array $values;
 
     public function __construct(Reference $reference)
     {
@@ -31,7 +31,7 @@ class ServiceClosureArgument implements ArgumentInterface
     /**
      * {@inheritdoc}
      */
-    public function getValues()
+    public function getValues(): array
     {
         return $this->values;
     }
@@ -41,7 +41,7 @@ class ServiceClosureArgument implements ArgumentInterface
      */
     public function setValues(array $values)
     {
-        if ([0] !== array_keys($values) || ! ($values[0] instanceof Reference || null === $values[0])) {
+        if ([0] !== array_keys($values) || !($values[0] instanceof Reference || null === $values[0])) {
             throw new InvalidArgumentException('A ServiceClosureArgument must hold one and only one Reference.');
         }
 

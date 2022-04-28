@@ -14,7 +14,7 @@ namespace Symfony\Component\DependencyInjection;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage as BaseExpressionLanguage;
 
-if (! class_exists(BaseExpressionLanguage::class)) {
+if (!class_exists(BaseExpressionLanguage::class)) {
     return;
 }
 

@@ -38,10 +38,13 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.15
  */
 
 namespace PDepend\Source\AST;
+
+use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
  * This class represents a cast-expression node.
@@ -78,9 +81,10 @@ namespace PDepend\Source\AST;
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.15
  */
-class ASTCastExpression extends \PDepend\Source\AST\ASTUnaryExpression
+class ASTCastExpression extends ASTUnaryExpression
 {
     /**
      * Constructs a new cast-expression node.
@@ -99,7 +103,7 @@ class ASTCastExpression extends \PDepend\Source\AST\ASTUnaryExpression
      */
     public function isArray()
     {
-        return $this->getImage() === '(array)';
+        return ($this->getImage() === '(array)');
     }
 
     /**
@@ -109,7 +113,7 @@ class ASTCastExpression extends \PDepend\Source\AST\ASTUnaryExpression
      */
     public function isObject()
     {
-        return $this->getImage() === '(object)';
+        return ($this->getImage() === '(object)');
     }
 
     /**
@@ -119,7 +123,7 @@ class ASTCastExpression extends \PDepend\Source\AST\ASTUnaryExpression
      */
     public function isBoolean()
     {
-        return $this->getImage() === '(bool)' || $this->getImage() === '(boolean)';
+        return ($this->getImage() === '(bool)' || $this->getImage() === '(boolean)');
     }
 
     /**
@@ -129,7 +133,7 @@ class ASTCastExpression extends \PDepend\Source\AST\ASTUnaryExpression
      */
     public function isInteger()
     {
-        return $this->getImage() === '(int)' || $this->getImage() === '(integer)';
+        return ($this->getImage() === '(int)' || $this->getImage() === '(integer)');
     }
 
     /**
@@ -139,9 +143,10 @@ class ASTCastExpression extends \PDepend\Source\AST\ASTUnaryExpression
      */
     public function isFloat()
     {
-        return $this->getImage() === '(real)'
+        return ($this->getImage() === '(real)'
             || $this->getImage() === '(float)'
-            || $this->getImage() === '(double)';
+            || $this->getImage() === '(double)'
+        );
     }
 
     /**
@@ -151,7 +156,7 @@ class ASTCastExpression extends \PDepend\Source\AST\ASTUnaryExpression
      */
     public function isString()
     {
-        return strcmp('(string)', $this->getImage()) === 0;
+        return (strcmp('(string)', $this->getImage()) === 0);
     }
 
     /**
@@ -161,19 +166,16 @@ class ASTCastExpression extends \PDepend\Source\AST\ASTUnaryExpression
      */
     public function isUnset()
     {
-        return $this->getImage() === '(unset)';
+        return ($this->getImage() === '(unset)');
     }
 
     /**
      * Accept method of the visitor design pattern. This method will be called
      * by a visitor during tree traversal.
      *
-     * @param \PDepend\Source\ASTVisitor\ASTVisitor $visitor The calling visitor instance.
-     * @param mixed                                 $data
-     *
-     * @return mixed
+     * @param ASTVisitor $visitor The calling visitor instance.
      */
-    public function accept(\PDepend\Source\ASTVisitor\ASTVisitor $visitor, $data = null)
+    public function accept(ASTVisitor $visitor, $data = null)
     {
         return $visitor->visitCastExpression($this, $data);
     }

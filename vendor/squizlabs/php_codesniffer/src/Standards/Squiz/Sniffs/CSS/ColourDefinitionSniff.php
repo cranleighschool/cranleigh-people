@@ -14,12 +14,14 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ColourDefinitionSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['CSS'];
+
 
     /**
      * Returns the token types that this sniff is interested in.
@@ -29,9 +31,9 @@ class ColourDefinitionSniff implements Sniff
     public function register()
     {
         return [T_COLOUR];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -50,7 +52,7 @@ class ColourDefinitionSniff implements Sniff
         $expected = strtoupper($colour);
         if ($colour !== $expected) {
             $error = 'CSS colours must be defined in uppercase; expected %s but found %s';
-            $data = [
+            $data  = [
                 $expected,
                 $colour,
             ];
@@ -68,8 +70,8 @@ class ColourDefinitionSniff implements Sniff
 
         if ($colour[1] === $colour[2] && $colour[3] === $colour[4] && $colour[5] === $colour[6]) {
             $expected = '#'.$colour[1].$colour[3].$colour[5];
-            $error = 'CSS colours must use shorthand if available; expected %s but found %s';
-            $data = [
+            $error    = 'CSS colours must use shorthand if available; expected %s but found %s';
+            $data     = [
                 $expected,
                 $colour,
             ];
@@ -79,7 +81,8 @@ class ColourDefinitionSniff implements Sniff
                 $phpcsFile->fixer->replaceToken($stackPtr, $expected);
             }
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

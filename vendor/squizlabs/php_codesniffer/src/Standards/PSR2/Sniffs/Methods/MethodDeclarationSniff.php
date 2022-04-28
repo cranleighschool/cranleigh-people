@@ -15,15 +15,17 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class MethodDeclarationSniff extends AbstractScopeSniff
 {
+
+
     /**
      * Constructs a Squiz_Sniffs_Scope_MethodScopeSniff.
      */
     public function __construct()
     {
         parent::__construct(Tokens::$ooScopeTokens, [T_FUNCTION]);
-    }
 
-    //end __construct()
+    }//end __construct()
+
 
     /**
      * Processes the function tokens within the class.
@@ -54,14 +56,14 @@ class MethodDeclarationSniff extends AbstractScopeSniff
 
         if ($methodName[0] === '_' && isset($methodName[1]) === true && $methodName[1] !== '_') {
             $error = 'Method name "%s" should not be prefixed with an underscore to indicate visibility';
-            $data = [$methodName];
+            $data  = [$methodName];
             $phpcsFile->addWarning($error, $stackPtr, 'Underscore', $data);
         }
 
         $visibility = 0;
-        $static = 0;
-        $abstract = 0;
-        $final = 0;
+        $static     = 0;
+        $abstract   = 0;
+        $final      = 0;
 
         $find = (Tokens::$methodPrefixes + Tokens::$emptyTokens);
         $prev = $phpcsFile->findPrevious($find, ($stackPtr - 1), null, true);
@@ -88,9 +90,9 @@ class MethodDeclarationSniff extends AbstractScopeSniff
 
         if ($visibility !== 0 && $final > $visibility) {
             $error = 'The final declaration must precede the visibility declaration';
-            $fix = $phpcsFile->addFixableError($error, $final, 'FinalAfterVisibility');
+            $fix   = $phpcsFile->addFixableError($error, $final, 'FinalAfterVisibility');
             if ($fix === true) {
-                $fixes[$final] = '';
+                $fixes[$final]       = '';
                 $fixes[($final + 1)] = '';
                 if (isset($fixes[$visibility]) === true) {
                     $fixes[$visibility] = 'final '.$fixes[$visibility];
@@ -102,9 +104,9 @@ class MethodDeclarationSniff extends AbstractScopeSniff
 
         if ($visibility !== 0 && $abstract > $visibility) {
             $error = 'The abstract declaration must precede the visibility declaration';
-            $fix = $phpcsFile->addFixableError($error, $abstract, 'AbstractAfterVisibility');
+            $fix   = $phpcsFile->addFixableError($error, $abstract, 'AbstractAfterVisibility');
             if ($fix === true) {
-                $fixes[$abstract] = '';
+                $fixes[$abstract]       = '';
                 $fixes[($abstract + 1)] = '';
                 if (isset($fixes[$visibility]) === true) {
                     $fixes[$visibility] = 'abstract '.$fixes[$visibility];
@@ -116,9 +118,9 @@ class MethodDeclarationSniff extends AbstractScopeSniff
 
         if ($static !== 0 && $static < $visibility) {
             $error = 'The static declaration must come after the visibility declaration';
-            $fix = $phpcsFile->addFixableError($error, $static, 'StaticBeforeVisibility');
+            $fix   = $phpcsFile->addFixableError($error, $static, 'StaticBeforeVisibility');
             if ($fix === true) {
-                $fixes[$static] = '';
+                $fixes[$static]       = '';
                 $fixes[($static + 1)] = '';
                 if (isset($fixes[$visibility]) === true) {
                     $fixes[$visibility] .= ' static';
@@ -137,9 +139,9 @@ class MethodDeclarationSniff extends AbstractScopeSniff
 
             $phpcsFile->fixer->endChangeset();
         }
-    }
 
-    //end processTokenWithinScope()
+    }//end processTokenWithinScope()
+
 
     /**
      * Processes a token that is found within the scope that this test is
@@ -153,7 +155,8 @@ class MethodDeclarationSniff extends AbstractScopeSniff
      */
     protected function processTokenOutsideScope(File $phpcsFile, $stackPtr)
     {
-    }
 
-    //end processTokenOutsideScope()
+    }//end processTokenOutsideScope()
+
+
 }//end class

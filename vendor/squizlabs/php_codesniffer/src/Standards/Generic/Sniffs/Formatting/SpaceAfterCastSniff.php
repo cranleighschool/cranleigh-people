@@ -15,19 +15,21 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class SpaceAfterCastSniff implements Sniff
 {
+
     /**
      * The number of spaces desired after a cast token.
      *
-     * @var int
+     * @var integer
      */
     public $spacing = 1;
 
     /**
      * Allow newlines instead of spaces.
      *
-     * @var bool
+     * @var boolean
      */
     public $ignoreNewlines = false;
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -37,9 +39,9 @@ class SpaceAfterCastSniff implements Sniff
     public function register()
     {
         return Tokens::$castTokens;
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -52,7 +54,7 @@ class SpaceAfterCastSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens = $phpcsFile->getTokens();
+        $tokens        = $phpcsFile->getTokens();
         $this->spacing = (int) $this->spacing;
 
         if ($tokens[$stackPtr]['code'] === T_BINARY_CAST
@@ -71,20 +73,18 @@ class SpaceAfterCastSniff implements Sniff
             && $tokens[$stackPtr]['line'] !== $tokens[$nextNonEmpty]['line']
         ) {
             $phpcsFile->recordMetric($stackPtr, 'Spacing after cast statement', 'newline');
-
             return;
         }
 
         if ($this->spacing === 0 && $nextNonEmpty === ($stackPtr + 1)) {
             $phpcsFile->recordMetric($stackPtr, 'Spacing after cast statement', 0);
-
             return;
         }
 
         $nextNonWhitespace = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
         if ($nextNonEmpty !== $nextNonWhitespace) {
             $error = 'Expected %s space(s) after cast statement; comment found';
-            $data = [$this->spacing];
+            $data  = [$this->spacing];
             $phpcsFile->addError($error, $stackPtr, 'CommentFound', $data);
 
             if ($tokens[($stackPtr + 1)]['code'] === T_WHITESPACE) {
@@ -99,7 +99,7 @@ class SpaceAfterCastSniff implements Sniff
         $found = 0;
         if ($tokens[$stackPtr]['line'] !== $tokens[$nextNonEmpty]['line']) {
             $found = 'newline';
-        } elseif ($tokens[($stackPtr + 1)]['code'] === T_WHITESPACE) {
+        } else if ($tokens[($stackPtr + 1)]['code'] === T_WHITESPACE) {
             $found = $tokens[($stackPtr + 1)]['length'];
         }
 
@@ -110,7 +110,7 @@ class SpaceAfterCastSniff implements Sniff
         }
 
         $error = 'Expected %s space(s) after cast statement; %s found';
-        $data = [
+        $data  = [
             $this->spacing,
             $found,
         ];
@@ -119,7 +119,7 @@ class SpaceAfterCastSniff implements Sniff
         if ($this->spacing !== 0) {
             if ($found === 0) {
                 $errorCode = 'NoSpace';
-            } elseif ($found !== 'newline' && $found < $this->spacing) {
+            } else if ($found !== 'newline' && $found < $this->spacing) {
                 $errorCode = 'TooLittleSpace';
             }
         }
@@ -136,7 +136,7 @@ class SpaceAfterCastSniff implements Sniff
 
                 if ($this->spacing > 0) {
                     $phpcsFile->fixer->replaceToken($start, $padding);
-                    $start++;
+                    ++$start;
                 }
 
                 for ($i = $start; $i < $nextNonWhitespace; $i++) {
@@ -146,7 +146,8 @@ class SpaceAfterCastSniff implements Sniff
                 $phpcsFile->fixer->endChangeset();
             }
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

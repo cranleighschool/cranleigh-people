@@ -42,10 +42,11 @@
 
 namespace PDepend\Metrics;
 
+use PDepend\Report\ReportGenerator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Creates Analyzer instances.
+ * Creates Analyzer instances
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
@@ -53,14 +54,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AnalyzerFactory
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      */
     private $container;
 
     /**
-     * Create a new Analyzer Factory.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * Create a new Analyzer Factory
      */
     public function __construct(ContainerInterface $container)
     {
@@ -70,12 +69,13 @@ class AnalyzerFactory
     /**
      * Create and configure all analyzers required for given set of loggers.
      *
-     * @param  \PDepend\Report\ReportGenerator[] $generators
-     * @return \PDepend\Metrics\Analyzer[]
+     * @param ReportGenerator[] $generators
+     *
+     * @return Analyzer[]
      */
     public function createRequiredForGenerators(array $generators)
     {
-        $analyzers = [];
+        $analyzers = array();
 
         foreach ($generators as $logger) {
             foreach ($logger->getAcceptedAnalyzers() as $type) {

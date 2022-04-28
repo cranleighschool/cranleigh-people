@@ -23,19 +23,16 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ResourceCheckerConfigCache implements ConfigCacheInterface
 {
-    /**
-     * @var string
-     */
-    private $file;
+    private string $file;
 
     /**
-     * @var iterable|ResourceCheckerInterface[]
+     * @var iterable<mixed, ResourceCheckerInterface>
      */
-    private $resourceCheckers;
+    private iterable $resourceCheckers;
 
     /**
-     * @param string                              $file             The absolute cache path
-     * @param iterable|ResourceCheckerInterface[] $resourceCheckers The ResourceCheckers to use for the freshness check
+     * @param string                                    $file             The absolute cache path
+     * @param iterable<mixed, ResourceCheckerInterface> $resourceCheckers The ResourceCheckers to use for the freshness check
      */
     public function __construct(string $file, iterable $resourceCheckers = [])
     {
@@ -46,7 +43,7 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
     /**
      * {@inheritdoc}
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->file;
     }
@@ -59,26 +56,24 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
      *
      * The first ResourceChecker that supports a given resource is considered authoritative.
      * Resources with no matching ResourceChecker will silently be ignored and considered fresh.
-     *
-     * @return bool true if the cache is fresh, false otherwise
      */
-    public function isFresh()
+    public function isFresh(): bool
     {
-        if (! is_file($this->file)) {
+        if (!is_file($this->file)) {
             return false;
         }
 
-        if ($this->resourceCheckers instanceof \Traversable && ! $this->resourceCheckers instanceof \Countable) {
+        if ($this->resourceCheckers instanceof \Traversable && !$this->resourceCheckers instanceof \Countable) {
             $this->resourceCheckers = iterator_to_array($this->resourceCheckers);
         }
 
-        if (! \count($this->resourceCheckers)) {
+        if (!\count($this->resourceCheckers)) {
             return true; // shortcut - if we don't have any checkers we don't need to bother with the meta file at all
         }
 
         $metadata = $this->getMetaFile();
 
-        if (! is_file($metadata)) {
+        if (!is_file($metadata)) {
             return false;
         }
 
@@ -91,9 +86,8 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
         $time = filemtime($this->file);
 
         foreach ($meta as $resource) {
-            /* @var ResourceInterface $resource */
             foreach ($this->resourceCheckers as $checker) {
-                if (! $checker->supports($resource)) {
+                if (!$checker->supports($resource)) {
                     continue; // next checker
                 }
                 if ($checker->isFresh($resource, $time)) {
@@ -181,7 +175,7 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
     /**
      * @internal
      */
-    public static function handleUnserializeCallback($class)
+    public static function handleUnserializeCallback(string $class)
     {
         trigger_error('Class not found: '.$class);
     }

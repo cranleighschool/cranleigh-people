@@ -15,6 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class TodoSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -25,6 +26,7 @@ class TodoSniff implements Sniff
         'JS',
     ];
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -33,9 +35,9 @@ class TodoSniff implements Sniff
     public function register()
     {
         return array_diff(Tokens::$commentTokens, Tokens::$phpcsCommentTokens);
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -56,19 +58,20 @@ class TodoSniff implements Sniff
         if (empty($matches) === false) {
             // Clear whitespace and some common characters not required at
             // the end of a to-do message to make the warning more informative.
-            $type = 'CommentFound';
+            $type        = 'CommentFound';
             $todoMessage = trim($matches[1]);
             $todoMessage = trim($todoMessage, '-:[](). ');
-            $error = 'Comment refers to a TODO task';
-            $data = [$todoMessage];
+            $error       = 'Comment refers to a TODO task';
+            $data        = [$todoMessage];
             if ($todoMessage !== '') {
-                $type = 'TaskFound';
+                $type   = 'TaskFound';
                 $error .= ' "%s"';
             }
 
             $phpcsFile->addWarning($error, $stackPtr, $type, $data);
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

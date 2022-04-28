@@ -13,7 +13,7 @@
  * Authors:
  * - JD Isaacks
  * - Atef Ben Ali (atefBB)
- * - Mohamed Sabil (mohamedsabil83).
+ * - Mohamed Sabil (mohamedsabil83)
  */
 $months = [
     'جانفي',

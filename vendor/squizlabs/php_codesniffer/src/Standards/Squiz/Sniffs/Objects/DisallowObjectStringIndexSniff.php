@@ -14,12 +14,14 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DisallowObjectStringIndexSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['JS'];
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -29,9 +31,9 @@ class DisallowObjectStringIndexSniff implements Sniff
     public function register()
     {
         return [T_OPEN_SQUARE_BRACKET];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -76,7 +78,8 @@ class DisallowObjectStringIndexSniff implements Sniff
             $error = 'Object indexes must be written in dot notation';
             $phpcsFile->addError($error, $prev, 'Found');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

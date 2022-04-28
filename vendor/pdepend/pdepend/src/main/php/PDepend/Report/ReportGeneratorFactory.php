@@ -42,6 +42,8 @@
 
 namespace PDepend\Report;
 
+use RuntimeException;
+use Symfony\Component\DependencyInjection\TaggedContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -61,10 +63,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ReportGeneratorFactory
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var TaggedContainerInterface
      */
     private $container;
 
+    /**
+     * @param TaggedContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -74,28 +79,30 @@ class ReportGeneratorFactory
      * Creates a new generator or returns an existing instance for the given
      * <b>$identifier</b>.
      *
-     * @param  string $identifier The generator identifier.
-     * @param  string $fileName   The log output file name.
-     * @return \PDepend\Report\ReportGenerator
-     * @throws \RuntimeException
+     * @param string $identifier The generator identifier.
+     * @param string $fileName   The log output file name.
+     *
+     * @throws RuntimeException
+     *
+     * @return ReportGenerator
      */
     public function createGenerator($identifier, $fileName)
     {
-        if (! isset($this->instances[$identifier])) {
+        if (!isset($this->instances[$identifier])) {
             $loggerServices = $this->container->findTaggedServiceIds('pdepend.logger');
 
             $logger = null;
 
             foreach ($loggerServices as $id => $loggerServiceTags) {
                 foreach ($loggerServiceTags as $loggerServiceTag) {
-                    if ($loggerServiceTag['option'] === '--'.$identifier) {
+                    if ($loggerServiceTag['option'] === '--' . $identifier) {
                         $logger = $this->container->get($id);
                     }
                 }
             }
 
-            if (! $logger) {
-                throw new \RuntimeException(sprintf('Unknown generator with identifier "%s".', $identifier));
+            if (!$logger) {
+                throw new RuntimeException(sprintf('Unknown generator with identifier "%s".', $identifier));
             }
 
             // TODO: Refactor this into an external log configurator or a similar
@@ -106,14 +113,13 @@ class ReportGeneratorFactory
 
             $this->instances[$identifier] = $logger;
         }
-
         return $this->instances[$identifier];
     }
 
     /**
      * Set of created logger instances.
      *
-     * @var \PDepend\Report\ReportGenerator[]
+     * @var ReportGenerator[]
      */
-    protected $instances = [];
+    protected $instances = array();
 }

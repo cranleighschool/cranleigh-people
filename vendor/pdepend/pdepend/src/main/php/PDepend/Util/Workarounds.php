@@ -55,6 +55,7 @@ class Workarounds
      * references.
      *
      * @return bool
+     *
      * @see    https://bugs.php.net/bug.php?id=62373
      */
     public function hasSerializeReferenceIssue()
@@ -70,19 +71,19 @@ class Workarounds
      */
     public function isNotRequired()
     {
-        return ! $this->hasSerializeReferenceIssue();
+        return !$this->hasSerializeReferenceIssue();
     }
 
     /**
      * Returns an array with error messages related to the required workarounds.
      *
-     * @return array<integer, string>
+     * @return array<int, string>
      */
     public function getRequiredWorkarounds()
     {
-        $issues = [];
+        $issues = array();
         if ($this->hasSerializeReferenceIssue()) {
-            $issues[] = 'File cache deactivated due to known serialize() issues in PHP '.PHP_VERSION;
+            $issues[] = 'File cache deactivated due to known serialize() issues in PHP ' . PHP_VERSION;
         }
 
         return $issues;

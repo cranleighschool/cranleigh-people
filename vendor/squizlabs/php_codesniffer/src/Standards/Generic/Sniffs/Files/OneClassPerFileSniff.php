@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class OneClassPerFileSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -22,9 +24,9 @@ class OneClassPerFileSniff implements Sniff
     public function register()
     {
         return [T_CLASS];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -42,7 +44,8 @@ class OneClassPerFileSniff implements Sniff
             $error = 'Only one class is allowed in a file';
             $phpcsFile->addError($error, $nextClass, 'MultipleFound');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class NamespaceDeclarationSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -23,9 +25,9 @@ class NamespaceDeclarationSniff implements Sniff
     public function register()
     {
         return [T_NAMESPACE];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -72,7 +74,7 @@ class NamespaceDeclarationSniff implements Sniff
         }
 
         $error = 'There must be one blank line after the namespace declaration';
-        $fix = $phpcsFile->addFixableError($error, $stackPtr, 'BlankLineAfter');
+        $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'BlankLineAfter');
 
         if ($fix === true) {
             if ($diff === 0) {
@@ -91,7 +93,8 @@ class NamespaceDeclarationSniff implements Sniff
                 $phpcsFile->fixer->endChangeset();
             }
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

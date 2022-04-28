@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class JoinStringsUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -23,7 +25,7 @@ class JoinStringsUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = 'JoinStringsUnitTest.js')
+    public function getErrorList($testFile='JoinStringsUnitTest.js')
     {
         if ($testFile !== 'JoinStringsUnitTest.js') {
             return [];
@@ -38,9 +40,9 @@ class JoinStringsUnitTest extends AbstractSniffUnitTest
             12 => 2,
             15 => 1,
         ];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -53,7 +55,8 @@ class JoinStringsUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

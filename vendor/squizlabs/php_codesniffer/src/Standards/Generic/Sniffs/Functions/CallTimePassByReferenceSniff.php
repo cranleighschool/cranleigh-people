@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class CallTimePassByReferenceSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -26,9 +28,9 @@ class CallTimePassByReferenceSniff implements Sniff
             T_STRING,
             T_VARIABLE,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -43,7 +45,7 @@ class CallTimePassByReferenceSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $findTokens = Tokens::$emptyTokens;
+        $findTokens   = Tokens::$emptyTokens;
         $findTokens[] = T_BITWISE_AND;
 
         $prev = $phpcsFile->findPrevious($findTokens, ($stackPtr - 1), null, true);
@@ -60,7 +62,7 @@ class CallTimePassByReferenceSniff implements Sniff
         // If the next non-whitespace token after the function or method call
         // is not an opening parenthesis then it cant really be a *call*.
         $functionName = $stackPtr;
-        $openBracket = $phpcsFile->findNext(
+        $openBracket  = $phpcsFile->findNext(
             Tokens::$emptyTokens,
             ($functionName + 1),
             null,
@@ -78,7 +80,7 @@ class CallTimePassByReferenceSniff implements Sniff
         $closeBracket = $tokens[$openBracket]['parenthesis_closer'];
 
         $nextSeparator = $openBracket;
-        $find = [
+        $find          = [
             T_VARIABLE,
             T_OPEN_SHORT_ARRAY,
         ];
@@ -95,7 +97,7 @@ class CallTimePassByReferenceSniff implements Sniff
 
             // Make sure the variable belongs directly to this function call
             // and is not inside a nested function call or array.
-            $brackets = $tokens[$nextSeparator]['nested_parenthesis'];
+            $brackets    = $tokens[$nextSeparator]['nested_parenthesis'];
             $lastBracket = array_pop($brackets);
             if ($lastBracket !== $closeBracket) {
                 continue;
@@ -132,7 +134,8 @@ class CallTimePassByReferenceSniff implements Sniff
                 $phpcsFile->addError($error, $tokenBefore, 'NotAllowed');
             }//end if
         }//end while
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

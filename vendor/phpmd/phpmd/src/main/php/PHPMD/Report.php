@@ -17,6 +17,9 @@
 
 namespace PHPMD;
 
+use ArrayIterator;
+use PHPMD\Baseline\BaselineValidator;
+
 /**
  * The report class collects all found violations and further information about
  * a PHPMD run.
@@ -28,7 +31,7 @@ class Report
      *
      * @var array
      */
-    private $ruleViolations = [];
+    private $ruleViolations = array();
 
     /**
      * The start time for this report.
@@ -50,7 +53,15 @@ class Report
      * @var array
      * @since 1.2.1
      */
-    private $errors = [];
+    private $errors = array();
+
+    /** @var BaselineValidator|null */
+    private $baselineValidator;
+
+    public function __construct(BaselineValidator $baselineValidator = null)
+    {
+        $this->baselineValidator = $baselineValidator;
+    }
 
     /**
      * Adds a rule violation to this report.
@@ -60,14 +71,18 @@ class Report
      */
     public function addRuleViolation(RuleViolation $violation)
     {
+        if ($this->baselineValidator !== null && $this->baselineValidator->isBaselined($violation)) {
+            return;
+        }
+
         $fileName = $violation->getFileName();
-        if (! isset($this->ruleViolations[$fileName])) {
-            $this->ruleViolations[$fileName] = [];
+        if (!isset($this->ruleViolations[$fileName])) {
+            $this->ruleViolations[$fileName] = array();
         }
 
         $beginLine = $violation->getBeginLine();
-        if (! isset($this->ruleViolations[$fileName][$beginLine])) {
-            $this->ruleViolations[$fileName][$beginLine] = [];
+        if (!isset($this->ruleViolations[$fileName][$beginLine])) {
+            $this->ruleViolations[$fileName][$beginLine] = array();
         }
 
         $this->ruleViolations[$fileName][$beginLine][] = $violation;
@@ -76,12 +91,12 @@ class Report
     /**
      * Returns <b>true</b> when this report does not contain any errors.
      *
-     * @return bool
+     * @return boolean
      * @since 0.2.5
      */
     public function isEmpty()
     {
-        return count($this->ruleViolations) === 0;
+        return (count($this->ruleViolations) === 0);
     }
 
     /**
@@ -94,7 +109,7 @@ class Report
         // First sort by file name
         ksort($this->ruleViolations);
 
-        $violations = [];
+        $violations = array();
         foreach ($this->ruleViolations as $violationInLine) {
             // Second sort is by line number
             ksort($violationInLine);
@@ -104,7 +119,7 @@ class Report
             }
         }
 
-        return new \ArrayIterator($violations);
+        return new ArrayIterator($violations);
     }
 
     /**
@@ -123,7 +138,7 @@ class Report
      * Returns <b>true</b> when the report contains at least one processing
      * error. Otherwise this method will return <b>false</b>.
      *
-     * @return bool
+     * @return boolean
      * @since 1.2.1
      */
     public function hasErrors()
@@ -140,7 +155,7 @@ class Report
      */
     public function getErrors()
     {
-        return new \ArrayIterator($this->errors);
+        return new ArrayIterator($this->errors);
     }
 
     /**

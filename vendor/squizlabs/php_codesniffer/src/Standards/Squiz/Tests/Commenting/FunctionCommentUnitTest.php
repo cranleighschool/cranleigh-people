@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class FunctionCommentUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -118,16 +120,16 @@ class FunctionCommentUnitTest extends AbstractSniffUnitTest
 
         // Scalar type hints only work from PHP 7 onwards.
         if (PHP_VERSION_ID >= 70000) {
-            $errors[17] = 3;
-            $errors[128] = 1;
-            $errors[143] = 3;
-            $errors[161] = 2;
-            $errors[201] = 1;
-            $errors[232] = 7;
-            $errors[363] = 3;
-            $errors[377] = 1;
-            $errors[575] = 2;
-            $errors[627] = 1;
+            $errors[17]   = 3;
+            $errors[128]  = 1;
+            $errors[143]  = 3;
+            $errors[161]  = 2;
+            $errors[201]  = 1;
+            $errors[232]  = 7;
+            $errors[363]  = 3;
+            $errors[377]  = 1;
+            $errors[575]  = 2;
+            $errors[627]  = 1;
             $errors[1002] = 1;
         } else {
             $errors[729] = 4;
@@ -153,9 +155,9 @@ class FunctionCommentUnitTest extends AbstractSniffUnitTest
         }
 
         return $errors;
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -168,7 +170,8 @@ class FunctionCommentUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

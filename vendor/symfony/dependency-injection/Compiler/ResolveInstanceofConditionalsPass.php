@@ -54,11 +54,11 @@ class ResolveInstanceofConditionalsPass implements CompilerPassInterface
     {
         $instanceofConditionals = $definition->getInstanceofConditionals();
         $autoconfiguredInstanceof = $definition->isAutoconfigured() ? $container->getAutoconfiguredInstanceof() : [];
-        if (! $instanceofConditionals && ! $autoconfiguredInstanceof) {
+        if (!$instanceofConditionals && !$autoconfiguredInstanceof) {
             return $definition;
         }
 
-        if (! $class = $container->getParameterBag()->resolveValue($definition->getClass())) {
+        if (!$class = $container->getParameterBag()->resolveValue($definition->getClass())) {
             return $definition;
         }
 
@@ -73,11 +73,11 @@ class ResolveInstanceofConditionalsPass implements CompilerPassInterface
         $parent = $definition instanceof ChildDefinition ? $definition->getParent() : null;
 
         foreach ($conditionals as $interface => $instanceofDefs) {
-            if ($interface !== $class && ! ($reflectionClass ?? $reflectionClass = $container->getReflectionClass($class, false) ?: false)) {
+            if ($interface !== $class && !($reflectionClass ?? $reflectionClass = $container->getReflectionClass($class, false) ?: false)) {
                 continue;
             }
 
-            if ($interface !== $class && ! is_subclass_of($class, $interface)) {
+            if ($interface !== $class && !is_subclass_of($class, $interface)) {
                 continue;
             }
 
@@ -119,7 +119,7 @@ class ResolveInstanceofConditionalsPass implements CompilerPassInterface
             $definition = unserialize($definition);
             $definition->setParent($parent);
 
-            if (null !== $shared && ! isset($definition->getChanges()['shared'])) {
+            if (null !== $shared && !isset($definition->getChanges()['shared'])) {
                 $definition->setShared($shared);
             }
 
@@ -157,17 +157,15 @@ class ResolveInstanceofConditionalsPass implements CompilerPassInterface
     private function mergeConditionals(array $autoconfiguredInstanceof, array $instanceofConditionals, ContainerBuilder $container): array
     {
         // make each value an array of ChildDefinition
-        $conditionals = array_map(function ($childDef) {
-            return [$childDef];
-        }, $autoconfiguredInstanceof);
+        $conditionals = array_map(function ($childDef) { return [$childDef]; }, $autoconfiguredInstanceof);
 
         foreach ($instanceofConditionals as $interface => $instanceofDef) {
             // make sure the interface/class exists (but don't validate automaticInstanceofConditionals)
-            if (! $container->getReflectionClass($interface)) {
+            if (!$container->getReflectionClass($interface)) {
                 throw new RuntimeException(sprintf('"%s" is set as an "instanceof" conditional, but it does not exist.', $interface));
             }
 
-            if (! isset($autoconfiguredInstanceof[$interface])) {
+            if (!isset($autoconfiguredInstanceof[$interface])) {
                 $conditionals[$interface] = [];
             }
 

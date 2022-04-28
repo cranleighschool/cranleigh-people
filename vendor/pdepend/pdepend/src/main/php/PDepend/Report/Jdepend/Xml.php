@@ -42,6 +42,9 @@
 
 namespace PDepend\Report\Jdepend;
 
+use DOMDocument;
+use DOMElement;
+use DOMNode;
 use PDepend\Metrics\Analyzer;
 use PDepend\Metrics\Analyzer\DependencyAnalyzer;
 use PDepend\Report\CodeAwareGenerator;
@@ -49,6 +52,7 @@ use PDepend\Report\FileAwareGenerator;
 use PDepend\Report\NoLogOutputException;
 use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\ASTClass;
+use PDepend\Source\AST\ASTCompilationUnit;
 use PDepend\Source\AST\ASTInterface;
 use PDepend\Source\AST\ASTNamespace;
 use PDepend\Source\ASTVisitor\AbstractASTVisitor;
@@ -71,32 +75,32 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     private $logFile = null;
 
     /**
-     * The raw {@link \PDepend\Source\AST\ASTNamespace} instances.
+     * The raw {@link ASTNamespace} instances.
      *
-     * @var \PDepend\Source\AST\ASTArtifactList<\PDepend\Source\AST\ASTNamespace>
+     * @var ASTArtifactList<ASTNamespace>
      */
     protected $code = null;
 
     /**
      * Set of all analyzed files.
      *
-     * @var \PDepend\Source\AST\ASTCompilationUnit[]
+     * @var ASTCompilationUnit[]
      */
-    protected $fileSet = [];
+    protected $fileSet = array();
 
     /**
      * List of all generated project metrics.
      *
      * @var array<string, mixed>
      */
-    protected $projectMetrics = [];
+    protected $projectMetrics = array();
 
     /**
      * List of all collected node metrics.
      *
      * @var array<string, array>
      */
-    protected $nodeMetrics = [];
+    protected $nodeMetrics = array();
 
     /**
      * The dependency result set.
@@ -108,28 +112,28 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * The Packages dom element.
      *
-     * @var \DOMNode
+     * @var DOMNode
      */
     protected $packages = null;
 
     /**
      * The Cycles dom element.
      *
-     * @var \DOMNode
+     * @var DOMNode
      */
     protected $cycles = null;
 
     /**
      * The concrete classes element for the current package.
      *
-     * @var \DOMElement
+     * @var DOMElement
      */
     protected $concreteClasses = null;
 
     /**
      * The abstract classes element for the current package.
      *
-     * @var \DOMElement
+     * @var DOMElement
      */
     protected $abstractClasses = null;
 
@@ -153,13 +157,14 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      */
     public function getAcceptedAnalyzers()
     {
-        return ['pdepend.analyzer.dependency'];
+        return array('pdepend.analyzer.dependency');
     }
 
     /**
      * Sets the context code nodes.
      *
-     * @param  \PDepend\Source\AST\ASTArtifactList<\PDepend\Source\AST\ASTNamespace> $artifacts
+     * @param ASTArtifactList<ASTNamespace> $artifacts
+     *
      * @return void
      */
     public function setArtifacts(ASTArtifactList $artifacts)
@@ -171,7 +176,8 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
      * Adds an analyzer to log. If this logger accepts the given analyzer it
      * with return <b>true</b>, otherwise the return value is <b>false</b>.
      *
-     * @param  \PDepend\Metrics\Analyzer $analyzer The analyzer to log.
+     * @param Analyzer $analyzer The analyzer to log.
+     *
      * @return bool
      */
     public function log(Analyzer $analyzer)
@@ -181,15 +187,15 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
 
             return true;
         }
-
         return false;
     }
 
     /**
      * Closes the logger process and writes the output file.
      *
+     * @throws NoLogOutputException If the no log target exists.
+     *
      * @return void
-     * @throws \PDepend\Report\NoLogOutputException If the no log target exists.
      */
     public function close()
     {
@@ -198,14 +204,14 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
             throw new NoLogOutputException($this);
         }
 
-        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom = new DOMDocument('1.0', 'UTF-8');
 
         $dom->formatOutput = true;
 
         $jdepend = $dom->createElement('PDepend');
 
         $this->packages = $jdepend->appendChild($dom->createElement('Packages'));
-        $this->cycles = $jdepend->appendChild($dom->createElement('Cycles'));
+        $this->cycles   = $jdepend->appendChild($dom->createElement('Cycles'));
 
         foreach ($this->code as $node) {
             $node->accept($this);
@@ -219,12 +225,11 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a class node.
      *
-     * @param  \PDepend\Source\AST\ASTClass $class
      * @return void
      */
     public function visitClass(ASTClass $class)
     {
-        if (! $class->isUserDefined()) {
+        if (!$class->isUserDefined()) {
             return;
         }
 
@@ -248,12 +253,11 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a code interface object.
      *
-     * @param  \PDepend\Source\AST\ASTInterface $interface
      * @return void
      */
     public function visitInterface(ASTInterface $interface)
     {
-        if (! $interface->isUserDefined()) {
+        if (!$interface->isUserDefined()) {
             return;
         }
 
@@ -273,12 +277,11 @@ class Xml extends AbstractASTVisitor implements CodeAwareGenerator, FileAwareGen
     /**
      * Visits a package node.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace $namespace
      * @return void
      */
     public function visitNamespace(ASTNamespace $namespace)
     {
-        if (! $namespace->isUserDefined()) {
+        if (!$namespace->isUserDefined()) {
             return;
         }
 

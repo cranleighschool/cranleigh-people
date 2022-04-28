@@ -31,7 +31,7 @@ class ResolveInvalidReferencesPass implements CompilerPassInterface
 {
     private $container;
     private $signalingException;
-    private $currentId;
+    private string $currentId;
 
     /**
      * Process the ContainerBuilder to resolve invalid references.
@@ -46,18 +46,16 @@ class ResolveInvalidReferencesPass implements CompilerPassInterface
                 $this->processValue($definition);
             }
         } finally {
-            $this->container = $this->signalingException = null;
+            unset($this->container, $this->signalingException);
         }
     }
 
     /**
      * Processes arguments to determine invalid references.
      *
-     * @return mixed
-     *
      * @throws RuntimeException When an invalid reference is found
      */
-    private function processValue($value, int $rootLevel = 0, int $level = 0)
+    private function processValue(mixed $value, int $rootLevel = 0, int $level = 0): mixed
     {
         if ($value instanceof ServiceClosureArgument) {
             $value->setValues($this->processValue($value->getValues(), 1, 1));
@@ -82,7 +80,7 @@ class ResolveInvalidReferencesPass implements CompilerPassInterface
                         $value[$k] = $processedValue;
                     }
                 } catch (RuntimeException $e) {
-                    if ($rootLevel < $level || ($rootLevel && ! $level)) {
+                    if ($rootLevel < $level || ($rootLevel && !$level)) {
                         unset($value[$k]);
                     } elseif ($rootLevel) {
                         throw $e;
@@ -110,7 +108,7 @@ class ResolveInvalidReferencesPass implements CompilerPassInterface
 
             $invalidBehavior = $value->getInvalidBehavior();
 
-            if (ContainerInterface::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE === $invalidBehavior && $value instanceof TypedReference && ! $this->container->has($id)) {
+            if (ContainerInterface::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE === $invalidBehavior && $value instanceof TypedReference && !$this->container->has($id)) {
                 $e = new ServiceNotFoundException($id, $this->currentId);
 
                 // since the error message varies by $id and $this->currentId, so should the id of the dummy errored definition

@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ValidLogicalOperatorsSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +27,9 @@ class ValidLogicalOperatorsSniff implements Sniff
             T_LOGICAL_AND,
             T_LOGICAL_OR,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -53,12 +55,13 @@ class ValidLogicalOperatorsSniff implements Sniff
         }
 
         $error = 'Logical operator "%s" is prohibited; use "%s" instead';
-        $data = [
+        $data  = [
             $operator,
             $replacements[$operator],
         ];
         $phpcsFile->addError($error, $stackPtr, 'NotAllowed', $data);
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

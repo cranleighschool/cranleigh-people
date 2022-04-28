@@ -56,15 +56,17 @@ interface AnalyzerListener extends ASTVisitListener
     /**
      * This method is called when the analyzer starts code processing.
      *
-     * @param  \PDepend\Metrics\Analyzer $analyzer The context analyzer instance.
+     * @param Analyzer $analyzer The context analyzer instance.
+     *
      * @return void
      */
     public function startAnalyzer(Analyzer $analyzer);
-
+    
     /**
      * This method is called when the analyzer has finished code processing.
      *
-     * @param  \PDepend\Metrics\Analyzer $analyzer The context analyzer instance.
+     * @param Analyzer $analyzer The context analyzer instance.
+     *
      * @return void
      */
     public function endAnalyzer(Analyzer $analyzer);

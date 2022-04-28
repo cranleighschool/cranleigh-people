@@ -38,7 +38,7 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- */
+  */
 
 namespace PDepend;
 
@@ -59,56 +59,56 @@ interface ProcessListener extends ASTVisitListener, AnalyzerListener
     /**
      * Is called when PDepend starts the file parsing process.
      *
-     * @param  \PDepend\Source\Builder\Builder<mixed> $builder The used node builder instance.
+     * @param Builder<mixed> $builder The used node builder instance.
+     *
      * @return void
      */
     public function startParseProcess(Builder $builder);
-
+    
     /**
      * Is called when PDepend has finished the file parsing process.
      *
-     * @param  \PDepend\Source\Builder\Builder<mixed> $builder The used node builder instance.
+     * @param Builder<mixed> $builder The used node builder instance.
+     *
      * @return void
      */
     public function endParseProcess(Builder $builder);
-
+    
     /**
      * Is called when PDepend starts parsing of a new file.
      *
-     * @param  \PDepend\Source\Tokenizer\Tokenizer $tokenizer
      * @return void
      */
     public function startFileParsing(Tokenizer $tokenizer);
-
+    
     /**
      * Is called when PDepend has finished a file.
      *
-     * @param  \PDepend\Source\Tokenizer\Tokenizer $tokenizer
      * @return void
      */
     public function endFileParsing(Tokenizer $tokenizer);
-
+    
     /**
      * Is called when PDepend starts the analyzing process.
      *
      * @return void
      */
     public function startAnalyzeProcess();
-
+    
     /**
      * Is called when PDepend has finished the analyzing process.
      *
      * @return void
      */
     public function endAnalyzeProcess();
-
+    
     /**
      * Is called when PDepend starts the logging process.
      *
      * @return void
      */
     public function startLogProcess();
-
+    
     /**
      * Is called when PDepend has finished the logging process.
      *

@@ -54,15 +54,15 @@ class InvalidStateException extends ParserException
     /**
      * Constructs a new invalid state exception.
      *
-     * @param int $lineNumber Line number where the parser has stopped.
-     * @param string  $fileName   The source file where this exception occurred.
-     * @param string  $reason     Short description what has happened.
+     * @param int    $lineNumber Line number where the parser has stopped.
+     * @param string $fileName   The source file where this exception occurred.
+     * @param string $reason     Short description what has happened.
      */
     public function __construct($lineNumber, $fileName, $reason)
     {
         parent::__construct(
             sprintf(
-                'The parser has reached an invalid state near line "%d" in file '.
+                'The parser has reached an invalid state near line "%d" in file ' .
                 '"%s". Please check the following conditions: %s',
                 $lineNumber,
                 $fileName,

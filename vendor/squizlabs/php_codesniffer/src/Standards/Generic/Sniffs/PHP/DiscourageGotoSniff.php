@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DiscourageGotoSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,9 +27,9 @@ class DiscourageGotoSniff implements Sniff
             T_GOTO,
             T_GOTO_LABEL,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -41,7 +43,8 @@ class DiscourageGotoSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $phpcsFile->addWarning('Use of the GOTO language construct is discouraged', $stackPtr, 'Found');
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

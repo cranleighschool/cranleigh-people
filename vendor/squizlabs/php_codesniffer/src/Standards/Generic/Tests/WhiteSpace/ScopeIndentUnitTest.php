@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class ScopeIndentUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Get a list of CLI values to set before the file is tested.
      *
@@ -29,9 +31,9 @@ class ScopeIndentUnitTest extends AbstractSniffUnitTest
         } else {
             $config->tabWidth = 0;
         }
-    }
 
-    //end setCliValues()
+    }//end setCliValues()
+
 
     /**
      * Returns the lines where errors should occur.
@@ -43,7 +45,7 @@ class ScopeIndentUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = 'ScopeIndentUnitTest.inc')
+    public function getErrorList($testFile='ScopeIndentUnitTest.inc')
     {
         if ($testFile === 'ScopeIndentUnitTest.1.js') {
             return [
@@ -185,14 +187,14 @@ class ScopeIndentUnitTest extends AbstractSniffUnitTest
             1527 => 1,
             1529 => 1,
             1530 => 1,
-            1558 => 1,
-            1559 => 1,
-            1560 => 1,
-            1561 => 1,
+            1567 => 1,
+            1568 => 1,
+            1569 => 1,
+            1570 => 1,
         ];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -205,7 +207,8 @@ class ScopeIndentUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

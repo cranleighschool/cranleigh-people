@@ -59,7 +59,7 @@ class PropertyStrategy extends AbstractASTVisitor implements CodeRankStrategyI
      *
      * @var array<string, array>
      */
-    private $nodes = [];
+    private $nodes = array();
 
     /**
      * Returns the collected nodes.
@@ -74,7 +74,6 @@ class PropertyStrategy extends AbstractASTVisitor implements CodeRankStrategyI
     /**
      * Visits a property node.
      *
-     * @param  \PDepend\Source\AST\ASTProperty $property
      * @return void
      */
     public function visitProperty(ASTProperty $property)
@@ -83,7 +82,6 @@ class PropertyStrategy extends AbstractASTVisitor implements CodeRankStrategyI
 
         if (($depClass = $property->getClass()) === null) {
             $this->fireEndProperty($property);
-
             return;
         }
 
@@ -96,7 +94,7 @@ class PropertyStrategy extends AbstractASTVisitor implements CodeRankStrategyI
             $this->initNode($class);
             $this->initNode($depClass);
 
-            $this->nodes[$class->getId()]['in'][] = $depClass->getId();
+            $this->nodes[$class->getId()]['in'][]     = $depClass->getId();
             $this->nodes[$depClass->getId()]['out'][] = $class->getId();
         }
 
@@ -104,7 +102,7 @@ class PropertyStrategy extends AbstractASTVisitor implements CodeRankStrategyI
             $this->initNode($namespace);
             $this->initNode($depNamespace);
 
-            $this->nodes[$namespace->getId()]['in'][] = $depNamespace->getId();
+            $this->nodes[$namespace->getId()]['in'][]     = $depNamespace->getId();
             $this->nodes[$depNamespace->getId()]['out'][] = $namespace->getId();
         }
 
@@ -114,18 +112,17 @@ class PropertyStrategy extends AbstractASTVisitor implements CodeRankStrategyI
     /**
      * Initializes the temporary node container for the given <b>$node</b>.
      *
-     * @param  \PDepend\Source\AST\AbstractASTArtifact $node
      * @return void
      */
     protected function initNode(AbstractASTArtifact $node)
     {
-        if (! isset($this->nodes[$node->getId()])) {
-            $this->nodes[$node->getId()] = [
-                'in'   =>  [],
-                'out'  =>  [],
+        if (!isset($this->nodes[$node->getId()])) {
+            $this->nodes[$node->getId()] = array(
+                'in'   =>  array(),
+                'out'  =>  array(),
                 'name'  =>  $node->getName(),
-                'type'  =>  get_class($node),
-            ];
+                'type'  =>  get_class($node)
+            );
         }
     }
 }

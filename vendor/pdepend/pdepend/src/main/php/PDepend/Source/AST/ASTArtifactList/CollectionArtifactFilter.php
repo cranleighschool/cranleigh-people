@@ -58,26 +58,27 @@ final class CollectionArtifactFilter implements ArtifactFilter
     /**
      * Singleton instance of this filter.
      *
-     * @var \PDepend\Source\AST\ASTArtifactList\CollectionArtifactFilter
+     * @var CollectionArtifactFilter
      */
     private static $instance = null;
 
     /**
      * Singleton method for this filter class.
      *
-     * @return \PDepend\Source\AST\ASTArtifactList\CollectionArtifactFilter
+     * @return CollectionArtifactFilter
      */
     public static function getInstance()
     {
         if (self::$instance === null) {
             self::$instance = new CollectionArtifactFilter();
         }
-
         return self::$instance;
     }
 
     /**
      * Constructs a new static filter.
+     *
+     * @access private
      */
     public function __construct()
     {
@@ -86,15 +87,17 @@ final class CollectionArtifactFilter implements ArtifactFilter
     /**
      * An optional configured filter instance.
      *
-     * @var \PDepend\Source\AST\ASTArtifactList\ArtifactFilter
+     * @var ArtifactFilter
      */
     private $filter = null;
 
     /**
      * Sets the used filter instance.
      *
-     * @param  \PDepend\Source\AST\ASTArtifactList\ArtifactFilter $filter
+     * @param ArtifactFilter $filter
+     *
      * @return void
+     *
      * @since  0.9.12
      */
     public function setFilter(ArtifactFilter $filter = null)
@@ -106,7 +109,6 @@ final class CollectionArtifactFilter implements ArtifactFilter
      * Returns <b>true</b> if the given node should be part of the node iterator,
      * otherwise this method will return <b>false</b>.
      *
-     * @param  \PDepend\Source\AST\ASTArtifact $node
      * @return bool
      */
     public function accept(ASTArtifact $node)
@@ -114,7 +116,6 @@ final class CollectionArtifactFilter implements ArtifactFilter
         if ($this->filter === null) {
             return true;
         }
-
         return $this->filter->accept($node);
     }
 }

@@ -38,6 +38,7 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 
@@ -57,6 +58,7 @@ use PDepend\Source\ASTVisitor\ASTVisitor;
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 class ASTFormalParameter extends AbstractASTNode
@@ -75,7 +77,7 @@ class ASTFormalParameter extends AbstractASTNode
      */
     public function hasType()
     {
-        return reset($this->nodes) instanceof ASTType;
+        return (reset($this->nodes) instanceof ASTType);
     }
 
     /**
@@ -97,6 +99,7 @@ class ASTFormalParameter extends AbstractASTNode
      * variable argument list <b>...</b>.
      *
      * @return bool
+     *
      * @since 2.0.7
      */
     public function isVariableArgList()
@@ -108,7 +111,7 @@ class ASTFormalParameter extends AbstractASTNode
      * This method can be used to mark this parameter as passed by reference.
      *
      * @return void
-     * @since 2.0.7
+    @since 2.0.7
      */
     public function setVariableArgList()
     {
@@ -140,9 +143,8 @@ class ASTFormalParameter extends AbstractASTNode
      * Accept method of the visitor design pattern. This method will be called
      * by a visitor during tree traversal.
      *
-     * @param  ASTVisitor $visitor The calling visitor instance.
-     * @param  mixed      $data
-     * @return mixed
+     * @param ASTVisitor $visitor The calling visitor instance.
+     *
      * @since  0.9.12
      */
     public function accept(ASTVisitor $visitor, $data = null)
@@ -154,8 +156,9 @@ class ASTFormalParameter extends AbstractASTNode
      * Returns the total number of the used property bag.
      *
      * @return int
+     *
      * @since  0.10.4
-     * @see    \PDepend\Source\AST\ASTNode#getMetadataSize()
+     * @see    ASTNode#getMetadataSize()
      */
     protected function getMetadataSize()
     {
@@ -166,6 +169,7 @@ class ASTFormalParameter extends AbstractASTNode
      * Returns the declared modifiers for this type.
      *
      * @return int
+     *
      * @since  0.9.4
      */
     public function getModifiers()
@@ -180,10 +184,13 @@ class ASTFormalParameter extends AbstractASTNode
      * This method will throw an exception when the value of given <b>$modifiers</b>
      * contains an invalid/unexpected modifier
      *
-     * @param  int $modifiers
-     * @return void
+     * @param int $modifiers
+     *
      * @throws BadMethodCallException
      * @throws InvalidArgumentException
+     *
+     * @return void
+     *
      * @since  0.9.4
      */
     public function setModifiers($modifiers)
@@ -196,7 +203,8 @@ class ASTFormalParameter extends AbstractASTNode
 
         $expected = ~State::IS_PUBLIC
             & ~State::IS_PROTECTED
-            & ~State::IS_PRIVATE;
+            & ~State::IS_PRIVATE
+            & ~State::IS_READONLY;
 
         if (($expected & $modifiers) !== 0) {
             throw new InvalidArgumentException('Invalid constructor property modifier given.');
@@ -255,5 +263,10 @@ class ASTFormalParameter extends AbstractASTNode
     public function isPrivate()
     {
         return ($this->getModifiers() & State::IS_PRIVATE) === State::IS_PRIVATE;
+    }
+
+    public function __sleep()
+    {
+        return array_merge(array('modifiers'), parent::__sleep());
     }
 }

@@ -79,7 +79,8 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
     /**
      * Is called when PDepend starts the file parsing process.
      *
-     * @param  \PDepend\Source\Builder\Builder<mixed> $builder The used node builder instance.
+     * @param Builder<mixed> $builder The used node builder instance.
+     *
      * @return void
      */
     public function startParseProcess(Builder $builder)
@@ -90,7 +91,8 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
     /**
      * Is called when PDepend has finished the file parsing process.
      *
-     * @param  \PDepend\Source\Builder\Builder<mixed> $builder The used node builder instance.
+     * @param Builder<mixed> $builder The used node builder instance.
+     *
      * @return void
      */
     public function endParseProcess(Builder $builder)
@@ -100,7 +102,6 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
     /**
      * Is called when PDepend starts parsing of a new file.
      *
-     * @param  \PDepend\Source\Tokenizer\Tokenizer $tokenizer
      * @return void
      */
     public function startFileParsing(Tokenizer $tokenizer)
@@ -110,12 +111,11 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
     /**
      * Is called when PDepend has finished a file.
      *
-     * @param  \PDepend\Source\Tokenizer\Tokenizer $tokenizer
      * @return void
      */
     public function endFileParsing(Tokenizer $tokenizer)
     {
-        $this->parsedFiles++;
+        ++$this->parsedFiles;
     }
 
     /**
@@ -156,11 +156,11 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
             return;
         }
 
-        $dbus = new Dbus(Dbus::BUS_SESSION);
+        $dbus  = new Dbus(Dbus::BUS_SESSION);
         $proxy = $dbus->createProxy(
-            'org.freedesktop.Notifications', // connection name
-            '/org/freedesktop/Notifications', // object
-            'org.freedesktop.Notifications' // interface
+            "org.freedesktop.Notifications", // connection name
+            "/org/freedesktop/Notifications", // object
+            "org.freedesktop.Notifications" // interface
         );
         $proxy->Notify(
             'PDepend',
@@ -172,8 +172,8 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
                 $this->parsedFiles,
                 (date('i:s', time() - $this->startTime))
             ),
-            new DBusArray(DBus::STRING, []),
-            new DBusDict(DBus::VARIANT, []),
+            new DBusArray(DBus::STRING, array()),
+            new DBusDict(DBus::VARIANT, array()),
             1000
         );
     }
@@ -181,7 +181,8 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
     /**
      * Is called when PDepend starts a new analyzer.
      *
-     * @param  \PDepend\Metrics\Analyzer $analyzer The context analyzer instance.
+     * @param Analyzer $analyzer The context analyzer instance.
+     *
      * @return void
      */
     public function startAnalyzer(Analyzer $analyzer)
@@ -191,7 +192,8 @@ class ResultPrinter extends AbstractASTVisitListener implements ProcessListener
     /**
      * Is called when PDepend has finished one analyzing process.
      *
-     * @param  \PDepend\Metrics\Analyzer $analyzer The context analyzer instance.
+     * @param Analyzer $analyzer The context analyzer instance.
+     *
      * @return void
      */
     public function endAnalyzer(Analyzer $analyzer)

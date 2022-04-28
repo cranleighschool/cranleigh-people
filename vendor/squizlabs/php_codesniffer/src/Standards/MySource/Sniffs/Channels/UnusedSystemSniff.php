@@ -9,11 +9,13 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\Channels;
 
-use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 class UnusedSystemSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -22,9 +24,9 @@ class UnusedSystemSniff implements Sniff
     public function register()
     {
         return [T_DOUBLE_COLON];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -59,7 +61,7 @@ class UnusedSystemSniff implements Sniff
 
         if ($methodName === 'includeasset') {
             $systemName .= 'assettype';
-        } elseif ($methodName === 'includewidget') {
+        } else if ($methodName === 'includewidget') {
             $systemName .= 'widgettype';
         }
 
@@ -107,7 +109,7 @@ class UnusedSystemSniff implements Sniff
                 break;
             case T_EXTENDS:
                 $classNameToken = $phpcsFile->findNext(T_STRING, ($i + 1));
-                $className = strtolower($tokens[$classNameToken]['content']);
+                $className      = strtolower($tokens[$classNameToken]['content']);
                 if ($className === $systemName) {
                     // The included system was used, so it is fine.
                     return;
@@ -130,9 +132,10 @@ class UnusedSystemSniff implements Sniff
 
         // If we get to here, the system was not use.
         $error = 'Included system "%s" is never used';
-        $data = [$systemName];
+        $data  = [$systemName];
         $phpcsFile->addError($error, $stackPtr, 'Found', $data);
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

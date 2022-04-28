@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -24,9 +26,9 @@ class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -38,7 +40,7 @@ class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getWarningList($testFile = 'MultipleStatementAlignmentUnitTest.inc')
+    public function getWarningList($testFile='MultipleStatementAlignmentUnitTest.inc')
     {
         switch ($testFile) {
         case 'MultipleStatementAlignmentUnitTest.inc':
@@ -116,6 +118,9 @@ class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest
                 442 => 1,
                 443 => 1,
                 454 => 1,
+                487 => 1,
+                499 => 1,
+                500 => 1,
             ];
         break;
         case 'MultipleStatementAlignmentUnitTest.js':
@@ -154,7 +159,8 @@ class MultipleStatementAlignmentUnitTest extends AbstractSniffUnitTest
             return [];
             break;
         }//end switch
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

@@ -9,12 +9,14 @@
 
 namespace PHP_CodeSniffer\Filters;
 
-use PHP_CodeSniffer\Config;
-use PHP_CodeSniffer\Ruleset;
 use PHP_CodeSniffer\Util;
+use PHP_CodeSniffer\Ruleset;
+use PHP_CodeSniffer\Config;
+use ReturnTypeWillChange;
 
 class Filter extends \RecursiveFilterIterator
 {
+
     /**
      * The top-level path we are filtering.
      *
@@ -59,6 +61,7 @@ class Filter extends \RecursiveFilterIterator
      */
     protected $acceptedPaths = [];
 
+
     /**
      * Constructs a filter.
      *
@@ -73,11 +76,11 @@ class Filter extends \RecursiveFilterIterator
     {
         parent::__construct($iterator);
         $this->basedir = $basedir;
-        $this->config = $config;
+        $this->config  = $config;
         $this->ruleset = $ruleset;
-    }
 
-    //end __construct()
+    }//end __construct()
+
 
     /**
      * Check whether the current element of the iterator is acceptable.
@@ -87,6 +90,7 @@ class Filter extends \RecursiveFilterIterator
      *
      * @return bool
      */
+    #[ReturnTypeWillChange]
     public function accept()
     {
         $filePath = $this->current();
@@ -106,7 +110,7 @@ class Filter extends \RecursiveFilterIterator
             if ($this->config->local === true) {
                 return false;
             }
-        } elseif ($this->shouldProcessFile($filePath) === false) {
+        } else if ($this->shouldProcessFile($filePath) === false) {
             return false;
         }
 
@@ -115,11 +119,10 @@ class Filter extends \RecursiveFilterIterator
         }
 
         $this->acceptedPaths[$realPath] = true;
-
         return true;
-    }
 
-    //end accept()
+    }//end accept()
+
 
     /**
      * Returns an iterator for the current entry.
@@ -129,10 +132,11 @@ class Filter extends \RecursiveFilterIterator
      *
      * @return \RecursiveIterator
      */
+    #[ReturnTypeWillChange]
     public function getChildren()
     {
         $filterClass = get_called_class();
-        $children = new $filterClass(
+        $children    = new $filterClass(
             new \RecursiveDirectoryIterator($this->current(), (\RecursiveDirectoryIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS)),
             $this->basedir,
             $this->config,
@@ -140,14 +144,13 @@ class Filter extends \RecursiveFilterIterator
         );
 
         // Set the ignore patterns so we don't have to generate them again.
-        $children->ignoreDirPatterns = $this->ignoreDirPatterns;
+        $children->ignoreDirPatterns  = $this->ignoreDirPatterns;
         $children->ignoreFilePatterns = $this->ignoreFilePatterns;
-        $children->acceptedPaths = $this->acceptedPaths;
-
+        $children->acceptedPaths      = $this->acceptedPaths;
         return $children;
-    }
 
-    //end getChildren()
+    }//end getChildren()
+
 
     /**
      * Checks filtering rules to see if a file should be checked.
@@ -163,7 +166,7 @@ class Filter extends \RecursiveFilterIterator
         // Check that the file's extension is one we are checking.
         // We are strict about checking the extension and we don't
         // let files through with no extension or that start with a dot.
-        $fileName = basename($path);
+        $fileName  = basename($path);
         $fileParts = explode('.', $fileName);
         if ($fileParts[0] === $fileName || $fileParts[0] === '') {
             return false;
@@ -184,9 +187,9 @@ class Filter extends \RecursiveFilterIterator
         }
 
         return true;
-    }
 
-    //end shouldProcessFile()
+    }//end shouldProcessFile()
+
 
     /**
      * Checks filtering rules to see if a path should be ignored.
@@ -198,10 +201,10 @@ class Filter extends \RecursiveFilterIterator
     protected function shouldIgnorePath($path)
     {
         if ($this->ignoreFilePatterns === null) {
-            $this->ignoreDirPatterns = [];
+            $this->ignoreDirPatterns  = [];
             $this->ignoreFilePatterns = [];
 
-            $ignorePatterns = $this->config->ignored;
+            $ignorePatterns        = $this->config->ignored;
             $rulesetIgnorePatterns = $this->ruleset->getIgnorePatterns();
             foreach ($rulesetIgnorePatterns as $pattern => $type) {
                 // Ignore standard/sniff specific exclude rules.
@@ -245,7 +248,7 @@ class Filter extends \RecursiveFilterIterator
             // not have a relative/absolute value.
             if (is_int($pattern) === true) {
                 $pattern = $type;
-                $type = 'absolute';
+                $type    = 'absolute';
             }
 
             $replacements = [
@@ -275,7 +278,8 @@ class Filter extends \RecursiveFilterIterator
         }//end foreach
 
         return false;
-    }
 
-    //end shouldIgnorePath()
+    }//end shouldIgnorePath()
+
+
 }//end class

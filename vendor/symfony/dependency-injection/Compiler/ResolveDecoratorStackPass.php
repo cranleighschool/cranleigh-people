@@ -24,39 +24,32 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class ResolveDecoratorStackPass implements CompilerPassInterface
 {
-    private $tag;
-
-    public function __construct(string $tag = 'container.stack')
-    {
-        $this->tag = $tag;
-    }
-
     public function process(ContainerBuilder $container)
     {
         $stacks = [];
 
-        foreach ($container->findTaggedServiceIds($this->tag) as $id => $tags) {
+        foreach ($container->findTaggedServiceIds('container.stack') as $id => $tags) {
             $definition = $container->getDefinition($id);
 
-            if (! $definition instanceof ChildDefinition) {
-                throw new InvalidArgumentException(sprintf('Invalid service "%s": only definitions with a "parent" can have the "%s" tag.', $id, $this->tag));
+            if (!$definition instanceof ChildDefinition) {
+                throw new InvalidArgumentException(sprintf('Invalid service "%s": only definitions with a "parent" can have the "container.stack" tag.', $id));
             }
 
-            if (! $stack = $definition->getArguments()) {
+            if (!$stack = $definition->getArguments()) {
                 throw new InvalidArgumentException(sprintf('Invalid service "%s": the stack of decorators is empty.', $id));
             }
 
             $stacks[$id] = $stack;
         }
 
-        if (! $stacks) {
+        if (!$stacks) {
             return;
         }
 
         $resolvedDefinitions = [];
 
         foreach ($container->getDefinitions() as $id => $definition) {
-            if (! isset($stacks[$id])) {
+            if (!isset($stacks[$id])) {
                 $resolvedDefinitions[$id] = $definition;
                 continue;
             }
@@ -85,7 +78,7 @@ class ResolveDecoratorStackPass implements CompilerPassInterface
         $id = end($path);
         $prefix = '.'.$id.'.';
 
-        if (! isset($stacks[$id])) {
+        if (!isset($stacks[$id])) {
             return [$id => new ChildDefinition($id)];
         }
 

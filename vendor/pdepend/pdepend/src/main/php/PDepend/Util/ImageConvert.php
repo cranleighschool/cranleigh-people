@@ -42,6 +42,8 @@
 
 namespace PDepend\Util;
 
+use Imagick;
+
 /**
  * Simple utility class that is used to create different image formats. This
  * class can use the ImageMagick cli tool <b>convert</b> and the pecl extension
@@ -55,19 +57,20 @@ class ImageConvert
     /**
      * Tries to converts the <b>$input</b> image into the <b>$output</b> format.
      *
-     * @param  string $input  The input file.
-     * @param  string $output The output file.
+     * @param string $input  The input file.
+     * @param string $output The output file.
+     *
      * @return void
      */
     public static function convert($input, $output)
     {
-        $inputType = strtolower(pathinfo($input, PATHINFO_EXTENSION));
+        $inputType  = strtolower(pathinfo($input, PATHINFO_EXTENSION));
         $outputType = strtolower(pathinfo($output, PATHINFO_EXTENSION));
 
         // Check for output file without extension and reuse input type
         if ($outputType === '') {
             $outputType = $inputType;
-            $output .= ".{$outputType}";
+            $output    .= ".{$outputType}";
         }
 
         if ($inputType === 'svg') {
@@ -77,19 +80,19 @@ class ImageConvert
         if ($inputType === $outputType) {
             file_put_contents($output, file_get_contents($input));
         } elseif (extension_loaded('imagick') === true) {
-            $imagick = new \Imagick($input);
+            $imagick = new Imagick($input);
             $imagick->setImageFormat($outputType);
             $imagick->writeImage($output);
 
-        // The following code is not testable when imagick is installed
+            // The following code is not testable when imagick is installed
             // @codeCoverageIgnoreStart
         } elseif (self::hasImagickConvert() === true) {
-            $input = escapeshellarg($input);
+            $input  = escapeshellarg($input);
             $output = escapeshellarg($output);
 
             system("convert {$input} {$output}");
         } else {
-            $fallback = substr($output, 0, -strlen($outputType)).$inputType;
+            $fallback = substr($output, 0, -strlen($outputType)) . $inputType;
 
             echo "WARNING: Cannot generate image of type '{$outputType}'. This",
                  " feature needs either the\n         pecl/imagick extension or",
@@ -109,20 +112,19 @@ class ImageConvert
     protected static function hasImagickConvert()
     {
         // @codeCoverageIgnoreStart
-        $desc = [
-            0  =>  ['pipe', 'r'],
-            1  =>  ['pipe', 'w'],
-            2  =>  ['pipe', 'a'],
-        ];
+        $desc = array(
+            0  =>  array('pipe', 'r'),
+            1  =>  array('pipe', 'w'),
+            2  =>  array('pipe', 'a'),
+        );
 
         $proc = proc_open('convert', $desc, $pipes);
         if (is_resource($proc)) {
             fwrite($pipes[0], '-version');
             fclose($pipes[0]);
 
-            return 0 === proc_close($proc);
+            return (0 === proc_close($proc));
         }
-
         return false;
         // @codeCoverageIgnoreEnd
     }
@@ -134,7 +136,8 @@ class ImageConvert
      * imageConvert options exists, this method will prepare the input image
      * file.
      *
-     * @param  string $input The input svg file.
+     * @param string $input The input svg file.
+     *
      * @return void
      */
     protected static function prepareSvg($input)
@@ -151,7 +154,7 @@ class ImageConvert
             // Get font family
             $fontFamily = (string) $config->imageConvert->fontFamily;
             // Replace CSS separators
-            $fontReplace = 'font-family:'.strtr($fontFamily, ';:', '  ');
+            $fontReplace = 'font-family:' . strtr($fontFamily, ';:', '  ');
             $fontPattern = '/font-family:\s*Arial/';
 
             $svg = preg_replace($fontPattern, $fontReplace, $svg);
@@ -169,7 +172,7 @@ class ImageConvert
             $resize = ($fontSize - max($fontSizes));
             foreach ($fontSizes as $fontSize) {
                 // Calculate resize value
-                $fontReplace = 'font-size:'.($fontSize + $resize);
+                $fontReplace = 'font-size:' . ($fontSize + $resize);
                 $fontPattern = "/font-size:\s*{$fontSize}/";
 
                 $svg = preg_replace($fontPattern, $fontReplace, $svg);

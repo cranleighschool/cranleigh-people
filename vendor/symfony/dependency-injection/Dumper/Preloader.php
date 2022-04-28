@@ -18,7 +18,7 @@ final class Preloader
 {
     public static function append(string $file, array $list): void
     {
-        if (! file_exists($file)) {
+        if (!file_exists($file)) {
             throw new \LogicException(sprintf('File "%s" does not exist.', $file));
         }
 
@@ -34,10 +34,10 @@ final class Preloader
             $classes[] = sprintf("\$classes[] = %s;\n", var_export($item, true));
         }
 
-        file_put_contents($file, sprintf("\n\$classes = [];\n%sPreloader::preload(\$classes);\n", implode('', $classes)), \FILE_APPEND);
+        file_put_contents($file, sprintf("\n\$classes = [];\n%s\$preloaded = Preloader::preload(\$classes, \$preloaded);\n", implode('', $classes)), \FILE_APPEND);
     }
 
-    public static function preload(array $classes): void
+    public static function preload(array $classes, array $preloaded = []): array
     {
         set_error_handler(function ($t, $m, $f, $l) {
             if (error_reporting() & $t) {
@@ -50,13 +50,12 @@ final class Preloader
         });
 
         $prev = [];
-        $preloaded = [];
 
         try {
             while ($prev !== $classes) {
                 $prev = $classes;
                 foreach ($classes as $c) {
-                    if (! isset($preloaded[$c])) {
+                    if (!isset($preloaded[$c])) {
                         self::doPreload($c, $preloaded);
                     }
                 }
@@ -65,6 +64,8 @@ final class Preloader
         } finally {
             restore_error_handler();
         }
+
+        return $preloaded;
     }
 
     private static function doPreload(string $class, array &$preloaded): void
@@ -76,6 +77,10 @@ final class Preloader
         $preloaded[$class] = true;
 
         try {
+            if (!class_exists($class) && !interface_exists($class, false) && !trait_exists($class, false)) {
+                return;
+            }
+
             $r = new \ReflectionClass($class);
 
             if ($r->isInternal()) {
@@ -85,10 +90,8 @@ final class Preloader
             $r->getConstants();
             $r->getDefaultProperties();
 
-            if (\PHP_VERSION_ID >= 70400) {
-                foreach ($r->getProperties(\ReflectionProperty::IS_PUBLIC) as $p) {
-                    self::preloadType($p->getType(), $preloaded);
-                }
+            foreach ($r->getProperties(\ReflectionProperty::IS_PUBLIC) as $p) {
+                self::preloadType($p->getType(), $preloaded);
             }
 
             foreach ($r->getMethods(\ReflectionMethod::IS_PUBLIC) as $m) {
@@ -113,12 +116,12 @@ final class Preloader
 
     private static function preloadType(?\ReflectionType $t, array &$preloaded): void
     {
-        if (! $t) {
+        if (!$t) {
             return;
         }
 
-        foreach ($t instanceof \ReflectionUnionType ? $t->getTypes() : [$t] as $t) {
-            if (! $t->isBuiltin()) {
+        foreach (($t instanceof \ReflectionUnionType || $t instanceof \ReflectionIntersectionType) ? $t->getTypes() : [$t] as $t) {
+            if (!$t->isBuiltin()) {
                 self::doPreload($t instanceof \ReflectionNamedType ? $t->getName() : $t, $preloaded);
             }
         }

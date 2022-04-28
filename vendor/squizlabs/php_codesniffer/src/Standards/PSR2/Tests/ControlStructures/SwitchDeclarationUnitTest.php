@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class SwitchDeclarationUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -47,10 +49,19 @@ class SwitchDeclarationUnitTest extends AbstractSniffUnitTest
             260 => 1,
             300 => 1,
             311 => 1,
+            346 => 1,
+            350 => 1,
+            356 => 1,
+            362 => 1,
+            384 => 1,
+            528 => 1,
+            541 => 1,
+            558 => 1,
+            575 => 1,
         ];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -63,7 +74,8 @@ class SwitchDeclarationUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

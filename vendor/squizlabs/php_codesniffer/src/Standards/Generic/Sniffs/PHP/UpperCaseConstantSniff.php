@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class UpperCaseConstantSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -26,9 +28,9 @@ class UpperCaseConstantSniff implements Sniff
             T_FALSE,
             T_NULL,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -41,8 +43,8 @@ class UpperCaseConstantSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens = $phpcsFile->getTokens();
-        $keyword = $tokens[$stackPtr]['content'];
+        $tokens   = $phpcsFile->getTokens();
+        $keyword  = $tokens[$stackPtr]['content'];
         $expected = strtoupper($keyword);
         if ($keyword !== $expected) {
             if ($keyword === strtolower($keyword)) {
@@ -52,7 +54,7 @@ class UpperCaseConstantSniff implements Sniff
             }
 
             $error = 'TRUE, FALSE and NULL must be uppercase; expected "%s" but found "%s"';
-            $data = [
+            $data  = [
                 $expected,
                 $keyword,
             ];
@@ -64,7 +66,8 @@ class UpperCaseConstantSniff implements Sniff
         } else {
             $phpcsFile->recordMetric($stackPtr, 'PHP constant case', 'upper');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

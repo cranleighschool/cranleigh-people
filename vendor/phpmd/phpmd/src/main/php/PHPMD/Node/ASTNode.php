@@ -49,7 +49,7 @@ class ASTNode extends \PHPMD\AbstractNode
      * instance.
      *
      * @param \PHPMD\Rule $rule
-     * @return bool
+     * @return boolean
      * @SuppressWarnings("PMD.UnusedFormalParameter")
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
      */

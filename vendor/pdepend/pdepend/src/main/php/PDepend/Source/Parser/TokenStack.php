@@ -38,6 +38,7 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 
@@ -46,11 +47,12 @@ namespace PDepend\Source\Parser;
 use PDepend\Source\Tokenizer\Token;
 
 /**
- * This class provides a scoped collection for {@link \PDepend\Source\Tokenizer\Token}
+ * This class provides a scoped collection for {@link Token}
  * objects.
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 class TokenStack
@@ -58,16 +60,16 @@ class TokenStack
     /**
      * The actual token scope.
      *
-     * @var \PDepend\Source\Tokenizer\Token[]
+     * @var Token[]
      */
-    private $tokens = [];
+    private $tokens = array();
 
     /**
      * Stack with token scopes.
      *
-     * @var \PDepend\Source\Tokenizer\Token[][]
+     * @var Token[][]
      */
-    private $stack = [];
+    private $stack = array();
 
     /**
      * The current stack offset.
@@ -77,14 +79,14 @@ class TokenStack
     private $offset = 0;
 
     /**
-     * This method will push a new token scope onto the stack,.
+     * This method will push a new token scope onto the stack,
      *
      * @return void
      */
     public function push()
     {
         $this->stack[$this->offset++] = $this->tokens;
-        $this->tokens = [];
+        $this->tokens                  = array();
     }
 
     /**
@@ -92,11 +94,11 @@ class TokenStack
      * array with all collected tokens. Additionally this method will add all
      * tokens of the removed scope onto the next token scope.
      *
-     * @return \PDepend\Source\Tokenizer\Token[]
+     * @return Token[]
      */
     public function pop()
     {
-        $tokens = $this->tokens;
+        $tokens        = $this->tokens;
         $this->tokens = $this->stack[--$this->offset];
 
         unset($this->stack[$this->offset]);
@@ -104,18 +106,18 @@ class TokenStack
         foreach ($tokens as $token) {
             $this->tokens[] = $token;
         }
-
         return $tokens;
     }
 
     /**
      * This method will add a new token to the currently active token scope.
      *
-     * @param  \PDepend\Source\Tokenizer\Token $token The token to add.
-     * @return \PDepend\Source\Tokenizer\Token
+     * @param Token $token The token to add.
+     *
+     * @return Token
      */
     public function add(Token $token)
     {
-        return $this->tokens[] = $token;
+        return ($this->tokens[] = $token);
     }
 }

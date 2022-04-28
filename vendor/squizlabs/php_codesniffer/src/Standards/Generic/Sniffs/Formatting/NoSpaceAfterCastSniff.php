@@ -18,6 +18,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class NoSpaceAfterCastSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -26,9 +28,9 @@ class NoSpaceAfterCastSniff implements Sniff
     public function register()
     {
         return Tokens::$castTokens;
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -48,11 +50,12 @@ class NoSpaceAfterCastSniff implements Sniff
         }
 
         $error = 'A cast statement must not be followed by a space';
-        $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceFound');
+        $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceFound');
         if ($fix === true) {
             $phpcsFile->fixer->replaceToken(($stackPtr + 1), '');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

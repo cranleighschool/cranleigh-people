@@ -31,14 +31,14 @@ use Symfony\Component\DependencyInjection\Reference;
 class AnalyzeServiceReferencesPass extends AbstractRecursivePass
 {
     private $graph;
-    private $currentDefinition;
-    private $onlyConstructorArguments;
-    private $hasProxyDumper;
-    private $lazy;
-    private $byConstructor;
-    private $byFactory;
-    private $definitions;
-    private $aliases;
+    private $currentDefinition = null;
+    private bool $onlyConstructorArguments;
+    private bool $hasProxyDumper;
+    private bool $lazy;
+    private bool $byConstructor;
+    private bool $byFactory;
+    private array $definitions;
+    private array $aliases;
 
     /**
      * @param bool $onlyConstructorArguments Sets this Service Reference pass to ignore method calls
@@ -76,13 +76,13 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
         }
     }
 
-    protected function processValue($value, bool $isRoot = false)
+    protected function processValue(mixed $value, bool $isRoot = false): mixed
     {
         $lazy = $this->lazy;
         $inExpression = $this->inExpression();
 
         if ($value instanceof ArgumentInterface) {
-            $this->lazy = ! $this->byFactory || ! $value instanceof IteratorArgument;
+            $this->lazy = !$this->byFactory || !$value instanceof IteratorArgument;
             parent::processValue($value->getValues());
             $this->lazy = $lazy;
 
@@ -117,7 +117,7 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
 
             return $value;
         }
-        if (! $value instanceof Definition) {
+        if (!$value instanceof Definition) {
             return parent::processValue($value, $isRoot);
         }
         if ($isRoot) {
@@ -170,7 +170,7 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
 
         $this->byConstructor = $byConstructor;
 
-        if (! $this->onlyConstructorArguments) {
+        if (!$this->onlyConstructorArguments) {
             $this->processValue($properties);
             $this->processValue($setters);
             $this->processValue($value->getConfigurator());

@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util\Common;
 
 class ValidClassNameSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -27,9 +29,9 @@ class ValidClassNameSniff implements Sniff
             T_INTERFACE,
             T_TRAIT,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -46,18 +48,17 @@ class ValidClassNameSniff implements Sniff
 
         if (isset($tokens[$stackPtr]['scope_opener']) === false) {
             $error = 'Possible parse error: %s missing opening or closing brace';
-            $data = [$tokens[$stackPtr]['content']];
+            $data  = [$tokens[$stackPtr]['content']];
             $phpcsFile->addWarning($error, $stackPtr, 'MissingBrace', $data);
-
             return;
         }
 
         // Determine the name of the class or interface. Note that we cannot
         // simply look for the first T_STRING because a class name
         // starting with the number will be multiple tokens.
-        $opener = $tokens[$stackPtr]['scope_opener'];
+        $opener    = $tokens[$stackPtr]['scope_opener'];
         $nameStart = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), $opener, true);
-        $nameEnd = $phpcsFile->findNext(T_WHITESPACE, $nameStart, $opener);
+        $nameEnd   = $phpcsFile->findNext(T_WHITESPACE, $nameStart, $opener);
         if ($nameEnd === false) {
             $name = $tokens[$nameStart]['content'];
         } else {
@@ -67,9 +68,9 @@ class ValidClassNameSniff implements Sniff
         // Check for PascalCase format.
         $valid = Common::isCamelCaps($name, true, true, false);
         if ($valid === false) {
-            $type = ucfirst($tokens[$stackPtr]['content']);
+            $type  = ucfirst($tokens[$stackPtr]['content']);
             $error = '%s name "%s" is not in PascalCase format';
-            $data = [
+            $data  = [
                 $type,
                 $name,
             ];
@@ -78,7 +79,8 @@ class ValidClassNameSniff implements Sniff
         } else {
             $phpcsFile->recordMetric($stackPtr, 'PascalCase class name', 'yes');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

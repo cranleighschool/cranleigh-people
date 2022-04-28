@@ -32,8 +32,14 @@ use InvalidArgumentException;
  */
 trait Comparison
 {
+    /** @var bool */
+    protected $endOfTime = false;
+
+    /** @var bool */
+    protected $startOfTime = false;
+
     /**
-     * Determines if the instance is equal to another.
+     * Determines if the instance is equal to another
      *
      * @example
      * ```
@@ -54,7 +60,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is equal to another.
+     * Determines if the instance is equal to another
      *
      * @example
      * ```
@@ -69,11 +75,11 @@ trait Comparison
      */
     public function equalTo($date): bool
     {
-        return $this == $date;
+        return $this == $this->resolveCarbon($date);
     }
 
     /**
-     * Determines if the instance is not equal to another.
+     * Determines if the instance is not equal to another
      *
      * @example
      * ```
@@ -94,7 +100,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is not equal to another.
+     * Determines if the instance is not equal to another
      *
      * @example
      * ```
@@ -109,11 +115,11 @@ trait Comparison
      */
     public function notEqualTo($date): bool
     {
-        return ! $this->equalTo($date);
+        return !$this->equalTo($date);
     }
 
     /**
-     * Determines if the instance is greater (after) than another.
+     * Determines if the instance is greater (after) than another
      *
      * @example
      * ```
@@ -134,7 +140,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than another.
+     * Determines if the instance is greater (after) than another
      *
      * @example
      * ```
@@ -149,11 +155,11 @@ trait Comparison
      */
     public function greaterThan($date): bool
     {
-        return $this > $date;
+        return $this > $this->resolveCarbon($date);
     }
 
     /**
-     * Determines if the instance is greater (after) than another.
+     * Determines if the instance is greater (after) than another
      *
      * @example
      * ```
@@ -174,7 +180,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than or equal to another.
+     * Determines if the instance is greater (after) than or equal to another
      *
      * @example
      * ```
@@ -195,7 +201,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is greater (after) than or equal to another.
+     * Determines if the instance is greater (after) than or equal to another
      *
      * @example
      * ```
@@ -214,7 +220,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) than another.
+     * Determines if the instance is less (before) than another
      *
      * @example
      * ```
@@ -235,7 +241,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) than another.
+     * Determines if the instance is less (before) than another
      *
      * @example
      * ```
@@ -250,11 +256,11 @@ trait Comparison
      */
     public function lessThan($date): bool
     {
-        return $this < $date;
+        return $this < $this->resolveCarbon($date);
     }
 
     /**
-     * Determines if the instance is less (before) than another.
+     * Determines if the instance is less (before) than another
      *
      * @example
      * ```
@@ -275,7 +281,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) or equal to another.
+     * Determines if the instance is less (before) or equal to another
      *
      * @example
      * ```
@@ -296,7 +302,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is less (before) or equal to another.
+     * Determines if the instance is less (before) or equal to another
      *
      * @example
      * ```
@@ -392,7 +398,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is between two others.
+     * Determines if the instance is between two others
      *
      * @example
      * ```
@@ -426,7 +432,7 @@ trait Comparison
      */
     public function isWeekday()
     {
-        return ! $this->isWeekend();
+        return !$this->isWeekend();
     }
 
     /**
@@ -542,7 +548,7 @@ trait Comparison
     }
 
     /**
-     * Determines if the instance is a long year.
+     * Determines if the instance is a long year
      *
      * @example
      * ```
@@ -615,9 +621,9 @@ trait Comparison
             'microsecond' => 'Y-m-d H:i:s.u',
         ];
 
-        if (! isset($units[$unit])) {
+        if (!isset($units[$unit])) {
             if (isset($this->$unit)) {
-                return $this->$unit === $this->resolveCarbon($date)->$unit;
+                return $this->resolveCarbon($date)->$unit === $this->$unit;
             }
 
             if ($this->localStrictModeEnabled ?? static::isStrictModeEnabled()) {
@@ -670,7 +676,7 @@ trait Comparison
     {
         $date = $this->resolveCarbon($date);
 
-        return $this->quarter === $date->quarter && (! $ofSameYear || $this->isSameYear($date));
+        return $this->quarter === $date->quarter && (!$ofSameYear || $this->isSameYear($date));
     }
 
     /**
@@ -739,7 +745,7 @@ trait Comparison
     }
 
     /**
-     * Check if today is the last day of the Month.
+     * Check if today is the last day of the Month
      *
      * @example
      * ```
@@ -905,7 +911,7 @@ trait Comparison
         try {
             // Try to create a DateTime object. Throws an InvalidArgumentException if the provided time string
             // doesn't match the format in any way.
-            if (! static::rawCreateFromFormat($format, $date)) {
+            if (!static::rawCreateFromFormat($format, $date)) {
                 return false;
             }
         } catch (InvalidArgumentException $e) {
@@ -944,7 +950,7 @@ trait Comparison
         $tester = trim($tester);
 
         if (preg_match('/^\d+$/', $tester)) {
-            return $this->year === \intval($tester);
+            return $this->year === (int) $tester;
         }
 
         if (preg_match('/^\d{3,}-\d{1,2}$/', $tester)) {
@@ -959,9 +965,9 @@ trait Comparison
 
         /* @var CarbonInterface $max */
         $median = static::parse('5555-06-15 12:30:30.555555')->modify($modifier);
-        $current = $this->copy();
+        $current = $this->avoidMutation();
         /* @var CarbonInterface $other */
-        $other = $this->copy()->modify($modifier);
+        $other = $this->avoidMutation()->modify($modifier);
 
         if ($current->eq($other)) {
             return true;
@@ -996,7 +1002,7 @@ trait Comparison
         ];
 
         foreach ($units as $unit => [$minimum, $startUnit]) {
-            if ($median->$unit === $minimum) {
+            if ($minimum === $median->$unit) {
                 $current = $current->startOf($startUnit);
 
                 break;
@@ -1040,5 +1046,25 @@ trait Comparison
         $regex = preg_replace('#(?<!\\\\)((?:\\\\{2})*)/#', '$1\\/', $regex);
 
         return (bool) @preg_match('/^'.$regex.'$/', $date);
+    }
+
+    /**
+     * Returns true if the date was created using CarbonImmutable::startOfTime()
+     *
+     * @return bool
+     */
+    public function isStartOfTime(): bool
+    {
+        return $this->startOfTime ?? false;
+    }
+
+    /**
+     * Returns true if the date was created using CarbonImmutable::endOfTime()
+     *
+     * @return bool
+     */
+    public function isEndOfTime(): bool
+    {
+        return $this->endOfTime ?? false;
     }
 }

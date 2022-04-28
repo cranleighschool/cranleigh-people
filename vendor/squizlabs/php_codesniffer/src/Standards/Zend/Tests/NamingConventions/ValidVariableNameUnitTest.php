@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class ValidVariableNameUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -53,9 +55,9 @@ class ValidVariableNameUnitTest extends AbstractSniffUnitTest
             116 => 1,
             121 => 1,
         ];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -85,7 +87,8 @@ class ValidVariableNameUnitTest extends AbstractSniffUnitTest
             94  => 1,
             107 => 1,
         ];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

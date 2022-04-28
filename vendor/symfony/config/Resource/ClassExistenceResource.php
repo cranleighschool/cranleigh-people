@@ -23,12 +23,12 @@ namespace Symfony\Component\Config\Resource;
  */
 class ClassExistenceResource implements SelfCheckingResourceInterface
 {
-    private $resource;
-    private $exists;
+    private string $resource;
+    private ?array $exists = null;
 
-    private static $autoloadLevel = 0;
-    private static $autoloadedClass;
-    private static $existsCache = [];
+    private static int $autoloadLevel = 0;
+    private static ?string $autoloadedClass = null;
+    private static array $existsCache = [];
 
     /**
      * @param string    $resource The fully-qualified class name
@@ -38,21 +38,15 @@ class ClassExistenceResource implements SelfCheckingResourceInterface
     {
         $this->resource = $resource;
         if (null !== $exists) {
-            $this->exists = [(bool) $exists, null];
+            $this->exists = [$exists, null];
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
         return $this->resource;
     }
 
-    /**
-     * @return string The file path to the resource
-     */
     public function getResource(): string
     {
         return $this->resource;
@@ -70,11 +64,11 @@ class ClassExistenceResource implements SelfCheckingResourceInterface
         if (null !== $exists = &self::$existsCache[$this->resource]) {
             if ($loaded) {
                 $exists = [true, null];
-            } elseif (0 >= $timestamp && ! $exists[0] && null !== $exists[1]) {
+            } elseif (0 >= $timestamp && !$exists[0] && null !== $exists[1]) {
                 throw new \ReflectionException($exists[1]);
             }
         } elseif ([false, null] === $exists = [$loaded, null]) {
-            if (! self::$autoloadLevel++) {
+            if (!self::$autoloadLevel++) {
                 spl_autoload_register(__CLASS__.'::throwOnRequiredClass');
             }
             $autoloadedClass = self::$autoloadedClass;
@@ -98,7 +92,7 @@ class ClassExistenceResource implements SelfCheckingResourceInterface
                 throw $e;
             } finally {
                 self::$autoloadedClass = $autoloadedClass;
-                if (! --self::$autoloadLevel) {
+                if (!--self::$autoloadLevel) {
                     spl_autoload_unregister(__CLASS__.'::throwOnRequiredClass');
                 }
             }
@@ -108,7 +102,7 @@ class ClassExistenceResource implements SelfCheckingResourceInterface
             $this->exists = $exists;
         }
 
-        return $this->exists[0] xor ! $exists[0];
+        return $this->exists[0] xor !$exists[0];
     }
 
     /**
@@ -190,7 +184,7 @@ class ClassExistenceResource implements SelfCheckingResourceInterface
             'args' => [$class],
         ];
 
-        if (\PHP_VERSION_ID >= 80000 && isset($trace[1])) {
+        if (isset($trace[1])) {
             $callerFrame = $trace[1];
             $i = 2;
         } elseif (false !== $i = array_search($autoloadFrame, $trace, true)) {
@@ -199,7 +193,7 @@ class ClassExistenceResource implements SelfCheckingResourceInterface
             throw $e;
         }
 
-        if (isset($callerFrame['function']) && ! isset($callerFrame['class'])) {
+        if (isset($callerFrame['function']) && !isset($callerFrame['class'])) {
             switch ($callerFrame['function']) {
                 case 'get_class_methods':
                 case 'get_class_vars':

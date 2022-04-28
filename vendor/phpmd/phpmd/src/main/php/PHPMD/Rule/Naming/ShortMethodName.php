@@ -50,16 +50,16 @@ class ShortMethodName extends AbstractRule implements MethodAware, FunctionAware
 
         $this->addViolation(
             $node,
-            [
+            array(
                 $node->getParentName(),
                 $node->getName(),
                 $threshold,
-            ]
+            )
         );
     }
 
     /**
-     * Gets array of exceptions from property.
+     * Gets array of exceptions from property
      *
      * @return array
      */

@@ -50,6 +50,7 @@ use PDepend\Source\AST\ASTArtifact;
 use PDepend\Source\AST\ASTFunction;
 use PDepend\Source\AST\ASTInterface;
 use PDepend\Source\AST\ASTMethod;
+use PDepend\Source\AST\ASTNamespace;
 use PDepend\Source\Tokenizer\Tokens;
 
 /**
@@ -64,28 +65,21 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
     /**
      * Metrics provided by the analyzer implementation.
      */
-    const M_HALSTEAD_LENGTH = 'hnt';
-    const // N = N1 + N2 (total operators + operands)
-          M_HALSTEAD_VOCABULARY = 'hnd';
-    const // n = n1 + n2 (distinct operators + operands)
-          M_HALSTEAD_VOLUME = 'hv';
-    const // V = N * log2(n)
-          M_HALSTEAD_DIFFICULTY = 'hd';
-    const // D = (n1 / 2) * (N2 / n2)
-          M_HALSTEAD_LEVEL = 'hl';
-    const // L = 1 / D
-          M_HALSTEAD_EFFORT = 'he';
-    const // E = V * D
-          M_HALSTEAD_TIME = 'ht';
-    const // T = E / 18
-          M_HALSTEAD_BUGS = 'hb';
-    const // B = (E ** (2/3)) / 3000
+    const M_HALSTEAD_LENGTH = 'hnt', // N = N1 + N2 (total operators + operands)
+          M_HALSTEAD_VOCABULARY = 'hnd', // n = n1 + n2 (distinct operators + operands)
+          M_HALSTEAD_VOLUME = 'hv', // V = N * log2(n)
+          M_HALSTEAD_DIFFICULTY = 'hd', // D = (n1 / 2) * (N2 / n2)
+          M_HALSTEAD_LEVEL = 'hl', // L = 1 / D
+          M_HALSTEAD_EFFORT = 'he', // E = V * D
+          M_HALSTEAD_TIME = 'ht', // T = E / 18
+          M_HALSTEAD_BUGS = 'hb', // B = (E ** (2/3)) / 3000
           M_HALSTEAD_CONTENT = 'hi'; // I = (V / D)
 
     /**
-     * Processes all {@link \PDepend\Source\AST\ASTNamespace} code nodes.
+     * Processes all {@link ASTNamespace} code nodes.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace[] $namespaces
+     * @param ASTNamespace[] $namespaces
+     *
      * @return void
      */
     public function analyze($namespaces)
@@ -95,7 +89,7 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
             $this->fireStartAnalyzer();
 
             // Init node metrics
-            $this->metrics = [];
+            $this->metrics = array();
 
             foreach ($namespaces as $namespace) {
                 $namespace->accept($this);
@@ -111,7 +105,6 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
      * for the given <b>$node</b> (n1, n2, N1, N2). If there are no metrics for
      * the requested node, this method will return an empty <b>array</b>.
      *
-     * @param \PDepend\Source\AST\ASTArtifact $artifact
      * @return array<string, integer>
      */
     public function getNodeBasisMetrics(ASTArtifact $artifact)
@@ -120,7 +113,7 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
             return $this->metrics[$artifact->getId()];
         }
 
-        return [];
+        return array();
     }
 
     /**
@@ -128,7 +121,6 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
      * for the given <b>$node</b>. If there are no metrics for the requested
      * node, this method will return an empty <b>array</b>.
      *
-     * @param \PDepend\Source\AST\ASTArtifact $artifact
      * @return array<string, float>
      */
     public function getNodeMetrics(ASTArtifact $artifact)
@@ -138,13 +130,12 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
             return $this->calculateHalsteadMeasures($basis);
         }
 
-        return [];
+        return array();
     }
 
     /**
      * Visits a function node.
      *
-     * @param  \PDepend\Source\AST\ASTFunction $function
      * @return void
      */
     public function visitFunction(ASTFunction $function)
@@ -161,7 +152,6 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
     /**
      * Visits a code interface object.
      *
-     * @param  \PDepend\Source\AST\ASTInterface $interface
      * @return void
      */
     public function visitInterface(ASTInterface $interface)
@@ -172,7 +162,6 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
     /**
      * Visits a method node.
      *
-     * @param  \PDepend\Source\AST\ASTMethod $method
      * @return void
      */
     public function visitMethod(ASTMethod $method)
@@ -189,13 +178,12 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
     /**
      * @see http://www.scribd.com/doc/99533/Halstead-s-Operators-and-Operands-in-C-C-JAVA-by-Indranil-Nandy
      *
-     * @param  \PDepend\Source\AST\AbstractASTCallable $callable
      * @return void
      */
     public function calculateHalsteadBasis(AbstractASTCallable $callable)
     {
-        $operators = [];
-        $operands = [];
+        $operators = array();
+        $operands = array();
 
         $skipUntil = null;
 
@@ -291,6 +279,7 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
                  * Class::method or $object->method both only count as 1
                  * identifier, even though they consist of 3 tokens.
                  */
+                case Tokens::T_NULLSAFE_OBJECT_OPERATOR:
                 case Tokens::T_OBJECT_OPERATOR:
                 case Tokens::T_DOUBLE_COLON:
                     // Glue ->/:: and before & after parts together.
@@ -371,12 +360,12 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
             }
         }
 
-        $this->metrics[$callable->getId()] = [
+        $this->metrics[$callable->getId()] = array(
             'n1' => count($operators),
             'n2' => count($operands),
             'N1' => count(array_unique($operators)),
             'N2' => count(array_unique($operands)),
-        ];
+        );
     }
 
     /**
@@ -386,11 +375,12 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
      * @see http://www.grammatech.com/codesonar/workflow-features/halstead
      *
      * @param array<string, int> $basis [n1, n2, N1, N2]
+     *
      * @return array<string, float>
      */
     public function calculateHalsteadMeasures(array $basis)
     {
-        $measures = [];
+        $measures = array();
         $measures[self::M_HALSTEAD_LENGTH] = $basis['N1'] + $basis['N2'];
         $measures[self::M_HALSTEAD_VOCABULARY] = $basis['n1'] + $basis['n2'];
         $measures[self::M_HALSTEAD_VOLUME] =
@@ -400,7 +390,7 @@ class HalsteadAnalyzer extends AbstractCachingAnalyzer implements AnalyzerNodeAw
         $measures[self::M_HALSTEAD_EFFORT] =
             $measures[self::M_HALSTEAD_VOLUME] * $measures[self::M_HALSTEAD_DIFFICULTY];
         $measures[self::M_HALSTEAD_TIME] = $measures[self::M_HALSTEAD_EFFORT] / 18;
-        $measures[self::M_HALSTEAD_BUGS] = pow($measures[self::M_HALSTEAD_EFFORT], (2 / 3)) / 3000;
+        $measures[self::M_HALSTEAD_BUGS] = pow($measures[self::M_HALSTEAD_EFFORT], (2/3)) / 3000;
         $measures[self::M_HALSTEAD_CONTENT] =
             $measures[self::M_HALSTEAD_VOLUME] / ($measures[self::M_HALSTEAD_DIFFICULTY] ?: 1);
 

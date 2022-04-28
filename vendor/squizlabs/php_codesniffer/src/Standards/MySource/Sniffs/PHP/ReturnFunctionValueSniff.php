@@ -9,11 +9,13 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\PHP;
 
-use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 class ReturnFunctionValueSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -22,9 +24,9 @@ class ReturnFunctionValueSniff implements Sniff
     public function register()
     {
         return [T_RETURN];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -54,7 +56,8 @@ class ReturnFunctionValueSniff implements Sniff
             $phpcsFile->addWarning($error, $stackPtr, 'NotAssigned');
             break;
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

@@ -51,12 +51,12 @@ class ElseExpression extends AbstractRule implements MethodAware, FunctionAware
                 continue;
             }
 
-            $this->addViolation($scope, [$node->getImage()]);
+            $this->addViolation($scope, array($node->getImage()));
         }
     }
 
     /**
-     * Whether the given scope is an else clause.
+     * Whether the given scope is an else clause
      *
      * @param AbstractNode $scope
      * @param ASTNode $parent
@@ -64,19 +64,20 @@ class ElseExpression extends AbstractRule implements MethodAware, FunctionAware
      */
     protected function isElseScope(AbstractNode $scope, ASTNode $parent)
     {
-        return
+        return (
             count($parent->getChildren()) === 3 &&
-            $scope->getNode() === $parent->getChild(2)->getNode();
+            $scope->getNode() === $parent->getChild(2)->getNode()
+        );
     }
 
     /**
-     * Whether the parent node is an if or an elseif clause.
+     * Whether the parent node is an if or an elseif clause
      *
      * @param ASTNode $parent
      * @return bool
      */
     protected function isIfOrElseIfStatement(ASTNode $parent)
     {
-        return $parent->getName() === 'if' || $parent->getName() === 'elseif';
+        return ($parent->getName() === "if" || $parent->getName() === "elseif");
     }
 }

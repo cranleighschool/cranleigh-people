@@ -15,24 +15,25 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class FunctionSpacingSniff implements Sniff
 {
+
     /**
      * The number of blank lines between functions.
      *
-     * @var int
+     * @var integer
      */
     public $spacing = 2;
 
     /**
      * The number of blank lines before the first function in a class.
      *
-     * @var int
+     * @var integer
      */
     public $spacingBeforeFirst = 2;
 
     /**
      * The number of blank lines after the last function in a class.
      *
-     * @var int
+     * @var integer
      */
     public $spacingAfterLast = 2;
 
@@ -43,6 +44,7 @@ class FunctionSpacingSniff implements Sniff
      */
     private $rulesetProperties = null;
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -51,9 +53,9 @@ class FunctionSpacingSniff implements Sniff
     public function register()
     {
         return [T_FUNCTION];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff when one of its tokens is encountered.
@@ -66,7 +68,7 @@ class FunctionSpacingSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens = $phpcsFile->getTokens();
+        $tokens           = $phpcsFile->getTokens();
         $previousNonEmpty = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if ($previousNonEmpty !== false
             && $tokens[$previousNonEmpty]['code'] === T_OPEN_TAG
@@ -96,9 +98,9 @@ class FunctionSpacingSniff implements Sniff
             }
         }
 
-        $this->spacing = (int) $this->spacing;
+        $this->spacing            = (int) $this->spacing;
         $this->spacingBeforeFirst = (int) $this->spacingBeforeFirst;
-        $this->spacingAfterLast = (int) $this->spacingAfterLast;
+        $this->spacingAfterLast   = (int) $this->spacingAfterLast;
 
         if (isset($tokens[$stackPtr]['scope_closer']) === false) {
             // Must be an interface method, so the closer is the semicolon.
@@ -108,7 +110,7 @@ class FunctionSpacingSniff implements Sniff
         }
 
         $isFirst = false;
-        $isLast = false;
+        $isLast  = false;
 
         $ignore = ([T_WHITESPACE => T_WHITESPACE] + Tokens::$methodPrefixes);
 
@@ -153,10 +155,10 @@ class FunctionSpacingSniff implements Sniff
         }
 
         $requiredSpacing = $this->spacing;
-        $errorCode = 'After';
+        $errorCode       = 'After';
         if ($isLast === true) {
             $requiredSpacing = $this->spacingAfterLast;
-            $errorCode = 'AfterLast';
+            $errorCode       = 'AfterLast';
         }
 
         $foundLines = 0;
@@ -190,7 +192,7 @@ class FunctionSpacingSniff implements Sniff
             }
 
             $error .= ' after function; %s found';
-            $data = [
+            $data   = [
                 $requiredSpacing,
                 $foundLines,
             ];
@@ -229,8 +231,8 @@ class FunctionSpacingSniff implements Sniff
         if ($prevLineToken === null) {
             // Never found the previous line, which means
             // there are 0 blank lines before the function.
-            $foundLines = 0;
-            $prevContent = 0;
+            $foundLines    = 0;
+            $prevContent   = 0;
             $prevLineToken = 0;
         } else {
             $currentLine = $tokens[$stackPtr]['line'];
@@ -265,15 +267,15 @@ class FunctionSpacingSniff implements Sniff
             // Before we throw an error, check that we are not throwing an error
             // for another function. We don't want to error for no blank lines after
             // the previous function and no blank lines before this one as well.
-            $prevLine = ($tokens[$prevContent]['line'] - 1);
-            $i = ($stackPtr - 1);
+            $prevLine   = ($tokens[$prevContent]['line'] - 1);
+            $i          = ($stackPtr - 1);
             $foundLines = 0;
 
             $stopAt = 0;
             if (isset($tokens[$stackPtr]['conditions']) === true) {
                 $conditions = $tokens[$stackPtr]['conditions'];
                 $conditions = array_keys($conditions);
-                $stopAt = array_pop($conditions);
+                $stopAt     = array_pop($conditions);
             }
 
             while ($currentLine !== $prevLine && $currentLine > 1 && $i > $stopAt) {
@@ -306,10 +308,10 @@ class FunctionSpacingSniff implements Sniff
         }//end if
 
         $requiredSpacing = $this->spacing;
-        $errorCode = 'Before';
+        $errorCode       = 'Before';
         if ($isFirst === true) {
             $requiredSpacing = $this->spacingBeforeFirst;
-            $errorCode = 'BeforeFirst';
+            $errorCode       = 'BeforeFirst';
 
             $phpcsFile->recordMetric($stackPtr, 'Function spacing before first', $foundLines);
         } else {
@@ -323,7 +325,7 @@ class FunctionSpacingSniff implements Sniff
             }
 
             $error .= ' before function; %s found';
-            $data = [
+            $data   = [
                 $requiredSpacing,
                 $foundLines,
             ];
@@ -358,7 +360,8 @@ class FunctionSpacingSniff implements Sniff
                 }//end if
             }//end if
         }//end if
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

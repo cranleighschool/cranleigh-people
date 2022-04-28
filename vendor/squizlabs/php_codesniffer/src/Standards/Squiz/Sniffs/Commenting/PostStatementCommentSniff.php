@@ -14,6 +14,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class PostStatementCommentSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -42,6 +43,7 @@ class PostStatementCommentSniff implements Sniff
         T_MATCH   => true,
     ];
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -50,9 +52,9 @@ class PostStatementCommentSniff implements Sniff
     public function register()
     {
         return [T_COMMENT];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -108,11 +110,12 @@ class PostStatementCommentSniff implements Sniff
         }
 
         $error = 'Comments may not appear after statements';
-        $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Found');
+        $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'Found');
         if ($fix === true) {
             $phpcsFile->fixer->addNewlineBefore($stackPtr);
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

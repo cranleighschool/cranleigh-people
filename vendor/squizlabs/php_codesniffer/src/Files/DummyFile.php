@@ -14,11 +14,13 @@
 
 namespace PHP_CodeSniffer\Files;
 
-use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Ruleset;
+use PHP_CodeSniffer\Config;
 
 class DummyFile extends File
 {
+
+
     /**
      * Creates a DummyFile object and sets the content.
      *
@@ -36,12 +38,12 @@ class DummyFile extends File
         // This is done by including: phpcs_input_file: [file path]
         // as the first line of content.
         $path = 'STDIN';
-        if ($content !== null) {
+        if ($content !== '') {
             if (substr($content, 0, 17) === 'phpcs_input_file:') {
-                $eolPos = strpos($content, $this->eolChar);
+                $eolPos   = strpos($content, $this->eolChar);
                 $filename = trim(substr($content, 17, ($eolPos - 17)));
-                $content = substr($content, ($eolPos + strlen($this->eolChar)));
-                $path = $filename;
+                $content  = substr($content, ($eolPos + strlen($this->eolChar)));
+                $path     = $filename;
 
                 $this->setContent($content);
             }
@@ -53,9 +55,9 @@ class DummyFile extends File
         }
 
         parent::__construct($path, $ruleset, $config);
-    }
 
-    //end __construct()
+    }//end __construct()
+
 
     /**
      * Set the error, warning, and fixable counts for the file.
@@ -69,11 +71,12 @@ class DummyFile extends File
      */
     public function setErrorCounts($errorCount, $warningCount, $fixableCount, $fixedCount)
     {
-        $this->errorCount = $errorCount;
+        $this->errorCount   = $errorCount;
         $this->warningCount = $warningCount;
         $this->fixableCount = $fixableCount;
-        $this->fixedCount = $fixedCount;
-    }
+        $this->fixedCount   = $fixedCount;
 
-    //end setErrorCounts()
+    }//end setErrorCounts()
+
+
 }//end class

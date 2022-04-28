@@ -74,10 +74,10 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
     /**
      * Metrics provided by the analyzer implementation.
      */
-    const M_NUMBER_OF_ABSTRACT_CLASSES = 'clsa';
-    const M_NUMBER_OF_CONCRETE_CLASSES = 'clsc';
-    const M_NUMBER_OF_ROOT_CLASSES = 'roots';
-    const M_NUMBER_OF_LEAF_CLASSES = 'leafs';
+    const M_NUMBER_OF_ABSTRACT_CLASSES = 'clsa',
+          M_NUMBER_OF_CONCRETE_CLASSES = 'clsc',
+          M_NUMBER_OF_ROOT_CLASSES     = 'roots',
+          M_NUMBER_OF_LEAF_CLASSES     = 'leafs';
 
     /**
      * Number of all analyzed functions.
@@ -119,14 +119,14 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
      *
      * @var array<string, boolean>
      */
-    private $roots = [];
+    private $roots = array();
 
     /**
-     * Number of all none leaf classes within the analyzed source code.
+     * Number of all none leaf classes within the analyzed source code
      *
      * @var array<string, boolean>
      */
-    private $noneLeafs = [];
+    private $noneLeafs = array();
 
     /**
      * Hash with all calculated node metrics.
@@ -151,9 +151,10 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
     private $nodeMetrics = null;
 
     /**
-     * Processes all {@link \PDepend\Source\AST\ASTNamespace} code nodes.
+     * Processes all {@link ASTNamespace} code nodes.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace[] $namespaces
+     * @param ASTNamespace[] $namespaces
+     *
      * @return void
      */
     public function analyze($namespaces)
@@ -162,7 +163,7 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
             $this->fireStartAnalyzer();
 
             // Init node metrics
-            $this->nodeMetrics = [];
+            $this->nodeMetrics = array();
 
             // Visit all nodes
             foreach ($namespaces as $namespace) {
@@ -183,12 +184,12 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
         // Count none leaf classes
         $noneLeafs = count($this->noneLeafs);
 
-        return [
+        return array(
             self::M_NUMBER_OF_ABSTRACT_CLASSES  =>  $this->clsa,
             self::M_NUMBER_OF_CONCRETE_CLASSES  =>  $this->cls - $this->clsa,
             self::M_NUMBER_OF_ROOT_CLASSES      =>  count($this->roots),
             self::M_NUMBER_OF_LEAF_CLASSES      =>  $this->cls - $noneLeafs,
-        ];
+        );
     }
 
     /**
@@ -196,7 +197,6 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
      * for the given <b>$node</b> instance. If there are no metrics for the
      * requested node, this method will return an empty <b>array</b>.
      *
-     * @param  \PDepend\Source\AST\ASTArtifact $artifact
      * @return array<string, mixed>
      */
     public function getNodeMetrics(ASTArtifact $artifact)
@@ -204,14 +204,12 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
         if (isset($this->nodeMetrics[$artifact->getId()])) {
             return $this->nodeMetrics[$artifact->getId()];
         }
-
-        return [];
+        return array();
     }
 
     /**
      * Calculates metrics for the given <b>$class</b> instance.
      *
-     * @param  \PDepend\Source\AST\ASTClass $class
      * @return void
      */
     public function visitClass(ASTClass $class)
@@ -222,10 +220,10 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
 
         $this->fireStartClass($class);
 
-        $this->cls++;
+        ++$this->cls;
 
         if ($class->isAbstract()) {
-            $this->clsa++;
+            ++$this->clsa;
         }
 
         $parentClass = $class->getParentClass();
@@ -237,7 +235,7 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
         }
 
         // Store node metric
-        $this->nodeMetrics[$class->getId()] = [];
+        $this->nodeMetrics[$class->getId()] = array();
 
         foreach ($class->getMethods() as $method) {
             $method->accept($this);
@@ -252,27 +250,25 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
     /**
      * Calculates metrics for the given <b>$function</b> instance.
      *
-     * @param  \PDepend\Source\AST\ASTFunction $function
      * @return void
      */
     public function visitFunction(ASTFunction $function)
     {
         $this->fireStartFunction($function);
-        $this->fcs++;
+        ++$this->fcs;
         $this->fireEndFunction($function);
     }
 
     /**
      * Calculates metrics for the given <b>$interface</b> instance.
      *
-     * @param  \PDepend\Source\AST\ASTInterface $interface
      * @return void
      */
     public function visitInterface(ASTInterface $interface)
     {
         $this->fireStartInterface($interface);
 
-        $this->interfs++;
+        ++$this->interfs;
 
         foreach ($interface->getMethods() as $method) {
             $method->accept($this);
@@ -284,20 +280,18 @@ class HierarchyAnalyzer extends AbstractAnalyzer implements AnalyzerFilterAware,
     /**
      * Visits a method node.
      *
-     * @param  \PDepend\Source\AST\ASTMethod $method
      * @return void
      */
     public function visitMethod(ASTMethod $method)
     {
         $this->fireStartMethod($method);
-        $this->mts++;
+        ++$this->mts;
         $this->fireEndMethod($method);
     }
 
     /**
      * Calculates metrics for the given <b>$namespace</b> instance.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace $namespace
      * @return void
      */
     public function visitNamespace(ASTNamespace $namespace)

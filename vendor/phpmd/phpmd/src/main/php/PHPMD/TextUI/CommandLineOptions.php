@@ -9,18 +9,23 @@
  * For full copyright and license information, please see the LICENSE file.
  * Redistributions of files must retain the above copyright notice.
  *
- * @author Manuel Pichler <mapi@phpmd.org>
+ * @author    Manuel Pichler <mapi@phpmd.org>
  * @copyright Manuel Pichler. All rights reserved.
- * @license https://opensource.org/licenses/bsd-license.php BSD License
- * @link http://phpmd.org/
+ * @license   https://opensource.org/licenses/bsd-license.php BSD License
+ * @link      http://phpmd.org/
  */
 
 namespace PHPMD\TextUI;
 
+use InvalidArgumentException;
+use PHPMD\Baseline\BaselineMode;
 use PHPMD\Renderer\AnsiRenderer;
+use PHPMD\Renderer\GitHubRenderer;
 use PHPMD\Renderer\HTMLRenderer;
 use PHPMD\Renderer\JSONRenderer;
+use PHPMD\Renderer\SARIFRenderer;
 use PHPMD\Renderer\TextRenderer;
+use PHPMD\Renderer\CheckStyleRenderer;
 use PHPMD\Renderer\XMLRenderer;
 use PHPMD\Rule;
 
@@ -33,21 +38,21 @@ use PHPMD\Rule;
 class CommandLineOptions
 {
     /**
-     * Error code for invalid input.
+     * Error code for invalid input
      */
     const INPUT_ERROR = 23;
 
     /**
      * The minimum rule priority.
      *
-     * @var int
+     * @var integer
      */
     protected $minimumPriority = Rule::LOWEST_PRIORITY;
 
     /**
      * The maximum rule priority.
      *
-     * @var int
+     * @var integer
      */
     protected $maximumPriority = Rule::HIGHEST_PRIORITY;
 
@@ -77,7 +82,7 @@ class CommandLineOptions
      *
      * @var array
      */
-    protected $reportFiles = [];
+    protected $reportFiles = array();
 
     /**
      * A ruleset filename or a comma-separated string of ruleset filenames.
@@ -112,22 +117,30 @@ class CommandLineOptions
     /**
      * Should the shell show the current phpmd version?
      *
-     * @var bool
+     * @var boolean
      */
     protected $version = false;
 
     /**
      * Should PHPMD run in strict mode?
      *
-     * @var bool
+     * @var boolean
      * @since 1.2.0
      */
     protected $strict = false;
 
     /**
+     * Should PHPMD exit without error code even if error is found?
+     *
+     * @var boolean
+     * @since 2.10.0
+     */
+    protected $ignoreErrorsOnExit = false;
+
+    /**
      * Should PHPMD exit without error code even if violation is found?
      *
-     * @var bool
+     * @var boolean
      */
     protected $ignoreViolationsOnExit = false;
 
@@ -136,34 +149,47 @@ class CommandLineOptions
      *
      * @var array(string)
      */
-    protected $availableRuleSets = [];
+    protected $availableRuleSets = array();
+
+    /**
+     * Should PHPMD baseline the existing violations and write them to the $baselineFile
+     * @var string allowed modes: NONE, GENERATE or UPDATE
+     */
+    protected $generateBaseline = BaselineMode::NONE;
+
+    /**
+     * The baseline source file to read the baseline violations from.
+     * Defaults to the path of the (first) ruleset file as phpmd.baseline.xml
+     * @var string|null
+     */
+    protected $baselineFile;
 
     /**
      * Constructs a new command line options instance.
      *
      * @param string[] $args
      * @param string[] $availableRuleSets
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function __construct(array $args, array $availableRuleSets = [])
+    public function __construct(array $args, array $availableRuleSets = array())
     {
         // Remove current file name
         array_shift($args);
 
         $this->availableRuleSets = $availableRuleSets;
 
-        $arguments = [];
+        $arguments = array();
         while (($arg = array_shift($args)) !== null) {
             switch ($arg) {
                 case '--min-priority':
                 case '--minimum-priority':
                 case '--minimumpriority':
-                    $this->minimumPriority = (int) array_shift($args);
+                    $this->minimumPriority = (int)array_shift($args);
                     break;
                 case '--max-priority':
                 case '--maximum-priority':
                 case '--maximumpriority':
-                    $this->maximumPriority = (int) array_shift($args);
+                    $this->maximumPriority = (int)array_shift($args);
                     break;
                 case '--report-file':
                 case '--reportfile':
@@ -202,14 +228,28 @@ class CommandLineOptions
                 case '--not-strict':
                     $this->strict = false;
                     break;
+                case '--generate-baseline':
+                    $this->generateBaseline = BaselineMode::GENERATE;
+                    break;
+                case '--update-baseline':
+                    $this->generateBaseline = BaselineMode::UPDATE;
+                    break;
+                case '--baseline-file':
+                    $this->baselineFile = array_shift($args);
+                    break;
+                case '--ignore-errors-on-exit':
+                    $this->ignoreErrorsOnExit = true;
+                    break;
                 case '--ignore-violations-on-exit':
                     $this->ignoreViolationsOnExit = true;
                     break;
+                case '--reportfile-checkstyle':
                 case '--reportfile-html':
+                case '--reportfile-json':
+                case '--reportfile-sarif':
                 case '--reportfile-text':
                 case '--reportfile-xml':
-                case '--reportfile-json':
-                    preg_match('(^\-\-reportfile\-(xml|html|text|json)$)', $arg, $match);
+                    preg_match('(^\-\-reportfile\-(checkstyle|html|json|sarif|text|xml)$)', $arg, $match);
                     $this->reportFiles[$match[1]] = array_shift($args);
                     break;
                 default:
@@ -219,12 +259,12 @@ class CommandLineOptions
         }
 
         if (count($arguments) < 3) {
-            throw new \InvalidArgumentException($this->usage(), self::INPUT_ERROR);
+            throw new InvalidArgumentException($this->usage(), self::INPUT_ERROR);
         }
 
-        $this->inputPath = (string) array_shift($arguments);
-        $this->reportFormat = (string) array_shift($arguments);
-        $this->ruleSets = (string) array_shift($arguments);
+        $this->inputPath    = (string)array_shift($arguments);
+        $this->reportFormat = (string)array_shift($arguments);
+        $this->ruleSets     = (string)array_shift($arguments);
     }
 
     /**
@@ -270,7 +310,7 @@ class CommandLineOptions
     }
 
     /**
-     * Returns a ruleset filename or a comma-separated string of ruleset.
+     * Returns a ruleset filename or a comma-separated string of ruleset
      *
      * @return string
      */
@@ -282,7 +322,7 @@ class CommandLineOptions
     /**
      * Returns the minimum rule priority.
      *
-     * @return int
+     * @return integer
      */
     public function getMinimumPriority()
     {
@@ -292,7 +332,7 @@ class CommandLineOptions
     /**
      * Returns the maximum rule priority.
      *
-     * @return int
+     * @return integer
      */
     public function getMaximumPriority()
     {
@@ -335,7 +375,7 @@ class CommandLineOptions
     /**
      * Was the <b>--version</b> passed to PHPMD's command line interface?
      *
-     * @return bool
+     * @return boolean
      */
     public function hasVersion()
     {
@@ -345,7 +385,7 @@ class CommandLineOptions
     /**
      * Was the <b>--strict</b> option passed to PHPMD's command line interface?
      *
-     * @return bool
+     * @return boolean
      * @since 1.2.0
      */
     public function hasStrict()
@@ -354,9 +394,40 @@ class CommandLineOptions
     }
 
     /**
+     * Should the current violations be baselined
+     *
+     * @return string
+     */
+    public function generateBaseline()
+    {
+        return $this->generateBaseline;
+    }
+
+    /**
+     * The filepath of the baseline violations xml
+     *
+     * @return string|null
+     */
+    public function baselineFile()
+    {
+        return $this->baselineFile;
+    }
+
+    /**
+     * Was the <b>--ignore-errors-on-exit</b> passed to PHPMD's command line interface?
+     *
+     * @return boolean
+     * @since 2.10.0
+     */
+    public function ignoreErrorsOnExit()
+    {
+        return $this->ignoreErrorsOnExit;
+    }
+
+    /**
      * Was the <b>--ignore-violations-on-exit</b> passed to PHPMD's command line interface?
      *
-     * @return bool
+     * @return boolean
      */
     public function ignoreViolationsOnExit()
     {
@@ -377,23 +448,29 @@ class CommandLineOptions
      *
      * @param string $reportFormat
      * @return \PHPMD\AbstractRenderer
-     * @throws \InvalidArgumentException When the specified renderer does not exist.
+     * @throws InvalidArgumentException When the specified renderer does not exist.
      */
     public function createRenderer($reportFormat = null)
     {
         $reportFormat = $reportFormat ?: $this->reportFormat;
 
         switch ($reportFormat) {
-            case 'xml':
-                return $this->createXmlRenderer();
-            case 'html':
-                return $this->createHtmlRenderer();
-            case 'text':
-                return $this->createTextRenderer();
-            case 'json':
-                return $this->createJsonRenderer();
             case 'ansi':
                 return $this->createAnsiRenderer();
+            case 'checkstyle':
+                return $this->createCheckStyleRenderer();
+            case 'github':
+                return $this->createGitHubRenderer();
+            case 'html':
+                return $this->createHtmlRenderer();
+            case 'json':
+                return $this->createJsonRenderer();
+            case 'sarif':
+                return $this->createSarifRenderer();
+            case 'text':
+                return $this->createTextRenderer();
+            case 'xml':
+                return $this->createXmlRenderer();
             default:
                 return $this->createCustomRenderer();
         }
@@ -424,6 +501,14 @@ class CommandLineOptions
     }
 
     /**
+     * @return \PHPMD\Renderer\GitHubRenderer
+     */
+    protected function createGitHubRenderer()
+    {
+        return new GitHubRenderer();
+    }
+
+    /**
      * @return \PHPMD\Renderer\HTMLRenderer
      */
     protected function createHtmlRenderer()
@@ -440,13 +525,29 @@ class CommandLineOptions
     }
 
     /**
+     * @return \PHPMD\Renderer\JSONRenderer
+     */
+    protected function createCheckStyleRenderer()
+    {
+        return new CheckStyleRenderer();
+    }
+
+    /**
+     * @return \PHPMD\Renderer\SARIFRenderer
+     */
+    protected function createSarifRenderer()
+    {
+        return new SARIFRenderer();
+    }
+
+    /**
      * @return \PHPMD\AbstractRenderer
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function createCustomRenderer()
     {
         if ('' === $this->reportFormat) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Can\'t create report with empty format.',
                 self::INPUT_ERROR
             );
@@ -457,11 +558,11 @@ class CommandLineOptions
         }
 
         // Try to load a custom renderer
-        $fileName = strtr($this->reportFormat, '_\\', '//').'.php';
+        $fileName = strtr($this->reportFormat, '_\\', '//') . '.php';
 
         $fileHandle = @fopen($fileName, 'r', true);
         if (is_resource($fileHandle) === false) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'Can\'t find the custom report class: %s',
                     $this->reportFormat
@@ -485,43 +586,50 @@ class CommandLineOptions
     {
         $availableRenderers = $this->getListOfAvailableRenderers();
 
-        return 'Mandatory arguments:'.\PHP_EOL.
-            '1) A php source code filename or directory. Can be a comma-'.
-            'separated string'.\PHP_EOL.
-            '2) A report format'.\PHP_EOL.
-            '3) A ruleset filename or a comma-separated string of ruleset'.
-            'filenames'.\PHP_EOL.\PHP_EOL.
-            'Example: phpmd /path/to/source format ruleset'.\PHP_EOL.\PHP_EOL.
-            'Available formats: '.$availableRenderers.'.'.\PHP_EOL.
-            'Available rulesets: '.implode(', ', $this->availableRuleSets).'.'.\PHP_EOL.\PHP_EOL.
-            'Optional arguments that may be put after the mandatory arguments:'.
-            \PHP_EOL.
-            '--minimumpriority: rule priority threshold; rules with lower '.
-            'priority than this will not be used'.\PHP_EOL.
-            '--reportfile: send report output to a file; default to STDOUT'.
-            \PHP_EOL.
-            '--suffixes: comma-separated string of valid source code '.
-            'filename extensions, e.g. php,phtml'.\PHP_EOL.
-            '--exclude: comma-separated string of patterns that are used to '.
-            'ignore directories. Use asterisks to exclude by pattern. '.
-            'For example *src/foo/*.php or *src/foo/*'.\PHP_EOL.
-            '--strict: also report those nodes with a @SuppressWarnings '.
-            'annotation'.\PHP_EOL.
-            '--ignore-violations-on-exit: will exit with a zero code, '.
-            'even if any violations are found'.\PHP_EOL;
+        return 'Mandatory arguments:' . \PHP_EOL .
+            '1) A php source code filename or directory. Can be a comma-' .
+            'separated string' . \PHP_EOL .
+            '2) A report format' . \PHP_EOL .
+            '3) A ruleset filename or a comma-separated string of ruleset' .
+            'filenames' . \PHP_EOL . \PHP_EOL .
+            'Example: phpmd /path/to/source format ruleset' . \PHP_EOL . \PHP_EOL .
+            'Available formats: ' . $availableRenderers . '.' . \PHP_EOL .
+            'Available rulesets: ' . implode(', ', $this->availableRuleSets) . '.' . \PHP_EOL . \PHP_EOL .
+            'Optional arguments that may be put after the mandatory arguments:' .
+            \PHP_EOL .
+            '--minimumpriority: rule priority threshold; rules with lower ' .
+            'priority than this will not be used' . \PHP_EOL .
+            '--reportfile: send report output to a file; default to STDOUT' .
+            \PHP_EOL .
+            '--suffixes: comma-separated string of valid source code ' .
+            'filename extensions, e.g. php,phtml' . \PHP_EOL .
+            '--exclude: comma-separated string of patterns that are used to ' .
+            'ignore directories. Use asterisks to exclude by pattern. ' .
+            'For example *src/foo/*.php or *src/foo/*' . \PHP_EOL .
+            '--strict: also report those nodes with a @SuppressWarnings ' .
+            'annotation' . \PHP_EOL .
+            '--ignore-errors-on-exit: will exit with a zero code, ' .
+            'even on error' . \PHP_EOL .
+            '--ignore-violations-on-exit: will exit with a zero code, ' .
+            'even if any violations are found' . \PHP_EOL .
+            '--generate-baseline: will generate a phpmd.baseline.xml next ' .
+            'to the first ruleset file location' . \PHP_EOL .
+            '--update-baseline: will remove any non-existing violations from the phpmd.baseline.xml' . \PHP_EOL .
+            '--baseline-file: a custom location of the baseline file' . \PHP_EOL;
     }
 
     /**
-     * Get a list of available renderers.
+     * Get a list of available renderers
      *
      * @return string The list of renderers found.
      */
     protected function getListOfAvailableRenderers()
     {
-        $renderersDirPathName = __DIR__.'/../Renderer';
-        $renderers = [];
+        $renderersDirPathName = __DIR__ . '/../Renderer';
+        $renderers            = array();
 
         foreach (scandir($renderersDirPathName) as $rendererFileName) {
+            $rendererName = array();
             if (preg_match('/^(\w+)Renderer.php$/i', $rendererFileName, $rendererName)) {
                 $renderers[] = strtolower($rendererName[1]);
             }
@@ -551,7 +659,7 @@ class CommandLineOptions
             $newName
         );
 
-        fwrite(STDERR, $message.PHP_EOL.PHP_EOL);
+        fwrite(STDERR, $message . PHP_EOL . PHP_EOL);
     }
 
     /**
@@ -562,7 +670,7 @@ class CommandLineOptions
      *
      * @param string $inputFile Specified input file name.
      * @return string
-     * @throws \InvalidArgumentException If the specified input file does not exist.
+     * @throws InvalidArgumentException If the specified input file does not exist.
      * @since 1.1.0
      */
     protected function readInputFile($inputFile)
@@ -570,6 +678,6 @@ class CommandLineOptions
         if (file_exists($inputFile)) {
             return implode(',', array_map('trim', file($inputFile)));
         }
-        throw new \InvalidArgumentException("Input file '{$inputFile}' not exists.");
+        throw new InvalidArgumentException("Input file '{$inputFile}' not exists.");
     }
 }

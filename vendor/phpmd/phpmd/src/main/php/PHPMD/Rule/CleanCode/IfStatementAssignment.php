@@ -24,7 +24,7 @@ use PHPMD\Rule\FunctionAware;
 use PHPMD\Rule\MethodAware;
 
 /**
- * If Statement Assignment Rule.
+ * If Statement Assignment Rule
  *
  * This rule covers the following cases:
  * - single assignment in an if clause
@@ -40,10 +40,10 @@ class IfStatementAssignment extends AbstractRule implements MethodAware, Functio
     /**
      * @var array List of statement types where to forbid assignation.
      */
-    protected $ifStatements = [
+    protected $ifStatements = array(
         'IfStatement',
         'ElseIfStatement',
-    ];
+    );
 
     /**
      * This method checks if method/function has if clauses
@@ -62,7 +62,7 @@ class IfStatementAssignment extends AbstractRule implements MethodAware, Functio
     }
 
     /**
-     * Extracts if and elseif statements from method/function body.
+     * Extracts if and elseif statements from method/function body
      *
      * @param AbstractNode $node An instance of MethodNode or FunctionNode class
      * @return ASTNode[]
@@ -75,7 +75,7 @@ class IfStatementAssignment extends AbstractRule implements MethodAware, Functio
     }
 
     /**
-     * Extracts all expression from statements array.
+     * Extracts all expression from statements array
      *
      * @param ASTNode[] $statements Array of if and elseif clauses
      * @return ASTExpression[]
@@ -88,14 +88,14 @@ class IfStatementAssignment extends AbstractRule implements MethodAware, Functio
     }
 
     /**
-     * Extracts all assignments from expressions array.
+     * Extracts all assignments from expressions array
      *
      * @param ASTExpression[] $expressions Array of expressions
      * @return ASTAssignmentExpression[]
      */
     protected function getAssignments(array $expressions)
     {
-        $assignments = [];
+        $assignments = array();
         /** @var ASTNode $expression */
         foreach ($expressions as $expression) {
             $assignments = array_merge($assignments, $expression->findChildrenOfType('AssignmentExpression'));
@@ -105,24 +105,24 @@ class IfStatementAssignment extends AbstractRule implements MethodAware, Functio
     }
 
     /**
-     * Signals if any violations have been found in given method or function.
+     * Signals if any violations have been found in given method or function
      *
      * @param AbstractNode $node An instance of MethodNode or FunctionNode class
      * @param ASTAssignmentExpression[] $assignments Array of assignments
      */
     protected function addViolations(AbstractNode $node, array $assignments)
     {
-        $processesViolations = [];
+        $processesViolations = array();
         /** @var \PDepend\Source\AST\AbstractASTNode $assignment */
         foreach ($assignments as $assignment) {
             if (null === $assignment || $assignment->getImage() !== '=') {
                 continue;
             }
 
-            $uniqueHash = $assignment->getStartColumn().':'.$assignment->getStartLine();
-            if (! in_array($uniqueHash, $processesViolations)) {
+            $uniqueHash = $assignment->getStartColumn() . ':' . $assignment->getStartLine();
+            if (!in_array($uniqueHash, $processesViolations)) {
                 $processesViolations[] = $uniqueHash;
-                $this->addViolation($node, [$assignment->getStartLine(), $assignment->getStartColumn()]);
+                $this->addViolation($node, array($assignment->getStartLine(), $assignment->getStartColumn()));
             }
         }
     }

@@ -15,12 +15,14 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class SemicolonSpacingSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['CSS'];
+
 
     /**
      * Returns the token types that this sniff is interested in.
@@ -30,9 +32,9 @@ class SemicolonSpacingSniff implements Sniff
     public function register()
     {
         return [T_STYLE];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -62,7 +64,6 @@ class SemicolonSpacingSniff implements Sniff
         if ($tokens[$endOfThisStatement]['code'] !== T_SEMICOLON) {
             $error = 'Style definitions must end with a semicolon';
             $phpcsFile->addError($error, $endOfThisStatement, 'NotAtEnd');
-
             return;
         }
 
@@ -72,14 +73,14 @@ class SemicolonSpacingSniff implements Sniff
 
         // There is a semi-colon, so now find the last token in the statement.
         $prevNonEmpty = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($endOfThisStatement - 1), null, true);
-        $found = $tokens[($endOfThisStatement - 1)]['length'];
+        $found        = $tokens[($endOfThisStatement - 1)]['length'];
         if ($tokens[$prevNonEmpty]['line'] !== $tokens[$endOfThisStatement]['line']) {
             $found = 'newline';
         }
 
         $error = 'Expected 0 spaces before semicolon in style definition; %s found';
-        $data = [$found];
-        $fix = $phpcsFile->addFixableError($error, $prevNonEmpty, 'SpaceFound', $data);
+        $data  = [$found];
+        $fix   = $phpcsFile->addFixableError($error, $prevNonEmpty, 'SpaceFound', $data);
         if ($fix === true) {
             $phpcsFile->fixer->beginChangeset();
             $phpcsFile->fixer->addContent($prevNonEmpty, ';');
@@ -95,7 +96,8 @@ class SemicolonSpacingSniff implements Sniff
 
             $phpcsFile->fixer->endChangeset();
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class RequireStrictTypesSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -22,9 +24,9 @@ class RequireStrictTypesSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -37,9 +39,9 @@ class RequireStrictTypesSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens = $phpcsFile->getTokens();
+        $tokens  = $phpcsFile->getTokens();
         $declare = $phpcsFile->findNext(T_DECLARE, $stackPtr);
-        $found = false;
+        $found   = false;
 
         if ($declare !== false) {
             $nextString = $phpcsFile->findNext(T_STRING, $declare);
@@ -60,7 +62,8 @@ class RequireStrictTypesSniff implements Sniff
         // Skip the rest of the file so we don't pick up additional
         // open tags, typically embedded in HTML.
         return $phpcsFile->numTokens;
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

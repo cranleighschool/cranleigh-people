@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class EndFileNewlineUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -23,7 +25,7 @@ class EndFileNewlineUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = '')
+    public function getErrorList($testFile='')
     {
         switch ($testFile) {
         case 'EndFileNewlineUnitTest.3.inc':
@@ -31,12 +33,15 @@ class EndFileNewlineUnitTest extends AbstractSniffUnitTest
         case 'EndFileNewlineUnitTest.3.css':
         case 'EndFileNewlineUnitTest.4.inc':
             return [2 => 1];
+        case 'EndFileNewlineUnitTest.6.inc':
+        case 'EndFileNewlineUnitTest.7.inc':
+            return [1 => 1];
         default:
             return [];
         }//end switch
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -48,10 +53,11 @@ class EndFileNewlineUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getWarningList($testFile = '')
+    public function getWarningList($testFile='')
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

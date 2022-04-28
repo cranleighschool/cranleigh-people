@@ -14,12 +14,14 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DuplicateStyleDefinitionSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['CSS'];
+
 
     /**
      * Returns the token types that this sniff is interested in.
@@ -29,9 +31,9 @@ class DuplicateStyleDefinitionSniff implements Sniff
     public function register()
     {
         return [T_OPEN_CURLY_BRACKET];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes the tokens that this sniff is interested in.
@@ -55,7 +57,7 @@ class DuplicateStyleDefinitionSniff implements Sniff
         $styleNames = [];
 
         $next = $stackPtr;
-        $end = $tokens[$stackPtr]['bracket_closer'];
+        $end  = $tokens[$stackPtr]['bracket_closer'];
 
         do {
             $next = $phpcsFile->findNext([T_STYLE, T_OPEN_CURLY_BRACKET], ($next + 1), $end);
@@ -73,13 +75,14 @@ class DuplicateStyleDefinitionSniff implements Sniff
             if (isset($styleNames[$name]) === true) {
                 $first = $styleNames[$name];
                 $error = 'Duplicate style definition found; first defined on line %s';
-                $data = [$tokens[$first]['line']];
+                $data  = [$tokens[$first]['line']];
                 $phpcsFile->addError($error, $next, 'Found', $data);
             } else {
                 $styleNames[$name] = $next;
             }
         } while ($next !== false);
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

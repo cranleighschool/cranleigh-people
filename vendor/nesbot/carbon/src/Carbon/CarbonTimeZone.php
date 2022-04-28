@@ -15,6 +15,7 @@ use Carbon\Exceptions\InvalidCastException;
 use Carbon\Exceptions\InvalidTimeZoneException;
 use DateTimeInterface;
 use DateTimeZone;
+use Throwable;
 
 class CarbonTimeZone extends DateTimeZone
 {
@@ -34,7 +35,7 @@ class CarbonTimeZone extends DateTimeZone
 
     protected static function getDateTimeZoneNameFromMixed($timezone)
     {
-        if (\is_null($timezone)) {
+        if ($timezone === null) {
             return date_default_timezone_get();
         }
 
@@ -63,7 +64,7 @@ class CarbonTimeZone extends DateTimeZone
      */
     public function cast(string $className)
     {
-        if (! method_exists($className, 'instance')) {
+        if (!method_exists($className, 'instance')) {
             if (is_a($className, DateTimeZone::class, true)) {
                 return new $className($this->getName());
             }
@@ -96,7 +97,7 @@ class CarbonTimeZone extends DateTimeZone
             return new static();
         }
 
-        if (! $tz instanceof DateTimeZone) {
+        if (!$tz instanceof DateTimeZone) {
             $tz = static::getDateTimeZoneFromName($object);
         }
 
@@ -199,7 +200,7 @@ class CarbonTimeZone extends DateTimeZone
         // @codeCoverageIgnoreStart
         try {
             $offset = @$this->getOffset($date) ?: 0;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $offset = 0;
         }
         // @codeCoverageIgnoreEnd

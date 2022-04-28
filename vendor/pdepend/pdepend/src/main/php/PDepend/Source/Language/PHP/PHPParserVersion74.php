@@ -38,11 +38,13 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 2.3
  */
 
 namespace PDepend\Source\Language\PHP;
 
+use PDepend\Source\AST\ASTClosure;
 use PDepend\Source\AST\ASTFieldDeclaration;
 use PDepend\Source\AST\ASTType;
 use PDepend\Source\Parser\UnexpectedTokenException;
@@ -53,24 +55,27 @@ use PDepend\Source\Tokenizer\Tokens;
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 2.4
  */
 abstract class PHPParserVersion74 extends PHPParserVersion73
 {
+    protected $possiblePropertyTypes = array(
+        Tokens::T_STRING,
+        Tokens::T_ARRAY,
+        Tokens::T_QUESTION_MARK,
+        Tokens::T_BACKSLASH,
+        Tokens::T_CALLABLE,
+        Tokens::T_SELF,
+    );
+
     protected function parseUnknownDeclaration($tokenType, $modifiers)
     {
         /**
          * Typed properties
-         * https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.typed-properties.
+         * https://www.php.net/manual/en/migration74.new-features.php#migration74.new-features.core.typed-properties
          */
-        if (in_array($tokenType, [
-            Tokens::T_STRING,
-            Tokens::T_ARRAY,
-            Tokens::T_QUESTION_MARK,
-            Tokens::T_BACKSLASH,
-            Tokens::T_CALLABLE,
-            Tokens::T_SELF,
-        ])) {
+        if (in_array($tokenType, $this->possiblePropertyTypes, true)) {
             $type = $this->parseTypeHint();
             $declaration = $this->parseFieldDeclaration();
             $declaration->prependChild($type);
@@ -91,7 +96,7 @@ abstract class PHPParserVersion74 extends PHPParserVersion73
 
             $field = parent::parseMethodOrFieldDeclaration($modifiers);
 
-            if (! ($field instanceof ASTFieldDeclaration)) {
+            if (!($field instanceof ASTFieldDeclaration)) {
                 throw new UnexpectedTokenException($this->tokenizer->prevToken(), $this->tokenizer->getSourceFile());
             }
 
@@ -101,6 +106,9 @@ abstract class PHPParserVersion74 extends PHPParserVersion73
         return $field;
     }
 
+    /**
+     * @return ASTClosure
+     */
     protected function parseLambdaFunctionDeclaration()
     {
         $this->tokenStack->push();
@@ -112,7 +120,7 @@ abstract class PHPParserVersion74 extends PHPParserVersion73
         $closure = $this->builder->buildAstClosure();
         $closure->setReturnsByReference($this->parseOptionalByReference());
         $closure->addChild($this->parseFormalParameters($closure));
-        $closure = $this->parseCallableDeclarationAddition($closure);
+        $this->parseCallableDeclarationAddition($closure);
 
         $closure->addChild(
             $this->buildReturnStatement(
@@ -126,6 +134,7 @@ abstract class PHPParserVersion74 extends PHPParserVersion73
     /**
      * Override PHP 7.3 checkEllipsisInExpressionSupport to stop throwing the
      * parsing exception.
+     *
      * @return void
      */
     protected function checkEllipsisInExpressionSupport()

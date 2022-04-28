@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class FunctionDuplicateArgumentSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -22,9 +24,9 @@ class FunctionDuplicateArgumentSniff implements Sniff
     public function register()
     {
         return [T_FUNCTION];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -39,7 +41,7 @@ class FunctionDuplicateArgumentSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $openBracket = $tokens[$stackPtr]['parenthesis_opener'];
+        $openBracket  = $tokens[$stackPtr]['parenthesis_opener'];
         $closeBracket = $tokens[$stackPtr]['parenthesis_closer'];
 
         $foundVariables = [];
@@ -48,14 +50,15 @@ class FunctionDuplicateArgumentSniff implements Sniff
                 $variable = $tokens[$i]['content'];
                 if (in_array($variable, $foundVariables, true) === true) {
                     $error = 'Variable "%s" appears more than once in function declaration';
-                    $data = [$variable];
+                    $data  = [$variable];
                     $phpcsFile->addError($error, $i, 'Found', $data);
                 } else {
                     $foundVariables[] = $variable;
                 }
             }
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DisallowLongArraySyntaxSniff implements Sniff
 {
+
+
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -22,9 +24,9 @@ class DisallowLongArraySyntaxSniff implements Sniff
     public function register()
     {
         return [T_ARRAY];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -48,7 +50,6 @@ class DisallowLongArraySyntaxSniff implements Sniff
         ) {
             // Live coding/parse error, just show the error, don't try and fix it.
             $phpcsFile->addError($error, $stackPtr, 'Found');
-
             return;
         }
 
@@ -70,7 +71,8 @@ class DisallowLongArraySyntaxSniff implements Sniff
 
             $phpcsFile->fixer->endChangeset();
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

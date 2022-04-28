@@ -25,9 +25,9 @@ class ResolveTaggedIteratorArgumentPass extends AbstractRecursivePass
     /**
      * {@inheritdoc}
      */
-    protected function processValue($value, bool $isRoot = false)
+    protected function processValue(mixed $value, bool $isRoot = false): mixed
     {
-        if (! $value instanceof TaggedIteratorArgument) {
+        if (!$value instanceof TaggedIteratorArgument) {
             return parent::processValue($value, $isRoot);
         }
 

@@ -78,7 +78,7 @@ trait Macro
      */
     public static function genericMacro($macro, $priority = 0)
     {
-        if (! isset(static::$globalGenericMacros[$priority])) {
+        if (!isset(static::$globalGenericMacros[$priority])) {
             static::$globalGenericMacros[$priority] = [];
             krsort(static::$globalGenericMacros, SORT_NUMERIC);
         }

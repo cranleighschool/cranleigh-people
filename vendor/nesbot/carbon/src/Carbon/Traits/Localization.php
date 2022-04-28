@@ -16,13 +16,14 @@ use Carbon\Exceptions\InvalidTypeException;
 use Carbon\Exceptions\NotLocaleAwareException;
 use Carbon\Language;
 use Carbon\Translator;
+use Carbon\TranslatorStrongTypeInterface;
 use Closure;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface as ContractsTranslatorInterface;
 
-if (! interface_exists('Symfony\\Component\\Translation\\TranslatorInterface')) {
+if (!interface_exists('Symfony\\Component\\Translation\\TranslatorInterface')) {
     class_alias(
         'Symfony\\Contracts\\Translation\\TranslatorInterface',
         'Symfony\\Component\\Translation\\TranslatorInterface'
@@ -169,20 +170,20 @@ trait Localization
      *
      * @return string
      */
-    public static function getTranslationMessageWith($translator, string $key, string $locale = null, string $default = null)
+    public static function getTranslationMessageWith($translator, string $key, ?string $locale = null, ?string $default = null)
     {
-        if (! ($translator instanceof TranslatorBagInterface && $translator instanceof TranslatorInterface)) {
+        if (!($translator instanceof TranslatorBagInterface && $translator instanceof TranslatorInterface)) {
             throw new InvalidTypeException(
                 'Translator does not implement '.TranslatorInterface::class.' and '.TranslatorBagInterface::class.'. '.
                 (\is_object($translator) ? \get_class($translator) : \gettype($translator)).' has been given.'
             );
         }
 
-        if (! $locale && $translator instanceof LocaleAwareInterface) {
+        if (!$locale && $translator instanceof LocaleAwareInterface) {
             $locale = $translator->getLocale();
         }
 
-        $result = $translator->getCatalogue($locale)->get($key);
+        $result = self::getFromCatalogue($translator, $translator->getCatalogue($locale), $key);
 
         return $result === $key ? $default : $result;
     }
@@ -197,7 +198,7 @@ trait Localization
      *
      * @return string
      */
-    public function getTranslationMessage(string $key, string $locale = null, string $default = null, $translator = null)
+    public function getTranslationMessage(string $key, ?string $locale = null, ?string $default = null, $translator = null)
     {
         return static::getTranslationMessageWith($translator ?: $this->getLocalTranslator(), $key, $locale, $default);
     }
@@ -238,14 +239,15 @@ trait Localization
     /**
      * Translate using translation string or callback available.
      *
-     * @param string                                             $key
-     * @param array                                              $parameters
-     * @param null                                               $number
-     * @param \Symfony\Component\Translation\TranslatorInterface $translator
+     * @param string                                                  $key
+     * @param array                                                   $parameters
+     * @param string|int|float|null                                   $number
+     * @param \Symfony\Component\Translation\TranslatorInterface|null $translator
+     * @param bool                                                    $altNumbers
      *
      * @return string
      */
-    public function translate(string $key, array $parameters = [], $number = null, TranslatorInterface $translator = null, bool $altNumbers = false): string
+    public function translate(string $key, array $parameters = [], $number = null, ?TranslatorInterface $translator = null, bool $altNumbers = false): string
     {
         $translation = static::translateWith($translator ?: $this->getLocalTranslator(), $key, $parameters, $number);
 
@@ -303,7 +305,7 @@ trait Localization
             return $result;
         }
 
-        return "$number";
+        return (string) $number;
     }
 
     /**
@@ -343,7 +345,7 @@ trait Localization
             $translator = Translator::get($language);
             $translations = $translator->getMessages();
 
-            if (! isset($translations[$language])) {
+            if (!isset($translations[$language])) {
                 return $timeString;
             }
 
@@ -437,10 +439,10 @@ trait Localization
             return $this->getTranslatorLocale();
         }
 
-        if (! $this->localTranslator || $this->getTranslatorLocale($this->localTranslator) !== $locale) {
+        if (!$this->localTranslator || $this->getTranslatorLocale($this->localTranslator) !== $locale) {
             $translator = Translator::get($locale);
 
-            if (! empty($fallbackLocales)) {
+            if (!empty($fallbackLocales)) {
                 $translator->setFallbackLocales($fallbackLocales);
 
                 foreach ($fallbackLocales as $fallbackLocale) {
@@ -578,12 +580,14 @@ trait Localization
     public static function localeHasDiffSyntax($locale)
     {
         return static::executeWithLocale($locale, function ($newLocale, TranslatorInterface $translator) {
-            if (! $newLocale) {
+            if (!$newLocale) {
                 return false;
             }
 
             foreach (['ago', 'from_now', 'before', 'after'] as $key) {
-                if ($translator instanceof TranslatorBagInterface && $translator->getCatalogue($newLocale)->get($key) instanceof Closure) {
+                if ($translator instanceof TranslatorBagInterface &&
+                    self::getFromCatalogue($translator, $translator->getCatalogue($newLocale), $key) instanceof Closure
+                ) {
                     continue;
                 }
 
@@ -652,7 +656,7 @@ trait Localization
 
     /**
      * Returns the list of internally available locales and already loaded custom locales.
-     * (It will ignore custom translator dynamic loading.).
+     * (It will ignore custom translator dynamic loading.)
      *
      * @return array
      */
@@ -729,11 +733,24 @@ trait Localization
             $translator = static::translator();
         }
 
-        if ($translator && ! ($translator instanceof LocaleAwareInterface || method_exists($translator, 'getLocale'))) {
+        if ($translator && !($translator instanceof LocaleAwareInterface || method_exists($translator, 'getLocale'))) {
             throw new NotLocaleAwareException($translator);
         }
 
         return $translator;
+    }
+
+    /**
+     * @param mixed                                                    $translator
+     * @param \Symfony\Component\Translation\MessageCatalogueInterface $catalogue
+     *
+     * @return mixed
+     */
+    private static function getFromCatalogue($translator, $catalogue, string $id, string $domain = 'messages')
+    {
+        return $translator instanceof TranslatorStrongTypeInterface
+            ? $translator->getFromCatalogue($catalogue, $id, $domain) // @codeCoverageIgnore
+            : $catalogue->get($id, $domain);
     }
 
     /**
@@ -768,14 +785,14 @@ trait Localization
                 ? $messages[$wordKey.'_regexp']
                 : ($messages[$wordKey] ?? null);
 
-            if (! $message) {
+            if (!$message) {
                 return '>>DO NOT REPLACE<<';
             }
 
             $parts = explode('|', $message);
 
             return $key === 'to'
-                ? static::cleanWordFromTranslationString(end($parts))
+                ? self::cleanWordFromTranslationString(end($parts))
                 : '(?:'.implode('|', array_map([static::class, 'cleanWordFromTranslationString'], $parts)).')';
         }, $keys);
     }

@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class DiscourageGotoUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -24,9 +26,9 @@ class DiscourageGotoUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -44,7 +46,8 @@ class DiscourageGotoUnitTest extends AbstractSniffUnitTest
             11 => 1,
             16 => 1,
         ];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

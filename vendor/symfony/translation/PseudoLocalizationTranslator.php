@@ -21,11 +21,15 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
     private const EXPANSION_CHARACTER = '~';
 
     private $translator;
-    private $accents;
-    private $expansionFactor;
-    private $brackets;
-    private $parseHTML;
-    private $localizableHTMLAttributes;
+    private bool $accents;
+    private float $expansionFactor;
+    private bool $brackets;
+    private bool $parseHTML;
+
+    /**
+     * @var string[]
+     */
+    private array $localizableHTMLAttributes;
 
     /**
      * Available options:
@@ -72,7 +76,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
         $this->brackets = $options['brackets'] ?? true;
 
         $this->parseHTML = $options['parse_html'] ?? false;
-        if ($this->parseHTML && ! $this->accents && 1.0 === $this->expansionFactor) {
+        if ($this->parseHTML && !$this->accents && 1.0 === $this->expansionFactor) {
             $this->parseHTML = false;
         }
 
@@ -82,7 +86,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
     /**
      * {@inheritdoc}
      */
-    public function trans(string $id, array $parameters = [], string $domain = null, string $locale = null)
+    public function trans(string $id, array $parameters = [], string $domain = null, string $locale = null): string
     {
         $trans = '';
         $visibleText = '';
@@ -92,7 +96,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
                 $visibleText .= $text;
             }
 
-            if (! $localizable) {
+            if (!$localizable) {
                 $trans .= $text;
 
                 continue;
@@ -108,13 +112,18 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
         return $trans;
     }
 
+    public function getLocale(): string
+    {
+        return $this->translator->getLocale();
+    }
+
     private function getParts(string $originalTrans): array
     {
-        if (! $this->parseHTML) {
+        if (!$this->parseHTML) {
             return [[true, true, $originalTrans]];
         }
 
-        $html = mb_convert_encoding($originalTrans, 'HTML-ENTITIES', mb_detect_encoding($originalTrans, null, true) ?: 'UTF-8');
+        $html = mb_encode_numericentity($originalTrans, [0x80, 0xFFFF, 0, 0xFFFF], mb_detect_encoding($originalTrans, null, true) ?: 'UTF-8');
 
         $useInternalErrors = libxml_use_internal_errors(true);
 
@@ -132,7 +141,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
         $parts = [];
 
         foreach ($node->childNodes as $childNode) {
-            if (! $childNode instanceof \DOMElement) {
+            if (!$childNode instanceof \DOMElement) {
                 $parts[] = [true, true, $childNode->nodeValue];
 
                 continue;
@@ -292,15 +301,15 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
                 continue;
             }
 
-            if (! isset($words[$wordLength])) {
+            if (!isset($words[$wordLength])) {
                 $words[$wordLength] = 0;
             }
 
-            $words[$wordLength]++;
-            $wordsCount++;
+            ++$words[$wordLength];
+            ++$wordsCount;
         }
 
-        if (! $words) {
+        if (!$words) {
             $trans .= 1 === $missingLength ? self::EXPANSION_CHARACTER : ' '.str_repeat(self::EXPANSION_CHARACTER, $missingLength - 1);
 
             return;
@@ -332,7 +341,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
                 $wordsCount -= $words[$longestWordLength];
                 unset($words[$longestWordLength]);
 
-                if (! $words) {
+                if (!$words) {
                     $trans .= 1 === $missingLength ? self::EXPANSION_CHARACTER : ' '.str_repeat(self::EXPANSION_CHARACTER, $missingLength - 1);
 
                     return;
@@ -345,7 +354,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
 
     private function addBrackets(string &$trans): void
     {
-        if (! $this->brackets) {
+        if (!$this->brackets) {
             return;
         }
 

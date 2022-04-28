@@ -20,7 +20,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  */
 class EnumNode extends ScalarNode
 {
-    private $values;
+    private array $values;
 
     public function __construct(?string $name, NodeInterface $parent = null, array $values = [], string $pathSeparator = BaseNode::DEFAULT_PATH_SEPARATOR)
     {
@@ -38,11 +38,14 @@ class EnumNode extends ScalarNode
         return $this->values;
     }
 
-    protected function finalizeValue($value)
+    /**
+     * {@inheritdoc}
+     */
+    protected function finalizeValue(mixed $value): mixed
     {
         $value = parent::finalizeValue($value);
 
-        if (! \in_array($value, $this->values, true)) {
+        if (!\in_array($value, $this->values, true)) {
             $ex = new InvalidConfigurationException(sprintf('The value %s is not allowed for path "%s". Permissible values: %s', json_encode($value), $this->getPath(), implode(', ', array_map('json_encode', $this->values))));
             $ex->setPath($this->getPath());
 

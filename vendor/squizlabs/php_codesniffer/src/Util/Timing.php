@@ -11,6 +11,7 @@ namespace PHP_CodeSniffer\Util;
 
 class Timing
 {
+
     /**
      * The start time of the run.
      *
@@ -21,9 +22,10 @@ class Timing
     /**
      * Used to make sure we only print the run time once per run.
      *
-     * @var bool
+     * @var boolean
      */
     private static $printed = false;
+
 
     /**
      * Start recording time for the run.
@@ -32,20 +34,21 @@ class Timing
      */
     public static function startTiming()
     {
-        self::$startTime = microtime(true);
-    }
 
-    //end startTiming()
+        self::$startTime = microtime(true);
+
+    }//end startTiming()
+
 
     /**
      * Print information about the run.
      *
-     * @param bool $force If TRUE, prints the output even if it has
+     * @param boolean $force If TRUE, prints the output even if it has
      *                       already been printed during the run.
      *
      * @return void
      */
-    public static function printRunTime($force = false)
+    public static function printRunTime($force=false)
     {
         if ($force === false && self::$printed === true) {
             // A double call.
@@ -61,12 +64,12 @@ class Timing
 
         if ($time > 60000) {
             $mins = floor($time / 60000);
-            $secs = round((($time % 60000) / 1000), 2);
+            $secs = round((fmod($time, 60000) / 1000), 2);
             $time = $mins.' mins';
             if ($secs !== 0) {
                 $time .= ", $secs secs";
             }
-        } elseif ($time > 1000) {
+        } else if ($time > 1000) {
             $time = round(($time / 1000), 2).' secs';
         } else {
             $time = round($time).'ms';
@@ -76,7 +79,8 @@ class Timing
         echo "Time: $time; Memory: $mem".PHP_EOL.PHP_EOL;
 
         self::$printed = true;
-    }
 
-    //end printRunTime()
+    }//end printRunTime()
+
+
 }//end class

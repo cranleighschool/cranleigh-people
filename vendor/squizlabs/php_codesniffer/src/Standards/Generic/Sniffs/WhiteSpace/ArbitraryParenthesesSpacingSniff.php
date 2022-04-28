@@ -18,17 +18,18 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ArbitraryParenthesesSpacingSniff implements Sniff
 {
+
     /**
      * The number of spaces desired on the inside of the parentheses.
      *
-     * @var int
+     * @var integer
      */
     public $spacing = 0;
 
     /**
      * Allow newlines instead of spaces.
      *
-     * @var bool
+     * @var boolean
      */
     public $ignoreNewlines = false;
 
@@ -40,6 +41,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
      */
     private $ignoreTokens = [];
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -49,25 +51,25 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
     {
         $this->ignoreTokens = Tokens::$functionNameTokens;
 
-        $this->ignoreTokens[T_VARIABLE] = T_VARIABLE;
-        $this->ignoreTokens[T_CLOSE_PARENTHESIS] = T_CLOSE_PARENTHESIS;
+        $this->ignoreTokens[T_VARIABLE]            = T_VARIABLE;
+        $this->ignoreTokens[T_CLOSE_PARENTHESIS]   = T_CLOSE_PARENTHESIS;
         $this->ignoreTokens[T_CLOSE_CURLY_BRACKET] = T_CLOSE_CURLY_BRACKET;
         $this->ignoreTokens[T_CLOSE_SQUARE_BRACKET] = T_CLOSE_SQUARE_BRACKET;
-        $this->ignoreTokens[T_CLOSE_SHORT_ARRAY] = T_CLOSE_SHORT_ARRAY;
+        $this->ignoreTokens[T_CLOSE_SHORT_ARRAY]    = T_CLOSE_SHORT_ARRAY;
 
-        $this->ignoreTokens[T_USE] = T_USE;
-        $this->ignoreTokens[T_THROW] = T_THROW;
-        $this->ignoreTokens[T_YIELD] = T_YIELD;
+        $this->ignoreTokens[T_USE]        = T_USE;
+        $this->ignoreTokens[T_THROW]      = T_THROW;
+        $this->ignoreTokens[T_YIELD]      = T_YIELD;
         $this->ignoreTokens[T_YIELD_FROM] = T_YIELD_FROM;
-        $this->ignoreTokens[T_CLONE] = T_CLONE;
+        $this->ignoreTokens[T_CLONE]      = T_CLONE;
 
         return [
             T_OPEN_PARENTHESIS,
             T_CLOSE_PARENTHESIS,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -115,7 +117,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
             if ($nextNonEmpty === $tokens[$stackPtr]['parenthesis_closer']) {
                 $phpcsFile->addWarning('Empty set of arbitrary parentheses found.', $stackPtr, 'FoundEmpty');
 
-                return $tokens[$stackPtr]['parenthesis_closer'] + 1;
+                return ($tokens[$stackPtr]['parenthesis_closer'] + 1);
             }
         }
 
@@ -141,11 +143,11 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
                 && ($inside !== 'newline' || $this->ignoreNewlines === false)
             ) {
                 $error = 'Expected %s space after open parenthesis; %s found';
-                $data = [
+                $data  = [
                     $this->spacing,
                     $inside,
                 ];
-                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceAfterOpen', $data);
+                $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceAfterOpen', $data);
 
                 if ($fix === true) {
                     $expected = '';
@@ -157,7 +159,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
                         if ($expected !== '') {
                             $phpcsFile->fixer->addContent($stackPtr, $expected);
                         }
-                    } elseif ($inside === 'newline') {
+                    } else if ($inside === 'newline') {
                         $phpcsFile->fixer->beginChangeset();
                         for ($i = ($stackPtr + 2); $i < $phpcsFile->numTokens; $i++) {
                             if ($tokens[$i]['code'] !== T_WHITESPACE) {
@@ -195,11 +197,11 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
                 && ($inside !== 'newline' || $this->ignoreNewlines === false)
             ) {
                 $error = 'Expected %s space before close parenthesis; %s found';
-                $data = [
+                $data  = [
                     $this->spacing,
                     $inside,
                 ];
-                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceBeforeClose', $data);
+                $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceBeforeClose', $data);
 
                 if ($fix === true) {
                     $expected = '';
@@ -211,7 +213,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
                         if ($expected !== '') {
                             $phpcsFile->fixer->addContentBefore($stackPtr, $expected);
                         }
-                    } elseif ($inside === 'newline') {
+                    } else if ($inside === 'newline') {
                         $phpcsFile->fixer->beginChangeset();
                         for ($i = ($stackPtr - 2); $i > 0; $i--) {
                             if ($tokens[$i]['code'] !== T_WHITESPACE) {
@@ -229,7 +231,8 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
                 }//end if
             }//end if
         }//end if
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

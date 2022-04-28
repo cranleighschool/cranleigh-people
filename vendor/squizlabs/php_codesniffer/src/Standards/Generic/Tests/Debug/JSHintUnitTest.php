@@ -9,11 +9,13 @@
 
 namespace PHP_CodeSniffer\Standards\Generic\Tests\Debug;
 
-use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
+use PHP_CodeSniffer\Config;
 
 class JSHintUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Should this test be skipped for some reason.
      *
@@ -21,16 +23,16 @@ class JSHintUnitTest extends AbstractSniffUnitTest
      */
     protected function shouldSkipTest()
     {
-        $rhinoPath = Config::getExecutablePath('rhino');
+        $rhinoPath  = Config::getExecutablePath('rhino');
         $jshintPath = Config::getExecutablePath('jshint');
         if ($rhinoPath === null && $jshintPath === null) {
             return true;
         }
 
         return false;
-    }
 
-    //end shouldSkipTest()
+    }//end shouldSkipTest()
+
 
     /**
      * Returns the lines where errors should occur.
@@ -43,9 +45,9 @@ class JSHintUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -58,7 +60,8 @@ class JSHintUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [3 => 2];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

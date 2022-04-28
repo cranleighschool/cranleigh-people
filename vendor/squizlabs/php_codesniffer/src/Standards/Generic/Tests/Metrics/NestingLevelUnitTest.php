@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class NestingLevelUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -24,9 +26,9 @@ class NestingLevelUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [73 => 1];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -42,7 +44,8 @@ class NestingLevelUnitTest extends AbstractSniffUnitTest
             27 => 1,
             46 => 1,
         ];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

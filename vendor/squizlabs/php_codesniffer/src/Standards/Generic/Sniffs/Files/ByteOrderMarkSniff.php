@@ -15,6 +15,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ByteOrderMarkSniff implements Sniff
 {
+
     /**
      * List of supported BOM definitions.
      *
@@ -28,6 +29,7 @@ class ByteOrderMarkSniff implements Sniff
         'UTF-16 (LE)' => 'fffe',
     ];
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -36,9 +38,9 @@ class ByteOrderMarkSniff implements Sniff
     public function register()
     {
         return [T_INLINE_HTML];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -60,19 +62,19 @@ class ByteOrderMarkSniff implements Sniff
 
         foreach ($this->bomDefinitions as $bomName => $expectedBomHex) {
             $bomByteLength = (strlen($expectedBomHex) / 2);
-            $htmlBomHex = bin2hex(substr($tokens[$stackPtr]['content'], 0, $bomByteLength));
+            $htmlBomHex    = bin2hex(substr($tokens[$stackPtr]['content'], 0, $bomByteLength));
             if ($htmlBomHex === $expectedBomHex) {
                 $errorData = [$bomName];
-                $error = 'File contains %s byte order mark, which may corrupt your application';
+                $error     = 'File contains %s byte order mark, which may corrupt your application';
                 $phpcsFile->addError($error, $stackPtr, 'Found', $errorData);
                 $phpcsFile->recordMetric($stackPtr, 'Using byte order mark', 'yes');
-
                 return;
             }
         }
 
         $phpcsFile->recordMetric($stackPtr, 'Using byte order mark', 'no');
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

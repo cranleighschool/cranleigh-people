@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Util;
 
 class Comment
 {
+
+
     /**
      * Creates an array of tokens when given some PHP code.
      *
@@ -31,7 +33,7 @@ class Comment
             echo "\t\t*** START COMMENT TOKENIZING ***".PHP_EOL;
         }
 
-        $tokens = [];
+        $tokens   = [];
         $numChars = strlen($string);
 
         /*
@@ -39,9 +41,9 @@ class Comment
             extra star when they are used for function and class comments.
         */
 
-        $char = ($numChars - strlen(ltrim($string, '/*')));
+        $char    = ($numChars - strlen(ltrim($string, '/*')));
         $openTag = substr($string, 0, $char);
-        $string = ltrim($string, '/*');
+        $string  = ltrim($string, '/*');
 
         $tokens[$stackPtr] = [
             'content'      => $openTag,
@@ -81,14 +83,14 @@ class Comment
             Process each line of the comment.
         */
 
-        $lines = explode($eolChar, $string);
+        $lines    = explode($eolChar, $string);
         $numLines = count($lines);
         foreach ($lines as $lineNum => $string) {
             if ($lineNum !== ($numLines - 1)) {
                 $string .= $eolChar;
             }
 
-            $char = 0;
+            $char     = 0;
             $numChars = strlen($string);
 
             // We've started a new line, so process the indent.
@@ -133,7 +135,7 @@ class Comment
                 $tokens[$stackPtr] = $lineToken;
                 if (PHP_CODESNIFFER_VERBOSITY > 1) {
                     $content = Util\Common::prepareForOutput($lineToken['content']);
-                    $type = $lineToken['type'];
+                    $type    = $lineToken['type'];
                     echo "\t\tCreate comment token: $type => $content".PHP_EOL;
                 }
 
@@ -157,9 +159,9 @@ class Comment
         }
 
         return $tokens;
-    }
 
-    //end tokenizeString()
+    }//end tokenizeString()
+
 
     /**
      * Process a single line of a comment.
@@ -179,7 +181,7 @@ class Comment
         $space = $this->collectWhitespace($string, $start, $end);
         if ($space !== null) {
             $tokens[] = $space;
-            $start += strlen($space['content']);
+            $start   += strlen($space['content']);
         }
 
         if (isset($string[$start]) === false) {
@@ -193,8 +195,8 @@ class Comment
             if (isset($matches[0]) === true
                 && substr(strtolower($matches[0]), 0, 7) !== '@phpcs:'
             ) {
-                $tagName = $matches[0];
-                $start += strlen($tagName);
+                $tagName  = $matches[0];
+                $start   += strlen($tagName);
                 $tokens[] = [
                     'content' => $tagName,
                     'code'    => T_DOC_COMMENT_TAG,
@@ -205,7 +207,7 @@ class Comment
                 $space = $this->collectWhitespace($string, $start, $end);
                 if ($space !== null) {
                     $tokens[] = $space;
-                    $start += strlen($space['content']);
+                    $start   += strlen($space['content']);
                 }
             }
         }//end if
@@ -233,9 +235,9 @@ class Comment
         }
 
         return $tokens;
-    }
 
-    //end processLine()
+    }//end processLine()
+
 
     /**
      * Collect consecutive whitespace into a single token.
@@ -268,7 +270,8 @@ class Comment
         ];
 
         return $token;
-    }
 
-    //end collectWhitespace()
+    }//end collectWhitespace()
+
+
 }//end class

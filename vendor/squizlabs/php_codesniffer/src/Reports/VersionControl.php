@@ -15,12 +15,14 @@ use PHP_CodeSniffer\Util\Timing;
 
 abstract class VersionControl implements Report
 {
+
     /**
      * The name of the report we want in the output.
      *
      * @var string
      */
     protected $reportName = 'VERSION CONTROL';
+
 
     /**
      * Generate a partial report for a single processed file.
@@ -36,7 +38,7 @@ abstract class VersionControl implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
+    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
     {
         $blames = $this->getBlameContent($report['filename']);
 
@@ -118,16 +120,16 @@ abstract class VersionControl implements Report
 
         foreach ($sourceCache as $author => $sources) {
             foreach ($sources as $source => $sourceData) {
-                $count = $sourceData['count'];
+                $count   = $sourceData['count'];
                 $fixable = (int) $sourceData['fixable'];
                 echo "SOURCE>>$author>>$source>>$count>>$fixable".PHP_EOL;
             }
         }
 
         return true;
-    }
 
-    //end generateFileReport()
+    }//end generateFileReport()
+
 
     /**
      * Prints the author of all errors and warnings, as given by "version control blame".
@@ -151,10 +153,10 @@ abstract class VersionControl implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources = false,
-        $width = 80,
-        $interactive = false,
-        $toScreen = true
+        $showSources=false,
+        $width=80,
+        $interactive=false,
+        $toScreen=true
     ) {
         $errorsShown = ($totalErrors + $totalWarnings);
         if ($errorsShown === 0) {
@@ -191,7 +193,7 @@ abstract class VersionControl implements Report
                     ];
                 } else {
                     $praiseCache[$parts[1]]['good'] += $parts[2];
-                    $praiseCache[$parts[1]]['bad'] += $parts[3];
+                    $praiseCache[$parts[1]]['bad']  += $parts[3];
                 }
                 break;
             case 'SOURCE':
@@ -258,16 +260,16 @@ abstract class VersionControl implements Report
             if ($praiseCache[$author]['good'] === 0) {
                 $percent = 0;
             } else {
-                $total = ($praiseCache[$author]['bad'] + $praiseCache[$author]['good']);
+                $total   = ($praiseCache[$author]['bad'] + $praiseCache[$author]['good']);
                 $percent = round(($praiseCache[$author]['bad'] / $total * 100), 2);
             }
 
             $overallPercent = '('.round((($count / $errorsShown) * 100), 2).')';
-            $authorPercent = '('.$percent.')';
-            $line = str_repeat(' ', (6 - strlen($count))).$count;
-            $line = str_repeat(' ', (12 - strlen($overallPercent))).$overallPercent.$line;
-            $line = str_repeat(' ', (11 - strlen($authorPercent))).$authorPercent.$line;
-            $line = $author.str_repeat(' ', ($width - strlen($author) - strlen($line))).$line;
+            $authorPercent  = '('.$percent.')';
+            $line           = str_repeat(' ', (6 - strlen($count))).$count;
+            $line           = str_repeat(' ', (12 - strlen($overallPercent))).$overallPercent.$line;
+            $line           = str_repeat(' ', (11 - strlen($authorPercent))).$authorPercent.$line;
+            $line           = $author.str_repeat(' ', ($width - strlen($author) - strlen($line))).$line;
 
             if ($showSources === true) {
                 $line = "\033[1m$line\033[0m";
@@ -347,9 +349,9 @@ abstract class VersionControl implements Report
         if ($toScreen === true && $interactive === false) {
             Timing::printRunTime();
         }
-    }
 
-    //end generate()
+    }//end generate()
+
 
     /**
      * Extract the author from a blame line.
@@ -360,6 +362,7 @@ abstract class VersionControl implements Report
      */
     abstract protected function getAuthor($line);
 
+
     /**
      * Gets the blame output.
      *
@@ -368,4 +371,6 @@ abstract class VersionControl implements Report
      * @return array
      */
     abstract protected function getBlameContent($filename);
+
+
 }//end class

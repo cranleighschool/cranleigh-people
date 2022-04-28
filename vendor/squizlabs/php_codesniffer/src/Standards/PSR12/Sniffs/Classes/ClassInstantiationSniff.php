@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ClassInstantiationSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -23,9 +25,9 @@ class ClassInstantiationSniff implements Sniff
     public function register()
     {
         return [T_NEW];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -61,6 +63,14 @@ class ClassInstantiationSniff implements Sniff
                 continue;
             }
 
+            // Skip over potential attributes for anonymous classes.
+            if ($tokens[$i]['code'] === T_ATTRIBUTE
+                && isset($tokens[$i]['attribute_closer']) === true
+            ) {
+                $i = $tokens[$i]['attribute_closer'];
+                continue;
+            }
+
             if ($tokens[$i]['code'] === T_OPEN_SQUARE_BRACKET
                 || $tokens[$i]['code'] === T_OPEN_CURLY_BRACKET
             ) {
@@ -70,7 +80,7 @@ class ClassInstantiationSniff implements Sniff
 
             $classNameEnd = $i;
             break;
-        }
+        }//end for
 
         if ($classNameEnd === null) {
             return;
@@ -86,13 +96,19 @@ class ClassInstantiationSniff implements Sniff
             return;
         }
 
+        if ($classNameEnd === $stackPtr) {
+            // Failed to find the class name.
+            return;
+        }
+
         $error = 'Parentheses must be used when instantiating a new class';
-        $fix = $phpcsFile->addFixableError($error, $stackPtr, 'MissingParentheses');
+        $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'MissingParentheses');
         if ($fix === true) {
             $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($classNameEnd - 1), null, true);
             $phpcsFile->fixer->addContent($prev, '()');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

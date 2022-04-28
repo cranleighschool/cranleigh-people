@@ -26,8 +26,8 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
  */
 class CheckCircularReferencesPass implements CompilerPassInterface
 {
-    private $currentPath;
-    private $checkedNodes;
+    private array $currentPath;
+    private array $checkedNodes;
 
     /**
      * Checks the ContainerBuilder object for circular references.
@@ -59,7 +59,7 @@ class CheckCircularReferencesPass implements CompilerPassInterface
 
             if (empty($this->checkedNodes[$id])) {
                 // Don't check circular references for lazy edges
-                if (! $node->getValue() || (! $edge->isLazy() && ! $edge->isWeak())) {
+                if (!$node->getValue() || (!$edge->isLazy() && !$edge->isWeak())) {
                     $searchKey = array_search($id, $this->currentPath);
                     $this->currentPath[] = $id;
 

@@ -57,14 +57,14 @@ abstract class AbstractAnalyzer extends AbstractASTVisitor implements Analyzer
      *
      * @var array<string, mixed>
      */
-    protected $options = [];
+    protected $options = array();
 
     /**
      * List or registered listeners.
      *
-     * @var \PDepend\Metrics\AnalyzerListener[]
+     * @var AnalyzerListener[]
      */
-    private $listeners = [];
+    private $listeners = array();
 
     /**
      * Constructs a new analyzer instance.
@@ -72,19 +72,20 @@ abstract class AbstractAnalyzer extends AbstractASTVisitor implements Analyzer
      * @param array<string, mixed> $options Global option array, every analyzer
      *                                      can extract the required options.
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = array())
     {
         $this->options = $options;
     }
 
     /**
-     * Set global options.
+     * Set global options
      *
      * @param array<string, mixed> $options Global option array, every analyzer
      *                                      can extract the required options.
+     *
      * @return void
      */
-    public function setOptions(array $options = [])
+    public function setOptions(array $options = array())
     {
         $this->options = $options;
     }
@@ -92,10 +93,11 @@ abstract class AbstractAnalyzer extends AbstractASTVisitor implements Analyzer
     /**
      * Adds a listener to this analyzer.
      *
-     * @param  \PDepend\Metrics\AnalyzerListener $listener The listener instance.
+     * @param AnalyzerListener $listener The listener instance.
+     *
      * @return void
      */
-    public function addAnalyzeListener(\PDepend\Metrics\AnalyzerListener $listener)
+    public function addAnalyzeListener(AnalyzerListener $listener)
     {
         if (in_array($listener, $this->listeners, true) === false) {
             $this->listeners[] = $listener;
@@ -111,6 +113,7 @@ abstract class AbstractAnalyzer extends AbstractASTVisitor implements Analyzer
      * state based disabling/enabling.
      *
      * @return bool
+     *
      * @since  0.9.10
      */
     public function isEnabled()

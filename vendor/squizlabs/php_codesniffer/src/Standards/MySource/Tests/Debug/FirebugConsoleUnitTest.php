@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class FirebugConsoleUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -23,7 +25,7 @@ class FirebugConsoleUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = 'FirebugConsoleUnitTest.js')
+    public function getErrorList($testFile='FirebugConsoleUnitTest.js')
     {
         if ($testFile !== 'FirebugConsoleUnitTest.js') {
             return [];
@@ -37,9 +39,9 @@ class FirebugConsoleUnitTest extends AbstractSniffUnitTest
             6 => 1,
             8 => 1,
         ];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -52,7 +54,8 @@ class FirebugConsoleUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

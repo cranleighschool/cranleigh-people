@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Config;
 
 class Standards
 {
+
+
     /**
      * Get a list of paths where standards are installed.
      *
@@ -25,7 +27,7 @@ class Standards
         $ds = DIRECTORY_SEPARATOR;
 
         $installedPaths = [dirname(dirname(__DIR__)).$ds.'src'.$ds.'Standards'];
-        $configPaths = Config::getConfigData('installed_paths');
+        $configPaths    = Config::getConfigData('installed_paths');
         if ($configPaths !== null) {
             $installedPaths = array_merge($installedPaths, explode(',', $configPaths));
         }
@@ -43,9 +45,9 @@ class Standards
         }
 
         return $resolvedInstalledPaths;
-    }
 
-    //end getInstalledStandardPaths()
+    }//end getInstalledStandardPaths()
+
 
     /**
      * Get the details of all coding standards installed.
@@ -63,7 +65,7 @@ class Standards
      * use getInstalledStandardPaths() instead as it performs less work to
      * retrieve coding standard names.
      *
-     * @param bool $includeGeneric If true, the special "Generic"
+     * @param boolean $includeGeneric If true, the special "Generic"
      *                                coding standard will be included
      *                                if installed.
      * @param string  $standardsDir   A specific directory to look for standards
@@ -74,8 +76,8 @@ class Standards
      * @see    getInstalledStandardPaths()
      */
     public static function getInstalledStandardDetails(
-        $includeGeneric = false,
-        $standardsDir = ''
+        $includeGeneric=false,
+        $standardsDir=''
     ) {
         $rulesets = [];
 
@@ -125,7 +127,7 @@ class Standards
             }
 
             $standardName = (string) $ruleset['name'];
-            $dirname = basename(dirname($rulesetPath));
+            $dirname      = basename(dirname($rulesetPath));
 
             if (isset($ruleset['namespace']) === true) {
                 $namespace = (string) $ruleset['namespace'];
@@ -141,9 +143,9 @@ class Standards
         }//end foreach
 
         return $installedStandards;
-    }
 
-    //end getInstalledStandardDetails()
+    }//end getInstalledStandardDetails()
+
 
     /**
      * Get a list of all coding standards installed.
@@ -152,7 +154,7 @@ class Standards
      * CodeSniffer/Standards directory. Valid coding standards
      * include a Sniffs subdirectory.
      *
-     * @param bool $includeGeneric If true, the special "Generic"
+     * @param boolean $includeGeneric If true, the special "Generic"
      *                                coding standard will be included
      *                                if installed.
      * @param string  $standardsDir   A specific directory to look for standards
@@ -163,8 +165,8 @@ class Standards
      * @see    isInstalledStandard()
      */
     public static function getInstalledStandards(
-        $includeGeneric = false,
-        $standardsDir = ''
+        $includeGeneric=false,
+        $standardsDir=''
     ) {
         $installedStandards = [];
 
@@ -207,9 +209,9 @@ class Standards
         }//end foreach
 
         return $installedStandards;
-    }
 
-    //end getInstalledStandards()
+    }//end getInstalledStandards()
+
 
     /**
      * Determine if a standard is installed.
@@ -220,7 +222,7 @@ class Standards
      *
      * @param string $standard The name of the coding standard.
      *
-     * @return bool
+     * @return boolean
      * @see    getInstalledStandards()
      */
     public static function isInstalledStandard($standard)
@@ -254,9 +256,9 @@ class Standards
         }//end if
 
         return false;
-    }
 
-    //end isInstalledStandard()
+    }//end isInstalledStandard()
+
 
     /**
      * Return the path of an installed coding standard.
@@ -290,7 +292,7 @@ class Standards
 
             if ($path !== false && is_file($path) === true) {
                 return $path;
-            } elseif (Common::isPharFile($standardPath) === true) {
+            } else if (Common::isPharFile($standardPath) === true) {
                 $path = Common::realpath($standardPath);
                 if ($path !== false) {
                     return $path;
@@ -299,9 +301,9 @@ class Standards
         }//end foreach
 
         return null;
-    }
 
-    //end getInstalledStandardPath()
+    }//end getInstalledStandardPath()
+
 
     /**
      * Prints out a list of installed coding standards.
@@ -311,7 +313,7 @@ class Standards
     public static function printInstalledStandards()
     {
         $installedStandards = self::getInstalledStandards();
-        $numStandards = count($installedStandards);
+        $numStandards       = count($installedStandards);
 
         if ($numStandards === 0) {
             echo 'No coding standards are installed.'.PHP_EOL;
@@ -320,12 +322,13 @@ class Standards
             if ($numStandards === 1) {
                 echo "The only coding standard installed is $lastStandard".PHP_EOL;
             } else {
-                $standardList = implode(', ', $installedStandards);
+                $standardList  = implode(', ', $installedStandards);
                 $standardList .= ' and '.$lastStandard;
                 echo 'The installed coding standards are '.$standardList.PHP_EOL;
             }
         }
-    }
 
-    //end printInstalledStandards()
+    }//end printInstalledStandards()
+
+
 }//end class

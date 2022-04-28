@@ -38,16 +38,20 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.6
  */
 
 namespace PDepend\Source\AST;
+
+use OutOfBoundsException;
 
 /**
  * This is an abstract base implementation of the ast node interface.
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 2.3
  */
 interface ASTNode
@@ -91,15 +95,17 @@ interface ASTNode
      * Returns the node instance for the given index or throws an exception.
      *
      * @param int $index
-     * @return \PDepend\Source\AST\ASTNode
-     * @throws \OutOfBoundsException When no node exists at the given index.
+     *
+     * @throws OutOfBoundsException When no node exists at the given index.
+     *
+     * @return AbstractASTNode
      */
     public function getChild($index);
 
     /**
      * This method returns all direct children of the actual node.
      *
-     * @return \PDepend\Source\AST\ASTNode[]
+     * @return ASTNode[]
      */
     public function getChildren();
 
@@ -108,8 +114,10 @@ interface ASTNode
      * instance of the given <b>$targetType</b>. The returned value will be
      * <b>null</b> if no child exists for that.
      *
-     * @template T of \PDepend\Source\AST\ASTNode
+     * @template T of ASTNode
+     *
      * @param class-string<T> $targetType
+     *
      * @return T|null
      */
     public function getFirstChildOfType($targetType);
@@ -119,26 +127,27 @@ interface ASTNode
      * instance of the given <b>$targetType</b>. The returned value will be
      * an empty <b>array</b> if no child exists for that.
      *
-     * @template T of \PDepend\Source\AST\ASTNode
+     * @template T of ASTNode
+     *
      * @param class-string<T> $targetType Searched class or interface type.
-     * @param T[]             $results Already found node instances. This parameter
-     *        is only for internal usage.
+     * @param T[]             $results    Already found node instances. This parameter
+     *                                    is only for internal usage.
+     *
      * @return T[]
      */
-    public function findChildrenOfType($targetType, array &$results = []);
+    public function findChildrenOfType($targetType, array &$results = array());
 
     /**
      * Returns the parent node of this node or <b>null</b> when this node is
      * the root of a node tree.
      *
-     * @return \PDepend\Source\AST\ASTNode
+     * @return ASTNode
      */
     public function getParent();
 
     /**
      * Sets the parent node of this node.
      *
-     * @param \PDepend\Source\AST\ASTNode $node
      * @return void
      */
     public function setParent(ASTNode $node);
@@ -148,7 +157,8 @@ interface ASTNode
      * of <b>$parentType</b>.
      *
      * @param string $parentType
-     * @return \PDepend\Source\AST\ASTNode[]
+     *
+     * @return ASTNode[]
      */
     public function getParentsOfType($parentType);
 
@@ -177,7 +187,9 @@ interface ASTNode
      * @param int $endLine
      * @param int $startColumn
      * @param int $endColumn
+     *
      * @return void
+     *
      * @since 0.9.10
      */
     public function configureLinesAndColumns($startLine, $endLine, $startColumn, $endColumn);

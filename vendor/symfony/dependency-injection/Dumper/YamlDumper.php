@@ -41,18 +41,14 @@ class YamlDumper extends Dumper
 
     /**
      * Dumps the service container as an YAML string.
-     *
-     * @return string A YAML string representing of the service container
      */
-    public function dump(array $options = [])
+    public function dump(array $options = []): string
     {
-        if (! class_exists(\Symfony\Component\Yaml\Dumper::class)) {
+        if (!class_exists(YmlDumper::class)) {
             throw new LogicException('Unable to dump the container as the Symfony Yaml Component is not installed.');
         }
 
-        if (null === $this->dumper) {
-            $this->dumper = new YmlDumper();
-        }
+        $this->dumper ??= new YmlDumper();
 
         return $this->container->resolveEnvPlaceholders($this->addParameters()."\n".$this->addServices());
     }
@@ -68,7 +64,7 @@ class YamlDumper extends Dumper
             $code .= sprintf("        class: %s\n", $this->dumper->dump($class));
         }
 
-        if (! $definition->isPrivate()) {
+        if (!$definition->isPrivate()) {
             $code .= sprintf("        public: %s\n", $definition->isPublic() ? 'true' : 'false');
         }
 
@@ -133,7 +129,7 @@ class YamlDumper extends Dumper
             $code .= sprintf("        calls:\n%s\n", $this->dumper->dump($this->dumpValue($definition->getMethodCalls()), 1, 12));
         }
 
-        if (! $definition->isShared()) {
+        if (!$definition->isShared()) {
             $code .= "        shared: false\n";
         }
 
@@ -179,7 +175,7 @@ class YamlDumper extends Dumper
             }
         }
 
-        if (! $id->isDeprecated() && $id->isPrivate()) {
+        if (!$id->isDeprecated() && $id->isPrivate()) {
             return sprintf("    %s: '@%s'\n", $alias, $id);
         }
 
@@ -192,7 +188,7 @@ class YamlDumper extends Dumper
 
     private function addServices(): string
     {
-        if (! $this->container->getDefinitions()) {
+        if (!$this->container->getDefinitions()) {
             return '';
         }
 
@@ -214,7 +210,7 @@ class YamlDumper extends Dumper
 
     private function addParameters(): string
     {
-        if (! $this->container->getParameterBag()->all()) {
+        if (!$this->container->getParameterBag()->all()) {
             return '';
         }
 
@@ -225,12 +221,8 @@ class YamlDumper extends Dumper
 
     /**
      * Dumps callable to YAML format.
-     *
-     * @param mixed $callable
-     *
-     * @return mixed
      */
-    private function dumpCallable($callable)
+    private function dumpCallable(mixed $callable): mixed
     {
         if (\is_array($callable)) {
             if ($callable[0] instanceof Reference) {
@@ -246,14 +238,14 @@ class YamlDumper extends Dumper
     /**
      * Dumps the value to YAML format.
      *
-     * @return mixed
-     *
      * @throws RuntimeException When trying to dump object or resource
      */
-    private function dumpValue($value)
+    private function dumpValue(mixed $value): mixed
     {
         if ($value instanceof ServiceClosureArgument) {
             $value = $value->getValues()[0];
+
+            return new TaggedValue('service_closure', $this->getServiceCall((string) $value, $value));
         }
         if ($value instanceof ArgumentInterface) {
             $tag = $value;
@@ -304,6 +296,8 @@ class YamlDumper extends Dumper
             return $this->getExpressionCall((string) $value);
         } elseif ($value instanceof Definition) {
             return new TaggedValue('service', (new Parser())->parse("_:\n".$this->addService('_', $value), Yaml::PARSE_CUSTOM_TAGS)['_']['_']);
+        } elseif ($value instanceof \UnitEnum) {
+            return new TaggedValue('php/const', sprintf('%s::%s', \get_class($value), $value->name));
         } elseif ($value instanceof AbstractArgument) {
             return new TaggedValue('abstract', $value->getText());
         } elseif (\is_object($value) || \is_resource($value)) {
@@ -343,7 +337,7 @@ class YamlDumper extends Dumper
         foreach ($parameters as $key => $value) {
             if (\is_array($value)) {
                 $value = $this->prepareParameters($value, $escape);
-            } elseif ($value instanceof Reference || \is_string($value) && 0 === strpos($value, '@')) {
+            } elseif ($value instanceof Reference || \is_string($value) && str_starts_with($value, '@')) {
                 $value = '@'.$value;
             }
 

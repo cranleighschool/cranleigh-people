@@ -52,7 +52,7 @@ use PDepend\Source\ASTVisitor\ASTVisitor;
  * <?php
  * class Builder
  * {
- *     public function buildNode($name, $line, \PDepend\Source\AST\ASTCompilationUnit $unit) {
+ *     public function buildNode($name, $line, ASTCompilationUnit $unit) {
  *     }
  * }
  *
@@ -68,7 +68,7 @@ class ASTParameter extends AbstractASTArtifact
     /**
      * The parent function or method instance.
      *
-     * @var \PDepend\Source\AST\AbstractASTCallable
+     * @var AbstractASTCallable
      */
     private $declaringFunction = null;
 
@@ -96,18 +96,16 @@ class ASTParameter extends AbstractASTArtifact
     /**
      * The wrapped variable declarator instance.
      *
-     * @var \PDepend\Source\AST\ASTVariableDeclarator
+     * @var ASTVariableDeclarator
      */
     private $variableDeclarator = null;
 
     /**
      * Constructs a new parameter instance for the given AST node.
-     *
-     * @param ASTFormalParameter $formalParameter
      */
     public function __construct(ASTFormalParameter $formalParameter)
     {
-        $this->formalParameter = $formalParameter;
+        $this->formalParameter    = $formalParameter;
         $this->variableDeclarator = $formalParameter->getFirstChildOfType(
             'PDepend\\Source\\AST\\ASTVariableDeclarator'
         );
@@ -146,9 +144,10 @@ class ASTParameter extends AbstractASTArtifact
     }
 
     /**
-     * Returns the parent function or method instance or <b>null</b>.
+     * Returns the parent function or method instance or <b>null</b>
      *
-     * @return \PDepend\Source\AST\AbstractASTCallable
+     * @return AbstractASTCallable
+     *
      * @since  0.9.5
      */
     public function getDeclaringFunction()
@@ -159,8 +158,8 @@ class ASTParameter extends AbstractASTArtifact
     /**
      * Sets the parent function or method object.
      *
-     * @param  \PDepend\Source\AST\AbstractASTCallable $function
      * @return void
+     *
      * @since  0.9.5
      */
     public function setDeclaringFunction(AbstractASTCallable $function)
@@ -173,7 +172,9 @@ class ASTParameter extends AbstractASTArtifact
      * The returned value will be <b>null</b> if the parent is a function.
      *
      * @todo Review this for refactoring, maybe create a empty getParent()?
-     * @return \PDepend\Source\AST\AbstractASTClassOrInterface|null
+     *
+     * @return AbstractASTClassOrInterface|null
+     *
      * @since  0.9.5
      */
     public function getDeclaringClass()
@@ -181,7 +182,6 @@ class ASTParameter extends AbstractASTArtifact
         if ($this->declaringFunction instanceof ASTMethod) {
             return $this->declaringFunction->getParent();
         }
-
         return null;
     }
 
@@ -211,7 +211,8 @@ class ASTParameter extends AbstractASTArtifact
      * Returns the class type of this parameter. This method will return
      * <b>null</b> for all scalar type, only classes or interfaces are used.
      *
-     * @return \PDepend\Source\AST\AbstractASTClassOrInterface|null
+     * @return AbstractASTClassOrInterface|null
+     *
      * @since  0.9.5
      */
     public function getClass()
@@ -222,7 +223,6 @@ class ASTParameter extends AbstractASTArtifact
         if ($classReference === null) {
             return null;
         }
-
         return $classReference->getType();
     }
 
@@ -231,6 +231,7 @@ class ASTParameter extends AbstractASTArtifact
      * reference.
      *
      * @return bool
+     *
      * @since  0.9.5
      */
     public function isPassedByReference()
@@ -243,13 +244,13 @@ class ASTParameter extends AbstractASTArtifact
      * the array type hint, otherwise the it will return <b>false</b>.
      *
      * @return bool
+     *
      * @since  0.9.5
      */
     public function isArray()
     {
         $node = $this->formalParameter->getChild(0);
-
-        return $node instanceof \PDepend\Source\AST\ASTTypeArray;
+        return ($node instanceof ASTTypeArray);
     }
 
     /**
@@ -258,18 +259,20 @@ class ASTParameter extends AbstractASTArtifact
      * value <b>null</b>.
      *
      * @return bool
+     *
      * @since  0.9.5
      */
     public function allowsNull()
     {
-        return
+        return (
             (
                 $this->isArray() === false
                 && $this->getClass() === null
             ) || (
                 $this->isDefaultValueAvailable() === true
                 && $this->getDefaultValue() === null
-            );
+            )
+        );
     }
 
     /**
@@ -277,6 +280,7 @@ class ASTParameter extends AbstractASTArtifact
      * can be left blank on invocation.
      *
      * @return bool
+     *
      * @since  0.9.5
      */
     public function isOptional()
@@ -290,14 +294,15 @@ class ASTParameter extends AbstractASTArtifact
      * parameter has no default value.
      *
      * @param bool $optional Boolean flag that marks this parameter a
-     *                          optional or not.
+     *                       optional or not.
      *
      * @return void
+     *
      * @since  0.9.5
      */
     public function setOptional($optional)
     {
-        $this->optional = (bool) $optional;
+        $this->optional = (boolean) $optional;
     }
 
     /**
@@ -305,6 +310,7 @@ class ASTParameter extends AbstractASTArtifact
      * contains a default value.
      *
      * @return bool
+     *
      * @since  0.9.5
      */
     public function isDefaultValueAvailable()
@@ -313,7 +319,6 @@ class ASTParameter extends AbstractASTArtifact
         if ($value === null) {
             return false;
         }
-
         return $value->isValueAvailable();
     }
 
@@ -321,10 +326,9 @@ class ASTParameter extends AbstractASTArtifact
      * This method will return the declared default value for this parameter.
      * Please note that this method will return <b>null</b> when no default
      * value was declared, therefore you should combine calls to this method and
-     * {@link \PDepend\Source\AST\ASTParameter::isDefaultValueAvailable()} to
+     * {@link ASTParameter::isDefaultValueAvailable()} to
      * detect a NULL-value.
      *
-     * @return mixed
      * @since  0.9.5
      */
     public function getDefaultValue()
@@ -337,12 +341,21 @@ class ASTParameter extends AbstractASTArtifact
     /**
      * ASTVisitor method for node tree traversal.
      *
-     * @param  \PDepend\Source\ASTVisitor\ASTVisitor $visitor
      * @return void
      */
     public function accept(ASTVisitor $visitor)
     {
         $visitor->visitParameter($this);
+    }
+
+    /**
+     * Returns the wrapped formal parameter instance.
+     *
+     * @return ASTFormalParameter
+     */
+    public function getFormalParameter()
+    {
+        return $this->formalParameter;
     }
 
     /**
@@ -352,14 +365,14 @@ class ASTParameter extends AbstractASTArtifact
      */
     public function __toString()
     {
-        $required = $this->isOptional() ? 'optional' : 'required';
+        $required  = $this->isOptional() ? 'optional' : 'required';
         $reference = $this->isPassedByReference() ? '&' : '';
 
         $typeHint = '';
         if ($this->isArray() === true) {
             $typeHint = ' array';
         } elseif ($this->getClass() !== null) {
-            $typeHint = ' '.$this->getClass()->getName();
+            $typeHint = ' ' . $this->getClass()->getName();
         }
 
         $default = '';
@@ -368,7 +381,7 @@ class ASTParameter extends AbstractASTArtifact
 
             $value = $this->getDefaultValue();
             if ($value === null) {
-                $default .= 'NULL';
+                $default  .= 'NULL';
                 $typeHint .= ($typeHint !== '' ? ' or NULL' : '');
             } elseif ($value === false) {
                 $default .= 'false';
@@ -377,7 +390,7 @@ class ASTParameter extends AbstractASTArtifact
             } elseif (is_array($value) === true) {
                 $default .= 'Array';
             } elseif (is_string($value) === true) {
-                $default .= "'".$value."'";
+                $default .= "'" . $value . "'";
             } else {
                 $default .= $value;
             }

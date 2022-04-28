@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Files\File;
 
 class Diff implements Report
 {
+
+
     /**
      * Generate a partial report for a single processed file.
      *
@@ -27,7 +29,7 @@ class Diff implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
+    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
     {
         $errors = $phpcsFile->getFixableCount();
         if ($errors === 0) {
@@ -40,7 +42,7 @@ class Diff implements Report
             if (PHP_CODESNIFFER_VERBOSITY === 1) {
                 $startTime = microtime(true);
                 echo 'DIFF report is parsing '.basename($report['filename']).' ';
-            } elseif (PHP_CODESNIFFER_VERBOSITY > 1) {
+            } else if (PHP_CODESNIFFER_VERBOSITY > 1) {
                 echo 'DIFF report is forcing parse of '.$report['filename'].PHP_EOL;
             }
 
@@ -85,11 +87,10 @@ class Diff implements Report
         }
 
         echo $diff.PHP_EOL;
-
         return true;
-    }
 
-    //end generateFileReport()
+    }//end generateFileReport()
+
 
     /**
      * Prints all errors and warnings for each file processed.
@@ -113,16 +114,17 @@ class Diff implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources = false,
-        $width = 80,
-        $interactive = false,
-        $toScreen = true
+        $showSources=false,
+        $width=80,
+        $interactive=false,
+        $toScreen=true
     ) {
         echo $cachedData;
         if ($toScreen === true && $cachedData !== '') {
             echo PHP_EOL;
         }
-    }
 
-    //end generate()
+    }//end generate()
+
+
 }//end class

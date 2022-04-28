@@ -38,30 +38,41 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- */
+  */
 
 namespace PDepend;
 
+use AppendIterator;
 use ArrayIterator;
 use GlobIterator;
+use InvalidArgumentException;
+use OutOfBoundsException;
 use PDepend\Input\CompositeFilter;
 use PDepend\Input\Filter;
 use PDepend\Input\Iterator;
+use PDepend\Metrics\Analyzer;
 use PDepend\Metrics\AnalyzerCacheAware;
 use PDepend\Metrics\AnalyzerFactory;
 use PDepend\Metrics\AnalyzerFilterAware;
 use PDepend\Report\CodeAwareGenerator;
+use PDepend\Report\ReportGenerator;
+use PDepend\Source\AST\ASTArtifactList;
 use PDepend\Source\AST\ASTArtifactList\ArtifactFilter;
 use PDepend\Source\AST\ASTArtifactList\CollectionArtifactFilter;
 use PDepend\Source\AST\ASTArtifactList\NullArtifactFilter;
+use PDepend\Source\AST\ASTNamespace;
 use PDepend\Source\ASTVisitor\ASTVisitor;
 use PDepend\Source\Builder\Builder;
 use PDepend\Source\Language\PHP\PHPBuilder;
 use PDepend\Source\Language\PHP\PHPParserGeneric;
 use PDepend\Source\Language\PHP\PHPTokenizerInternal;
+use PDepend\Source\Parser\ParserException;
 use PDepend\Source\Tokenizer\Tokenizer;
 use PDepend\Util\Cache\CacheFactory;
 use PDepend\Util\Configuration;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
 use SplFileObject;
 
 /**
@@ -88,7 +99,8 @@ class Engine
     /**
      * The system configuration.
      *
-     * @var   \PDepend\Util\Configuration
+     * @var Configuration
+     *
      * @since 0.10.0
      */
     protected $configuration = null;
@@ -105,47 +117,47 @@ class Engine
      *
      * @var array<string>
      */
-    private $directories = [];
+    private $directories = array();
 
     /**
      * List of source code file names.
      *
      * @var array<string>
      */
-    private $files = [];
+    private $files = array();
 
     /**
      * The used code node builder.
      *
-     * @var \PDepend\Source\Builder\Builder<\PDepend\Source\AST\ASTNamespace>|null
+     * @var PHPBuilder<ASTNamespace>|null
      */
     private $builder = null;
 
     /**
-     * Generated {@link \PDepend\Source\AST\ASTNamespace} objects.
+     * Generated {@link ASTNamespace} objects.
      *
-     * @var \PDepend\Source\AST\ASTNamespace[]
+     * @var ASTArtifactList<ASTNamespace>
      */
     private $namespaces = null;
 
     /**
-     * List of all registered {@link \PDepend\Report\ReportGenerator} instances.
+     * List of all registered {@link ReportGenerator} instances.
      *
-     * @var \PDepend\Report\ReportGenerator[]
+     * @var ReportGenerator[]
      */
-    private $generators = [];
+    private $generators = array();
 
     /**
      * A composite filter for input files.
      *
-     * @var \PDepend\Input\CompositeFilter
+     * @var CompositeFilter
      */
     private $fileFilter = null;
 
     /**
      * A filter for namespace.
      *
-     * @var \PDepend\Source\AST\ASTArtifactList\ArtifactFilter
+     * @var ArtifactFilter
      */
     private $codeFilter = null;
 
@@ -159,44 +171,43 @@ class Engine
     /**
      * List or registered listeners.
      *
-     * @var \PDepend\ProcessListener[]
+     * @var ProcessListener[]
      */
-    private $listeners = [];
+    private $listeners = array();
 
     /**
      * List of analyzer options.
      *
      * @var array<string, mixed>
      */
-    private $options = [];
+    private $options = array();
 
     /**
-     * List of all {@link \PDepend\Source\Parser\ParserException} that were caught during
+     * List of all {@link ParserException} that were caught during
      * the parsing process.
      *
-     * @var \PDepend\Source\Parser\ParserException[]
+     * @var ParserException[]
      */
-    private $parseExceptions = [];
+    private $parseExceptions = array();
 
     /**
      * The configured cache factory.
      *
-     * @var   \PDepend\Util\Cache\CacheFactory
+     * @var CacheFactory
+     *
      * @since 1.0.0
      */
     private $cacheFactory;
 
     /**
-     * @var \PDepend\Metrics\AnalyzerFactory
+     * @var AnalyzerFactory
      */
     private $analyzerFactory;
 
     /**
      * Constructs a new php depend facade.
      *
-     * @param \PDepend\Util\Configuration      $configuration   The system configuration.
-     * @param \PDepend\Util\Cache\CacheFactory $cacheFactory
-     * @param \PDepend\Metrics\AnalyzerFactory $analyzerFactory
+     * @param Configuration $configuration The system configuration.
      */
     public function __construct(
         Configuration $configuration,
@@ -215,15 +226,16 @@ class Engine
     /**
      * Adds the specified directory to the list of directories to be analyzed.
      *
-     * @param  string $directory The php source directory.
+     * @param string $directory The php source directory.
+     *
      * @return void
      */
     public function addDirectory($directory)
     {
         $dir = realpath($directory);
 
-        if ($dir === false || ! is_dir($dir)) {
-            throw new \InvalidArgumentException("Invalid directory '{$directory}' added.");
+        if ($dir === false || !is_dir($dir)) {
+            throw new InvalidArgumentException("Invalid directory '{$directory}' added.");
         }
 
         $this->directories[] = $dir;
@@ -232,13 +244,14 @@ class Engine
     /**
      * Adds a single source code file to the list of files to be analysed.
      *
-     * @param  string $file The source file name.
+     * @param string $file The source file name.
+     *
      * @return void
      */
     public function addFile($file)
     {
         if ($file === '-') {
-            $file = $this->phpStreamPrefix.'stdin';
+            $file = $this->phpStreamPrefix . 'stdin';
         }
 
         if ($this->isPhpStream($file)) {
@@ -247,8 +260,8 @@ class Engine
             return;
         }
 
-        if (! is_file($file)) {
-            throw new \InvalidArgumentException(sprintf('The given file "%s" does not exist.', $file));
+        if (!is_file($file)) {
+            throw new InvalidArgumentException(sprintf('The given file "%s" does not exist.', $file));
         }
 
         $this->files[] = realpath($file);
@@ -257,10 +270,11 @@ class Engine
     /**
      * Adds a logger to the output list.
      *
-     * @param  \PDepend\Report\ReportGenerator $generator The logger instance.
+     * @param ReportGenerator $generator The logger instance.
+     *
      * @return void
      */
-    public function addReportGenerator(\PDepend\Report\ReportGenerator $generator)
+    public function addReportGenerator(Report\ReportGenerator $generator)
     {
         $this->generators[] = $generator;
     }
@@ -268,7 +282,8 @@ class Engine
     /**
      * Adds a new input/file filter.
      *
-     * @param  \PDepend\Input\Filter $filter New input/file filter instance.
+     * @param Filter $filter New input/file filter instance.
+     *
      * @return void
      */
     public function addFileFilter(Filter $filter)
@@ -280,7 +295,6 @@ class Engine
      * Sets an additional code filter. These filters could be used to hide
      * external libraries and global stuff from the PDepend output.
      *
-     * @param  \PDepend\Source\AST\ASTArtifactList\ArtifactFilter $filter
      * @return void
      */
     public function setCodeFilter(ArtifactFilter $filter)
@@ -291,10 +305,11 @@ class Engine
     /**
      * Sets analyzer options.
      *
-     * @param  array<string, mixed> $options The analyzer options.
+     * @param array<string, mixed> $options The analyzer options.
+     *
      * @return void
      */
-    public function setOptions(array $options = [])
+    public function setOptions(array $options = array())
     {
         $this->options = $options;
     }
@@ -312,7 +327,8 @@ class Engine
     /**
      * Adds a process listener.
      *
-     * @param  \PDepend\ProcessListener $listener The listener instance.
+     * @param ProcessListener $listener The listener instance.
+     *
      * @return void
      */
     public function addProcessListener(ProcessListener $listener)
@@ -326,7 +342,7 @@ class Engine
      * Analyzes the registered directories and returns the collection of
      * analyzed namespace.
      *
-     * @return \PDepend\Source\AST\ASTNamespace[]
+     * @return ASTArtifactList<ASTNamespace>
      */
     public function analyze()
     {
@@ -359,7 +375,7 @@ class Engine
 
         $this->fireEndLogProcess();
 
-        return $this->namespaces = $namespaces;
+        return ($this->namespaces = $namespaces);
     }
 
     /**
@@ -371,22 +387,21 @@ class Engine
     {
         if ($this->namespaces === null) {
             $msg = 'countClasses() doesn\'t work before the source was analyzed.';
-            throw new \RuntimeException($msg);
+            throw new RuntimeException($msg);
         }
 
         $classes = 0;
         foreach ($this->namespaces as $namespace) {
             $classes += count($namespace->getTypes());
         }
-
         return $classes;
     }
 
     /**
-     * Returns an <b>array</b> with all {@link \PDepend\Source\Parser\ParserException}
+     * Returns an <b>array</b> with all {@link ParserException}
      * that were caught during the parsing process.
      *
-     * @return \PDepend\Source\Parser\ParserException[]
+     * @return ParserException[]
      */
     public function getExceptions()
     {
@@ -402,61 +417,63 @@ class Engine
     {
         if ($this->namespaces === null) {
             $msg = 'countNamespaces() doesn\'t work before the source was analyzed.';
-            throw new \RuntimeException($msg);
+            throw new RuntimeException($msg);
         }
 
         $count = 0;
         foreach ($this->namespaces as $namespace) {
             if ($namespace->isUserDefined()) {
-                $count++;
+                ++$count;
             }
         }
-
         return $count;
     }
 
     /**
      * Returns the analyzed namespace for the given name.
      *
-     * @param  string $name
-     * @return \PDepend\Source\AST\ASTNamespace
-     * @throws \OutOfBoundsException
-     * @throws \RuntimeException
+     * @param string $name
+     *
+     * @throws OutOfBoundsException
+     * @throws RuntimeException
+     *
+     * @return ASTNamespace
      */
     public function getNamespace($name)
     {
         if ($this->namespaces === null) {
             $msg = 'getNamespace() doesn\'t work before the source was analyzed.';
-            throw new \RuntimeException($msg);
+            throw new RuntimeException($msg);
         }
         foreach ($this->namespaces as $namespace) {
             if ($namespace->getName() === $name) {
                 return $namespace;
             }
         }
-        throw new \OutOfBoundsException(sprintf('Unknown namespace "%s".', $name));
+        throw new OutOfBoundsException(sprintf('Unknown namespace "%s".', $name));
     }
 
     /**
      * Returns an array with the analyzed namespace.
      *
-     * @return \PDepend\Source\AST\ASTNamespace[]
-     * @throws \RuntimeException
+     * @throws RuntimeException
+     *
+     * @return ASTArtifactList<ASTNamespace>
      */
     public function getNamespaces()
     {
         if ($this->namespaces === null) {
             $msg = 'getNamespaces() doesn\'t work before the source was analyzed.';
-            throw new \RuntimeException($msg);
+            throw new RuntimeException($msg);
         }
-
         return $this->namespaces;
     }
 
     /**
      * Send the start parsing process event.
      *
-     * @param  \PDepend\Source\Builder\Builder<\PDepend\Source\AST\ASTNamespace> $builder The used node builder instance.
+     * @param Builder<ASTNamespace> $builder The used node builder instance.
+     *
      * @return void
      */
     protected function fireStartParseProcess(Builder $builder)
@@ -469,7 +486,8 @@ class Engine
     /**
      * Send the end parsing process event.
      *
-     * @param  \PDepend\Source\Builder\Builder<\PDepend\Source\AST\ASTNamespace> $builder The used node builder instance.
+     * @param Builder<ASTNamespace> $builder The used node builder instance.
+     *
      * @return void
      */
     protected function fireEndParseProcess(Builder $builder)
@@ -482,7 +500,6 @@ class Engine
     /**
      * Sends the start file parsing event.
      *
-     * @param  \PDepend\Source\Tokenizer\Tokenizer $tokenizer
      * @return void
      */
     protected function fireStartFileParsing(Tokenizer $tokenizer)
@@ -495,7 +512,6 @@ class Engine
     /**
      * Sends the end file parsing event.
      *
-     * @param  \PDepend\Source\Tokenizer\Tokenizer $tokenizer
      * @return void
      */
     protected function fireEndFileParsing(Tokenizer $tokenizer)
@@ -563,7 +579,7 @@ class Engine
     private function performParseProcess()
     {
         // Reset list of thrown exceptions
-        $this->parseExceptions = [];
+        $this->parseExceptions = array();
 
         $tokenizer = new PHPTokenizerInternal();
 
@@ -588,7 +604,7 @@ class Engine
 
             try {
                 $parser->parse();
-            } catch (\PDepend\Source\Parser\ParserException $e) {
+            } catch (ParserException $e) {
                 $this->parseExceptions[] = $e;
             }
             $this->fireEndFileParsing($tokenizer);
@@ -639,20 +655,20 @@ class Engine
      * This method will create an iterator instance which contains all files
      * that are part of the parsing process.
      *
-     * @return \Iterator<int, string>
+     * @return ArrayIterator<int, string>
      */
     private function createFileIterator()
     {
         if (count($this->directories) === 0 && count($this->files) === 0) {
-            throw new \RuntimeException('No source directory and file set.');
+            throw new RuntimeException('No source directory and file set.');
         }
 
-        $fileIterator = new \AppendIterator();
+        $fileIterator = new AppendIterator();
 
         foreach ($this->files as $file) {
             $fileIterator->append(
                 $this->isPhpStream($file)
-                    ? new ArrayIterator([new SplFileObject($file)])
+                    ? new ArrayIterator(array(new SplFileObject($file)))
                     : new Iterator(new GlobIterator($file), $this->fileFilter)
             );
         }
@@ -660,10 +676,10 @@ class Engine
         foreach ($this->directories as $directory) {
             $fileIterator->append(
                 new Iterator(
-                    new \RecursiveIteratorIterator(
-                        new \RecursiveDirectoryIterator(
-                            $directory.'/',
-                            \RecursiveDirectoryIterator::FOLLOW_SYMLINKS
+                    new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator(
+                            $directory . '/',
+                            RecursiveDirectoryIterator::FOLLOW_SYMLINKS
                         )
                     ),
                     $this->fileFilter,
@@ -675,7 +691,7 @@ class Engine
         // TODO: It's important to validate this behavior, imho there is something
         //       wrong in the iterator code used above.
         // Strange: why is the iterator not unique and why does this loop fix it?
-        $files = [];
+        $files = array();
         foreach ($fileIterator as $file) {
             if (is_string($file)) {
                 $files[$file] = $file;
@@ -686,7 +702,7 @@ class Engine
         }
 
         foreach ($files as $key => $file) {
-            if (! $this->fileFilter->accept($file, $file)) {
+            if (!$this->fileFilter->accept($file, $file)) {
                 unset($files[$key]);
             }
         }
@@ -699,13 +715,14 @@ class Engine
 
     /**
      * @param array<string, mixed> $options
-     * @return \PDepend\Metrics\Analyzer[]
+     *
+     * @return Analyzer[]
      */
     private function createAnalyzers($options)
     {
         $analyzers = $this->analyzerFactory->createRequiredForGenerators($this->generators);
 
-        $cacheKey = md5(serialize($this->files).serialize($this->directories));
+        $cacheKey = md5(serialize($this->files) . serialize($this->directories));
         $cache = $this->cacheFactory->create($cacheKey);
 
         foreach ($analyzers as $analyzer) {
@@ -728,6 +745,7 @@ class Engine
 
     /**
      * @param string $path
+     *
      * @return bool
      */
     private function isPhpStream($path)

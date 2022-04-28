@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class UseDeclarationSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -23,9 +25,9 @@ class UseDeclarationSniff implements Sniff
     public function register()
     {
         return [T_USE];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -47,7 +49,7 @@ class UseDeclarationSniff implements Sniff
         // One space after the use keyword.
         if ($tokens[($stackPtr + 1)]['content'] !== ' ') {
             $error = 'There must be a single space after the USE keyword';
-            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceAfterUse');
+            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceAfterUse');
             if ($fix === true) {
                 $phpcsFile->fixer->replaceToken(($stackPtr + 1), ' ');
             }
@@ -89,7 +91,7 @@ class UseDeclarationSniff implements Sniff
                 } else {
                     $fix = $phpcsFile->addFixableError($error, $stackPtr, 'MultipleDeclarations');
                     if ($fix === true) {
-                        $baseUse = rtrim($phpcsFile->getTokensAsString($stackPtr, ($next - $stackPtr)));
+                        $baseUse           = rtrim($phpcsFile->getTokensAsString($stackPtr, ($next - $stackPtr)));
                         $lastNonWhitespace = $phpcsFile->findPrevious(T_WHITESPACE, ($closingCurly - 1), null, true);
 
                         $phpcsFile->fixer->beginChangeset();
@@ -215,7 +217,7 @@ class UseDeclarationSniff implements Sniff
             }
         }
 
-        $end--;
+        --$end;
 
         if (($tokens[$end]['code'] === T_COMMENT
             || isset(Tokens::$phpcsCommentTokens[$tokens[$end]['code']]) === true)
@@ -223,7 +225,7 @@ class UseDeclarationSniff implements Sniff
             && substr($tokens[$end]['content'], -2) !== '*/'
         ) {
             // Multi-line block comments are not allowed as trailing comment after a use statement.
-            $end--;
+            --$end;
         }
 
         $next = $phpcsFile->findNext(T_WHITESPACE, ($end + 1), null, true);
@@ -239,8 +241,8 @@ class UseDeclarationSniff implements Sniff
             }
 
             $error = 'There must be one blank line after the last USE statement; %s found;';
-            $data = [$diff];
-            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceAfterLastUse', $data);
+            $data  = [$diff];
+            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceAfterLastUse', $data);
             if ($fix === true) {
                 if ($diff === 0) {
                     $phpcsFile->fixer->addNewline($end);
@@ -259,9 +261,9 @@ class UseDeclarationSniff implements Sniff
                 }
             }
         }//end if
-    }
 
-    //end process()
+    }//end process()
+
 
     /**
      * Check if this use statement is part of the namespace block.
@@ -288,7 +290,8 @@ class UseDeclarationSniff implements Sniff
         }
 
         return false;
-    }
 
-    //end shouldIgnoreUse()
+    }//end shouldIgnoreUse()
+
+
 }//end class

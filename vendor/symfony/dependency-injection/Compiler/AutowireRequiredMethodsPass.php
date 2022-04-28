@@ -24,14 +24,14 @@ class AutowireRequiredMethodsPass extends AbstractRecursivePass
     /**
      * {@inheritdoc}
      */
-    protected function processValue($value, bool $isRoot = false)
+    protected function processValue(mixed $value, bool $isRoot = false): mixed
     {
         $value = parent::processValue($value, $isRoot);
 
-        if (! $value instanceof Definition || ! $value->isAutowired() || $value->isAbstract() || ! $value->getClass()) {
+        if (!$value instanceof Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
             return $value;
         }
-        if (! $reflectionClass = $this->container->getReflectionClass($value->getClass(), false)) {
+        if (!$reflectionClass = $this->container->getReflectionClass($value->getClass(), false)) {
             return $value;
         }
 
@@ -50,7 +50,7 @@ class AutowireRequiredMethodsPass extends AbstractRecursivePass
             }
 
             while (true) {
-                if (\PHP_VERSION_ID >= 80000 && $r->getAttributes(Required::class)) {
+                if ($r->getAttributes(Required::class)) {
                     if ($this->isWither($r, $r->getDocComment() ?: '')) {
                         $withers[] = [$r->name, [], true];
                     } else {
@@ -67,7 +67,7 @@ class AutowireRequiredMethodsPass extends AbstractRecursivePass
                         }
                         break;
                     }
-                    if (false === stripos($doc, '@inheritdoc') || ! preg_match('#(?:^/\*\*|\n\s*+\*)\s*+(?:\{@inheritdoc\}|@inheritdoc)(?:\s|\*/$)#i', $doc)) {
+                    if (false === stripos($doc, '@inheritdoc') || !preg_match('#(?:^/\*\*|\n\s*+\*)\s*+(?:\{@inheritdoc\}|@inheritdoc)(?:\s|\*/$)#i', $doc)) {
                         break;
                     }
                 }

@@ -29,7 +29,7 @@ abstract class AbstractRule implements Rule
     /**
      * The name for this rule instance.
      *
-     * @var string
+     * @var string $_name
      */
     private $name = '';
 
@@ -66,7 +66,7 @@ abstract class AbstractRule implements Rule
      *
      * @var array(string)
      */
-    private $examples = [];
+    private $examples = array();
 
     /**
      * The name of the parent rule-set instance.
@@ -78,7 +78,7 @@ abstract class AbstractRule implements Rule
     /**
      * The priority of this rule.
      *
-     * @var int
+     * @var integer
      */
     private $priority = self::LOWEST_PRIORITY;
 
@@ -87,7 +87,7 @@ abstract class AbstractRule implements Rule
      *
      * @var array(string=>string)
      */
-    private $properties = [];
+    private $properties = array();
 
     /**
      * The report for object for this rule.
@@ -225,7 +225,7 @@ abstract class AbstractRule implements Rule
     /**
      * Returns the priority of this rule.
      *
-     * @return int
+     * @return integer
      */
     public function getPriority()
     {
@@ -235,7 +235,7 @@ abstract class AbstractRule implements Rule
     /**
      * Set the priority of this rule.
      *
-     * @param int $priority The rule priority
+     * @param integer $priority The rule priority
      * @return void
      */
     public function setPriority($priority)
@@ -298,7 +298,7 @@ abstract class AbstractRule implements Rule
     }
 
     /**
-     * Returns the value of a configured property.
+     * Returns the value of a configured property
      *
      * Throws an exception when no property with <b>$name</b> exists
      * and no default value to fall back was given.
@@ -319,11 +319,11 @@ abstract class AbstractRule implements Rule
             return $default;
         }
 
-        throw new \OutOfBoundsException('Property "'.$name.'" does not exist.');
+        throw new \OutOfBoundsException('Property "' . $name . '" does not exist.');
     }
 
     /**
-     * Returns the value of a configured property as a boolean.
+     * Returns the value of a configured property as a boolean
      *
      * Throws an exception when no property with <b>$name</b> exists
      * and no default value to fall back was given.
@@ -336,11 +336,11 @@ abstract class AbstractRule implements Rule
      */
     public function getBooleanProperty($name, $default = null)
     {
-        return in_array($this->getProperty($name, $default), ['true', 'on', 1], false);
+        return in_array($this->getProperty($name, $default), array('true', 'on', 1), false);
     }
 
     /**
-     * Returns the value of a configured property as an integer.
+     * Returns the value of a configured property as an integer
      *
      * Throws an exception when no property with <b>$name</b> exists
      * and no default value to fall back was given.
@@ -353,11 +353,11 @@ abstract class AbstractRule implements Rule
      */
     public function getIntProperty($name, $default = null)
     {
-        return (int) $this->getProperty($name, $default);
+        return (int)$this->getProperty($name, $default);
     }
 
     /**
-     * Returns the raw string value of a configured property.
+     * Returns the raw string value of a configured property
      *
      * Throws an exception when no property with <b>$name</b> exists
      * and no default value to fall back was given.
@@ -370,7 +370,7 @@ abstract class AbstractRule implements Rule
      */
     public function getStringProperty($name, $default = null)
     {
-        return (string) $this->getProperty($name, $default);
+        return (string)$this->getProperty($name, $default);
     }
 
     /**
@@ -384,17 +384,13 @@ abstract class AbstractRule implements Rule
      */
     protected function addViolation(
         AbstractNode $node,
-        array $args = [],
+        array $args = array(),
         $metric = null
     ) {
-        $search = [];
-        $replace = [];
-        foreach ($args as $index => $value) {
-            $search[] = '{'.$index.'}';
-            $replace[] = $value;
-        }
-
-        $message = str_replace($search, $replace, $this->message);
+        $message = array(
+            'message' => $this->message,
+            'args' => $args,
+        );
 
         $ruleViolation = new RuleViolation($this, $node, $message, $metric);
         $this->report->addRuleViolation($ruleViolation);

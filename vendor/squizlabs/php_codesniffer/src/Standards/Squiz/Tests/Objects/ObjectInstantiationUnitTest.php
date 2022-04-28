@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class ObjectInstantiationUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -24,12 +26,14 @@ class ObjectInstantiationUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [
-            5 => 1,
-            8 => 1,
+            5  => 1,
+            8  => 1,
+            31 => 1,
+            39 => 2,
         ];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -42,7 +46,8 @@ class ObjectInstantiationUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

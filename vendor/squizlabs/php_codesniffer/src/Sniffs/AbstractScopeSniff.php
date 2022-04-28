@@ -26,11 +26,12 @@
 
 namespace PHP_CodeSniffer\Sniffs;
 
-use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Exceptions\RuntimeException;
 
 abstract class AbstractScopeSniff implements Sniff
 {
+
     /**
      * The token types that this test wishes to listen to within the scope.
      *
@@ -48,9 +49,10 @@ abstract class AbstractScopeSniff implements Sniff
     /**
      * True if this test should fire on tokens outside of the scope.
      *
-     * @var bool
+     * @var boolean
      */
     private $listenOutside = false;
+
 
     /**
      * Constructs a new AbstractScopeTest.
@@ -58,7 +60,7 @@ abstract class AbstractScopeSniff implements Sniff
      * @param array   $scopeTokens   The type of scope the test wishes to listen to.
      * @param array   $tokens        The tokens that the test wishes to listen to
      *                               within the scope.
-     * @param bool $listenOutside If true this test will also alert the
+     * @param boolean $listenOutside If true this test will also alert the
      *                               extending class when a token is found outside
      *                               the scope, by calling the
      *                               processTokenOutsideScope method.
@@ -69,7 +71,7 @@ abstract class AbstractScopeSniff implements Sniff
     public function __construct(
         array $scopeTokens,
         array $tokens,
-        $listenOutside = false
+        $listenOutside=false
     ) {
         if (empty($scopeTokens) === true) {
             $error = 'The scope tokens list cannot be empty';
@@ -84,16 +86,16 @@ abstract class AbstractScopeSniff implements Sniff
         $invalidScopeTokens = array_intersect($scopeTokens, $tokens);
         if (empty($invalidScopeTokens) === false) {
             $invalid = implode(', ', $invalidScopeTokens);
-            $error = "Scope tokens [$invalid] can't be in the tokens array";
+            $error   = "Scope tokens [$invalid] can't be in the tokens array";
             throw new RuntimeException($error);
         }
 
         $this->listenOutside = $listenOutside;
-        $this->scopeTokens = array_flip($scopeTokens);
-        $this->tokens = $tokens;
-    }
+        $this->scopeTokens   = array_flip($scopeTokens);
+        $this->tokens        = $tokens;
 
-    //end __construct()
+    }//end __construct()
+
 
     /**
      * The method that is called to register the tokens this test wishes to
@@ -108,9 +110,9 @@ abstract class AbstractScopeSniff implements Sniff
     final public function register()
     {
         return $this->tokens;
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes the tokens that this test is listening for.
@@ -134,7 +136,7 @@ abstract class AbstractScopeSniff implements Sniff
         foreach ($tokens[$stackPtr]['conditions'] as $scope => $code) {
             if (isset($this->scopeTokens[$code]) === true) {
                 $skipTokens[] = $this->processTokenWithinScope($phpcsFile, $stackPtr, $scope);
-                $foundScope = true;
+                $foundScope   = true;
             }
         }
 
@@ -146,9 +148,10 @@ abstract class AbstractScopeSniff implements Sniff
             return min($skipTokens);
         }
 
-    }
+        return;
 
-    //end process()
+    }//end process()
+
 
     /**
      * Processes a token that is found within the scope that this test is
@@ -168,6 +171,7 @@ abstract class AbstractScopeSniff implements Sniff
      */
     abstract protected function processTokenWithinScope(File $phpcsFile, $stackPtr, $currScope);
 
+
     /**
      * Processes a token that is found outside the scope that this test is
      * listening to.
@@ -182,4 +186,6 @@ abstract class AbstractScopeSniff implements Sniff
      *                  the rest of the file.
      */
     abstract protected function processTokenOutsideScope(File $phpcsFile, $stackPtr);
+
+
 }//end class

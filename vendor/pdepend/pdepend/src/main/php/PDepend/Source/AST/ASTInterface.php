@@ -42,6 +42,7 @@
 
 namespace PDepend\Source\AST;
 
+use BadMethodCallException;
 use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
@@ -73,22 +74,22 @@ class ASTInterface extends AbstractASTClassOrInterface
     /**
      * Sets a reference onto the parent class of this class node.
      *
-     * @param  \PDepend\Source\AST\ASTClassReference $classReference
+     * @throws BadMethodCallException
+     *
      * @return void
-     * @throws \BadMethodCallException
+     *
      * @since  0.9.5
      */
-    public function setParentClassReference(\PDepend\Source\AST\ASTClassReference $classReference)
+    public function setParentClassReference(ASTClassReference $classReference)
     {
-        throw new \BadMethodCallException(
-            'Unsupported method '.__METHOD__.'() called.'
+        throw new BadMethodCallException(
+            'Unsupported method ' . __METHOD__ . '() called.'
         );
     }
 
     /**
      * Checks that this user type is a subtype of the given <b>$type</b> instance.
      *
-     * @param  \PDepend\Source\AST\AbstractASTType $type
      * @return bool
      */
     public function isSubtypeOf(AbstractASTType $type)
@@ -102,7 +103,6 @@ class ASTInterface extends AbstractASTClassOrInterface
                 }
             }
         }
-
         return false;
     }
 
@@ -110,6 +110,7 @@ class ASTInterface extends AbstractASTClassOrInterface
      * Returns the declared modifiers for this type.
      *
      * @return int
+     *
      * @since  0.9.4
      */
     public function getModifiers()
@@ -120,7 +121,6 @@ class ASTInterface extends AbstractASTClassOrInterface
     /**
      * ASTVisitor method for node tree traversal.
      *
-     * @param  \PDepend\Source\ASTVisitor\ASTVisitor $visitor
      * @return void
      */
     public function accept(ASTVisitor $visitor)
@@ -135,6 +135,7 @@ class ASTInterface extends AbstractASTClassOrInterface
      * context.
      *
      * @return void
+     *
      * @since  0.10.0
      */
     public function __wakeup()

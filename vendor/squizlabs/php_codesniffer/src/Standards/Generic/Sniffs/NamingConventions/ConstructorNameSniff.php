@@ -18,6 +18,7 @@ use PHP_CodeSniffer\Sniffs\AbstractScopeSniff;
 
 class ConstructorNameSniff extends AbstractScopeSniff
 {
+
     /**
      * The name of the class we are currently checking.
      *
@@ -32,15 +33,16 @@ class ConstructorNameSniff extends AbstractScopeSniff
      */
     private $functionList = [];
 
+
     /**
      * Constructs the test with the tokens it wishes to listen for.
      */
     public function __construct()
     {
         parent::__construct([T_CLASS, T_ANON_CLASS], [T_FUNCTION], true);
-    }
 
-    //end __construct()
+    }//end __construct()
+
 
     /**
      * Processes this test when one of its tokens is encountered.
@@ -64,7 +66,12 @@ class ConstructorNameSniff extends AbstractScopeSniff
             return;
         }
 
-        $className = strtolower($phpcsFile->getDeclarationName($currScope));
+        $className = $phpcsFile->getDeclarationName($currScope);
+        if (empty($className) === false) {
+            // Not an anonymous class.
+            $className = strtolower($className);
+        }
+
         if ($className !== $this->currentClass) {
             $this->loadFunctionNamesInScope($phpcsFile, $currScope);
             $this->currentClass = $className;
@@ -77,7 +84,7 @@ class ConstructorNameSniff extends AbstractScopeSniff
                 $error = 'PHP4 style constructors are not allowed; use "__construct()" instead';
                 $phpcsFile->addError($error, $stackPtr, 'OldStyle');
             }
-        } elseif ($methodName !== '__construct') {
+        } else if ($methodName !== '__construct') {
             // Not a constructor.
             return;
         }
@@ -93,7 +100,7 @@ class ConstructorNameSniff extends AbstractScopeSniff
         }
 
         $endFunctionIndex = $tokens[$stackPtr]['scope_closer'];
-        $startIndex = $stackPtr;
+        $startIndex       = $stackPtr;
         while (($doubleColonIndex = $phpcsFile->findNext(T_DOUBLE_COLON, $startIndex, $endFunctionIndex)) !== false) {
             if ($tokens[($doubleColonIndex + 1)]['code'] === T_STRING
                 && strtolower($tokens[($doubleColonIndex + 1)]['content']) === $parentClassName
@@ -104,9 +111,9 @@ class ConstructorNameSniff extends AbstractScopeSniff
 
             $startIndex = ($doubleColonIndex + 1);
         }
-    }
 
-    //end processTokenWithinScope()
+    }//end processTokenWithinScope()
+
 
     /**
      * Processes a token that is found within the scope that this test is
@@ -120,9 +127,9 @@ class ConstructorNameSniff extends AbstractScopeSniff
      */
     protected function processTokenOutsideScope(File $phpcsFile, $stackPtr)
     {
-    }
 
-    //end processTokenOutsideScope()
+    }//end processTokenOutsideScope()
+
 
     /**
      * Extracts all the function names found in the given scope.
@@ -149,7 +156,8 @@ class ConstructorNameSniff extends AbstractScopeSniff
                 $i = $tokens[$i]['scope_closer'];
             }
         }
-    }
 
-    //end loadFunctionNamesInScope()
+    }//end loadFunctionNamesInScope()
+
+
 }//end class

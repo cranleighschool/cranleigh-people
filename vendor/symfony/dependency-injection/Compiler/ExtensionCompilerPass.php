@@ -27,7 +27,7 @@ class ExtensionCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         foreach ($container->getExtensions() as $extension) {
-            if (! $extension instanceof CompilerPassInterface) {
+            if (!$extension instanceof CompilerPassInterface) {
                 continue;
             }
 

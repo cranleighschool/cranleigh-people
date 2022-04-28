@@ -38,6 +38,7 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 2.3
  */
 
@@ -52,15 +53,18 @@ use PDepend\Source\Tokenizer\Tokens;
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 2.3
  */
 abstract class PHPParserVersion53 extends AbstractPHPParser
 {
+
     /**
      * Tests if the next token is a valid array start delimiter in the supported
      * PHP version.
      *
      * @return bool
+     *
      * @since 1.0.0
      */
     protected function isArrayStartDelimiter()
@@ -69,16 +73,16 @@ abstract class PHPParserVersion53 extends AbstractPHPParser
             case Tokens::T_ARRAY:
                 return true;
         }
-
         return false;
     }
 
     /**
      * Parses a php array declaration.
      *
-     * @param \PDepend\Source\AST\ASTArray $array
      * @param bool $static
-     * @return \PDepend\Source\AST\ASTArray
+     *
+     * @return ASTArray
+     *
      * @since 1.0.0
      */
     protected function parseArray(ASTArray $array, $static = false)

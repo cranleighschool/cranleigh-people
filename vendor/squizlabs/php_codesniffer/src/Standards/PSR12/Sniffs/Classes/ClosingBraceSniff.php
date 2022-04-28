@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ClosingBraceSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -27,9 +29,9 @@ class ClosingBraceSniff implements Sniff
             T_TRAIT,
             T_FUNCTION,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -48,7 +50,7 @@ class ClosingBraceSniff implements Sniff
         }
 
         $closer = $tokens[$stackPtr]['scope_closer'];
-        $next = $phpcsFile->findNext(T_WHITESPACE, ($closer + 1), null, true);
+        $next   = $phpcsFile->findNext(T_WHITESPACE, ($closer + 1), null, true);
         if ($next === false
             || $tokens[$next]['line'] !== $tokens[$closer]['line']
         ) {
@@ -57,7 +59,8 @@ class ClosingBraceSniff implements Sniff
 
         $error = 'Closing brace must not be followed by any comment or statement on the same line';
         $phpcsFile->addError($error, $closer, 'StatementAfter');
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

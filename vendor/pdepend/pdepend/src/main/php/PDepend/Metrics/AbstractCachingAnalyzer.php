@@ -38,12 +38,18 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 1.0.0
  */
 
 namespace PDepend\Metrics;
 
 use PDepend\Source\AST\AbstractASTArtifact;
+use PDepend\Source\AST\ASTClass;
+use PDepend\Source\AST\ASTCompilationUnit;
+use PDepend\Source\AST\ASTFunction;
+use PDepend\Source\AST\ASTInterface;
+use PDepend\Source\AST\ASTMethod;
 use PDepend\Util\Cache\CacheDriver;
 
 /**
@@ -52,12 +58,13 @@ use PDepend\Util\Cache\CacheDriver;
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 1.0.0
  */
 abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements AnalyzerCacheAware
 {
     /**
-     * Collected node metrics.
+     * Collected node metrics
      *
      * @var array<string, mixed>
      */
@@ -68,19 +75,18 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
      *
      * @var array<string, mixed>
      */
-    private $metricsCached = [];
+    private $metricsCached = array();
 
     /**
      * Injected cache driver.
      *
-     * @var \PDepend\Util\Cache\CacheDriver
+     * @var CacheDriver
      */
     private $cache;
 
     /**
      * Setter method for the system wide used cache.
      *
-     * @param  \PDepend\Util\Cache\CacheDriver $cache
      * @return void
      */
     public function setCache(CacheDriver $cache)
@@ -91,7 +97,7 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
     /**
      * Getter method for the system wide used cache.
      *
-     * @return \PDepend\Util\Cache\CacheDriver $cache
+     * @return CacheDriver $cache
      */
     public function getCache()
     {
@@ -103,7 +109,8 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
      * restored the metrics it will return <b>TRUE</b>, otherwise the return
      * value will be <b>FALSE</b>.
      *
-     * @param  \PDepend\Source\AST\AbstractASTArtifact $node
+     * @param ASTClass|ASTCompilationUnit|ASTFunction|ASTInterface|ASTMethod $node
+     *
      * @return bool
      */
     protected function restoreFromCache(AbstractASTArtifact $node)
@@ -111,10 +118,8 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
         $id = $node->getId();
         if ($node->isCached() && isset($this->metricsCached[$id])) {
             $this->metrics[$id] = $this->metricsCached[$id];
-
             return true;
         }
-
         return false;
     }
 
@@ -142,6 +147,6 @@ abstract class AbstractCachingAnalyzer extends AbstractAnalyzer implements Analy
             ->type('metrics')
             ->store(get_class($this), $this->metrics);
 
-        $this->metricsCached = [];
+        $this->metricsCached = array();
     }
 }

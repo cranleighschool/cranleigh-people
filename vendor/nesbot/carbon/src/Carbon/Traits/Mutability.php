@@ -40,7 +40,7 @@ trait Mutability
      */
     public static function isImmutable()
     {
-        return ! static::isMutable();
+        return !static::isMutable();
     }
 
     /**

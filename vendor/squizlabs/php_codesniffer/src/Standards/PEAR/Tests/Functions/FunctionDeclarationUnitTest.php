@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class FunctionDeclarationUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -23,7 +25,7 @@ class FunctionDeclarationUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = 'FunctionDeclarationUnitTest.inc')
+    public function getErrorList($testFile='FunctionDeclarationUnitTest.inc')
     {
         if ($testFile === 'FunctionDeclarationUnitTest.inc') {
             $errors = [
@@ -80,6 +82,23 @@ class FunctionDeclarationUnitTest extends AbstractSniffUnitTest
                 309 => 1,
                 313 => 1,
                 314 => 1,
+                350 => 1,
+                351 => 1,
+                352 => 1,
+                353 => 1,
+                361 => 1,
+                362 => 1,
+                363 => 1,
+                364 => 1,
+                365 => 1,
+                366 => 1,
+                367 => 1,
+                368 => 1,
+                369 => 1,
+                370 => 1,
+                371 => 1,
+                402 => 1,
+                406 => 1,
             ];
         } else {
             $errors = [
@@ -97,9 +116,9 @@ class FunctionDeclarationUnitTest extends AbstractSniffUnitTest
         }//end if
 
         return $errors;
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -112,7 +131,8 @@ class FunctionDeclarationUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

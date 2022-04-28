@@ -34,6 +34,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class JumbledIncrementerSniff implements Sniff
 {
+
+
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -42,9 +44,9 @@ class JumbledIncrementerSniff implements Sniff
     public function register()
     {
         return [T_FOR];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -58,7 +60,7 @@ class JumbledIncrementerSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
-        $token = $tokens[$stackPtr];
+        $token  = $tokens[$stackPtr];
 
         // Skip for-loop without body.
         if (isset($token['scope_opener']) === false) {
@@ -75,25 +77,25 @@ class JumbledIncrementerSniff implements Sniff
 
         // Find nested for loops.
         $start = ++$token['scope_opener'];
-        $end = --$token['scope_closer'];
+        $end   = --$token['scope_closer'];
 
-        for (; $start <= $end; $start++) {
+        for (; $start <= $end; ++$start) {
             if ($tokens[$start]['code'] !== T_FOR) {
                 continue;
             }
 
             $inner = $this->findIncrementers($tokens, $tokens[$start]);
-            $diff = array_intersect($outer, $inner);
+            $diff  = array_intersect($outer, $inner);
 
             if (count($diff) !== 0) {
                 $error = 'Loop incrementor (%s) jumbling with inner loop';
-                $data = [join(', ', $diff)];
+                $data  = [join(', ', $diff)];
                 $phpcsFile->addWarning($error, $stackPtr, 'Found', $data);
             }
         }
-    }
 
-    //end process()
+    }//end process()
+
 
     /**
      * Get all used variables in the incrementer part of a for statement.
@@ -111,21 +113,22 @@ class JumbledIncrementerSniff implements Sniff
         }
 
         $start = ++$token['parenthesis_opener'];
-        $end = --$token['parenthesis_closer'];
+        $end   = --$token['parenthesis_closer'];
 
         $incrementers = [];
-        $semicolons = 0;
-        for ($next = $start; $next <= $end; $next++) {
+        $semicolons   = 0;
+        for ($next = $start; $next <= $end; ++$next) {
             $code = $tokens[$next]['code'];
             if ($code === T_SEMICOLON) {
-                $semicolons++;
-            } elseif ($semicolons === 2 && $code === T_VARIABLE) {
+                ++$semicolons;
+            } else if ($semicolons === 2 && $code === T_VARIABLE) {
                 $incrementers[] = $tokens[$next]['content'];
             }
         }
 
         return $incrementers;
-    }
 
-    //end findIncrementers()
+    }//end findIncrementers()
+
+
 }//end class

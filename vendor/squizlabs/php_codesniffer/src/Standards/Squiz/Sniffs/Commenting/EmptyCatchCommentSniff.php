@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class EmptyCatchCommentSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -22,9 +24,9 @@ class EmptyCatchCommentSniff implements Sniff
     public function register()
     {
         return [T_CATCH];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -39,14 +41,15 @@ class EmptyCatchCommentSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $scopeStart = $tokens[$stackPtr]['scope_opener'];
+        $scopeStart   = $tokens[$stackPtr]['scope_opener'];
         $firstContent = $phpcsFile->findNext(T_WHITESPACE, ($scopeStart + 1), $tokens[$stackPtr]['scope_closer'], true);
 
         if ($firstContent === false) {
             $error = 'Empty CATCH statement must have a comment to explain why the exception is not handled';
             $phpcsFile->addError($error, $scopeStart, 'Missing');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

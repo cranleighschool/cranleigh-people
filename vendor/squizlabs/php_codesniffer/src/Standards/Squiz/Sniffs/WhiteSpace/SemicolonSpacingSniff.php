@@ -15,6 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class SemicolonSpacingSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -25,6 +26,7 @@ class SemicolonSpacingSniff implements Sniff
         'JS',
     ];
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -33,9 +35,9 @@ class SemicolonSpacingSniff implements Sniff
     public function register()
     {
         return [T_SEMICOLON];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -60,7 +62,7 @@ class SemicolonSpacingSniff implements Sniff
         // Detect whether this is a semi-colon for a condition in a `for()` control structure.
         $forCondition = false;
         if (isset($tokens[$stackPtr]['nested_parenthesis']) === true) {
-            $nestedParens = $tokens[$stackPtr]['nested_parenthesis'];
+            $nestedParens     = $tokens[$stackPtr]['nested_parenthesis'];
             $closeParenthesis = end($nestedParens);
 
             if (isset($tokens[$closeParenthesis]['parenthesis_owner']) === true) {
@@ -68,7 +70,7 @@ class SemicolonSpacingSniff implements Sniff
 
                 if ($tokens[$owner]['code'] === T_FOR) {
                     $forCondition = true;
-                    $nonSpace = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 2), null, true);
+                    $nonSpace     = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 2), null, true);
                 }
             }
         }
@@ -83,12 +85,12 @@ class SemicolonSpacingSniff implements Sniff
         }
 
         $expected = $tokens[$nonSpace]['content'].';';
-        $found = $phpcsFile->getTokensAsString($nonSpace, ($stackPtr - $nonSpace)).';';
-        $found = str_replace("\n", '\n', $found);
-        $found = str_replace("\r", '\r', $found);
-        $found = str_replace("\t", '\t', $found);
-        $error = 'Space found before semicolon; expected "%s" but found "%s"';
-        $data = [
+        $found    = $phpcsFile->getTokensAsString($nonSpace, ($stackPtr - $nonSpace)).';';
+        $found    = str_replace("\n", '\n', $found);
+        $found    = str_replace("\r", '\r', $found);
+        $found    = str_replace("\t", '\t', $found);
+        $error    = 'Space found before semicolon; expected "%s" but found "%s"';
+        $data     = [
             $expected,
             $found,
         ];
@@ -107,7 +109,8 @@ class SemicolonSpacingSniff implements Sniff
 
             $phpcsFile->fixer->endChangeset();
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

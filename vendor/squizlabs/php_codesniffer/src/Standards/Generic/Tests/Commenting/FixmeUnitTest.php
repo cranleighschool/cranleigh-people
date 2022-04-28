@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class FixmeUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -24,7 +26,7 @@ class FixmeUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = 'FixmeUnitTest.inc')
+    public function getErrorList($testFile='FixmeUnitTest.inc')
     {
         return [
             3  => 1,
@@ -36,9 +38,9 @@ class FixmeUnitTest extends AbstractSniffUnitTest
             18 => 1,
             21 => 1,
         ];
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -50,10 +52,11 @@ class FixmeUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getWarningList($testFile = 'FixmeUnitTest.inc')
+    public function getWarningList($testFile='FixmeUnitTest.inc')
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

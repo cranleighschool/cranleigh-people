@@ -5,14 +5,15 @@
  *
  * Created to aid static analysis by PHPStan.
  *
+ * @package WordPress
  * @see wp_get_db_schema()
  */
 
 /**
  * List fields of postmeta database table as object properties.
  */
-class WP_Post_Meta_Row
-{
+class WP_Post_Meta_Row {
+
     /**
      * @var int
      */

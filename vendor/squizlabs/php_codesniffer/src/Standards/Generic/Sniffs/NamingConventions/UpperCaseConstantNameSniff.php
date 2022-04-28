@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class UpperCaseConstantNameSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -26,9 +28,9 @@ class UpperCaseConstantNameSniff implements Sniff
             T_STRING,
             T_CONST,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -60,7 +62,7 @@ class UpperCaseConstantNameSniff implements Sniff
                 }
 
                 $error = 'Class constants must be uppercase; expected %s but found %s';
-                $data = [
+                $data  = [
                     strtoupper($constName),
                     $constName,
                 ];
@@ -102,17 +104,17 @@ class UpperCaseConstantNameSniff implements Sniff
         $constName = $tokens[$constPtr]['content'];
 
         // Check for constants like self::CONSTANT.
-        $prefix = '';
+        $prefix   = '';
         $splitPos = strpos($constName, '::');
         if ($splitPos !== false) {
-            $prefix = substr($constName, 0, ($splitPos + 2));
+            $prefix    = substr($constName, 0, ($splitPos + 2));
             $constName = substr($constName, ($splitPos + 2));
         }
 
         // Strip namespace from constant like /foo/bar/CONSTANT.
         $splitPos = strrpos($constName, '\\');
         if ($splitPos !== false) {
-            $prefix = substr($constName, 0, ($splitPos + 1));
+            $prefix    = substr($constName, 0, ($splitPos + 1));
             $constName = substr($constName, ($splitPos + 1));
         }
 
@@ -124,7 +126,7 @@ class UpperCaseConstantNameSniff implements Sniff
             }
 
             $error = 'Constants must be uppercase; expected %s but found %s';
-            $data = [
+            $data  = [
                 $prefix.strtoupper($constName),
                 $prefix.$constName,
             ];
@@ -132,7 +134,8 @@ class UpperCaseConstantNameSniff implements Sniff
         } else {
             $phpcsFile->recordMetric($stackPtr, 'Constant name case', 'upper');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

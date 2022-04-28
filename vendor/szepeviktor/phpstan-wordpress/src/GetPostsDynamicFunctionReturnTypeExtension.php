@@ -6,18 +6,17 @@
 
 declare(strict_types=1);
 
-namespace PHPStan\WordPress;
+namespace SzepeViktor\PHPStan\WordPress;
 
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\Type;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantStringType;
 
 class GetPostsDynamicFunctionReturnTypeExtension implements \PHPStan\Type\DynamicFunctionReturnTypeExtension
 {
@@ -29,6 +28,7 @@ class GetPostsDynamicFunctionReturnTypeExtension implements \PHPStan\Type\Dynami
     /**
      * @see https://developer.wordpress.org/reference/classes/wp_query/#return-fields-parameter
      */
+    // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter
     public function getTypeFromFunctionCall(FunctionReflection $functionReflection, FuncCall $functionCall, Scope $scope): Type
     {
         // Called without arguments
@@ -60,11 +60,7 @@ class GetPostsDynamicFunctionReturnTypeExtension implements \PHPStan\Type\Dynami
 
         // Without constant argument return default return type
         if (! isset($fields)) {
-            return ParametersAcceptorSelector::selectFromArgs(
-                $scope,
-                $functionCall->args,
-                $functionReflection->getVariants()
-            )->getReturnType();
+            return new ArrayType(new IntegerType(), new ObjectType('WP_Post'));
         }
 
         switch ($fields) {

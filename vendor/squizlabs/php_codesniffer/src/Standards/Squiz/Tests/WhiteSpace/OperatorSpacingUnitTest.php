@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class OperatorSpacingUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -23,7 +25,7 @@ class OperatorSpacingUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = 'OperatorSpacingUnitTest.inc')
+    public function getErrorList($testFile='OperatorSpacingUnitTest.inc')
     {
         switch ($testFile) {
         case 'OperatorSpacingUnitTest.inc':
@@ -146,9 +148,9 @@ class OperatorSpacingUnitTest extends AbstractSniffUnitTest
             return [];
             break;
         }//end switch
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -161,7 +163,8 @@ class OperatorSpacingUnitTest extends AbstractSniffUnitTest
     public function getWarningList()
     {
         return [];
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

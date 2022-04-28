@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util;
 
 class LanguageConstructSpacingSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -32,9 +34,9 @@ class LanguageConstructSpacingSniff implements Sniff
             T_REQUIRE_ONCE,
             T_NEW,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -63,24 +65,25 @@ class LanguageConstructSpacingSniff implements Sniff
             $content = $tokens[($stackPtr + 1)]['content'];
             if ($content !== ' ') {
                 $error = 'Language constructs must be followed by a single space; expected 1 space but found "%s"';
-                $data = [Util\Common::prepareForOutput($content)];
-                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'IncorrectSingle', $data);
+                $data  = [Util\Common::prepareForOutput($content)];
+                $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'IncorrectSingle', $data);
                 if ($fix === true) {
                     $phpcsFile->fixer->replaceToken(($stackPtr + 1), ' ');
                 }
             }
-        } elseif ($tokens[($stackPtr + 1)]['code'] !== T_OPEN_PARENTHESIS) {
+        } else if ($tokens[($stackPtr + 1)]['code'] !== T_OPEN_PARENTHESIS) {
             $error = 'Language constructs must be followed by a single space; expected "%s" but found "%s"';
-            $data = [
+            $data  = [
                 $tokens[$stackPtr]['content'].' '.$tokens[($stackPtr + 1)]['content'],
                 $tokens[$stackPtr]['content'].$tokens[($stackPtr + 1)]['content'],
             ];
-            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Incorrect', $data);
+            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'Incorrect', $data);
             if ($fix === true) {
                 $phpcsFile->fixer->addContent($stackPtr, ' ');
             }
         }//end if
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

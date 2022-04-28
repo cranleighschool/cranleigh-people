@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class DisallowMultipleAssignmentsSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -23,9 +25,9 @@ class DisallowMultipleAssignmentsSniff implements Sniff
     public function register()
     {
         return [T_EQUAL];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -113,15 +115,15 @@ class DisallowMultipleAssignmentsSniff implements Sniff
 
         $allowed = Tokens::$emptyTokens;
 
-        $allowed[T_STRING] = T_STRING;
-        $allowed[T_NS_SEPARATOR] = T_NS_SEPARATOR;
-        $allowed[T_DOUBLE_COLON] = T_DOUBLE_COLON;
+        $allowed[T_STRING]          = T_STRING;
+        $allowed[T_NS_SEPARATOR]    = T_NS_SEPARATOR;
+        $allowed[T_DOUBLE_COLON]    = T_DOUBLE_COLON;
         $allowed[T_OBJECT_OPERATOR] = T_OBJECT_OPERATOR;
-        $allowed[T_ASPERAND] = T_ASPERAND;
-        $allowed[T_DOLLAR] = T_DOLLAR;
-        $allowed[T_SELF] = T_SELF;
-        $allowed[T_PARENT] = T_PARENT;
-        $allowed[T_STATIC] = T_STATIC;
+        $allowed[T_ASPERAND]        = T_ASPERAND;
+        $allowed[T_DOLLAR]          = T_DOLLAR;
+        $allowed[T_SELF]            = T_SELF;
+        $allowed[T_PARENT]          = T_PARENT;
+        $allowed[T_STATIC]          = T_STATIC;
 
         $varToken = $phpcsFile->findPrevious($allowed, ($varToken - 1), null, true);
 
@@ -154,7 +156,7 @@ class DisallowMultipleAssignmentsSniff implements Sniff
             return;
         }
 
-        $error = 'Assignments must be the first block of code on a line';
+        $error     = 'Assignments must be the first block of code on a line';
         $errorCode = 'Found';
 
         if (isset($nested) === true) {
@@ -177,7 +179,8 @@ class DisallowMultipleAssignmentsSniff implements Sniff
         }
 
         $phpcsFile->addError($error, $stackPtr, $errorCode);
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

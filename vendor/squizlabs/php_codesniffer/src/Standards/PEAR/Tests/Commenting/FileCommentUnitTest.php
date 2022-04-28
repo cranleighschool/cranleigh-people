@@ -13,6 +13,8 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
 class FileCommentUnitTest extends AbstractSniffUnitTest
 {
+
+
     /**
      * Returns the lines where errors should occur.
      *
@@ -23,7 +25,7 @@ class FileCommentUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getErrorList($testFile = 'FileCommentUnitTest.inc')
+    public function getErrorList($testFile='FileCommentUnitTest.inc')
     {
         switch ($testFile) {
         case 'FileCommentUnitTest.1.inc':
@@ -51,9 +53,9 @@ class FileCommentUnitTest extends AbstractSniffUnitTest
         default:
             return [];
         }//end switch
-    }
 
-    //end getErrorList()
+    }//end getErrorList()
+
 
     /**
      * Returns the lines where warnings should occur.
@@ -65,7 +67,7 @@ class FileCommentUnitTest extends AbstractSniffUnitTest
      *
      * @return array<int, int>
      */
-    public function getWarningList($testFile = 'FileCommentUnitTest.inc')
+    public function getWarningList($testFile='FileCommentUnitTest.inc')
     {
         switch ($testFile) {
         case 'FileCommentUnitTest.1.inc':
@@ -79,7 +81,8 @@ class FileCommentUnitTest extends AbstractSniffUnitTest
         default:
             return [];
         }//end switch
-    }
 
-    //end getWarningList()
+    }//end getWarningList()
+
+
 }//end class

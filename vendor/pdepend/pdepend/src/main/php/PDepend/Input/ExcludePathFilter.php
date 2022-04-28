@@ -53,7 +53,8 @@ class ExcludePathFilter implements Filter
     /**
      * Regular expression that should not match against the relative file paths.
      *
-     * @var   string
+     * @var string
+     *
      * @since 0.10.0
      */
     protected $relative = '';
@@ -61,7 +62,8 @@ class ExcludePathFilter implements Filter
     /**
      * Regular expression that should not match against the absolute file paths.
      *
-     * @var   string
+     * @var string
+     *
      * @since 0.10.0
      */
     protected $absolute = '';
@@ -76,8 +78,8 @@ class ExcludePathFilter implements Filter
     {
         $quoted = array_map('preg_quote', $patterns);
 
-        $this->relative = '('.str_replace('\*', '.*', join('|', $quoted)).')i';
-        $this->absolute = '(^('.str_replace('\*', '.*', join('|', $quoted)).'))i';
+        $this->relative = '(' . str_replace('\*', '.*', join('|', $quoted)) . ')i';
+        $this->absolute = '(^(' . str_replace('\*', '.*', join('|', $quoted)) .'))i';
     }
 
     /**
@@ -90,7 +92,7 @@ class ExcludePathFilter implements Filter
      */
     public function accept($relative, $absolute)
     {
-        return $this->notRelative($relative) && $this->notAbsolute($absolute);
+        return ($this->notRelative($relative) && $this->notAbsolute($absolute));
     }
 
     /**
@@ -100,11 +102,12 @@ class ExcludePathFilter implements Filter
      * @param string $path The absolute path to a source file.
      *
      * @return bool
+     *
      * @since  0.10.0
      */
     protected function notAbsolute($path)
     {
-        return preg_match($this->absolute, $path) === 0;
+        return (preg_match($this->absolute, $path) === 0);
     }
 
     /**
@@ -114,10 +117,11 @@ class ExcludePathFilter implements Filter
      * @param string $path The relative path to a source file.
      *
      * @return bool
+     *
      * @since  0.10.0
      */
     protected function notRelative($path)
     {
-        return preg_match($this->relative, $path) === 0;
+        return (preg_match($this->relative, $path) === 0);
     }
 }

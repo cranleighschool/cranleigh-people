@@ -15,19 +15,21 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class MemberVarSpacingSniff extends AbstractVariableSniff
 {
+
     /**
      * The number of blank lines between member vars.
      *
-     * @var int
+     * @var integer
      */
     public $spacing = 1;
 
     /**
      * The number of blank lines before the first member var.
      *
-     * @var int
+     * @var integer
      */
     public $spacingBeforeFirst = 1;
+
 
     /**
      * Processes the function tokens within the class.
@@ -43,7 +45,7 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        $validPrefixes = Tokens::$methodPrefixes;
+        $validPrefixes   = Tokens::$methodPrefixes;
         $validPrefixes[] = T_VAR;
 
         $startOfStatement = $phpcsFile->findPrevious($validPrefixes, ($stackPtr - 1), null, false, null, true);
@@ -54,10 +56,25 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
         $endOfStatement = $phpcsFile->findNext(T_SEMICOLON, ($stackPtr + 1), null, false, null, true);
 
         $ignore = $validPrefixes;
-        $ignore[] = T_WHITESPACE;
+        $ignore[T_WHITESPACE] = T_WHITESPACE;
 
         $start = $startOfStatement;
-        $prev = $phpcsFile->findPrevious($ignore, ($startOfStatement - 1), null, true);
+        for ($prev = ($startOfStatement - 1); $prev >= 0; $prev--) {
+            if (isset($ignore[$tokens[$prev]['code']]) === true) {
+                continue;
+            }
+
+            if ($tokens[$prev]['code'] === T_ATTRIBUTE_END
+                && isset($tokens[$prev]['attribute_opener']) === true
+            ) {
+                $prev  = $tokens[$prev]['attribute_opener'];
+                $start = $prev;
+                continue;
+            }
+
+            break;
+        }
+
         if (isset(Tokens::$commentTokens[$tokens[$prev]['code']]) === true) {
             // Assume the comment belongs to the member var if it is on a line by itself.
             $prevContent = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($prev - 1), null, true);
@@ -65,28 +82,48 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
                 // Check the spacing, but then skip it.
                 $foundLines = ($tokens[$startOfStatement]['line'] - $tokens[$prev]['line'] - 1);
                 if ($foundLines > 0) {
-                    $error = 'Expected 0 blank lines after member var comment; %s found';
-                    $data = [$foundLines];
-                    $fix = $phpcsFile->addFixableError($error, $prev, 'AfterComment', $data);
-                    if ($fix === true) {
-                        $phpcsFile->fixer->beginChangeset();
-                        // Inline comments have the newline included in the content but
-                        // docblock do not.
-                        if ($tokens[$prev]['code'] === T_COMMENT) {
-                            $phpcsFile->fixer->replaceToken($prev, rtrim($tokens[$prev]['content']));
+                    for ($i = ($prev + 1); $i < $startOfStatement; $i++) {
+                        if ($tokens[$i]['column'] !== 1) {
+                            continue;
                         }
 
-                        for ($i = ($prev + 1); $i <= $startOfStatement; $i++) {
-                            if ($tokens[$i]['line'] === $tokens[$startOfStatement]['line']) {
-                                break;
-                            }
+                        if ($tokens[$i]['code'] === T_WHITESPACE
+                            && $tokens[$i]['line'] !== $tokens[($i + 1)]['line']
+                        ) {
+                            $error = 'Expected 0 blank lines after member var comment; %s found';
+                            $data  = [$foundLines];
+                            $fix   = $phpcsFile->addFixableError($error, $prev, 'AfterComment', $data);
+                            if ($fix === true) {
+                                $phpcsFile->fixer->beginChangeset();
+                                // Inline comments have the newline included in the content but
+                                // docblocks do not.
+                                if ($tokens[$prev]['code'] === T_COMMENT) {
+                                    $phpcsFile->fixer->replaceToken($prev, rtrim($tokens[$prev]['content']));
+                                }
 
-                            $phpcsFile->fixer->replaceToken($i, '');
-                        }
+                                for ($i = ($prev + 1); $i <= $startOfStatement; $i++) {
+                                    if ($tokens[$i]['line'] === $tokens[$startOfStatement]['line']) {
+                                        break;
+                                    }
 
-                        $phpcsFile->fixer->addNewline($prev);
-                        $phpcsFile->fixer->endChangeset();
-                    }
+                                    // Remove the newline after the docblock, and any entirely
+                                    // empty lines before the member var.
+                                    if ($tokens[$i]['code'] === T_WHITESPACE
+                                        && $tokens[$i]['line'] === $tokens[$prev]['line']
+                                        || ($tokens[$i]['column'] === 1
+                                        && $tokens[$i]['line'] !== $tokens[($i + 1)]['line'])
+                                    ) {
+                                        $phpcsFile->fixer->replaceToken($i, '');
+                                    }
+                                }
+
+                                $phpcsFile->fixer->addNewline($prev);
+                                $phpcsFile->fixer->endChangeset();
+                            }//end if
+
+                            break;
+                        }//end if
+                    }//end for
                 }//end if
 
                 $start = $prev;
@@ -100,11 +137,11 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
             if ($first === false) {
                 $first = $start;
             }
-        } elseif ($tokens[$start]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
+        } else if ($tokens[$start]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
             $first = $tokens[$start]['comment_opener'];
         } else {
             $first = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($start - 1), null, true);
-            $first = $phpcsFile->findNext(Tokens::$commentTokens, ($first + 1));
+            $first = $phpcsFile->findNext(array_merge(Tokens::$commentTokens, [T_ATTRIBUTE]), ($first + 1));
         }
 
         // Determine if this is the first member var.
@@ -119,13 +156,13 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
         if ($tokens[$prev]['code'] === T_OPEN_CURLY_BRACKET
             && isset(Tokens::$ooScopeTokens[$tokens[$tokens[$prev]['scope_condition']]['code']]) === true
         ) {
-            $errorMsg = 'Expected %s blank line(s) before first member var; %s found';
+            $errorMsg  = 'Expected %s blank line(s) before first member var; %s found';
             $errorCode = 'FirstIncorrect';
-            $spacing = (int) $this->spacingBeforeFirst;
+            $spacing   = (int) $this->spacingBeforeFirst;
         } else {
-            $errorMsg = 'Expected %s blank line(s) before member var; %s found';
+            $errorMsg  = 'Expected %s blank line(s) before member var; %s found';
             $errorCode = 'Incorrect';
-            $spacing = (int) $this->spacing;
+            $spacing   = (int) $this->spacing;
         }
 
         $foundLines = ($tokens[$first]['line'] - $tokens[$prev]['line'] - 1);
@@ -175,9 +212,10 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
             return $endOfStatement;
         }
 
-    }
+        return;
 
-    //end processMemberVar()
+    }//end processMemberVar()
+
 
     /**
      * Processes normal variables.
@@ -192,9 +230,9 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
         /*
             We don't care about normal variables.
         */
-    }
 
-    //end processVariable()
+    }//end processVariable()
+
 
     /**
      * Processes variables in double quoted strings.
@@ -209,7 +247,8 @@ class MemberVarSpacingSniff extends AbstractVariableSniff
         /*
             We don't care about normal variables.
         */
-    }
 
-    //end processVariableInString()
+    }//end processVariableInString()
+
+
 }//end class

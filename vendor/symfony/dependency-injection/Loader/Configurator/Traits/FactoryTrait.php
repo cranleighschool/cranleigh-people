@@ -12,17 +12,16 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
 
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 
 trait FactoryTrait
 {
     /**
      * Sets a factory.
      *
-     * @param string|array $factory A PHP callable reference
-     *
      * @return $this
      */
-    final public function factory($factory): self
+    final public function factory(string|array|ReferenceConfigurator $factory): static
     {
         if (\is_string($factory) && 1 === substr_count($factory, ':')) {
             $factoryParts = explode(':', $factory);

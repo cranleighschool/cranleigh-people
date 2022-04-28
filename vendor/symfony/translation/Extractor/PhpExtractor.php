@@ -27,15 +27,11 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
 
     /**
      * Prefix for new found message.
-     *
-     * @var string
      */
-    private $prefix = '';
+    private string $prefix = '';
 
     /**
      * The sequence that captures translation messages.
-     *
-     * @var array
      */
     protected $sequences = [
         [
@@ -135,7 +131,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
     /**
      * {@inheritdoc}
      */
-    public function extract($resource, MessageCatalogue $catalog)
+    public function extract(string|iterable $resource, MessageCatalogue $catalog)
     {
         $files = $this->extractFiles($resource);
         foreach ($files as $file) {
@@ -155,12 +151,8 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
 
     /**
      * Normalizes a token.
-     *
-     * @param mixed $token
-     *
-     * @return string|null
      */
-    protected function normalizeToken($token)
+    protected function normalizeToken(mixed $token): ?string
     {
         if (isset($token[1]) && 'b"' !== $token) {
             return $token[1];
@@ -190,11 +182,11 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
             $t = $tokenIterator->current();
 
             if ('[' === $t[0] || '(' === $t[0]) {
-                $openBraces++;
+                ++$openBraces;
             }
 
             if (']' === $t[0] || ')' === $t[0]) {
-                $openBraces--;
+                --$openBraces;
             }
 
             if ((0 === $openBraces && ',' === $t[0]) || (-1 === $openBraces && ')' === $t[0])) {
@@ -219,7 +211,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
                 // Concatenate with next token
                 continue;
             }
-            if (! isset($t[1])) {
+            if (!isset($t[1])) {
                 break;
             }
 
@@ -270,7 +262,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
     {
         $tokenIterator = new \ArrayIterator($tokens);
 
-        for ($key = 0; $key < $tokenIterator->count(); $key++) {
+        for ($key = 0; $key < $tokenIterator->count(); ++$key) {
             foreach ($this->sequences as $sequence) {
                 $message = '';
                 $domain = 'messages';
@@ -315,11 +307,9 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
     }
 
     /**
-     * @return bool
-     *
      * @throws \InvalidArgumentException
      */
-    protected function canBeExtracted(string $file)
+    protected function canBeExtracted(string $file): bool
     {
         return $this->isFile($file) && 'php' === pathinfo($file, \PATHINFO_EXTENSION);
     }
@@ -327,8 +317,12 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
     /**
      * {@inheritdoc}
      */
-    protected function extractFromDirectory($directory)
+    protected function extractFromDirectory(string|array $directory): iterable
     {
+        if (!class_exists(Finder::class)) {
+            throw new \LogicException(sprintf('You cannot use "%s" as the "symfony/finder" package is not installed. Try running "composer require symfony/finder".', static::class));
+        }
+
         $finder = new Finder();
 
         return $finder->files()->name('*.php')->in($directory);

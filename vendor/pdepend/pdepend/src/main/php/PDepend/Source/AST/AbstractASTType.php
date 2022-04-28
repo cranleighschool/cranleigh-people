@@ -38,11 +38,14 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 1.0.0
  */
 
 namespace PDepend\Source\AST;
 
+use OutOfBoundsException;
+use PDepend\Source\AST\ASTTraitUseStatement;
 use PDepend\Source\Builder\BuilderContext;
 use PDepend\Source\Tokenizer\Token;
 use PDepend\Util\Cache\CacheDriver;
@@ -52,6 +55,7 @@ use PDepend\Util\Cache\CacheDriver;
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 1.0.0
  */
 abstract class AbstractASTType extends AbstractASTArtifact
@@ -59,21 +63,21 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * The internal used cache instance.
      *
-     * @var \PDepend\Util\Cache\CacheDriver|null
+     * @var CacheDriver|null
      */
     protected $cache = null;
 
     /**
      * The currently used builder context.
      *
-     * @var \PDepend\Source\Builder\BuilderContext|null
+     * @var BuilderContext|null
      */
     protected $context = null;
 
     /**
      * The parent namespace for this class.
      *
-     * @var \PDepend\Source\AST\ASTNamespace|null
+     * @var ASTNamespace|null
      */
     private $namespace = null;
 
@@ -96,9 +100,9 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * List of all parsed child nodes.
      *
-     * @var \PDepend\Source\AST\ASTNode[]
+     * @var ASTNode[]
      */
-    protected $nodes = [];
+    protected $nodes = array();
 
     /**
      * Name of the parent namespace for this class or interface instance. Or
@@ -118,43 +122,41 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * Temporary property that only holds methods during the parsing process.
      *
-     * @var   ASTMethod[]|null
+     * @var ASTMethod[]|null
+     *
      * @since 1.0.2
      */
-    protected $methods = [];
+    protected $methods = array();
+
 
     /**
      * Setter method for the currently used token cache, where this class or
      * interface instance can store the associated tokens.
      *
-     * @param  \PDepend\Util\Cache\CacheDriver $cache
      * @return $this
      */
     public function setCache(CacheDriver $cache)
     {
         $this->cache = $cache;
-
         return $this;
     }
 
     /**
      * Sets the currently active builder context.
      *
-     * @param  \PDepend\Source\Builder\BuilderContext $context
      * @return $this
      */
     public function setContext(BuilderContext $context)
     {
         $this->context = $context;
-
         return $this;
     }
 
     /**
      * Adds a parsed child node to this node.
      *
-     * @param  \PDepend\Source\AST\ASTNode $node
      * @return void
+     * @access private
      */
     public function addChild(ASTNode $node)
     {
@@ -164,16 +166,18 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * Returns the child at the given index.
      *
-     * @param  int $index
-     * @return \PDepend\Source\AST\ASTNode
-     * @throws \OutOfBoundsException
+     * @param int $index
+     *
+     * @throws OutOfBoundsException
+     *
+     * @return ASTNode
      */
     public function getChild($index)
     {
         if (isset($this->nodes[$index])) {
             return $this->nodes[$index];
         }
-        throw new \OutOfBoundsException(
+        throw new OutOfBoundsException(
             sprintf(
                 'No node found at index %d in node of type: %s',
                 $index,
@@ -185,7 +189,7 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * Returns all child nodes of this class.
      *
-     * @return \PDepend\Source\AST\ASTNode[]
+     * @return ASTNode[]
      */
     public function getChildren()
     {
@@ -197,10 +201,13 @@ abstract class AbstractASTType extends AbstractASTArtifact
      * instance of the given <b>$targetType</b>. The returned value will be
      * <b>null</b> if no child exists for that.
      *
-     * @template T of \PDepend\Source\AST\ASTNode
+     * @template T of ASTNode
+     *
      * @param class-string<T> $targetType Searched class or interface type.
      *
      * @return T|null
+     * @access private
+     *
      * @todo   Refactor $_methods property to getAllMethods() when it exists.
      */
     public function getFirstChildOfType($targetType)
@@ -226,14 +233,17 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * Will find all children for the given type.
      *
-     * @template T of \PDepend\Source\AST\ASTNode
+     * @template T of ASTNode
+     *
      * @param class-string<T> $targetType The target class or interface type.
      * @param T[]             $results    The found children.
      *
      * @return T[]
+     * @access private
+     *
      * @todo   Refactor $_methods property to getAllMethods() when it exists.
      */
-    public function findChildrenOfType($targetType, array &$results = [])
+    public function findChildrenOfType($targetType, array &$results = array())
     {
         foreach ($this->nodes as $node) {
             if ($node instanceof $targetType) {
@@ -272,7 +282,7 @@ abstract class AbstractASTType extends AbstractASTArtifact
     }
 
     /**
-     * Returns all {@link \PDepend\Source\AST\ASTMethod} objects in this type.
+     * Returns all {@link ASTMethod} objects in this type.
      *
      * @return ASTArtifactList<ASTMethod>
      */
@@ -282,6 +292,7 @@ abstract class AbstractASTType extends AbstractASTArtifact
             return new ASTArtifactList($this->methods);
         }
 
+        /** @var ASTMethod[] */
         $methods = (array) $this->cache
             ->type('methods')
             ->restore($this->getId());
@@ -297,7 +308,6 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * Adds the given method to this type.
      *
-     * @param ASTMethod $method
      * @return ASTMethod
      */
     public function addMethod(ASTMethod $method)
@@ -310,29 +320,29 @@ abstract class AbstractASTType extends AbstractASTArtifact
     }
 
     /**
-     * Returns an array with {@link \PDepend\Source\AST\ASTMethod} objects
+     * Returns an array with {@link ASTMethod} objects
      * that are imported through traits.
      *
      * @return ASTMethod[]
+     *
      * @since  1.0.0
      */
     protected function getTraitMethods()
     {
-        $methods = [];
+        $methods = array();
 
+        /** @var ASTTraitUseStatement[] */
         $uses = $this->findChildrenOfType(
             'PDepend\\Source\\AST\\ASTTraitUseStatement'
         );
 
         foreach ($uses as $use) {
-            $priorMethods = [];
+            $priorMethods = array();
             $precedences = $use->findChildrenOfType('PDepend\\Source\\AST\\ASTTraitAdaptationPrecedence');
 
-            /** @var ASTTraitAdaptationPrecedence $precedence */
             foreach ($precedences as $precedence) {
                 $priorMethods[strtolower($precedence->getImage())] = true;
             }
-            /** @var ASTMethod $method */
             foreach ($use->getAllMethods() as $method) {
                 foreach ($uses as $use2) {
                     if ($use2->hasExcludeFor($method)) {
@@ -342,7 +352,7 @@ abstract class AbstractASTType extends AbstractASTArtifact
 
                 $name = strtolower($method->getName());
 
-                if (! isset($methods[$name]) || isset($priorMethods[$name])) {
+                if (!isset($methods[$name]) || isset($priorMethods[$name])) {
                     $methods[$name] = $method;
                     continue;
                 }
@@ -366,7 +376,7 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * Returns an <b>array</b> with all tokens within this type.
      *
-     * @return \PDepend\Source\Tokenizer\Token[]
+     * @return Token[]
      */
     public function getTokens()
     {
@@ -378,18 +388,18 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * Sets the tokens for this type.
      *
-     * @param \PDepend\Source\Tokenizer\Token[] $tokens
-     * @param Token|null $startToken
+     * @param Token[] $tokens
+     *
      * @return void
      */
     public function setTokens(array $tokens, Token $startToken = null)
     {
-        if (! $startToken) {
+        if (!$startToken) {
             $startToken = reset($tokens);
         }
 
         $this->startLine = $startToken->startLine;
-        $this->endLine = end($tokens)->endLine;
+        $this->endLine   = end($tokens)->endLine;
 
         $this->cache
             ->type('tokens')
@@ -404,7 +414,6 @@ abstract class AbstractASTType extends AbstractASTArtifact
         if (null === $this->namespace || $this->namespace->isPackageAnnotation()) {
             return $this->name;
         }
-
         return sprintf('%s\\%s', $this->namespaceName, $this->name);
     }
 
@@ -421,7 +430,7 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * Returns the parent namespace for this class.
      *
-     * @return \PDepend\Source\AST\ASTNamespace
+     * @return ASTNamespace
      */
     public function getNamespace()
     {
@@ -431,7 +440,6 @@ abstract class AbstractASTType extends AbstractASTArtifact
     /**
      * Sets the parent namespace for this type.
      *
-     * @param  \PDepend\Source\AST\ASTNamespace $namespace
      * @return void
      */
     public function setNamespace(ASTNamespace $namespace)
@@ -474,8 +482,8 @@ abstract class AbstractASTType extends AbstractASTArtifact
      * Checks that this user type is a subtype of the given <b>$type</b>
      * instance.
      *
-     * @param  \PDepend\Source\AST\AbstractASTType $type
      * @return bool
+     *
      * @since  1.0.6
      */
     abstract public function isSubtypeOf(AbstractASTType $type);
@@ -498,7 +506,7 @@ abstract class AbstractASTType extends AbstractASTArtifact
             $this->methods = null;
         }
 
-        return [
+        return array(
             'cache',
             'context',
             'comment',
@@ -509,8 +517,8 @@ abstract class AbstractASTType extends AbstractASTArtifact
             'namespaceName',
             'startLine',
             'userDefined',
-            'id',
-        ];
+            'id'
+        );
     }
 
     /**

@@ -14,12 +14,14 @@ use PHP_CodeSniffer\Exceptions\DeepExitException;
 
 class Gitblame extends VersionControl
 {
+
     /**
-     * The name of the report we want in the output.
+     * The name of the report we want in the output
      *
      * @var string
      */
     protected $reportName = 'GIT';
+
 
     /**
      * Extract the author from a blame line.
@@ -31,7 +33,7 @@ class Gitblame extends VersionControl
     protected function getAuthor($line)
     {
         $blameParts = [];
-        $line = preg_replace('|\s+|', ' ', $line);
+        $line       = preg_replace('|\s+|', ' ', $line);
         preg_match(
             '|\(.+[0-9]{4}-[0-9]{2}-[0-9]{2}\s+[0-9]+\)|',
             $line,
@@ -48,13 +50,12 @@ class Gitblame extends VersionControl
             return false;
         }
 
-        $parts = array_slice($parts, 0, (count($parts) - 2));
+        $parts  = array_slice($parts, 0, (count($parts) - 2));
         $author = preg_replace('|\(|', '', implode(' ', $parts));
-
         return $author;
-    }
 
-    //end getAuthor()
+    }//end getAuthor()
+
 
     /**
      * Gets the blame output.
@@ -70,7 +71,7 @@ class Gitblame extends VersionControl
 
         chdir(dirname($filename));
         $command = 'git blame --date=short "'.$filename.'" 2>&1';
-        $handle = popen($command, 'r');
+        $handle  = popen($command, 'r');
         if ($handle === false) {
             $error = 'ERROR: Could not execute "'.$command.'"'.PHP_EOL.PHP_EOL;
             throw new DeepExitException($error, 3);
@@ -83,7 +84,8 @@ class Gitblame extends VersionControl
         chdir($cwd);
 
         return $blames;
-    }
 
-    //end getBlameContent()
+    }//end getBlameContent()
+
+
 }//end class

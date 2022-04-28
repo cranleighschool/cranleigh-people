@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DisallowShortArraySyntaxSniff implements Sniff
 {
+
+
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -22,9 +24,9 @@ class DisallowShortArraySyntaxSniff implements Sniff
     public function register()
     {
         return [T_OPEN_SHORT_ARRAY];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -40,7 +42,7 @@ class DisallowShortArraySyntaxSniff implements Sniff
         $phpcsFile->recordMetric($stackPtr, 'Short array syntax used', 'yes');
 
         $error = 'Short array syntax is not allowed';
-        $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Found');
+        $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'Found');
 
         if ($fix === true) {
             $tokens = $phpcsFile->getTokens();
@@ -52,7 +54,8 @@ class DisallowShortArraySyntaxSniff implements Sniff
             $phpcsFile->fixer->replaceToken($closer, ')');
             $phpcsFile->fixer->endChangeset();
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

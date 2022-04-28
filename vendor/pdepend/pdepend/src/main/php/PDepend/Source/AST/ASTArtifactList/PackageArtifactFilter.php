@@ -69,26 +69,25 @@ class PackageArtifactFilter implements ArtifactFilter
      */
     public function __construct(array $namespaces)
     {
-        $patterns = [];
+        $patterns = array();
         foreach ($namespaces as $namespace) {
             $patterns[] = str_replace('\*', '\S*', preg_quote($namespace));
         }
-        $this->pattern = '#^('.join('|', $patterns).')$#D';
+        $this->pattern = '#^(' . join('|', $patterns) . ')$#D';
     }
 
     /**
      * Returns <b>true</b> if the given node should be part of the node iterator,
      * otherwise this method will return <b>false</b>.
      *
-     * @param  \PDepend\Source\AST\ASTArtifact $node
      * @return bool
      */
     public function accept(ASTArtifact $node)
     {
         $namespace = null;
         // NOTE: This looks a little bit ugly and it seems better to exclude
-        //       \PDepend\Source\AST\ASTMethod and \PDepend\Source\AST\ASTProperty,
-        //       but when PDepend supports more node types, this could produce errors.
+        //       ASTMethod and ASTProperty, but when PDepend supports more node
+        //       types, this could produce errors.
         if ($node instanceof AbstractASTClassOrInterface) {
             $namespace = $node->getNamespace()->getName();
         } elseif ($node instanceof ASTFunction) {
@@ -97,6 +96,6 @@ class PackageArtifactFilter implements ArtifactFilter
             $namespace = $node->getName();
         }
 
-        return preg_match($this->pattern, $namespace) === 0;
+        return (preg_match($this->pattern, $namespace) === 0);
     }
 }

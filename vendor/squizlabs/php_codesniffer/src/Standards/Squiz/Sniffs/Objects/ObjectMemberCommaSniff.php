@@ -15,12 +15,14 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ObjectMemberCommaSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['JS'];
+
 
     /**
      * Registers the token types that this sniff wishes to listen to.
@@ -30,9 +32,9 @@ class ObjectMemberCommaSniff implements Sniff
     public function register()
     {
         return [T_CLOSE_OBJECT];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Process the tokens that this sniff is listening for.
@@ -50,12 +52,13 @@ class ObjectMemberCommaSniff implements Sniff
         $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if ($tokens[$prev]['code'] === T_COMMA) {
             $error = 'Last member of object must not be followed by a comma';
-            $fix = $phpcsFile->addFixableError($error, $prev, 'Found');
+            $fix   = $phpcsFile->addFixableError($error, $prev, 'Found');
             if ($fix === true) {
                 $phpcsFile->fixer->replaceToken($prev, '');
             }
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

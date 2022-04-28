@@ -38,6 +38,7 @@
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.5
  */
 
@@ -50,6 +51,7 @@ namespace PDepend\Source\AST;
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
  * @since 0.9.5
  */
 class ASTValue
@@ -62,16 +64,12 @@ class ASTValue
     private $valueAvailable = false;
 
     /**
-     * The parsed PHP-value,.
-     *
-     * @var mixed
+     * The parsed PHP-value,
      */
     private $value = null;
 
     /**
      * This method will return the parsed PHP value.
-     *
-     * @return mixed
      */
     public function getValue()
     {
@@ -90,7 +88,7 @@ class ASTValue
     public function setValue($value)
     {
         if ($this->valueAvailable === false) {
-            $this->value = $value;
+            $this->value          = $value;
             $this->valueAvailable = true;
         }
     }

@@ -37,41 +37,41 @@ class JSONRenderer extends AbstractRenderer
         $jsonData = $this->encodeReport($data);
 
         $writer = $this->getWriter();
-        $writer->write($jsonData.PHP_EOL);
+        $writer->write($jsonData . PHP_EOL);
     }
 
     /**
-     * Create report data and add renderer meta properties.
+     * Create report data and add renderer meta properties
      *
      * @return array
      */
-    private function initReportData()
+    protected function initReportData()
     {
-        $data = [
+        $data = array(
             'version' => PHPMD::VERSION,
             'package' => 'phpmd',
             'timestamp' => date('c'),
-        ];
+        );
 
         return $data;
     }
 
     /**
-     * Add violations, if any, to the report data.
+     * Add violations, if any, to the report data
      *
      * @param Report $report The report with potential violations.
      * @param array $data The report output to add the violations to.
      * @return array The report output with violations, if any.
      */
-    private function addViolationsToReport(Report $report, array $data)
+    protected function addViolationsToReport(Report $report, array $data)
     {
-        $filesList = [];
+        $filesList = array();
         /** @var RuleViolation $violation */
         foreach ($report->getRuleViolations() as $violation) {
             $fileName = $violation->getFileName();
             $rule = $violation->getRule();
             $filesList[$fileName]['file'] = $fileName;
-            $filesList[$fileName]['violations'][] = [
+            $filesList[$fileName]['violations'][] = array(
                 'beginLine' => $violation->getBeginLine(),
                 'endLine' => $violation->getEndLine(),
                 'package' => $violation->getNamespaceName(),
@@ -83,7 +83,7 @@ class JSONRenderer extends AbstractRenderer
                 'ruleSet' => $rule->getRuleSetName(),
                 'externalInfoUrl' => $rule->getExternalInfoUrl(),
                 'priority' => $rule->getPriority(),
-            ];
+            );
         }
         $data['files'] = array_values($filesList);
 
@@ -91,21 +91,21 @@ class JSONRenderer extends AbstractRenderer
     }
 
     /**
-     * Add errors, if any, to the report data.
+     * Add errors, if any, to the report data
      *
      * @param Report $report The report with potential errors.
      * @param array $data The report output to add the errors to.
      * @return array The report output with errors, if any.
      */
-    private function addErrorsToReport(Report $report, array $data)
+    protected function addErrorsToReport(Report $report, array $data)
     {
         $errors = $report->getErrors();
         if ($errors) {
             foreach ($errors as $error) {
-                $data['errors'][] = [
+                $data['errors'][] = array(
                     'fileName' => $error->getFile(),
                     'message' => $error->getMessage(),
-                ];
+                );
             }
         }
 
@@ -113,7 +113,7 @@ class JSONRenderer extends AbstractRenderer
     }
 
     /**
-     * Encode report data to the JSON representation string.
+     * Encode report data to the JSON representation string
      *
      * @param array $data The report data
      *

@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DisallowMultipleStatementsSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -22,9 +24,9 @@ class DisallowMultipleStatementsSniff implements Sniff
     public function register()
     {
         return [T_SEMICOLON];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -37,9 +39,9 @@ class DisallowMultipleStatementsSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens = $phpcsFile->getTokens();
+        $tokens  = $phpcsFile->getTokens();
         $fixable = true;
-        $prev = $stackPtr;
+        $prev    = $stackPtr;
 
         do {
             $prev = $phpcsFile->findPrevious([T_SEMICOLON, T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO, T_PHPCS_IGNORE], ($prev - 1));
@@ -48,7 +50,6 @@ class DisallowMultipleStatementsSniff implements Sniff
                 || $tokens[$prev]['code'] === T_OPEN_TAG_WITH_ECHO
             ) {
                 $phpcsFile->recordMetric($stackPtr, 'Multiple statements on same line', 'no');
-
                 return;
             }
 
@@ -78,10 +79,9 @@ class DisallowMultipleStatementsSniff implements Sniff
             $phpcsFile->recordMetric($stackPtr, 'Multiple statements on same line', 'yes');
 
             $error = 'Each PHP statement must be on a line by itself';
-            $code = 'SameLine';
+            $code  = 'SameLine';
             if ($fixable === false) {
                 $phpcsFile->addError($error, $stackPtr, $code);
-
                 return;
             }
 
@@ -98,7 +98,8 @@ class DisallowMultipleStatementsSniff implements Sniff
         } else {
             $phpcsFile->recordMetric($stackPtr, 'Multiple statements on same line', 'no');
         }//end if
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

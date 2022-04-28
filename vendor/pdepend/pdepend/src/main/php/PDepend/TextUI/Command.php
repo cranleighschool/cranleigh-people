@@ -42,10 +42,13 @@
 
 namespace PDepend\TextUI;
 
+use Exception;
 use PDepend\Application;
+use PDepend\DbusUI\ResultPrinter as DbusResultPrinter;
 use PDepend\Util\ConfigurationInstance;
 use PDepend\Util\Log;
 use PDepend\Util\Workarounds;
+use RuntimeException;
 
 /**
  * Handles the command line stuff and starts the text ui runner.
@@ -66,28 +69,28 @@ class Command
     const INPUT_ERROR = 1743;
 
     /**
-     * The recieved cli options.
+     * The recieved cli options
      *
      * @var array<string, mixed>
      */
-    private $options = [];
+    private $options = array();
 
     /**
-     * The directories/files to be analyzed.
+     * The directories/files to be analyzed
      *
-     * @var array<integer, string>
+     * @var array<int, string>
      */
-    private $source = [];
+    private $source = array();
 
     /**
      * The used text ui runner.
      *
-     * @var \PDepend\TextUI\Runner
+     * @var Runner
      */
     private $runner = null;
 
     /**
-     * @var \PDepend\Application
+     * @var Application
      */
     private $application;
 
@@ -103,30 +106,25 @@ class Command
         try {
             if ($this->parseArguments() === false) {
                 $this->printHelp();
-
                 return self::CLI_ERROR;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage(), PHP_EOL, PHP_EOL;
 
             $this->printHelp();
-
             return self::CLI_ERROR;
         }
 
         if (isset($this->options['--help'])) {
             $this->printHelp();
-
             return Runner::SUCCESS_EXIT;
         }
         if (isset($this->options['--usage'])) {
             $this->printUsage();
-
             return Runner::SUCCESS_EXIT;
         }
         if (isset($this->options['--version'])) {
             $this->printVersion();
-
             return Runner::SUCCESS_EXIT;
         }
 
@@ -136,27 +134,26 @@ class Command
             $configurationFile = $this->options['--configuration'];
 
             if (false === file_exists($configurationFile)) {
-                $configurationFile = getcwd().'/'.$configurationFile;
+                $configurationFile = getcwd() . '/' . $configurationFile;
             }
             if (false === file_exists($configurationFile)) {
                 $configurationFile = $this->options['--configuration'];
             }
 
             unset($this->options['--configuration']);
-        } elseif (file_exists(getcwd().'/pdepend.xml')) {
-            $configurationFile = getcwd().'/pdepend.xml';
-        } elseif (file_exists(getcwd().'/pdepend.xml.dist')) {
-            $configurationFile = getcwd().'/pdepend.xml.dist';
+        } elseif (file_exists(getcwd() . '/pdepend.xml')) {
+            $configurationFile = getcwd() . '/pdepend.xml';
+        } elseif (file_exists(getcwd() . '/pdepend.xml.dist')) {
+            $configurationFile = getcwd() . '/pdepend.xml.dist';
         }
 
         if ($configurationFile) {
             try {
                 $this->application->setConfigurationFile($configurationFile);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 echo $e->getMessage(), PHP_EOL, PHP_EOL;
 
                 $this->printHelp();
-
                 return self::CLI_ERROR;
             }
         }
@@ -187,7 +184,6 @@ class Command
 
                 if (isset($analyzerOptions[$option]['value']) && is_bool($value)) {
                     echo 'Option ', $option, ' requires a value.', PHP_EOL;
-
                     return self::INPUT_ERROR;
                 } elseif ($analyzerOptions[$option]['value'] === 'file'
                     && file_exists($value) === false
@@ -222,12 +218,12 @@ class Command
             unset($options['--quiet']);
         } else {
             $runSilent = false;
-            $this->runner->addProcessListener(new \PDepend\TextUI\ResultPrinter());
+            $this->runner->addProcessListener(new ResultPrinter());
         }
 
         if (isset($options['--notify-me'])) {
             $this->runner->addProcessListener(
-                new \PDepend\DbusUI\ResultPrinter()
+                new DbusResultPrinter()
             );
             unset($options['--notify-me']);
         }
@@ -235,7 +231,6 @@ class Command
         if (count($options) > 0) {
             $this->printHelp();
             echo "Unknown option '", key($options), "' given.", PHP_EOL;
-
             return self::CLI_ERROR;
         }
 
@@ -270,7 +265,7 @@ class Command
             }
 
             return $result;
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             echo PHP_EOL, PHP_EOL,
                  'Critical error: ', PHP_EOL,
                  '=============== ', PHP_EOL,
@@ -289,8 +284,8 @@ class Command
      */
     protected function parseArguments()
     {
-        if (! isset($_SERVER['argv'])) {
-            if (false === (bool) ini_get('register_argc_argv')) {
+        if (!isset($_SERVER['argv'])) {
+            if (false === (boolean) ini_get('register_argc_argv')) {
                 // @codeCoverageIgnoreStart
                 echo 'Please enable register_argc_argv in your php.ini.';
             } else {
@@ -298,7 +293,6 @@ class Command
                 echo 'Unknown error, no $argv array available.';
             }
             echo PHP_EOL, PHP_EOL;
-
             return false;
         }
 
@@ -316,20 +310,20 @@ class Command
             $this->source = explode(',', array_pop($argv));
         }
 
-        for ($i = 0, $c = count($argv); $i < $c; $i++) {
+        for ($i = 0, $c = count($argv); $i < $c; ++$i) {
             // Is it an ini_set option?
             if ($argv[$i] === '-d' && isset($argv[$i + 1])) {
                 if (strpos($argv[++$i], '=') === false) {
                     ini_set($argv[$i], 'on');
                 } else {
-                    [$key, $value] = explode('=', $argv[$i]);
+                    list($key, $value) = explode('=', $argv[$i]);
 
                     ini_set($key, $value);
                 }
             } elseif (strpos($argv[$i], '=') === false) {
                 $this->options[$argv[$i]] = true;
             } else {
-                [$key, $value] = explode('=', $argv[$i]);
+                list($key, $value) = explode('=', $argv[$i]);
 
                 $this->options[$key] = $value;
             }
@@ -339,7 +333,7 @@ class Command
     }
 
     /**
-     * Assign CLI arguments to current runner instance.
+     * Assign CLI arguments to current runner instance
      *
      * @return void
      */
@@ -381,7 +375,7 @@ class Command
 
         // Check for the bad documentation option
         if (isset($this->options['--bad-documentation'])) {
-            echo 'Option --bad-documentation is ambiguous.', PHP_EOL;
+            echo "Option --bad-documentation is ambiguous.", PHP_EOL;
 
             unset($this->options['--bad-documentation']);
         }
@@ -405,7 +399,7 @@ class Command
      */
     protected function printVersion()
     {
-        $build = __DIR__.'/../../../../../build.properties';
+        $build = __DIR__ . '/../../../../../build.properties';
 
         if (file_exists($build)) {
             $data = @parse_ini_file($build);
@@ -512,7 +506,7 @@ class Command
     protected function printLogOptions()
     {
         $maxLength = 0;
-        $options = [];
+        $options   = array();
         $logOptions = $this->application->getAvailableLoggerOptions();
         foreach ($logOptions as $option => $info) {
             // Build log option identifier
@@ -562,7 +556,7 @@ class Command
 
         foreach ($options as $option => $info) {
             if (isset($info['value'])) {
-                $option .= '=<'.$info['value'].'>';
+                $option .= '=<' . $info['value'] . '>';
             } else {
                 $option .= '=<value>';
             }
@@ -577,9 +571,9 @@ class Command
     /**
      * Prints a single option.
      *
-     * @param string  $option  The option identifier.
-     * @param string  $message The option help message.
-     * @param int $length  The length of the longest option.
+     * @param string $option  The option identifier.
+     * @param string $message The option help message.
+     * @param int    $length  The length of the longest option.
      *
      * @return void
      */
@@ -615,11 +609,11 @@ class Command
      */
     private function printDbusOption($length)
     {
-        if (extension_loaded('dbus') === false) {
+        if (extension_loaded("dbus") === false) {
             return;
         }
 
-        $option = '--notify-me';
+        $option  = '--notify-me';
         $message = 'Show a notification after analysis.';
 
         $this->printOption($option, $message, $length);
@@ -633,12 +627,12 @@ class Command
     public static function main()
     {
         $command = new Command();
-
         return $command->run();
     }
 
     /**
      * @param int $startTime
+     *
      * @return void
      */
     private function printStatistics($startTime)

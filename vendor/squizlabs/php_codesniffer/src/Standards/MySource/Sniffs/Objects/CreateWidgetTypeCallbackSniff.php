@@ -9,18 +9,20 @@
 
 namespace PHP_CodeSniffer\Standards\MySource\Sniffs\Objects;
 
-use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 
 class CreateWidgetTypeCallbackSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
      * @var array
      */
     public $supportedTokenizers = ['JS'];
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -30,9 +32,9 @@ class CreateWidgetTypeCallbackSniff implements Sniff
     public function register()
     {
         return [T_OBJECT];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -66,7 +68,7 @@ class CreateWidgetTypeCallbackSniff implements Sniff
         }
 
         $start = ($tokens[$function]['scope_opener'] + 1);
-        $end = ($tokens[$function]['scope_closer'] - 1);
+        $end   = ($tokens[$function]['scope_closer'] - 1);
 
         // Check that the first argument is called "callback".
         $arg = $phpcsFile->findNext(T_WHITESPACE, ($tokens[$function]['parenthesis_opener'] + 1), null, true);
@@ -84,7 +86,7 @@ class CreateWidgetTypeCallbackSniff implements Sniff
             followed by a return statement or the end of the method.
         */
 
-        $foundCallback = false;
+        $foundCallback  = false;
         $passedCallback = false;
         $nestedFunction = null;
         for ($i = $start; $i <= $end; $i++) {
@@ -94,7 +96,7 @@ class CreateWidgetTypeCallbackSniff implements Sniff
                     $nestedFunction = null;
                     continue;
                 }
-            } elseif (($tokens[$i]['code'] === T_FUNCTION
+            } else if (($tokens[$i]['code'] === T_FUNCTION
                 || $tokens[$i]['code'] === T_CLOSURE)
                 && isset($tokens[$i]['scope_closer']) === true
             ) {
@@ -110,7 +112,7 @@ class CreateWidgetTypeCallbackSniff implements Sniff
                 }
 
                 continue;
-            } elseif ($tokens[$i]['code'] !== T_STRING
+            } else if ($tokens[$i]['code'] !== T_STRING
                 || $tokens[$i]['content'] !== 'callback'
             ) {
                 continue;
@@ -133,15 +135,15 @@ class CreateWidgetTypeCallbackSniff implements Sniff
                 // like an IF or FOR statement.
                 foreach ($tokens[$i]['nested_parenthesis'] as $bracket) {
                     if (isset($tokens[$bracket]['parenthesis_owner']) === true) {
-                        continue 2;
+                        continue(2);
                     }
                 }
 
                 // Note that we use this endBracket down further when checking
                 // for a RETURN statement.
                 $nestedParens = $tokens[$i]['nested_parenthesis'];
-                $endBracket = end($nestedParens);
-                $bracket = key($nestedParens);
+                $endBracket   = end($nestedParens);
+                $bracket      = key($nestedParens);
 
                 $prev = $phpcsFile->findPrevious(
                     Tokens::$emptyTokens,
@@ -209,7 +211,8 @@ class CreateWidgetTypeCallbackSniff implements Sniff
             $error = 'The create() method of a widget type must call the callback function';
             $phpcsFile->addError($error, $create, 'CallbackNotCalled');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

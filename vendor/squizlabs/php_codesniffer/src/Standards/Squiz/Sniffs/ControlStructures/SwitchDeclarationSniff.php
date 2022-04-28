@@ -15,6 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class SwitchDeclarationSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -28,9 +29,10 @@ class SwitchDeclarationSniff implements Sniff
     /**
      * The number of spaces code should be indented.
      *
-     * @var int
+     * @var integer
      */
     public $indent = 4;
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -40,9 +42,9 @@ class SwitchDeclarationSniff implements Sniff
     public function register()
     {
         return [T_SWITCH];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -64,11 +66,11 @@ class SwitchDeclarationSniff implements Sniff
             return;
         }
 
-        $switch = $tokens[$stackPtr];
-        $nextCase = $stackPtr;
+        $switch        = $tokens[$stackPtr];
+        $nextCase      = $stackPtr;
         $caseAlignment = ($switch['column'] + $this->indent);
-        $caseCount = 0;
-        $foundDefault = false;
+        $caseCount     = 0;
+        $foundDefault  = false;
 
         while (($nextCase = $phpcsFile->findNext([T_CASE, T_DEFAULT, T_SWITCH], ($nextCase + 1), $switch['scope_closer'])) !== false) {
             // Skip nested SWITCH statements; they are handled on their own.
@@ -78,7 +80,7 @@ class SwitchDeclarationSniff implements Sniff
             }
 
             if ($tokens[$nextCase]['code'] === T_DEFAULT) {
-                $type = 'Default';
+                $type         = 'Default';
                 $foundDefault = true;
             } else {
                 $type = 'Case';
@@ -87,8 +89,8 @@ class SwitchDeclarationSniff implements Sniff
 
             if ($tokens[$nextCase]['content'] !== strtolower($tokens[$nextCase]['content'])) {
                 $expected = strtolower($tokens[$nextCase]['content']);
-                $error = strtoupper($type).' keyword must be lowercase; expected "%s" but found "%s"';
-                $data = [
+                $error    = strtoupper($type).' keyword must be lowercase; expected "%s" but found "%s"';
+                $data     = [
                     $expected,
                     $tokens[$nextCase]['content'],
                 ];
@@ -101,7 +103,7 @@ class SwitchDeclarationSniff implements Sniff
 
             if ($tokens[$nextCase]['column'] !== $caseAlignment) {
                 $error = strtoupper($type).' keyword must be indented '.$this->indent.' spaces from SWITCH keyword';
-                $fix = $phpcsFile->addFixableError($error, $nextCase, $type.'Indent');
+                $fix   = $phpcsFile->addFixableError($error, $nextCase, $type.'Indent');
 
                 if ($fix === true) {
                     $padding = str_repeat(' ', ($caseAlignment - 1));
@@ -120,7 +122,7 @@ class SwitchDeclarationSniff implements Sniff
                 || $tokens[($nextCase + 1)]['content'] !== ' ')
             ) {
                 $error = 'CASE keyword must be followed by a single space';
-                $fix = $phpcsFile->addFixableError($error, $nextCase, 'SpacingAfterCase');
+                $fix   = $phpcsFile->addFixableError($error, $nextCase, 'SpacingAfterCase');
                 if ($fix === true) {
                     if ($tokens[($nextCase + 1)]['type'] !== 'T_WHITESPACE') {
                         $phpcsFile->fixer->addContent($nextCase, ' ');
@@ -139,7 +141,7 @@ class SwitchDeclarationSniff implements Sniff
             $opener = $tokens[$nextCase]['scope_opener'];
             if ($tokens[($opener - 1)]['type'] === 'T_WHITESPACE') {
                 $error = 'There must be no space before the colon in a '.strtoupper($type).' statement';
-                $fix = $phpcsFile->addFixableError($error, $nextCase, 'SpaceBeforeColon'.$type);
+                $fix   = $phpcsFile->addFixableError($error, $nextCase, 'SpaceBeforeColon'.$type);
                 if ($fix === true) {
                     $phpcsFile->fixer->replaceToken(($opener - 1), '');
                 }
@@ -158,7 +160,7 @@ class SwitchDeclarationSniff implements Sniff
                     // the default case.
                     if ($tokens[$nextBreak]['column'] !== $caseAlignment) {
                         $error = 'Case breaking statement must be indented '.$this->indent.' spaces from SWITCH keyword';
-                        $fix = $phpcsFile->addFixableError($error, $nextBreak, 'BreakIndent');
+                        $fix   = $phpcsFile->addFixableError($error, $nextBreak, 'BreakIndent');
 
                         if ($fix === true) {
                             $padding = str_repeat(' ', ($caseAlignment - 1));
@@ -178,7 +180,7 @@ class SwitchDeclarationSniff implements Sniff
                         $phpcsFile->addError($error, $nextBreak, 'SpacingBeforeBreak');
                     }
 
-                    $nextLine = $tokens[$tokens[$stackPtr]['scope_closer']]['line'];
+                    $nextLine  = $tokens[$tokens[$stackPtr]['scope_closer']]['line'];
                     $semicolon = $phpcsFile->findEndOfStatement($nextBreak);
                     for ($i = ($semicolon + 1); $i < $tokens[$stackPtr]['scope_closer']; $i++) {
                         if ($tokens[$i]['type'] !== 'T_WHITESPACE') {
@@ -192,7 +194,7 @@ class SwitchDeclarationSniff implements Sniff
                         // a single blank line, or the end switch brace.
                         if ($nextLine !== ($tokens[$semicolon]['line'] + 2) && $i !== $tokens[$stackPtr]['scope_closer']) {
                             $error = 'Case breaking statements must be followed by a single blank line';
-                            $fix = $phpcsFile->addFixableError($error, $nextBreak, 'SpacingAfterBreak');
+                            $fix   = $phpcsFile->addFixableError($error, $nextBreak, 'SpacingAfterBreak');
                             if ($fix === true) {
                                 $phpcsFile->fixer->beginChangeset();
                                 for ($i = ($semicolon + 1); $i <= $tokens[$stackPtr]['scope_closer']; $i++) {
@@ -275,7 +277,7 @@ class SwitchDeclarationSniff implements Sniff
                         }
                     }//end if
                 }//end if
-            } elseif ($type === 'Default') {
+            } else if ($type === 'Default') {
                 $error = 'DEFAULT case must have a breaking statement';
                 $phpcsFile->addError($error, $nextCase, 'DefaultNoBreak');
             }//end if
@@ -295,7 +297,8 @@ class SwitchDeclarationSniff implements Sniff
             $error = 'SWITCH statements must contain at least one CASE statement';
             $phpcsFile->addError($error, $stackPtr, 'MissingCase');
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

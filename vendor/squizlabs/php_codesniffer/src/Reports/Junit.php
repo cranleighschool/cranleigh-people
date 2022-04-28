@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Files\File;
 
 class Junit implements Report
 {
+
+
     /**
      * Generate a partial report for a single processed file.
      *
@@ -29,7 +31,7 @@ class Junit implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
+    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
     {
         $out = new \XMLWriter;
         $out->openMemory();
@@ -75,11 +77,10 @@ class Junit implements Report
 
         $out->endElement();
         echo $out->flush();
-
         return true;
-    }
 
-    //end generateFileReport()
+    }//end generateFileReport()
+
 
     /**
      * Prints all violations for processed files, in a proprietary XML format.
@@ -103,13 +104,13 @@ class Junit implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources = false,
-        $width = 80,
-        $interactive = false,
-        $toScreen = true
+        $showSources=false,
+        $width=80,
+        $interactive=false,
+        $toScreen=true
     ) {
         // Figure out the total number of tests.
-        $tests = 0;
+        $tests   = 0;
         $matches = [];
         preg_match_all('/tests="([0-9]+)"/', $cachedData, $matches);
         if (isset($matches[1]) === true) {
@@ -123,7 +124,8 @@ class Junit implements Report
         echo '<testsuites name="PHP_CodeSniffer '.Config::VERSION.'" errors="0" tests="'.$tests.'" failures="'.$failures.'">'.PHP_EOL;
         echo $cachedData;
         echo '</testsuites>'.PHP_EOL;
-    }
 
-    //end generate()
+    }//end generate()
+
+
 }//end class

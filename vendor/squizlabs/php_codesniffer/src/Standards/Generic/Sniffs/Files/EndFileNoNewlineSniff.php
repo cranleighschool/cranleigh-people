@@ -14,6 +14,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class EndFileNoNewlineSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -25,6 +26,7 @@ class EndFileNoNewlineSniff implements Sniff
         'CSS',
     ];
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -32,10 +34,13 @@ class EndFileNoNewlineSniff implements Sniff
      */
     public function register()
     {
-        return [T_OPEN_TAG];
-    }
+        return [
+            T_OPEN_TAG,
+            T_OPEN_TAG_WITH_ECHO,
+        ];
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -49,18 +54,18 @@ class EndFileNoNewlineSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         // Skip to the end of the file.
-        $tokens = $phpcsFile->getTokens();
+        $tokens   = $phpcsFile->getTokens();
         $stackPtr = ($phpcsFile->numTokens - 1);
 
         if ($tokens[$stackPtr]['content'] === '') {
-            $stackPtr--;
+            --$stackPtr;
         }
 
         $eolCharLen = strlen($phpcsFile->eolChar);
-        $lastChars = substr($tokens[$stackPtr]['content'], ($eolCharLen * -1));
+        $lastChars  = substr($tokens[$stackPtr]['content'], ($eolCharLen * -1));
         if ($lastChars === $phpcsFile->eolChar) {
             $error = 'File must not end with a newline character';
-            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'Found');
+            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'Found');
             if ($fix === true) {
                 $phpcsFile->fixer->beginChangeset();
 
@@ -78,8 +83,9 @@ class EndFileNoNewlineSniff implements Sniff
         }
 
         // Ignore the rest of the file.
-        return $phpcsFile->numTokens + 1;
-    }
+        return ($phpcsFile->numTokens + 1);
 
-    //end process()
+    }//end process()
+
+
 }//end class

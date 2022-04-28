@@ -4,310 +4,311 @@
  *
  * Created to aid static analysis by PHPStan.
  *
+ * @package WordPress
  * @see wp_setup_nav_menu_item()
  */
 
 /**
  * Decorates a menu item (WP_Post) object with the shared navigation menu item properties.
  */
-class WP_Nav_Menu_Item
-{
-    /**
-     * The term_id if the menu item represents a taxonomy term.
-     *
-     * @overrides WP_Post
-     * @var int
-     */
-    public $ID;
+class WP_Nav_Menu_Item {
 
-    /**
-     * The title attribute of the link element for this menu item.
-     *
-     * @var string
-     */
-    public $attr_title;
+	/**
+	 * The term_id if the menu item represents a taxonomy term.
+	 *
+	 * @overrides WP_Post
+	 * @var int
+	 */
+	public $ID;
 
-    /**
-     * The array of class attribute values for the link element of this menu item.
-     *
-     * @var array
-     */
-    public $classes;
+	/**
+	 * The title attribute of the link element for this menu item.
+	 *
+	 * @var string
+	 */
+	public $attr_title;
 
-    /**
-     * The DB ID of this item as a nav_menu_item object, if it exists (0 if it doesn't exist).
-     *
-     * @var int
-     */
-    public $db_id;
+	/**
+	 * The array of class attribute values for the link element of this menu item.
+	 *
+	 * @var array
+	 */
+	public $classes;
 
-    /**
-     * The description of this menu item.
-     *
-     * @var string
-     */
-    public $description;
+	/**
+	 * The DB ID of this item as a nav_menu_item object, if it exists (0 if it doesn't exist).
+	 *
+	 * @var int
+	 */
+	public $db_id;
 
-    /**
-     * The DB ID of the nav_menu_item that is this item's menu parent, if any. 0 otherwise.
-     *
-     * @var int
-     */
-    public $menu_item_parent;
+	/**
+	 * The description of this menu item.
+	 *
+	 * @var string
+	 */
+	public $description;
 
-    /**
-     * The type of object originally represented, such as "category," "post", or "attachment.".
-     *
-     * @var string
-     */
-    public $object;
+	/**
+	 * The DB ID of the nav_menu_item that is this item's menu parent, if any. 0 otherwise.
+	 *
+	 * @var int
+	 */
+	public $menu_item_parent;
 
-    /**
-     * The DB ID of the original object this menu item represents,
-     * e.g. ID for posts and term_id for categories.
-     *
-     * @var int
-     */
-    public $object_id;
+	/**
+	 * The type of object originally represented, such as "category," "post", or "attachment."
+	 *
+	 * @var string
+	 */
+	public $object;
 
-    /**
-     * The DB ID of the original object's parent object, if any (0 otherwise).
-     *
-     * @overrides WP_Post
-     * @var int
-     */
-    public $post_parent;
+	/**
+	 * The DB ID of the original object this menu item represents,
+	 * e.g. ID for posts and term_id for categories.
+	 *
+	 * @var int
+	 */
+	public $object_id;
 
-    /**
-     * A "no title" label if menu item represents a post that lacks a title.
-     *
-     * @overrides WP_Post
-     * @var string
-     */
-    public $post_title;
+	/**
+	 * The DB ID of the original object's parent object, if any (0 otherwise).
+	 *
+	 * @overrides WP_Post
+	 * @var int
+	 */
+	public $post_parent;
 
-    /**
-     * The target attribute of the link element for this menu item.
-     *
-     * @var string
-     */
-    public $target;
+	/**
+	 * A "no title" label if menu item represents a post that lacks a title.
+	 *
+	 * @overrides WP_Post
+	 * @var string
+	 */
+	public $post_title;
 
-    /**
-     * The title of this menu item.
-     *
-     * @var string
-     */
-    public $title;
+	/**
+	 * The target attribute of the link element for this menu item.
+	 *
+	 * @var string
+	 */
+	public $target;
 
-    /**
-     * The family of objects originally represented, such as "post_type" or "taxonomy.".
-     *
-     * @var string
-     */
-    public $type;
+	/**
+	 * The title of this menu item.
+	 *
+	 * @var string
+	 */
+	public $title;
 
-    /**
-     * The singular label used to describe this type of menu item.
-     *
-     * @var string
-     */
-    public $type_label;
+	/**
+	 * The family of objects originally represented, such as "post_type" or "taxonomy."
+	 *
+	 * @var string
+	 */
+	public $type;
 
-    /**
-     * The URL to which this menu item points.
-     *
-     * @var string
-     */
-    public $url;
+	/**
+	 * The singular label used to describe this type of menu item.
+	 *
+	 * @var string
+	 */
+	public $type_label;
 
-    /**
-     * The XFN relationship expressed in the link of this menu item.
-     *
-     * @var string
-     */
-    public $xfn;
+	/**
+	 * The URL to which this menu item points.
+	 *
+	 * @var string
+	 */
+	public $url;
 
-    /**
-     * Whether the menu item represents an object that no longer exists.
-     *
-     * @var bool
-     */
-    public $_invalid; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
+	/**
+	 * The XFN relationship expressed in the link of this menu item.
+	 *
+	 * @var string
+	 */
+	public $xfn;
 
-    /**
-     * Whether the menu item represents the active menu item.
-     *
-     * @var bool
-     */
-    public $current;
+	/**
+	 * Whether the menu item represents an object that no longer exists.
+	 *
+	 * @var bool
+	 */
+	public $_invalid; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 
-    /**
-     * Whether the menu item represents an parent menu item.
-     *
-     * @var bool
-     */
-    public $current_item_parent;
+	/**
+	 * Whether the menu item represents the active menu item.
+	 *
+	 * @var bool
+	 */
+	public $current;
 
-    /**
-     * Whether the menu item represents an ancestor menu item.
-     *
-     * @var bool
-     */
-    public $current_item_ancestor;
+	/**
+	 * Whether the menu item represents an parent menu item.
+	 *
+	 * @var bool
+	 */
+	public $current_item_parent;
 
-    /* Copy of WP_Post */
+	/**
+	 * Whether the menu item represents an ancestor menu item.
+	 *
+	 * @var bool
+	 */
+	public $current_item_ancestor;
 
-    /**
-     * ID of post author.
-     *
-     * A numeric string, for compatibility reasons.
-     *
-     * @var string
-     */
-    public $post_author = 0;
+	/* Copy of WP_Post */
 
-    /**
-     * The post's local publication time.
-     *
-     * @var string
-     */
-    public $post_date = '0000-00-00 00:00:00';
+	/**
+	 * ID of post author.
+	 *
+	 * A numeric string, for compatibility reasons.
+	 *
+	 * @var string
+	 */
+	public $post_author = 0;
 
-    /**
-     * The post's GMT publication time.
-     *
-     * @var string
-     */
-    public $post_date_gmt = '0000-00-00 00:00:00';
+	/**
+	 * The post's local publication time.
+	 *
+	 * @var string
+	 */
+	public $post_date = '0000-00-00 00:00:00';
 
-    /**
-     * The post's content.
-     *
-     * @var string
-     */
-    public $post_content = '';
+	/**
+	 * The post's GMT publication time.
+	 *
+	 * @var string
+	 */
+	public $post_date_gmt = '0000-00-00 00:00:00';
 
-    /**
-     * The post's excerpt.
-     *
-     * @var string
-     */
-    public $post_excerpt = '';
+	/**
+	 * The post's content.
+	 *
+	 * @var string
+	 */
+	public $post_content = '';
 
-    /**
-     * The post's status.
-     *
-     * @var string
-     */
-    public $post_status = 'publish';
+	/**
+	 * The post's excerpt.
+	 *
+	 * @var string
+	 */
+	public $post_excerpt = '';
 
-    /**
-     * Whether comments are allowed.
-     *
-     * @var string
-     */
-    public $comment_status = 'open';
+	/**
+	 * The post's status.
+	 *
+	 * @var string
+	 */
+	public $post_status = 'publish';
 
-    /**
-     * Whether pings are allowed.
-     *
-     * @var string
-     */
-    public $ping_status = 'open';
+	/**
+	 * Whether comments are allowed.
+	 *
+	 * @var string
+	 */
+	public $comment_status = 'open';
 
-    /**
-     * The post's password in plain text.
-     *
-     * @var string
-     */
-    public $post_password = '';
+	/**
+	 * Whether pings are allowed.
+	 *
+	 * @var string
+	 */
+	public $ping_status = 'open';
 
-    /**
-     * The post's slug.
-     *
-     * @var string
-     */
-    public $post_name = '';
+	/**
+	 * The post's password in plain text.
+	 *
+	 * @var string
+	 */
+	public $post_password = '';
 
-    /**
-     * URLs queued to be pinged.
-     *
-     * @var string
-     */
-    public $to_ping = '';
+	/**
+	 * The post's slug.
+	 *
+	 * @var string
+	 */
+	public $post_name = '';
 
-    /**
-     * URLs that have been pinged.
-     *
-     * @var string
-     */
-    public $pinged = '';
+	/**
+	 * URLs queued to be pinged.
+	 *
+	 * @var string
+	 */
+	public $to_ping = '';
 
-    /**
-     * The post's local modified time.
-     *
-     * @var string
-     */
-    public $post_modified = '0000-00-00 00:00:00';
+	/**
+	 * URLs that have been pinged.
+	 *
+	 * @var string
+	 */
+	public $pinged = '';
 
-    /**
-     * The post's GMT modified time.
-     *
-     * @var string
-     */
-    public $post_modified_gmt = '0000-00-00 00:00:00';
+	/**
+	 * The post's local modified time.
+	 *
+	 * @var string
+	 */
+	public $post_modified = '0000-00-00 00:00:00';
 
-    /**
-     * A utility DB field for post content.
-     *
-     * @var string
-     */
-    public $post_content_filtered = '';
+	/**
+	 * The post's GMT modified time.
+	 *
+	 * @var string
+	 */
+	public $post_modified_gmt = '0000-00-00 00:00:00';
 
-    /**
-     * The unique identifier for a post, not necessarily a URL, used as the feed GUID.
-     *
-     * @var string
-     */
-    public $guid = '';
+	/**
+	 * A utility DB field for post content.
+	 *
+	 * @var string
+	 */
+	public $post_content_filtered = '';
 
-    /**
-     * A field used for ordering posts.
-     *
-     * @var int
-     */
-    public $menu_order = 0;
+	/**
+	 * The unique identifier for a post, not necessarily a URL, used as the feed GUID.
+	 *
+	 * @var string
+	 */
+	public $guid = '';
 
-    /**
-     * The post's type, like post or page.
-     *
-     * @var string
-     */
-    public $post_type = 'post';
+	/**
+	 * A field used for ordering posts.
+	 *
+	 * @var int
+	 */
+	public $menu_order = 0;
 
-    /**
-     * An attachment's mime type.
-     *
-     * @var string
-     */
-    public $post_mime_type = '';
+	/**
+	 * The post's type, like post or page.
+	 *
+	 * @var string
+	 */
+	public $post_type = 'post';
 
-    /**
-     * Cached comment count.
-     *
-     * A numeric string, for compatibility reasons.
-     *
-     * @var string
-     */
-    public $comment_count = 0;
+	/**
+	 * An attachment's mime type.
+	 *
+	 * @var string
+	 */
+	public $post_mime_type = '';
 
-    /**
-     * Stores the post object's sanitization level.
-     *
-     * Does not correspond to a DB field.
-     *
-     * @var string
-     */
-    public $filter;
+	/**
+	 * Cached comment count.
+	 *
+	 * A numeric string, for compatibility reasons.
+	 *
+	 * @var string
+	 */
+	public $comment_count = 0;
+
+	/**
+	 * Stores the post object's sanitization level.
+	 *
+	 * Does not correspond to a DB field.
+	 *
+	 * @var string
+	 */
+	public $filter;
 }

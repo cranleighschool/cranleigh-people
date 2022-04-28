@@ -14,6 +14,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class BooleanOperatorPlacementSniff implements Sniff
 {
+
     /**
      * Used to restrict the placement of the boolean operator.
      *
@@ -22,6 +23,7 @@ class BooleanOperatorPlacementSniff implements Sniff
      * @var string|null
      */
     public $allowOnly = null;
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -37,9 +39,9 @@ class BooleanOperatorPlacementSniff implements Sniff
             T_ELSEIF,
             T_MATCH,
         ];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -79,8 +81,8 @@ class BooleanOperatorPlacementSniff implements Sniff
             $position = null;
         }
 
-        $operator = $parenOpener;
-        $error = false;
+        $operator  = $parenOpener;
+        $error     = false;
         $operators = [];
 
         do {
@@ -102,7 +104,7 @@ class BooleanOperatorPlacementSniff implements Sniff
             }
 
             $firstOnLine = false;
-            $lastOnLine = false;
+            $lastOnLine  = false;
 
             if ($tokens[$prev]['line'] < $tokens[$operator]['line']) {
                 // The boolean operator is the first content on the line.
@@ -182,7 +184,7 @@ class BooleanOperatorPlacementSniff implements Sniff
                             $phpcsFile->fixer->replaceToken(($operator + 1), '');
                         }
 
-                        $first = $phpcsFile->findFirstOnLine(T_WHITESPACE, $operator, true);
+                        $first   = $phpcsFile->findFirstOnLine(T_WHITESPACE, $operator, true);
                         $padding = str_repeat(' ', ($tokens[$first]['column'] - 1));
                         $phpcsFile->fixer->addContent($operator, $phpcsFile->eolChar.$padding);
                     } else {
@@ -203,7 +205,7 @@ class BooleanOperatorPlacementSniff implements Sniff
                             $phpcsFile->fixer->replaceToken(($operator - 1), '');
                         }
 
-                        $first = $phpcsFile->findFirstOnLine(T_WHITESPACE, $operator, true);
+                        $first   = $phpcsFile->findFirstOnLine(T_WHITESPACE, $operator, true);
                         $padding = str_repeat(' ', ($tokens[$first]['column'] - 1));
                         $phpcsFile->fixer->addContentBefore($operator, $phpcsFile->eolChar.$padding);
                     } else {
@@ -220,7 +222,8 @@ class BooleanOperatorPlacementSniff implements Sniff
         }//end foreach
 
         $phpcsFile->fixer->endChangeset();
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

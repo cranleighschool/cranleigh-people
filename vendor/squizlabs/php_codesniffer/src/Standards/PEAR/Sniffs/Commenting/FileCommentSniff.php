@@ -15,6 +15,7 @@ use PHP_CodeSniffer\Util\Common;
 
 class FileCommentSniff implements Sniff
 {
+
     /**
      * Tags in correct order and related info.
      *
@@ -67,6 +68,7 @@ class FileCommentSniff implements Sniff
         ],
     ];
 
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -75,9 +77,9 @@ class FileCommentSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -97,7 +99,7 @@ class FileCommentSniff implements Sniff
 
         // Allow declare() statements at the top of the file.
         if ($tokens[$commentStart]['code'] === T_DECLARE) {
-            $semicolon = $phpcsFile->findNext(T_SEMICOLON, ($commentStart + 1));
+            $semicolon    = $phpcsFile->findNext(T_SEMICOLON, ($commentStart + 1));
             $commentStart = $phpcsFile->findNext(T_WHITESPACE, ($semicolon + 1), null, true);
         }
 
@@ -120,20 +122,18 @@ class FileCommentSniff implements Sniff
 
         if ($tokens[$commentStart]['code'] === T_CLOSE_TAG) {
             // We are only interested if this is the first open tag.
-            return $phpcsFile->numTokens + 1;
-        } elseif ($tokens[$commentStart]['code'] === T_COMMENT) {
+            return ($phpcsFile->numTokens + 1);
+        } else if ($tokens[$commentStart]['code'] === T_COMMENT) {
             $error = 'You must use "/**" style comments for a file comment';
             $phpcsFile->addError($error, $errorToken, 'WrongStyle');
             $phpcsFile->recordMetric($stackPtr, 'File has doc comment', 'yes');
-
-            return $phpcsFile->numTokens + 1;
-        } elseif ($commentStart === false
+            return ($phpcsFile->numTokens + 1);
+        } else if ($commentStart === false
             || $tokens[$commentStart]['code'] !== T_DOC_COMMENT_OPEN_TAG
         ) {
             $phpcsFile->addError('Missing file doc comment', $errorToken, 'Missing');
             $phpcsFile->recordMetric($stackPtr, 'File has doc comment', 'no');
-
-            return $phpcsFile->numTokens + 1;
+            return ($phpcsFile->numTokens + 1);
         }
 
         $commentEnd = $tokens[$commentStart]['comment_closer'];
@@ -176,8 +176,7 @@ class FileCommentSniff implements Sniff
         if (in_array($tokens[$nextToken]['code'], $ignore, true) === true) {
             $phpcsFile->addError('Missing file doc comment', $stackPtr, 'Missing');
             $phpcsFile->recordMetric($stackPtr, 'File has doc comment', 'no');
-
-            return $phpcsFile->numTokens + 1;
+            return ($phpcsFile->numTokens + 1);
         }
 
         $phpcsFile->recordMetric($stackPtr, 'File has doc comment', 'yes');
@@ -187,7 +186,7 @@ class FileCommentSniff implements Sniff
         for ($i = ($commentStart + 1); $i < $commentEnd; $i++) {
             if ($tokens[$i]['code'] === T_DOC_COMMENT_TAG) {
                 break;
-            } elseif ($tokens[$i]['code'] === T_DOC_COMMENT_STRING
+            } else if ($tokens[$i]['code'] === T_DOC_COMMENT_STRING
                 && strstr(strtolower($tokens[$i]['content']), 'php version') !== false
             ) {
                 $found = true;
@@ -204,10 +203,10 @@ class FileCommentSniff implements Sniff
         $this->processTags($phpcsFile, $stackPtr, $commentStart);
 
         // Ignore the rest of the file.
-        return $phpcsFile->numTokens + 1;
-    }
+        return ($phpcsFile->numTokens + 1);
 
-    //end process()
+    }//end process()
+
 
     /**
      * Processes each required or optional tag.
@@ -241,20 +240,20 @@ class FileCommentSniff implements Sniff
 
             if ($this->tags[$name]['allow_multiple'] === false && isset($tagTokens[$name]) === true) {
                 $error = 'Only one %s tag is allowed in a %s comment';
-                $data = [
+                $data  = [
                     $name,
                     $docBlock,
                 ];
                 $phpcsFile->addError($error, $tag, 'Duplicate'.ucfirst(substr($name, 1)).'Tag', $data);
             }
 
-            $foundTags[] = $name;
+            $foundTags[]        = $name;
             $tagTokens[$name][] = $tag;
 
             $string = $phpcsFile->findNext(T_DOC_COMMENT_STRING, $tag, $commentEnd);
             if ($string === false || $tokens[$string]['line'] !== $tokens[$tag]['line']) {
                 $error = 'Content missing for %s tag in %s comment';
-                $data = [
+                $data  = [
                     $name,
                     $docBlock,
                 ];
@@ -269,7 +268,7 @@ class FileCommentSniff implements Sniff
             if (isset($tagTokens[$tag]) === false) {
                 if ($tagData['required'] === true) {
                     $error = 'Missing %s tag in %s comment';
-                    $data = [
+                    $data  = [
                         $tag,
                         $docBlock,
                     ];
@@ -291,7 +290,7 @@ class FileCommentSniff implements Sniff
 
             if ($foundTags[$pos] !== $tag) {
                 $error = 'The tag in position %s should be the %s tag';
-                $data = [
+                $data  = [
                     ($pos + 1),
                     $tag,
                 ];
@@ -304,9 +303,9 @@ class FileCommentSniff implements Sniff
                 $pos++;
             }
         }//end foreach
-    }
 
-    //end processTags()
+    }//end processTags()
+
 
     /**
      * Process the category tag.
@@ -328,27 +327,27 @@ class FileCommentSniff implements Sniff
             $content = $tokens[($tag + 2)]['content'];
             if (Common::isUnderscoreName($content) !== true) {
                 $newContent = str_replace(' ', '_', $content);
-                $nameBits = explode('_', $newContent);
-                $firstBit = array_shift($nameBits);
-                $newName = ucfirst($firstBit).'_';
+                $nameBits   = explode('_', $newContent);
+                $firstBit   = array_shift($nameBits);
+                $newName    = ucfirst($firstBit).'_';
                 foreach ($nameBits as $bit) {
                     if ($bit !== '') {
                         $newName .= ucfirst($bit).'_';
                     }
                 }
 
-                $error = 'Category name "%s" is not valid; consider "%s" instead';
+                $error     = 'Category name "%s" is not valid; consider "%s" instead';
                 $validName = trim($newName, '_');
-                $data = [
+                $data      = [
                     $content,
                     $validName,
                 ];
                 $phpcsFile->addError($error, $tag, 'InvalidCategory', $data);
             }
         }//end foreach
-    }
 
-    //end processCategory()
+    }//end processCategory()
+
 
     /**
      * Process the package tag.
@@ -378,30 +377,30 @@ class FileCommentSniff implements Sniff
 
             if ($newContent === '') {
                 $error = 'Package name "%s" is not valid';
-                $data = [$content];
+                $data  = [$content];
                 $phpcsFile->addError($error, $tag, 'InvalidPackageValue', $data);
             } else {
                 $nameBits = explode('_', $newContent);
                 $firstBit = array_shift($nameBits);
-                $newName = strtoupper($firstBit[0]).substr($firstBit, 1).'_';
+                $newName  = strtoupper($firstBit[0]).substr($firstBit, 1).'_';
                 foreach ($nameBits as $bit) {
                     if ($bit !== '') {
                         $newName .= strtoupper($bit[0]).substr($bit, 1).'_';
                     }
                 }
 
-                $error = 'Package name "%s" is not valid; consider "%s" instead';
+                $error     = 'Package name "%s" is not valid; consider "%s" instead';
                 $validName = trim($newName, '_');
-                $data = [
+                $data      = [
                     $content,
                     $validName,
                 ];
                 $phpcsFile->addError($error, $tag, 'InvalidPackage', $data);
             }//end if
         }//end foreach
-    }
 
-    //end processPackage()
+    }//end processPackage()
+
 
     /**
      * Process the subpackage tag.
@@ -426,26 +425,26 @@ class FileCommentSniff implements Sniff
             }
 
             $newContent = str_replace(' ', '_', $content);
-            $nameBits = explode('_', $newContent);
-            $firstBit = array_shift($nameBits);
-            $newName = strtoupper($firstBit[0]).substr($firstBit, 1).'_';
+            $nameBits   = explode('_', $newContent);
+            $firstBit   = array_shift($nameBits);
+            $newName    = strtoupper($firstBit[0]).substr($firstBit, 1).'_';
             foreach ($nameBits as $bit) {
                 if ($bit !== '') {
                     $newName .= strtoupper($bit[0]).substr($bit, 1).'_';
                 }
             }
 
-            $error = 'Subpackage name "%s" is not valid; consider "%s" instead';
+            $error     = 'Subpackage name "%s" is not valid; consider "%s" instead';
             $validName = trim($newName, '_');
-            $data = [
+            $data      = [
                 $content,
                 $validName,
             ];
             $phpcsFile->addError($error, $tag, 'InvalidSubpackage', $data);
         }//end foreach
-    }
 
-    //end processSubpackage()
+    }//end processSubpackage()
+
 
     /**
      * Process the author tag(s) that this header comment has.
@@ -465,7 +464,7 @@ class FileCommentSniff implements Sniff
             }
 
             $content = $tokens[($tag + 2)]['content'];
-            $local = '\da-zA-Z-_+';
+            $local   = '\da-zA-Z-_+';
             // Dot character cannot be the first or last character in the local-part.
             $localMiddle = $local.'.\w';
             if (preg_match('/^([^<]*)\s+<(['.$local.'](['.$localMiddle.']*['.$local.'])*@[\da-zA-Z][-.\w]*[\da-zA-Z]\.[a-zA-Z]{2,})>$/', $content) === 0) {
@@ -473,9 +472,9 @@ class FileCommentSniff implements Sniff
                 $phpcsFile->addError($error, $tag, 'InvalidAuthors');
             }
         }
-    }
 
-    //end processAuthor()
+    }//end processAuthor()
+
 
     /**
      * Process the copyright tags.
@@ -514,9 +513,9 @@ class FileCommentSniff implements Sniff
                 $phpcsFile->addError($error, $tag, 'IncompleteCopyright');
             }
         }//end foreach
-    }
 
-    //end processCopyright()
+    }//end processCopyright()
+
 
     /**
      * Process the license tag.
@@ -543,9 +542,9 @@ class FileCommentSniff implements Sniff
                 $phpcsFile->addError($error, $tag, 'IncompleteLicense');
             }
         }
-    }
 
-    //end processLicense()
+    }//end processLicense()
+
 
     /**
      * Process the version tag.
@@ -571,11 +570,12 @@ class FileCommentSniff implements Sniff
                 && strstr($content, 'HG:') === false
             ) {
                 $error = 'Invalid version "%s" in file comment; consider "CVS: <cvs_id>" or "SVN: <svn_id>" or "GIT: <git_id>" or "HG: <hg_id>" instead';
-                $data = [$content];
+                $data  = [$content];
                 $phpcsFile->addWarning($error, $tag, 'InvalidVersion', $data);
             }
         }
-    }
 
-    //end processVersion()
+    }//end processVersion()
+
+
 }//end class

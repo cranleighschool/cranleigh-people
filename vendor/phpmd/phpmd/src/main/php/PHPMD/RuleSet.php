@@ -17,6 +17,8 @@
 
 namespace PHPMD;
 
+use ArrayIterator;
+
 /**
  * This class is a collection of concrete source analysis rules.
  */
@@ -25,7 +27,7 @@ class RuleSet implements \IteratorAggregate
     /**
      * Should this rule set force the strict mode.
      *
-     * @var bool
+     * @var boolean
      * @since 1.2.0
      */
     private $strict = false;
@@ -63,24 +65,24 @@ class RuleSet implements \IteratorAggregate
      *
      * @var array(string=>string)
      */
-    private $applyTo = [
+    private $applyTo = array(
         'PHPMD\\Rule\\ClassAware' => 'PHPMD\\Node\\ClassNode',
         'PHPMD\\Rule\\FunctionAware' => 'PHPMD\\Node\\FunctionNode',
         'PHPMD\\Rule\\InterfaceAware' => 'PHPMD\\Node\\InterfaceNode',
         'PHPMD\\Rule\\MethodAware' => 'PHPMD\\Node\\MethodNode',
-    ];
+    );
 
     /**
      * Mapping of rules that apply to a concrete code node type.
      *
      * @var array(string=>array)
      */
-    private $rules = [
-        'PHPMD\\Node\\ClassNode' => [],
-        'PHPMD\\Node\\FunctionNode' => [],
-        'PHPMD\\Node\\InterfaceNode' => [],
-        'PHPMD\\Node\\MethodNode' => [],
-    ];
+    private $rules = array(
+        'PHPMD\\Node\\ClassNode' => array(),
+        'PHPMD\\Node\\FunctionNode' => array(),
+        'PHPMD\\Node\\InterfaceNode' => array(),
+        'PHPMD\\Node\\MethodNode' => array(),
+    );
 
     /**
      * Returns the file name where the definition of this rule-set comes from.
@@ -202,7 +204,7 @@ class RuleSet implements \IteratorAggregate
      */
     public function getRules()
     {
-        $result = [];
+        $result = array();
         foreach ($this->rules as $rules) {
             foreach ($rules as $rule) {
                 if (in_array($rule, $result, true) === false) {
@@ -211,7 +213,7 @@ class RuleSet implements \IteratorAggregate
             }
         }
 
-        return new \ArrayIterator($result);
+        return new ArrayIterator($result);
     }
 
     /**
@@ -241,14 +243,14 @@ class RuleSet implements \IteratorAggregate
         $className = get_class($node);
 
         // Check for valid node type
-        if (! isset($this->rules[$className])) {
+        if (!isset($this->rules[$className])) {
             return;
         }
 
         // Apply all rules to this node
         foreach ($this->rules[$className] as $rule) {
             /** @var $rule Rule */
-            if ($node->hasSuppressWarningsAnnotationFor($rule) && ! $this->strict) {
+            if ($node->hasSuppressWarningsAnnotationFor($rule) && !$this->strict) {
                 continue;
             }
             $rule->setReport($this->report);
@@ -261,6 +263,7 @@ class RuleSet implements \IteratorAggregate
      *
      * @return \Iterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return $this->getRules();

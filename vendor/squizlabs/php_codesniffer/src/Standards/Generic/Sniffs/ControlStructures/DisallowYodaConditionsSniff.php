@@ -16,6 +16,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class DisallowYodaConditionsSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -24,9 +26,9 @@ class DisallowYodaConditionsSniff implements Sniff
     public function register()
     {
         return Tokens::$comparisonTokens;
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -39,8 +41,8 @@ class DisallowYodaConditionsSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
-        $tokens = $phpcsFile->getTokens();
-        $previousIndex = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
+        $tokens         = $phpcsFile->getTokens();
+        $previousIndex  = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         $relevantTokens = [
             T_CLOSE_SHORT_ARRAY,
             T_CLOSE_PARENTHESIS,
@@ -107,11 +109,11 @@ class DisallowYodaConditionsSniff implements Sniff
 
                 // If there is nothing inside the parenthesis, it it not a Yoda.
                 $opener = $tokens[$previousIndex]['parenthesis_opener'];
-                $prev = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($previousIndex - 1), ($opener + 1), true);
+                $prev   = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($previousIndex - 1), ($opener + 1), true);
                 if ($prev === false) {
                     return;
                 }
-            } elseif ($tokens[$closeParenthesisIndex]['code'] === T_ARRAY
+            } else if ($tokens[$closeParenthesisIndex]['code'] === T_ARRAY
                 && $this->isArrayStatic($phpcsFile, $closeParenthesisIndex) === false
             ) {
                 return;
@@ -123,9 +125,9 @@ class DisallowYodaConditionsSniff implements Sniff
             $stackPtr,
             'Found'
         );
-    }
 
-    //end process()
+    }//end process()
+
 
     /**
      * Determines if an array is a static definition.
@@ -142,15 +144,15 @@ class DisallowYodaConditionsSniff implements Sniff
         $arrayEnd = null;
         if ($tokens[$arrayToken]['code'] === T_OPEN_SHORT_ARRAY) {
             $start = $arrayToken;
-            $end = $tokens[$arrayToken]['bracket_closer'];
-        } elseif ($tokens[$arrayToken]['code'] === T_ARRAY) {
+            $end   = $tokens[$arrayToken]['bracket_closer'];
+        } else if ($tokens[$arrayToken]['code'] === T_ARRAY) {
             $start = $tokens[$arrayToken]['parenthesis_opener'];
-            $end = $tokens[$arrayToken]['parenthesis_closer'];
+            $end   = $tokens[$arrayToken]['parenthesis_closer'];
         } else {
             return true;
         }
 
-        $staticTokens = Tokens::$emptyTokens;
+        $staticTokens  = Tokens::$emptyTokens;
         $staticTokens += Tokens::$textStringTokens;
         $staticTokens += Tokens::$assignmentTokens;
         $staticTokens += Tokens::$equalityTokens;
@@ -179,7 +181,8 @@ class DisallowYodaConditionsSniff implements Sniff
         }
 
         return true;
-    }
 
-    //end isArrayStatic()
+    }//end isArrayStatic()
+
+
 }//end class

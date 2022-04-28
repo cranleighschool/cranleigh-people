@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class LowercasedFilenameSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -21,10 +23,13 @@ class LowercasedFilenameSniff implements Sniff
      */
     public function register()
     {
-        return [T_OPEN_TAG];
-    }
+        return [
+            T_OPEN_TAG,
+            T_OPEN_TAG_WITH_ECHO,
+        ];
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
@@ -42,10 +47,10 @@ class LowercasedFilenameSniff implements Sniff
             return;
         }
 
-        $filename = basename($filename);
+        $filename          = basename($filename);
         $lowercaseFilename = strtolower($filename);
         if ($filename !== $lowercaseFilename) {
-            $data = [
+            $data  = [
                 $filename,
                 $lowercaseFilename,
             ];
@@ -57,8 +62,9 @@ class LowercasedFilenameSniff implements Sniff
         }
 
         // Ignore the rest of the file.
-        return $phpcsFile->numTokens + 1;
-    }
+        return ($phpcsFile->numTokens + 1);
 
-    //end process()
+    }//end process()
+
+
 }//end class

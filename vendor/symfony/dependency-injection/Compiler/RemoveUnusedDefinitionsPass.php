@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class RemoveUnusedDefinitionsPass extends AbstractRecursivePass
 {
-    private $connectedIds = [];
+    private array $connectedIds = [];
 
     /**
      * Processes the ContainerBuilder to remove unused definitions.
@@ -52,7 +52,7 @@ class RemoveUnusedDefinitionsPass extends AbstractRecursivePass
                 $ids = $this->connectedIds;
                 $this->connectedIds = [];
                 foreach ($ids as $id) {
-                    if (! isset($connectedIds[$id]) && $container->hasDefinition($id)) {
+                    if (!isset($connectedIds[$id]) && $container->hasDefinition($id)) {
                         $connectedIds[$id] = true;
                         $this->processValue($container->getDefinition($id));
                     }
@@ -60,9 +60,9 @@ class RemoveUnusedDefinitionsPass extends AbstractRecursivePass
             }
 
             foreach ($container->getDefinitions() as $id => $definition) {
-                if (! isset($connectedIds[$id])) {
+                if (!isset($connectedIds[$id])) {
                     $container->removeDefinition($id);
-                    $container->resolveEnvPlaceholders(! $definition->hasErrors() ? serialize($definition) : $definition);
+                    $container->resolveEnvPlaceholders(!$definition->hasErrors() ? serialize($definition) : $definition);
                     $container->log($this, sprintf('Removed service "%s"; reason: unused.', $id));
                 }
             }
@@ -75,9 +75,9 @@ class RemoveUnusedDefinitionsPass extends AbstractRecursivePass
     /**
      * {@inheritdoc}
      */
-    protected function processValue($value, bool $isRoot = false)
+    protected function processValue(mixed $value, bool $isRoot = false): mixed
     {
-        if (! $value instanceof Reference) {
+        if (!$value instanceof Reference) {
             return parent::processValue($value, $isRoot);
         }
 

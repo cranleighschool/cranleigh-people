@@ -56,12 +56,12 @@ class TooManyMethods extends AbstractRule implements ClassAware
         }
         $this->addViolation(
             $node,
-            [
+            array(
                 $node->getType(),
                 $node->getName(),
                 $nom,
                 $threshold,
-            ]
+            )
         );
     }
 
@@ -69,14 +69,14 @@ class TooManyMethods extends AbstractRule implements ClassAware
      * Counts all methods within the given class/interface node.
      *
      * @param \PHPMD\Node\AbstractTypeNode $node
-     * @return int
+     * @return integer
      */
     protected function countMethods(AbstractTypeNode $node)
     {
         $count = 0;
         foreach ($node->getMethodNames() as $name) {
             if (preg_match($this->ignoreRegexp, $name) === 0) {
-                $count++;
+                ++$count;
             }
         }
 

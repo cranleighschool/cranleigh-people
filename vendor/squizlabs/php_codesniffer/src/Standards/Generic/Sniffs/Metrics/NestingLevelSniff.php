@@ -15,19 +15,21 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class NestingLevelSniff implements Sniff
 {
+
     /**
      * A nesting level higher than this value will throw a warning.
      *
-     * @var int
+     * @var integer
      */
     public $nestingLevel = 5;
 
     /**
      * A nesting level higher than this value will throw an error.
      *
-     * @var int
+     * @var integer
      */
     public $absoluteNestingLevel = 10;
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -37,9 +39,9 @@ class NestingLevelSniff implements Sniff
     public function register()
     {
         return [T_FUNCTION];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -61,7 +63,7 @@ class NestingLevelSniff implements Sniff
 
         // Detect start and end of this function definition.
         $start = $tokens[$stackPtr]['scope_opener'];
-        $end = $tokens[$stackPtr]['scope_closer'];
+        $end   = $tokens[$stackPtr]['scope_closer'];
 
         $nestingLevel = 0;
 
@@ -78,20 +80,21 @@ class NestingLevelSniff implements Sniff
 
         if ($nestingLevel > $this->absoluteNestingLevel) {
             $error = 'Function\'s nesting level (%s) exceeds allowed maximum of %s';
-            $data = [
+            $data  = [
                 $nestingLevel,
                 $this->absoluteNestingLevel,
             ];
             $phpcsFile->addError($error, $stackPtr, 'MaxExceeded', $data);
-        } elseif ($nestingLevel > $this->nestingLevel) {
+        } else if ($nestingLevel > $this->nestingLevel) {
             $warning = 'Function\'s nesting level (%s) exceeds %s; consider refactoring the function';
-            $data = [
+            $data    = [
                 $nestingLevel,
                 $this->nestingLevel,
             ];
             $phpcsFile->addWarning($warning, $stackPtr, 'TooHigh', $data);
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

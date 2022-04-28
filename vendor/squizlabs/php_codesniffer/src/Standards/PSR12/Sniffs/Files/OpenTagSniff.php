@@ -14,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class OpenTagSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -22,9 +24,9 @@ class OpenTagSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this sniff when one of its tokens is encountered.
@@ -49,7 +51,7 @@ class OpenTagSniff implements Sniff
         }
 
         $tokens = $phpcsFile->getTokens();
-        $next = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
+        $next   = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
         if ($next === false) {
             // Empty file.
             return;
@@ -57,14 +59,15 @@ class OpenTagSniff implements Sniff
 
         if ($tokens[$next]['line'] === $tokens[$stackPtr]['line']) {
             $error = 'Opening PHP tag must be on a line by itself';
-            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NotAlone');
+            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NotAlone');
             if ($fix === true) {
                 $phpcsFile->fixer->addNewline($stackPtr);
             }
         }
 
         return $phpcsFile->numTokens;
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class

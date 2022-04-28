@@ -45,9 +45,11 @@ namespace PDepend\DependencyInjection;
 use PDepend\Util\FileUtil;
 use PDepend\Util\Workarounds;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 
 /**
- * This is the class that validates and merges configuration.
+ * This is the class that validates and merges configuration
  *
  * @copyright 2008-2017 Manuel Pichler. All rights reserved.
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
@@ -59,7 +61,7 @@ class Configuration implements ConfigurationInterface
     /**
      * @var array<Extension>
      */
-    private $extensions = [];
+    private $extensions = array();
 
     /**
      * @param array<Extension> $extensions
@@ -80,38 +82,24 @@ class Configuration implements ConfigurationInterface
         $defaultCacheDriver = ($workarounds->hasSerializeReferenceIssue()) ? 'memory' : 'file';
 
         $treeBuilder = new TreeBuilder();
+        /** @var ArrayNodeDefinition */
         $rootNode = $treeBuilder->getRootNode();
 
-        $rootNode
-            ->children()
-            ->arrayNode('cache')
-            ->addDefaultsIfNotSet()
-            ->children()
-            ->enumNode('driver')->defaultValue($defaultCacheDriver)->values(['file', 'memory'])->end()
-            ->scalarNode('location')->info('This value is only used for the file cache.')->defaultValue($home.'/.pdepend')->end()
-            ->integerNode('ttl')->info('This value is only used for the file cache. Value in seconds.')->defaultValue(self::DEFAULT_TTL)->end()
-            ->end()
-            ->end()
-            ->arrayNode('image_convert')
-            ->addDefaultsIfNotSet()
-            ->children()
-            ->scalarNode('font_size')->defaultValue('11')->end()
-            ->scalarNode('font_family')->defaultValue('Arial')->end()
-            ->end()
-            ->end()
-            ->arrayNode('parser')
-            ->addDefaultsIfNotSet()
-            ->children()
-            ->integerNode('nesting')->defaultValue(65536)->end()
-            ->end()
-            ->end()
-            ->end();
+        $nodes = $rootNode->children();
 
-        $extensionsNode = $rootNode
-            ->children()
-            ->arrayNode('extensions')
-            ->addDefaultsIfNotSet()
-            ->children();
+        $cacheNode = $nodes->arrayNode('cache')->addDefaultsIfNotSet()->children();
+        $cacheNode->enumNode('driver')->defaultValue($defaultCacheDriver)->values(array('file', 'memory'));
+        $cacheNode->scalarNode('location')->info('This value is only used for the file cache.')->defaultValue($home . '/.pdepend');
+        $cacheNode->integerNode('ttl')->info('This value is only used for the file cache. Value in seconds.')->defaultValue(self::DEFAULT_TTL);
+
+        $imageConvertNode = $nodes->arrayNode('image_convert')->addDefaultsIfNotSet()->children();
+        $imageConvertNode->scalarNode('font_size')->defaultValue('11');
+        $imageConvertNode->scalarNode('font_family')->defaultValue('Arial');
+
+        $parserNode = $nodes->arrayNode('parser')->addDefaultsIfNotSet()->children();
+        $parserNode->integerNode('nesting')->defaultValue(65536);
+
+        $extensionsNode = $nodes->arrayNode('extensions')->addDefaultsIfNotSet()->children();
 
         foreach ($this->extensions as $extension) {
             $extensionNode = $extensionsNode->arrayNode($extension->getName());

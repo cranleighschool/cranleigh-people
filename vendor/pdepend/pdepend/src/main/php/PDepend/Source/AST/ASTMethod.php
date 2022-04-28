@@ -42,6 +42,7 @@
 
 namespace PDepend\Source\AST;
 
+use InvalidArgumentException;
 use PDepend\Source\ASTVisitor\ASTVisitor;
 
 /**
@@ -55,7 +56,7 @@ class ASTMethod extends AbstractASTCallable
     /**
      * The parent type object.
      *
-     * @var \PDepend\Source\AST\AbstractASTType
+     * @var AbstractASTType
      */
     protected $parent = null;
 
@@ -71,6 +72,7 @@ class ASTMethod extends AbstractASTCallable
      * this method.
      *
      * @return int
+     *
      * @since  1.0.0
      */
     public function getModifiers()
@@ -85,9 +87,12 @@ class ASTMethod extends AbstractASTCallable
      * This method will throw an exception when the value of given <b>$modifiers</b>
      * contains an invalid/unexpected modifier
      *
-     * @param  int $modifiers
+     * @param int $modifiers
+     *
+     * @throws InvalidArgumentException If the given modifier contains unexpected values.
+     *
      * @return void
-     * @throws \InvalidArgumentException If the given modifier contains unexpected values.
+     *
      * @since  0.9.4
      */
     public function setModifiers($modifiers)
@@ -100,7 +105,7 @@ class ASTMethod extends AbstractASTCallable
                   & ~State::IS_FINAL;
 
         if (($expected & $modifiers) !== 0) {
-            throw new \InvalidArgumentException('Invalid method modifier given.');
+            throw new InvalidArgumentException('Invalid method modifier given.');
         }
 
         $this->modifiers = $modifiers;
@@ -113,7 +118,7 @@ class ASTMethod extends AbstractASTCallable
      */
     public function isAbstract()
     {
-        return ($this->modifiers & State::IS_ABSTRACT) === State::IS_ABSTRACT;
+        return (($this->modifiers & State::IS_ABSTRACT) === State::IS_ABSTRACT);
     }
 
     /**
@@ -124,7 +129,7 @@ class ASTMethod extends AbstractASTCallable
      */
     public function isPublic()
     {
-        return ($this->modifiers & State::IS_PUBLIC) === State::IS_PUBLIC;
+        return (($this->modifiers & State::IS_PUBLIC) === State::IS_PUBLIC);
     }
 
     /**
@@ -135,7 +140,7 @@ class ASTMethod extends AbstractASTCallable
      */
     public function isProtected()
     {
-        return ($this->modifiers & State::IS_PROTECTED) === State::IS_PROTECTED;
+        return (($this->modifiers & State::IS_PROTECTED) === State::IS_PROTECTED);
     }
 
     /**
@@ -146,7 +151,7 @@ class ASTMethod extends AbstractASTCallable
      */
     public function isPrivate()
     {
-        return ($this->modifiers & State::IS_PRIVATE) === State::IS_PRIVATE;
+        return (($this->modifiers & State::IS_PRIVATE) === State::IS_PRIVATE);
     }
 
     /**
@@ -157,7 +162,7 @@ class ASTMethod extends AbstractASTCallable
      */
     public function isStatic()
     {
-        return ($this->modifiers & State::IS_STATIC) === State::IS_STATIC;
+        return (($this->modifiers & State::IS_STATIC) === State::IS_STATIC);
     }
 
     /**
@@ -168,13 +173,13 @@ class ASTMethod extends AbstractASTCallable
      */
     public function isFinal()
     {
-        return ($this->modifiers & State::IS_FINAL) === State::IS_FINAL;
+        return (($this->modifiers & State::IS_FINAL) === State::IS_FINAL);
     }
 
     /**
-     * Returns the parent type object or <b>null</b>.
+     * Returns the parent type object or <b>null</b>
      *
-     * @return \PDepend\Source\AST\AbstractASTType|null
+     * @return AbstractASTType|null
      */
     public function getParent()
     {
@@ -184,7 +189,6 @@ class ASTMethod extends AbstractASTCallable
     /**
      * Sets the parent type object.
      *
-     * @param  \PDepend\Source\AST\AbstractASTType|null $parent
      * @return void
      */
     public function setParent(AbstractASTType $parent = null)
@@ -195,8 +199,10 @@ class ASTMethod extends AbstractASTCallable
     /**
      * Returns the source file where this method was declared.
      *
-     * @return \PDepend\Source\AST\ASTCompilationUnit
-     * @throws \PDepend\Source\AST\ASTCompilationUnitNotFoundException When no parent was set.
+     * @throws ASTCompilationUnitNotFoundException When no parent was set.
+     *
+     * @return ASTCompilationUnit
+     *
      * @since  0.10.0
      */
     public function getCompilationUnit()
@@ -211,7 +217,6 @@ class ASTMethod extends AbstractASTCallable
     /**
      * ASTVisitor method for node tree traversal.
      *
-     * @param  \PDepend\Source\ASTVisitor\ASTVisitor $visitor
      * @return void
      */
     public function accept(ASTVisitor $visitor)
@@ -225,10 +230,11 @@ class ASTMethod extends AbstractASTCallable
      * cached for method instances.
      *
      * @return array<string>
+     *
      * @since  0.10.0
      */
     public function __sleep()
     {
-        return array_merge(['modifiers'], parent::__sleep());
+        return array_merge(array('modifiers'), parent::__sleep());
     }
 }

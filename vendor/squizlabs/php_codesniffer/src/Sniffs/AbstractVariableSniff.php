@@ -20,6 +20,7 @@ use PHP_CodeSniffer\Util\Tokens;
 
 abstract class AbstractVariableSniff extends AbstractScopeSniff
 {
+
     /**
      * List of PHP Reserved variables.
      *
@@ -42,6 +43,7 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
         'php_errormsg'         => true,
     ];
 
+
     /**
      * Constructs an AbstractVariableTest.
      */
@@ -56,9 +58,9 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
         ];
 
         parent::__construct($scopes, $listen, true);
-    }
 
-    //end __construct()
+    }//end __construct()
+
 
     /**
      * Processes the token in the specified PHP_CodeSniffer\Files\File.
@@ -141,9 +143,9 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
         } else {
             return $this->processMemberVar($phpcsFile, $stackPtr);
         }
-    }
 
-    //end processTokenWithinScope()
+    }//end processTokenWithinScope()
+
 
     /**
      * Processes the token outside the scope in the file.
@@ -163,7 +165,7 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
         // These variables are not member vars.
         if ($tokens[$stackPtr]['code'] === T_VARIABLE) {
             return $this->processVariable($phpcsFile, $stackPtr);
-        } elseif ($tokens[$stackPtr]['code'] === T_DOUBLE_QUOTED_STRING
+        } else if ($tokens[$stackPtr]['code'] === T_DOUBLE_QUOTED_STRING
             || $tokens[$stackPtr]['code'] === T_HEREDOC
         ) {
             // Check to see if this string has a variable in it.
@@ -172,9 +174,9 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
                 return $this->processVariableInString($phpcsFile, $stackPtr);
             }
         }
-    }
 
-    //end processTokenOutsideScope()
+    }//end processTokenOutsideScope()
+
 
     /**
      * Called to process class member vars.
@@ -190,6 +192,7 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
      */
     abstract protected function processMemberVar(File $phpcsFile, $stackPtr);
 
+
     /**
      * Called to process normal member vars.
      *
@@ -203,6 +206,7 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
      *                  the rest of the file.
      */
     abstract protected function processVariable(File $phpcsFile, $stackPtr);
+
 
     /**
      * Called to process variables found in double quoted strings or heredocs.
@@ -221,4 +225,6 @@ abstract class AbstractVariableSniff extends AbstractScopeSniff
      *                  the rest of the file.
      */
     abstract protected function processVariableInString(File $phpcsFile, $stackPtr);
+
+
 }//end class

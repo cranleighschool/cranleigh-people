@@ -18,6 +18,8 @@ use PHP_CodeSniffer\Files\File;
 
 interface Sniff
 {
+
+
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -36,6 +38,7 @@ interface Sniff
      * @see    Tokens.php
      */
     public function register();
+
 
     /**
      * Called when one of the token types that this sniff is listening for
@@ -72,4 +75,6 @@ interface Sniff
      *                  the rest of the file.
      */
     public function process(File $phpcsFile, $stackPtr);
+
+
 }//end interface

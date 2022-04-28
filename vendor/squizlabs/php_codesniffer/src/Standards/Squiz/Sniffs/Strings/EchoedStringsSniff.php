@@ -15,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class EchoedStringsSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -23,9 +25,9 @@ class EchoedStringsSniff implements Sniff
     public function register()
     {
         return [T_ECHO];
-    }
 
-    //end register()
+    }//end register()
+
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -44,7 +46,6 @@ class EchoedStringsSniff implements Sniff
         // If the first non-whitespace token is not an opening parenthesis, then we are not concerned.
         if ($tokens[$firstContent]['code'] !== T_OPEN_PARENTHESIS) {
             $phpcsFile->recordMetric($stackPtr, 'Brackets around echoed strings', 'no');
-
             return;
         }
 
@@ -54,14 +55,12 @@ class EchoedStringsSniff implements Sniff
         $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($end - 1), null, true);
         if ($tokens[$prev]['code'] !== T_CLOSE_PARENTHESIS) {
             $phpcsFile->recordMetric($stackPtr, 'Brackets around echoed strings', 'no');
-
             return;
         }
 
         // If the parenthesis don't match, then we are not concerned.
         if ($tokens[$firstContent]['parenthesis_closer'] !== $prev) {
             $phpcsFile->recordMetric($stackPtr, 'Brackets around echoed strings', 'no');
-
             return;
         }
 
@@ -70,7 +69,7 @@ class EchoedStringsSniff implements Sniff
         if (($phpcsFile->findNext(Tokens::$operators, $stackPtr, $end, false)) === false) {
             // There are no arithmetic operators in this.
             $error = 'Echoed strings should not be bracketed';
-            $fix = $phpcsFile->addFixableError($error, $stackPtr, 'HasBracket');
+            $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'HasBracket');
             if ($fix === true) {
                 $phpcsFile->fixer->beginChangeset();
                 $phpcsFile->fixer->replaceToken($firstContent, '');
@@ -82,7 +81,8 @@ class EchoedStringsSniff implements Sniff
                 $phpcsFile->fixer->endChangeset();
             }
         }
-    }
 
-    //end process()
+    }//end process()
+
+
 }//end class
