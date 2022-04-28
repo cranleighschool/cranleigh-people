@@ -15,7 +15,7 @@ class BaseController {
 	public $settings = array();
 
 	public function __construct( string $plugin_name ) {
-		new PluginUpdateCheck( $plugin_name );
+
 	}
 
 	public static function getPluginSetting( string $setting, bool $isset = false ) {

@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'caf990c1f76e20420bb486c8bde59afb470eca5c',
+        'reference' => '09a10fd1704134b15be5a4efa3de39e4dbb49ffc',
         'name' => 'fredbradley/cranleigh-people',
         'dev' => true,
     ),
@@ -34,7 +34,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'caf990c1f76e20420bb486c8bde59afb470eca5c',
+            'reference' => '09a10fd1704134b15be5a4efa3de39e4dbb49ffc',
             'dev_requirement' => false,
         ),
         'fredbradley/cranleigh-slacker' => array(
@@ -276,15 +276,6 @@
             'aliases' => array(),
             'reference' => '7da1894633f168fe244afc6de00d141f27517b62',
             'dev_requirement' => true,
-        ),
-        'yahnis-elsts/plugin-update-checker' => array(
-            'pretty_version' => 'v4.11',
-            'version' => '4.11.0.0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../yahnis-elsts/plugin-update-checker',
-            'aliases' => array(),
-            'reference' => '3155f2d3f1ca5e7ed3f25b256f020e370515af43',
-            'dev_requirement' => false,
         ),
     ),
 );

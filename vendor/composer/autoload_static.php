@@ -16,7 +16,6 @@ class ComposerStaticInit74daf4cd28dc4cd50fc135888cd1fb9f
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         'f7d520a7dfd4979ca7d4b88dfbc5d7f5' => __DIR__ . '/..' . '/rilwis/meta-box/meta-box.php',
-        '49a1299791c25c6fd83542c6fedacddd' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v4p11.php',
     );
 
     public static $prefixLengthsPsr4 = array (
