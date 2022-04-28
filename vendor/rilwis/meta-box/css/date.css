@@ -1,7 +1,7 @@
 /* Fix empty block below admin footer (issue #24) */
 #ui-datepicker-div {
 	display: none;
-	z-index: 99999 !important;
+	z-index: 999999 !important;
 }
 
 /* Style for multiple months */
@@ -112,6 +112,18 @@
 .ui-datepicker td.ui-state-disabled .ui-state-default {
 	opacity: 1;
 	color: #999;
+}
+/* timepicker button */
+.ui-timepicker-div .ui-slider-access {
+	display: inline-block;
+}
+.ui-timepicker-div .ui-slider-access button {
+    padding: 0 8px;
+    margin: 0 2px;
+    border-radius: 4px;
+}
+.ui-timepicker-div .ui-slider-access button span.ui-button-icon{
+	display: inline;
 }
 /* Other Datepicker Color Schemes */
 /* Blue */

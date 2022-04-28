@@ -1,10 +1,9 @@
-jQuery( function ( $ ) {
+( function ( $, rwmb ) {
 	'use strict';
 
-	var frame,
-		$doc = $( document );
+	var frame;
 
-	$doc.on( 'click', '.rwmb-file-input-select', function ( e ) {
+	function openSelectPopup( e ) {
 		e.preventDefault();
 		var $el = $( this );
 
@@ -26,18 +25,38 @@ jQuery( function ( $ ) {
 		// Handle selection
 		frame.on( 'select', function () {
 			var url = frame.state().get( 'selection' ).first().toJSON().url;
-			$el.siblings( 'input' ).val( url ).siblings( 'a' ).removeClass( 'hidden' );
+			$el.siblings( 'input' ).val( url ).trigger( 'change' ).siblings( 'a' ).removeClass( 'hidden' );
 		} );
-	} );
+	}
 
-	// Clear selected images
-	$doc.on( 'click', '.rwmb-file-input-remove', function ( e ) {
+	function changeValueInput( e ) {
 		e.preventDefault();
-		$( this ).addClass( 'hidden' ).siblings( 'input' ).val( '' );
-	} );
+		var $el = $( this ),
+			url = $el.val(),
+			fileType = url.split( '.' ).pop().toLowerCase(),
+			imageTypes = [ 'gif', 'jpeg', 'png', 'jpg' ],
+			validImageTypes = imageTypes.includes( fileType );
 
-	// Hide the Remove button when cloning
-	$doc.on( 'clone', '.rwmb-file_input', function () {
+		if ( validImageTypes ) {
+			$el.closest( '.rwmb-file-input-inner' ).siblings( '.rwmb-file-input-image' ).removeClass( 'rwmb-file-input-hidden' ).find( 'img' ).attr( 'src', url );
+		} else {
+			$el.closest( '.rwmb-file-input-inner' ).siblings( '.rwmb-file-input-image' ).addClass( 'rwmb-file-input-hidden' );
+		}
+	}
+
+	function clearSelection( e ) {
+		e.preventDefault();
+		$( this ).addClass( 'hidden' ).siblings( 'input' ).val( '' ).trigger( 'change' );
+		$( this ).closest( '.rwmb-file-input-inner' ).siblings( '.rwmb-file-input-image' ).addClass( 'rwmb-file-input-hidden' );
+	}
+
+	function hideRemoveButtonWhenCloning() {
 		$( this ).siblings( '.rwmb-file-input-remove' ).addClass( 'hidden' );
-	} );
-} );
+	}
+
+	rwmb.$document
+		.on( 'click', '.rwmb-file-input-select', openSelectPopup )
+		.on( 'input change', '.rwmb-file_input', changeValueInput )
+		.on( 'click', '.rwmb-file-input-remove', clearSelection )
+		.on( 'clone', '.rwmb-file_input', hideRemoveButtonWhenCloning );
+} )( jQuery, rwmb );

@@ -2,7 +2,7 @@
   "name": "fredbradley/cranleigh-people",
   "description": "Cranleigh People Wordpress Plugin for Cranleigh School",
   "require": {
-	"rilwis/meta-box": "4.*",
+	"rilwis/meta-box": "5.*",
 	"fredbradley/cranleigh-slacker": "^1.0",
 	"nesbot/carbon": "^2.21"
   },

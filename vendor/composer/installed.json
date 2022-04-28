@@ -658,27 +658,22 @@
         },
         {
             "name": "rilwis/meta-box",
-            "version": "4.18.4",
-            "version_normalized": "4.18.4.0",
+            "version": "5.6.3",
+            "version_normalized": "5.6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/meta-box.git",
-                "reference": "d299ea6d2dcfb55b05201fd1ac10e4cc1a6e839a"
+                "reference": "c2c4a30ed70163dfdfe93f2865e88a7a45c46856"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/meta-box/zipball/d299ea6d2dcfb55b05201fd1ac10e4cc1a6e839a",
-                "reference": "d299ea6d2dcfb55b05201fd1ac10e4cc1a6e839a",
+                "url": "https://api.github.com/repos/wpmetabox/meta-box/zipball/c2c4a30ed70163dfdfe93f2865e88a7a45c46856",
+                "reference": "c2c4a30ed70163dfdfe93f2865e88a7a45c46856",
                 "shasum": ""
             },
-            "time": "2019-07-06T01:57:45+00:00",
-            "type": "library",
+            "time": "2022-04-18T03:20:58+00:00",
+            "type": "wordpress-plugin",
             "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "meta-box.php"
-                ]
-            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0"
@@ -687,7 +682,7 @@
                 {
                     "name": "Tran Ngoc Tuan Anh",
                     "email": "anhtnt@elightup.com",
-                    "homepage": "https://deluxeblogtips.com",
+                    "homepage": "https://metabox.io",
                     "role": "Developer"
                 }
             ],
@@ -704,7 +699,7 @@
             ],
             "support": {
                 "issues": "https://github.com/wpmetabox/meta-box/issues",
-                "source": "https://github.com/wpmetabox/meta-box/tree/4.18.4"
+                "source": "https://github.com/wpmetabox/meta-box/tree/5.6.3"
             },
             "install-path": "../rilwis/meta-box"
         },

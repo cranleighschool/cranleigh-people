@@ -1,6 +1,4 @@
-window.rwmb = window.rwmb || {};
-
-jQuery( function ( $ ) {
+( function ( $, rwmb ) {
 	'use strict';
 
 	var views = rwmb.views = rwmb.views || {},
@@ -14,12 +12,8 @@ jQuery( function ( $ ) {
 			this.list = new MediaList( {
 				controller: this.controller,
 				itemView: MediaItem.extend( {
-					className: 'rwmb-image-item attachment',
-					template: wp.template( 'rwmb-image-item' ),
-					initialize: function( models, options ) {
-						MediaItem.prototype.initialize.call( this, models, options );
-						this.$el.addClass( this.controller.get( 'imageSize' ) );
-					}
+					className: 'rwmb-image-item',
+					template: wp.template( 'rwmb-image-item' )
 				} )
 			} );
 		}
@@ -29,19 +23,25 @@ jQuery( function ( $ ) {
 	 * Initialize image fields
 	 */
 	function initImageField() {
-		var view = new ImageField( { input: this } );
-		$( this ).after( view.el );
+		var $this = $( this ),
+			view = $this.data( 'view' );
+
+		if ( view ) {
+			return;
+		}
+
+		view = new ImageField( { input: this } );
+
+		$this.siblings( '.rwmb-media-view' ).remove();
+		$this.after( view.el );
+		$this.data( 'view', view );
 	}
 
-	/**
-	 * Remove views for uploaded images.
-	 */
-	function removeView() {
-		$( this ).siblings( '.rwmb-media-view' ).remove();
+	function init( e ) {
+		$( e.target ).find( '.rwmb-image_advanced' ).each( initImageField );
 	}
 
-	$( '.rwmb-image_advanced' ).each( initImageField );
-	$( document )
-		.on( 'clone', '.rwmb-image_advanced', removeView )
-		.on( 'after_clone', '.rwmb-image_advanced', initImageField );
-} );
+	rwmb.$document
+		.on( 'mb_ready', init )
+		.on( 'clone', '.rwmb-image_advanced', initImageField );
+} )( jQuery, rwmb );
