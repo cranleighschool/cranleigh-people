@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'c5a8e1c78ae783b1586ec49b4ade3bc0f154c9c0',
+        'reference' => '707fc9f0746324ced83ca053a65387d456990bb3',
         'name' => 'fredbradley/cranleigh-people',
         'dev' => true,
     ),
@@ -34,7 +34,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'c5a8e1c78ae783b1586ec49b4ade3bc0f154c9c0',
+            'reference' => '707fc9f0746324ced83ca053a65387d456990bb3',
             'dev_requirement' => false,
         ),
         'fredbradley/cranleigh-slacker' => array(
@@ -120,15 +120,6 @@
             'aliases' => array(),
             'reference' => 'fe5ea303b0887d5caefd3d431c3e61ad47037001',
             'dev_requirement' => true,
-        ),
-        'rilwis/meta-box' => array(
-            'pretty_version' => '5.6.3',
-            'version' => '5.6.3.0',
-            'type' => 'wordpress-plugin',
-            'install_path' => __DIR__ . '/../rilwis/meta-box',
-            'aliases' => array(),
-            'reference' => 'c2c4a30ed70163dfdfe93f2865e88a7a45c46856',
-            'dev_requirement' => false,
         ),
         'squizlabs/php_codesniffer' => array(
             'pretty_version' => '3.6.2',

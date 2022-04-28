@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c38c2c6f70697cc6426bfe300923521a",
+    "content-hash": "d1e2c56e31404c5731a3338290d327ef",
     "packages": [
         {
             "name": "fredbradley/cranleigh-slacker",
@@ -140,50 +140,6 @@
                 }
             ],
             "time": "2022-02-13T18:13:33+00:00"
-        },
-        {
-            "name": "rilwis/meta-box",
-            "version": "5.6.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wpmetabox/meta-box.git",
-                "reference": "c2c4a30ed70163dfdfe93f2865e88a7a45c46856"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/meta-box/zipball/c2c4a30ed70163dfdfe93f2865e88a7a45c46856",
-                "reference": "c2c4a30ed70163dfdfe93f2865e88a7a45c46856",
-                "shasum": ""
-            },
-            "type": "wordpress-plugin",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Tran Ngoc Tuan Anh",
-                    "email": "anhtnt@elightup.com",
-                    "homepage": "https://metabox.io",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A powerful, professional developer toolkit to create custom meta boxes and custom fields for WordPress websites.",
-            "homepage": "https://metabox.io",
-            "keywords": [
-                "custom-field",
-                "meta-box",
-                "select2",
-                "ui",
-                "wordpress",
-                "wordpress-plugin",
-                "wp-admin"
-            ],
-            "support": {
-                "issues": "https://github.com/wpmetabox/meta-box/issues",
-                "source": "https://github.com/wpmetabox/meta-box/tree/5.6.3"
-            },
-            "time": "2022-04-18T03:20:58+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
