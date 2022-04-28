@@ -9,8 +9,8 @@
 
 namespace CranleighSchool\CranleighPeople;
 
-class Slacker extends \FredBradley\CranleighSlacker\Slacker {
-
+//class Slacker extends \FredBradley\CranleighSlacker\Slacker {
+class Slacker {
 	public static $room = 'it-cranleigh-people';
 	private static $webhookEndpoint;
 
@@ -20,6 +20,10 @@ class Slacker extends \FredBradley\CranleighSlacker\Slacker {
 			self::$room = 'development-app-logs';
 		}
 
-		parent::__construct( self::$webhookEndpoint, self::$room );
+		//parent::__construct( self::$webhookEndpoint, self::$room );
+	}
+
+	public function __call( $method, $args ): void {
+
 	}
 }
