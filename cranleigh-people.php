@@ -3,7 +3,8 @@
 Plugin Name: Cranleigh People
 Plugin URI: http://www.cranleigh.org
 Description: One plugin that controls the people who work at Cranleigh.
-Author: Fred BradleyVersion: 2.0.13
+Author: Fred Bradley
+Version: 2.0.14
 Author URI: http://fred.im
 */
 

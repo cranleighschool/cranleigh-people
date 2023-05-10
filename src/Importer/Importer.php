@@ -79,9 +79,9 @@ class Importer {
 			self::updateOrCreate( $person, $post_id );
 			$i++;
 		}
-		self::slackmessage( 'Updated/Created ' . $i . ' People (' . get_site_url() . ')' );
-		self::slackmessage( 'Skipped ' . count( $skipped ) . ': ' . implode( ', ', $skipped ) );
-		self::slackmessage( 'Next WPCRONJOB will run at: ' . Cron::next_scheduled_sync() );
+		self::slackmessage( 'WP: Updated/Created ' . $i . ' People (' . get_site_url() . ')' );
+		self::slackmessage( 'WP: Skipped ' . count( $skipped ) . ': ' . implode( ', ', $skipped ) );
+		self::slackmessage( 'WP: Next WPCRONJOB will run at: ' . Cron::next_scheduled_sync() );
 	}
 
 	/**
@@ -222,6 +222,7 @@ class Importer {
 		self::saveMeta( $staff_post, 'qualifications', self::qualificationsAsList( $person->qualifications ) );
 		self::saveMeta( $staff_post, 'email_address', $person->email );
 		self::saveMeta( $staff_post, 'phone', $person->phone );
+		self::saveMeta( $staff_post, 'prefix', $person->title);
 
 		// Set the Taxonomy Objects
 		self::set_staff_categories( $staff_post, $person );

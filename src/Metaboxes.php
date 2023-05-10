@@ -77,6 +77,13 @@ class Metaboxes {
 			'autosave'   => true,
 			'fields'     => array(
 				array(
+					'name' => __('Prefix', 'cranleigh'),
+					'id' => self::fieldID('prefix'),
+					'type' => 'text',
+					'desc' => 'eg. Mr, Mrs, Dr, Prof',
+					'readonly' => $this->should_surname_be_read_only(),
+				),
+				array(
 					'name'     => __( 'Surname', 'cranleigh' ),
 					'id'       => self::fieldID( 'surname' ),
 					'type'     => 'text',
