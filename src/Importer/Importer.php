@@ -223,6 +223,7 @@ class Importer {
 		self::saveMeta( $staff_post, 'email_address', $person->email );
 		self::saveMeta( $staff_post, 'phone', $person->phone );
 		self::saveMeta( $staff_post, 'prefix', $person->title);
+		self::saveMeta( $staff_post, 'prename', $person->prename);
 
 		// Set the Taxonomy Objects
 		self::set_staff_categories( $staff_post, $person );

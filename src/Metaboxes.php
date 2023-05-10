@@ -84,6 +84,13 @@ class Metaboxes {
 					'readonly' => $this->should_surname_be_read_only(),
 				),
 				array(
+					'name' => __('Preferred Name', 'cranleigh'),
+					'id' => self::fieldID('prename'),
+					'type' => 'text',
+					'desc' => 'eg. John, Matt, Dave, Gary',
+					'readonly' => $this->should_surname_be_read_only(),
+				),
+				array(
 					'name'     => __( 'Surname', 'cranleigh' ),
 					'id'       => self::fieldID( 'surname' ),
 					'type'     => 'text',
@@ -113,7 +120,7 @@ class Metaboxes {
 					'name' => __( 'Full Title', 'cranleigh' ),
 					'id'   => self::fieldID( 'full_title' ),
 					'type' => 'text',
-					'desc' => 'eg. Mr Charlie H.D. Boddington. (This will be the title of the card)',
+					'desc' => 'eg. Mr C H D Boddington. (This will be the title of the card)',
 				),
 				array(
 					'name' => __( 'Qualifications', 'cranleigh' ),
