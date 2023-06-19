@@ -29,6 +29,20 @@ class Plugin extends BaseController {
 		} else {
 			$this->isams_controlled = false;
 		}
+		if (isset($this->settings['disable_wp_cron']) && $this->settings['disable_wp_cron'] == 'yes') {
+			$this->withCron = false;
+		} else {
+			$this->withCron = true;
+		}
+
+		if ($this->withCron === false) {
+			add_action('after_setup_theme', function() {
+				wp_clear_scheduled_hook(Cron::SYNC_CRONJOB_NAME);
+			});
+		}
+		if ($this->withCron === true) {
+			Cron::setup_sync_cronjob();
+		}
 
 		if ( isset( $this->settings['load_cpt'] ) ) {
 			if ( $this->settings['load_cpt'] == 'yes' ) {

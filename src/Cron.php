@@ -30,8 +30,10 @@ class Cron {
 	 */
 	public static function next_scheduled_sync() {
 		self::$timezone_string = get_option( 'timezone_string' );
-
 		$date_next_scheduled = Carbon::createFromTimestamp( wp_next_scheduled( self::SYNC_CRONJOB_NAME ), self::$timezone_string );
+		if ($date_next_scheduled->format('U') === '0') {
+			return 'Not scheduled. Manual sync required. Check Settings > Cranleigh People to turn on Cron Sync.';
+		}
 
 		$humanDiff = $date_next_scheduled->diffForHumans( Carbon::now( self::$timezone_string ), CarbonInterface::DIFF_RELATIVE_TO_NOW );
 

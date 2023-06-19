@@ -41,6 +41,7 @@ class Admin {
 
 		add_action( 'admin_notices', array( $instance, 'admin_notice' ) );
 		add_action( 'admin_head', array( $instance, 'admin_head' ) );
+		add_action('admin_notices', array($instance, 'api_key_notice'));
 
 		add_action( 'after_setup_theme', array( $instance, 'manual_importer' ) );
 
@@ -49,6 +50,14 @@ class Admin {
 		}
 	}
 
+	public function api_key_notice() {
+		if ( ! Plugin::getPluginSetting( 'importer_api_key' ) ) {
+			echo '<div class="notice notice-error"><p><strong>Cranleigh People:</strong> You need to add your Cranleigh People API Key. Please <a href="' . menu_page_url(
+				'cranleigh_people_settings',
+				false
+			) . '">click here</a>.</p></div>';
+		}
+	}
 	public function manual_importer() {
 		if ( method_exists( \CranleighSchool\CranleighPeople\Importer\Admin::class, 'add_submenu_page' ) ) {
 			\CranleighSchool\CranleighPeople\Importer\Admin::add_submenu_page();

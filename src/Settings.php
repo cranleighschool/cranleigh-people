@@ -101,6 +101,23 @@ if ( ! class_exists( 'CranleighSchool\CranleighPeople\Settings' ) ) {
 						'desc' => 'The full url of the People Manager endpoint',
 						'type' => 'url',
 					),
+					array(
+						'name' => 'importer_api_key',
+						'label' => 'Importer API Key',
+						'desc' => 'The API Key for the People Manager',
+						'type' => 'text',
+					),
+					array(
+						'name' => 'disable_wp_cron',
+						'label' => 'Disable WP Cron',
+						'desc' => 'Disable WP Cron and import things manually when you want to?',
+						'type'    => 'radio',
+						'options' => array(
+							'yes' => 'Yes, disable WP Cron',
+							'no'  => 'No, leave it alone',
+						),
+						'default' => 'no',
+					),
 
 				),
 			);
