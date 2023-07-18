@@ -208,6 +208,7 @@
 					'ID'           => $post_id,
 					'post_title'   => $post_title,
 					'post_content' => $post_content,
+					'post_name' => sanitize_title( $post_title ),
 				)
 			);
 
