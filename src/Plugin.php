@@ -9,6 +9,7 @@ class Plugin extends BaseController {
 	public const POST_TYPE_KEY = 'staff';
 	public const PROFILE_PHOTO_SIZE_NAME = 'staff-photo';
 	public $isams_controlled = false;
+    public $withCron = false;
 
 	private $load_cpt = false;
 
