@@ -2,7 +2,7 @@
 This is the plugin used by the Cranleigh websites. It creates the Staff Custom Post Type and staff group taxonomies. It also puts in the custom meta fields needed.
 
 ## Server Requirements
-- Requires PHP ^7.2 
+- Requires PHP ^8.2 
 
 ## Setup
 By default, when you activate this plugin it only loads relevant widgets and shortcodes. If you want to install the full plugin with the custom post type, taxonomies, and auto complete staff roles, you'll need to visit the Settings page. 

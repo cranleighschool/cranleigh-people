@@ -3,8 +3,9 @@
 namespace CranleighSchool\CranleighPeople;
 
 	use CranleighSchool\CranleighPeople\Importer\Importer;
+    use CranleighSchool\CranleighPeople\ImportViaJson\RestSetup;
 
-class Plugin extends BaseController {
+    class Plugin extends BaseController {
 
 	public const POST_TYPE_KEY = 'staff';
 	public const PROFILE_PHOTO_SIZE_NAME = 'staff-photo';
@@ -81,6 +82,7 @@ class Plugin extends BaseController {
 
 		// Add Rest API Support
 		new RestAPI();
+        new RestSetup();
 	}
 
 	private function load_in_all_cases() {
