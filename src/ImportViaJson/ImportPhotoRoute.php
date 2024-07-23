@@ -72,8 +72,8 @@ class ImportPhotoRoute
                 return [
                     'error' => 'Staff photo is newer than the last updated time',
                     'meta' => [
-                        'lastUpdated' => $this->lastUpdated,
-                        'thumbnail' => Carbon::parse($thumbnail->post_modified),
+                        'your_image' => $this->lastUpdated,
+                        'our_image' => Carbon::parse($thumbnail->post_modified),
                     ]
                 ];
             } else {

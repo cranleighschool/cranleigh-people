@@ -25,8 +25,8 @@ class PersonMap
     public ?bool $teacher;
     public ?bool $tutor;
     public ?string $photo_uri;
-    public ?string $photoUpdated;
-    public ?bool $hideFromWebsite;
+    public ?string $photo_updated;
+    public ?bool $hide_from_website;
 
 
     public function __construct(array $person)
