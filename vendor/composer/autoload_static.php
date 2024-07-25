@@ -4,10 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit47766b8291d227df9fdfb165dac0fa99
+class ComposerStaticInitd6f9a4847910a35c837a6b94ee55de54
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
     );
@@ -20,6 +21,10 @@ class ComposerStaticInit47766b8291d227df9fdfb165dac0fa99
             'Symfony\\Contracts\\Translation\\' => 30,
             'Symfony\\Component\\Translation\\' => 30,
         ),
+        'P' => 
+        array (
+            'Psr\\Clock\\' => 10,
+        ),
         'F' => 
         array (
             'FredBradley\\CranleighSlacker\\' => 29,
@@ -27,6 +32,7 @@ class ComposerStaticInit47766b8291d227df9fdfb165dac0fa99
         'C' => 
         array (
             'CranleighSchool\\CranleighPeople\\' => 32,
+            'Carbon\\Doctrine\\' => 16,
             'Carbon\\' => 7,
         ),
     );
@@ -48,6 +54,10 @@ class ComposerStaticInit47766b8291d227df9fdfb165dac0fa99
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
         ),
+        'Psr\\Clock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/clock/src',
+        ),
         'FredBradley\\CranleighSlacker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fredbradley/cranleigh-slacker/src',
@@ -55,6 +65,10 @@ class ComposerStaticInit47766b8291d227df9fdfb165dac0fa99
         'CranleighSchool\\CranleighPeople\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'Carbon\\Doctrine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine',
         ),
         'Carbon\\' => 
         array (
@@ -74,9 +88,9 @@ class ComposerStaticInit47766b8291d227df9fdfb165dac0fa99
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit47766b8291d227df9fdfb165dac0fa99::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit47766b8291d227df9fdfb165dac0fa99::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit47766b8291d227df9fdfb165dac0fa99::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd6f9a4847910a35c837a6b94ee55de54::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd6f9a4847910a35c837a6b94ee55de54::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd6f9a4847910a35c837a6b94ee55de54::$classMap;
 
         }, null, ClassLoader::class);
     }
