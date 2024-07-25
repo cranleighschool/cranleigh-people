@@ -23,7 +23,24 @@ class Import
         foreach ($people as $person) {
             $result[] = (new ImportPerson($person))->handle();
         }
+        return [
+            'from' => $this->get_client_ip(),
+            'success' => $result,
 
-        return $result;
+        ];
+    }
+
+    private function get_client_ip() {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            // Check if IP is passed from shared internet
+            $ip_address = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // Check if IP is passed from proxy
+            $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            // Get the remote IP address
+            $ip_address = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip_address;
     }
 }
