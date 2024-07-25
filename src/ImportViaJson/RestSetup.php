@@ -27,7 +27,7 @@ class RestSetup
 
         register_rest_route(
             'people',
-            'photo/(?P<initials>[a-zA-Z]{2}[a-zA-Z0-9-]+)', // Allows for people like TS2. This is the regex for initials.
+            'photo/(?P<initials>[a-zA-Z]{2}[a-zA-Z0-9.]*)', // Allows for people like TS2. This is the regex for initials.
             array(
                 'methods' => \WP_REST_Server::CREATABLE,
                 'callback' => new ImportPhotoRoute(),
