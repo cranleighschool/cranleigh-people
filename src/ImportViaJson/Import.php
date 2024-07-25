@@ -17,7 +17,7 @@ class Import
 
         $people = array_map(function ($person) {
             return new PersonMap($person);
-        }, $objData);
+        }, $objData['data']);
 
         $result = [];
         foreach ($people as $person) {
