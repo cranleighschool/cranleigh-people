@@ -25,20 +25,7 @@ By default, when you activate this plugin it only loads relevant widgets and sho
 | `type` | same as `type` for the `[person_card]`.| `small`|
 
 ## Changelog
-### 1.3.2
-* Added setting so that admins can now choose which blog it pulls data from, rather than assuming you want to do it from the default blog id
-
-### 1.3.0
-* Cleanup
-* Using `CranleighPeople` PHP Namespaces
-* Functionality to allow Cranleigh AE to use as a stand alone plugin without the iSAMS sync
-
-### 1.2.0 
-* Working with Shortcode and Widget
-
-### 1.0.0 "Bare Bones"
-* Initial Plugin Developed
-* No further instructions for scope
+- [View the Changelog](CHANGELOG.md)
 
 
 ## Developers

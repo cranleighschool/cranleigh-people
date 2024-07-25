@@ -1,6 +1,6 @@
 ## 3.0.0 (July 25, 2024)
-    - Some modernisation of the codebase
-    - Added two new Rest API endpoints to allow People Manager to post data to the website. (This was more favourable than getting WordPress to query People Manager)
+  - Some modernisation of the codebase
+  - Added two new Rest API endpoints to allow People Manager to post data to the website. (This was more favourable than getting WordPress to query People Manager)
 
 ## 1.6.6 (March 20, 2018)
   - Update to 1.6
