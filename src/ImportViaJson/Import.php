@@ -29,12 +29,9 @@ class Import
             $result[] = (new ImportPerson($person))->handle();
         }
         return [
-            'from' => $this->get_client_ip(),
+            'from' => RestSetup::get_client_ip(),
             'success' => $result,
         ];
     }
 
-    private function get_client_ip() {
-        return RestSetup::get_client_ip();
-    }
 }

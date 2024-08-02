@@ -6,7 +6,6 @@ if ( ! class_exists( 'CranleighSchool\CranleighPeople\Settings' ) ) {
 	class Settings {
 
 		public const SETTINGS_SECTION_ID = 'cran_people_basic';
-        public const SETTINGS_SECTION_IMPORTER = 'cran_people_importer';
 		private $settings_api;
 
 		public static function register() {
@@ -37,10 +36,6 @@ if ( ! class_exists( 'CranleighSchool\CranleighPeople\Settings' ) ) {
 					'id'    => self::SETTINGS_SECTION_ID,
 					'title' => __( 'Cranleigh People', 'cranleigh-2016' ),
 				),
-                array(
-                    'id'    => self::SETTINGS_SECTION_IMPORTER,
-                    'title' => __( 'Importer Settings', 'cranleigh-2016' ),
-                ),
 			);
 
 			return $sections;
@@ -104,9 +99,7 @@ if ( ! class_exists( 'CranleighSchool\CranleighPeople\Settings' ) ) {
                             'pull' => 'Pull data from the People Manager',
                         ),
                         'default' => 'push',
-                    )
-				),
-                self::SETTINGS_SECTION_IMPORTER => array (
+                    ),
                     array(
                         'name' => 'ip_allowlist',
                         'label' => 'IP Address that the Push is coming from',
