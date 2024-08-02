@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use CranleighSchool\CranleighPeople\Exceptions\StaffNotFoundException;
 use CranleighSchool\CranleighPeople\Exceptions\TooManyStaffFound;
 use CranleighSchool\CranleighPeople\Importer\MediaUploader;
+use CranleighSchool\CranleighPeople\Plugin;
 use Exception;
 use WP_Post;
 use WP_REST_Request;
@@ -24,6 +25,10 @@ class ImportPhotoRoute
      */
     public function __invoke(WP_REST_Request $data): array
     {
+        if (Plugin::getPluginSetting('isams_controlled') !== 'yes') {
+            throw new \Exception('The plugin is not set to be under ISAMS Control', 400);
+        }
+
         // 1. We allow an empty body, but we want it to be null, rather than an empty string
         $image = empty($data->get_body()) ? null : $data->get_body();
 

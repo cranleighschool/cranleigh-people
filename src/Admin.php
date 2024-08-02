@@ -52,7 +52,7 @@ class Admin {
 
 	public function api_key_notice() {
 		if ( ! Plugin::getPluginSetting( 'importer_api_key' ) ) {
-			echo '<div class="notice notice-error"><p><strong>Cranleigh People:</strong> You need to add your Cranleigh People API Key. Please <a href="' . menu_page_url(
+			echo '<div class="notice notice-error"><p><strong>Cranleigh People:</strong> You need to save your People Manager settings. Please <a href="' . menu_page_url(
 				'cranleigh_people_settings',
 				false
 			) . '">click here</a>.</p></div>';

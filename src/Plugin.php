@@ -51,12 +51,6 @@ namespace CranleighSchool\CranleighPeople;
 				$this->load_cpt = true;
 
 				$this->load_if_cpt();
-			} else {
-				/**
-				 * Commented out by FRB in version 2, as I think it is a mistake.
-				 * Why would we want to register the cpt if load_cpt is not on.
-				 */
-				//add_action('init', [$this, 'CPT_Cranleigh_People']);
 			}
 
 			$this->load_in_all_cases();
