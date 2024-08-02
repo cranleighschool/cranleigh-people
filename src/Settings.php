@@ -48,7 +48,7 @@ if ( ! class_exists( 'CranleighSchool\CranleighPeople\Settings' ) ) {
 		 */
 		public function get_settings_fields() {
 			$settings_fields = array(
-				'cran_people_basic' => array(
+				self::SETTINGS_SECTION_ID => array(
 					array(
 						'name'    => 'load_cpt',
 						'label'   => __( 'Load Custom Post Type', 'cranleigh-2016' ),
@@ -83,43 +83,61 @@ if ( ! class_exists( 'CranleighSchool\CranleighPeople\Settings' ) ) {
 					array(
 						'name'    => 'load_from_blog_id',
 						'label'   => 'Which Blog ID to load from',
-						'desc'    => "Which site did you want to grab data from? (eg. for Houses you will mostly put &quot;Cranleigh School&quot; but for Cranleigh Abu Dhabi Site, you'll need to put their site!)",
+						'desc'    => "Which site did you want to grab data from?",
 						'type'    => 'radio',
 						'default' => 1,
 						'options' => $this->selectSite_optionList(),
 					),
-					array(
-						'name'    => 'slack_webhook_endpoint',
-						'label'   => 'Slack Webhook Endpoint',
-						'desc'    => 'The Slack Webhook',
-						'type'    => 'text',
-						'default' => null,
-					),
-					array(
-						'name' => 'importer_api_endpoint',
-						'label' => 'Importer API Endpoint (full url)',
-						'desc' => 'The full url of the People Manager endpoint',
-						'type' => 'url',
-					),
-					array(
-						'name' => 'importer_api_key',
-						'label' => 'Importer API Key',
-						'desc' => 'The API Key for the People Manager',
-						'type' => 'text',
-					),
-					array(
-						'name' => 'disable_wp_cron',
-						'label' => 'Disable WP Cron',
-						'desc' => 'Disable WP Cron and import things manually when you want to?',
-						'type'    => 'radio',
-						'options' => array(
-							'yes' => 'Yes, disable WP Cron',
-							'no'  => 'No, leave it alone',
-						),
-						'default' => 'no',
-					),
 
-				),
+                    array(
+                        'name' => 'data_ingest_type',
+                        'label' => 'How is data ingested?',
+                        'desc' => 'Either People Manager pushes data to this site, or this site pulls data from the People Manager using a API key',
+                        'type' => 'radio',
+                        'options' => array(
+                            'push' => 'Push data to this site',
+                            'pull' => 'Pull data from the People Manager',
+                        ),
+                        'default' => 'push',
+                    ),
+                    array(
+                        'name' => 'ip_allowlist',
+                        'label' => 'IP Address that the Push is coming from',
+                        'desc' => 'A single IP address of the location that the push is coming from',
+                        'type' => 'text'
+                    ),
+                    array(
+                        'name' => 'importer_api_endpoint',
+                        'label' => 'Importer API Endpoint (full url)',
+                        'desc' => 'The full url of the People Manager endpoint',
+                        'type' => 'url',
+                    ),
+                    array(
+                        'name' => 'importer_api_key',
+                        'label' => 'Importer API Key',
+                        'desc' => 'The API Key for the People Manager',
+                        'type' => 'text',
+                        'default' => 'apikey',
+                    ),
+                    array(
+                        'name' => 'disable_wp_cron',
+                        'label' => 'Disable WP Cron',
+                        'desc' => 'Disable WP Cron and import things manually when you want to?',
+                        'type'    => 'radio',
+                        'options' => array(
+                            'yes' => 'Yes, disable WP Cron',
+                            'no'  => 'No, leave it alone',
+                        ),
+                        'default' => 'no',
+                    ),
+                    array(
+                        'name'    => 'slack_webhook_endpoint',
+                        'label'   => 'Slack Webhook Endpoint',
+                        'desc'    => 'The Slack Webhook, for sending notifications on importing',
+                        'type'    => 'text',
+                        'default' => null,
+                    ),
+                )
 			);
 
 			return $settings_fields;

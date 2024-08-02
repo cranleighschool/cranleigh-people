@@ -3,12 +3,14 @@
 namespace CranleighSchool\CranleighPeople;
 
 	use CranleighSchool\CranleighPeople\Importer\Importer;
+    use CranleighSchool\CranleighPeople\ImportViaJson\RestSetup;
 
-class Plugin extends BaseController {
+    class Plugin extends BaseController {
 
 	public const POST_TYPE_KEY = 'staff';
 	public const PROFILE_PHOTO_SIZE_NAME = 'staff-photo';
 	public $isams_controlled = false;
+    public $withCron = false;
 
 	private $load_cpt = false;
 
@@ -49,12 +51,6 @@ class Plugin extends BaseController {
 				$this->load_cpt = true;
 
 				$this->load_if_cpt();
-			} else {
-				/**
-				 * Commented out by FRB in version 2, as I think it is a mistake.
-				 * Why would we want to register the cpt if load_cpt is not on.
-				 */
-				//add_action('init', [$this, 'CPT_Cranleigh_People']);
 			}
 
 			$this->load_in_all_cases();
@@ -80,6 +76,7 @@ class Plugin extends BaseController {
 
 		// Add Rest API Support
 		new RestAPI();
+        new RestSetup();
 	}
 
 	private function load_in_all_cases() {

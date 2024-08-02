@@ -10,7 +10,9 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Contracts\\Translation\\' => array($vendorDir . '/symfony/translation-contracts'),
     'Symfony\\Component\\Translation\\' => array($vendorDir . '/symfony/translation'),
+    'Psr\\Clock\\' => array($vendorDir . '/psr/clock/src'),
     'FredBradley\\CranleighSlacker\\' => array($vendorDir . '/fredbradley/cranleigh-slacker/src'),
     'CranleighSchool\\CranleighPeople\\' => array($baseDir . '/src'),
+    'Carbon\\Doctrine\\' => array($vendorDir . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
 );

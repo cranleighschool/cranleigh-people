@@ -6,13 +6,10 @@
 	"nesbot/carbon": "^2.21"
   },
   "scripts": {
-	"phpcs": "vendor/bin/phpcs src/ cranleigh-people.php",
-	"phpcbf": "vendor/bin/phpcbf src/ cranleigh-people.php",
-	"phpstan": "vendor/bin/phpstan analyse --memory-limit=2G",
-	"phpmd": "vendor/bin/phpmd . html phpmd.xml > phpmd.html",
-	"phpcs-reset": "vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs"
+
   },
   "require-dev": {
+
   },
   "authors": [
 	{

@@ -126,7 +126,8 @@ class RestAPI {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'photos' ),
-			)
+                'permission_callback' => '__return_true'
+            )
 		);
 		register_rest_route(
 			'people',
@@ -134,6 +135,7 @@ class RestAPI {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'personOutput' ),
+                'permission_callback' => '__return_true'
 			)
 		);
 		register_rest_route(
@@ -142,7 +144,9 @@ class RestAPI {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'personOutput' ),
-			)
+                'permission_callback' => '__return_true'
+
+            )
 		);
 		register_rest_route(
 			'people',
@@ -150,7 +154,9 @@ class RestAPI {
 			array(
 				'methods'  => 'GET',
 				'callback' => array( $this, 'listStaff' ),
-			)
+                'permission_callback' => '__return_true'
+
+            )
 		);
 	}
 
