@@ -14,6 +14,7 @@ class RestSetup
     private function permissions(WP_REST_Request $request): bool
     {
         $ip = self::get_client_ip();
+        error_log("IP: $ip");
 
         return current_user_can('manage_options') && $ip === Plugin::getPluginSetting('ip_allowlist');
     }
