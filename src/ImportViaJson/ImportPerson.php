@@ -82,7 +82,7 @@ class ImportPerson
         $this->saveMeta('qualifications', self::qualificationsAsList($this->person->qualifications));
         $this->saveMeta('email_address', $this->person->email);
         $this->saveMeta('phone', $this->person->phone);
-        $this->saveMeta('prefix', $this->person->title);
+        $this->saveMeta('prefix', $this->person->title->name);
         $this->saveMeta('prename', $this->person->prename);
 
 
