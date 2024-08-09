@@ -49,6 +49,24 @@ class RestSetup
                 ]
             )
         );
+
+        register_rest_route(
+            'people',
+            'remove/(?P<initials>[a-zA-Z]{2}[a-zA-Z0-9.]*)', // Allows for people like TS2. This is the regex for initials.
+            array(
+                'methods' => \WP_REST_Server::DELETABLE,
+                'callback' => new RemovePerson(),
+                'permission_callback' => function (WP_REST_Request $request) {
+                    return $this->permissions($request);
+                },
+                'args' => [
+                    'initials' => [
+                        'type' => 'string',
+                        'required' => true,
+                    ],
+                ]
+            )
+        );
     }
 
     private function permissions(WP_REST_Request $request): bool
