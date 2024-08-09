@@ -54,7 +54,7 @@ class RemovePerson
         }
 
         // 3. Delete the post
-        $delete = wp_delete_post($this->post->ID);
+        $delete = wp_trash_post($this->post->ID);
 
         // 4. If we get a WP_Post object back, we have successfully deleted the post
         if ($delete instanceof WP_Post) {
