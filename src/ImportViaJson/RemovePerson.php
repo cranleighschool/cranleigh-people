@@ -22,7 +22,7 @@ class RemovePerson
     /**
      * @throws Exception
      */
-    public function __invoke(WP_REST_Request $data): array
+    public function __invoke(WP_REST_Request $data): \WP_REST_Response
     {
         if (Plugin::getPluginSetting('isams_controlled') !== 'yes') {
             throw new \Exception('The plugin is not set to be under ISAMS Control', 400);
@@ -33,7 +33,23 @@ class RemovePerson
 
 
         // 2. Get the WP Post (and set it to the $this->post property, if it fails throw an error and die early)
-        if (is_wp_error($this->getWPPost())) {
+        $post = $this->getWPPost();
+        if (is_wp_error($post)) {
+            $errorCodes = [
+                422 => 'unprocessable_entity',
+                404 => 'not_found'
+            ];
+
+            $errorCode = $post->get_error_code();
+            $status = $errorCodes[$errorCode] ?? null;
+
+            if ($status) {
+                return new \WP_REST_Response([
+                    'status' => $status,
+                    'message' => $post->get_error_message(),
+                ], $errorCode);
+            }
+
             throw new Exception('Error getting WP Post', 500);
         }
 
@@ -42,10 +58,10 @@ class RemovePerson
 
         // 4. If we get a WP_Post object back, we have successfully deleted the post
         if ($delete instanceof WP_Post) {
-            return [
+            return new \WP_REST_Response([
                 'status' => 'success',
                 'message' => 'Person removed',
-            ];
+            ], 200);
         }
 
         // 5. If we get here we have failed.
@@ -59,13 +75,13 @@ class RemovePerson
             $this->post = (new FindStaffPost($this->username))->find();
             return $this->post;
         } catch (TooManyStaffFound $exception) {
-            $msg = 'Too many staff found for ' . $this->username . ', aborting.';
+            $msg = 'Too many staff found for ' . $this->username . ', failed to delete.';
             (new SlackMessage($msg))->send();
-            return new \WP_Error(400, $msg);
+            return new \WP_Error(422, $msg);
         } catch (StaffNotFoundException $exception) {
-            $msg = 'Staff Member not found: ' . $this->username . ', aborting.';
+            $msg = 'Staff Member not found: ' . $this->username . ', nothing to delete.';
             (new SlackMessage($msg))->send();
-            return new \WP_Error(400, $msg);
+            return new \WP_Error(404, $msg);
         }
     }
 }
