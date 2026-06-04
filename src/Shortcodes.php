@@ -90,6 +90,8 @@ class Shortcodes extends BaseController {
 		self::switch_to_blog( $this->load_from_blog_id );
 		$query = new WP_Query( wp_parse_args( $args, $this->query_args ) );
 
+		$output = '';
+
 		if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
@@ -118,8 +120,8 @@ class Shortcodes extends BaseController {
 			}
 			wp_reset_postdata();
 		} else {
+			$output = '<div class="alert alert-warning">Staff member &quot;' . esc_html( $a['user'] ) . '&quot; not found.</div>';
 			if ( ! wp_doing_ajax() ) {
-				$output = '<div class="alert alert-warning">Staff member &quot;' . $a['user'] . '&quot; not found.</div>';
 				$slacker = new Slacker();
 				$slacker->setUsername( 'Cranleigh People Error Catcher' );
 				$slacker->post( 'The Cranleigh People Shortcode is trying to find `' . $a['user'] . '` but failing miserably! (' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . ')' );

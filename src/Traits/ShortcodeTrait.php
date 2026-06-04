@@ -130,7 +130,7 @@ trait ShortcodeTrait {
 	 * @throws \Exception
 	 */
 	public static function small( int $post_id, string $card_title = null ): string {
-		Plugin::switch_to_blog( Plugin::switch_to_blog( 'load_from_blog_id' ) );
+		Plugin::switch_to_blog( Plugin::getPluginSetting( 'load_from_blog_id' ) );
 		$full_title = get_post_meta( $post_id, Metaboxes::fieldID( 'full_title' ), true );
 		$position = get_post_meta( $post_id, Metaboxes::fieldID( 'leadjobtitle' ), true );
 		Plugin::restore_current_blog();

@@ -14,11 +14,10 @@ class View {
 	 *
 	 * @return string -
 	 */
-	public static function render( string $templateName, array $viewData = null ): string {
+	public static function render( string $templateName, array $viewData = [] ): string {
 		Plugin::switch_to_blog( Plugin::getPluginSetting( 'load_from_blog_id' ) );
 
-		// Was any data sent through?
-		( $viewData ) ? extract( $viewData ) : null;
+		extract( $viewData ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract -- needed for legacy template inclusion
 
 		ob_start();
 		include self::get_template_path( $templateName );

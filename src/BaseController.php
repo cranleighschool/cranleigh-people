@@ -68,9 +68,9 @@ class BaseController {
 	public function get_permalink( int $post_id ) {
 		if ( is_multisite() ) {
 			return get_blog_permalink( $this->load_from_blog_id, $post_id );
-		} else {
-			return $this->get_permalink( $post_id );
 		}
+
+		return get_permalink( $post_id );
 	}
 
 	/**
@@ -80,5 +80,12 @@ class BaseController {
 	 */
 	public function setting( string $variable ) {
 		return $this->settings[ $variable ];
+	}
+
+	/**
+	 * Returns true when a yes/no plugin setting is set to "yes".
+	 */
+	protected function isSettingEnabled( string $key ): bool {
+		return isset( $this->settings[ $key ] ) && $this->settings[ $key ] === 'yes';
 	}
 }

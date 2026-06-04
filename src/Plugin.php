@@ -26,16 +26,8 @@ namespace CranleighSchool\CranleighPeople;
 
 		$this->loadShortcodes();
 
-		if ( isset( $this->settings['isams_controlled'] ) && $this->settings['isams_controlled'] == 'yes' ) {
-			$this->isams_controlled = true;
-		} else {
-			$this->isams_controlled = false;
-		}
-		if (isset($this->settings['disable_wp_cron']) && $this->settings['disable_wp_cron'] == 'yes') {
-			$this->withCron = false;
-		} else {
-			$this->withCron = true;
-		}
+		$this->isams_controlled = $this->isSettingEnabled( 'isams_controlled' );
+		$this->withCron = ! $this->isSettingEnabled( 'disable_wp_cron' );
 
 		if ($this->withCron === false) {
 			add_action('after_setup_theme', function() {
@@ -47,9 +39,9 @@ namespace CranleighSchool\CranleighPeople;
 		}
 
 		if ( isset( $this->settings['load_cpt'] ) ) {
-			if ( $this->settings['load_cpt'] == 'yes' ) {
-				$this->load_cpt = true;
+			$this->load_cpt = $this->isSettingEnabled( 'load_cpt' );
 
+			if ( $this->load_cpt ) {
 				$this->load_if_cpt();
 			}
 
@@ -57,8 +49,8 @@ namespace CranleighSchool\CranleighPeople;
 		}
 	}
 
-	private function loadShortcodes() {
-		return new Shortcodes();
+	private function loadShortcodes(): void {
+		new Shortcodes();
 	}
 
 	private function load_if_cpt() {

@@ -91,22 +91,7 @@ class ImportPerson
         (new SetStaffHousesTaxonomy($this->post, $this->person))->handle();
         (new SetStaffSubjectsTaxonomy($this->post, $this->person))->handle();
 
-        /** TODO: I think we'll do the Image in a separate request
-        // Do the Profile Pic
-        $image = self::featureImageLogic($staff_post, $person);
-        if ($image instanceof WP_Post) {
-            // Updated / Created Featured Image;
-        } elseif ($image === true) {
-            // Removed Image, because no image was on People Manager
-        } elseif ($image === NULL) {
-            // No logic was hit, changing nothing.
-        } else {
-            throw new Exception('Error whilst checking featureImageLogic. Type: ' . gettype($image), 500);
-        }
-         */
     }
-
-
 
     /**
      * Just a nice little helper function.
