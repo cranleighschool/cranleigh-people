@@ -92,7 +92,7 @@ class Helper {
 	}
 
 	public static function santitizePositions( $positions, $not = null ) {
-
+		$position = null;
 		if ( is_array( $positions ) ):
 			foreach ( $positions as $position ):
 				if ( $position == $not ):
@@ -101,7 +101,7 @@ class Helper {
 				break;;
 			endforeach;
 
-			return $position;
+			return $position ?? false;
 		endif;
 
 		return false;
