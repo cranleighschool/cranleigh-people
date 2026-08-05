@@ -1,18 +1,20 @@
 <?php
 /*
-	Plugin Name: Cranleigh People
-	Plugin URI: http://www.cranleigh.org
-	Description: One plugin that controls the people who work at Cranleigh.
-	Author: Fred Bradley
-	Version: 1.6.9
-	Author URI: http://fred.im
+Plugin Name: Cranleigh People
+Plugin URI: http://www.cranleigh.org
+Description: One plugin that controls the people who work at Cranleigh.
+Author: Fred Bradley
+Version: 3.0.8
+Author URI: http://fred.im
 */
 
 namespace CranleighSchool\CranleighPeople;
 
-define("CRAN_PEOPLE_FILE_PATH", __FILE__);
+	ini_set( 'max_execution_time', 0 ); //0=NOLIMIT
 
-require_once 'vendor/autoload.php';
+	define( 'CRAN_PEOPLE_FILE_PATH', __FILE__ );
 
-new Plugin('cranleigh-people');
-new Settings();
+	require_once 'vendor/autoload.php';
+
+	new Plugin( 'cranleigh-people' );
+	Settings::register();
